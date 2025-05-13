@@ -9,6 +9,9 @@ import {
   FaFeather, FaAngellist, FaSkull, FaBug, FaSpaceShuttle,
   FaUserAstronaut
 } from 'react-icons/fa';
+import { useAuth } from '../contexts/AuthContext';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { db } from '../firebase';
 
 // Game modes with descriptions
 const GAME_MODES = {
@@ -501,13 +504,37 @@ const generateMathQuestion = () => {
 };
 
 function Gimkit() {
-  const loadState = (key, defaultValue) => {
-    const saved = localStorage.getItem(key);
-    return saved ? JSON.parse(saved) : defaultValue;
+  const { currentUser } = useAuth();
+  
+  // Update loadState function
+  const loadState = async (key, defaultValue) => {
+    if (!currentUser) return defaultValue;
+    
+    try {
+      const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+      if (userDoc.exists()) {
+        const data = userDoc.data();
+        return data[key] !== undefined ? data[key] : defaultValue;
+      }
+    } catch (error) {
+      console.error('Error loading state:', error);
+    }
+    return defaultValue;
   };
 
-  // Update initial state
-  const [gameMode, setGameMode] = useState('CLASSIC');
+  // Update saveState function
+  const saveState = async (key, value) => {
+    if (!currentUser) return;
+    
+    try {
+      const userRef = doc(db, 'users', currentUser.uid);
+      await setDoc(userRef, { [key]: value }, { merge: true });
+    } catch (error) {
+      console.error('Error saving state:', error);
+    }
+  };
+
+  // Update initial state loading
   const [money, setMoney] = useState(() => loadState('gimkitMoney', 23));
   const [streak, setStreak] = useState(0);
   const [lives, setLives] = useState(() => loadState('gimkitLives', 2));
@@ -713,13 +740,31 @@ function Gimkit() {
 
   // Save state
   useEffect(() => {
-    localStorage.setItem('gimkitMoney', JSON.stringify(money));
-    localStorage.setItem('gimkitLives', JSON.stringify(lives));
-    localStorage.setItem('gimkitInsurance', JSON.stringify(insurance));
-    localStorage.setItem('gimkitXp', JSON.stringify(xp));
-    localStorage.setItem('gimkitLevel', JSON.stringify(level));
-    localStorage.setItem('unlockedSkins', JSON.stringify(unlockedSkins));
-  }, [money, lives, insurance, xp, level, unlockedSkins]);
+    if (currentUser) {
+      saveState('gimkitMoney', money);
+      saveState('gimkitLives', lives);
+      saveState('gimkitInsurance', insurance);
+      saveState('gimkitXp', xp);
+      saveState('gimkitLevel', level);
+      saveState('unlockedSkins', unlockedSkins);
+      saveState('gimkitAchievements', achievements);
+      saveState('gimkitCurrentSkin', currentSkin);
+      saveState('gimkitPowerUps', powerUpsOwned);
+      saveState('gimkitConsumables', consumablesOwned);
+    }
+  }, [
+    currentUser,
+    money,
+    lives,
+    insurance,
+    xp,
+    level,
+    unlockedSkins,
+    achievements,
+    currentSkin,
+    powerUpsOwned,
+    consumablesOwned
+  ]);
 
   // Check for level up
   useEffect(() => {

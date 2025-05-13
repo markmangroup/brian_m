@@ -21,6 +21,17 @@ const CATEGORIES = [
   'Abstract'
 ];
 
+// Add announcement system
+const ANNOUNCEMENTS = [
+  {
+    id: 'bug-fix-1',
+    title: 'Bug Hunter Award! 🏆',
+    message: 'Chris discovered duplicate combinations in the game! Thanks to his sharp eyes, we fixed the issue and now have exactly 45 unique combinations.',
+    type: 'achievement',
+    date: new Date().toISOString()
+  }
+];
+
 const LittleAlchemy = () => {
   const [workspace, setWorkspace] = useState(() => {
     const saved = localStorage.getItem(WORKSPACE_KEY);
@@ -35,6 +46,8 @@ const LittleAlchemy = () => {
   const [notification, setNotification] = useState(null);
   const [showCheatList, setShowCheatList] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [announcements, setAnnouncements] = useState(ANNOUNCEMENTS);
+  const [currentAnnouncement, setCurrentAnnouncement] = useState(0);
 
   const baseElements = [
     { id: 'fire', name: 'Fire', icon: FaFire, color: 'text-red-500' },
@@ -70,14 +83,12 @@ const LittleAlchemy = () => {
     'tree+wind': { result: 'leaf', icon: FaLeaf, color: 'text-green-400' },
     
     // Weather and Temperature
-    'cloud+water': { result: 'rain', color: 'text-blue-400' },
-    'air+water': { result: 'mist', color: 'text-gray-300' },
+    'cloud+water': { result: 'mist', color: 'text-gray-300' },
     'mist+energy': { result: 'cold', icon: FaSnowflake, color: 'text-blue-200' },
     'water+cold': { result: 'ice', color: 'text-blue-200' },
     'rain+cold': { result: 'snow', icon: FaSnowflake, color: 'text-blue-100' },
     'cloud+cold': { result: 'blizzard', color: 'text-blue-300' },
     'sun+rain': { result: 'rainbow', color: 'text-purple-400' },
-    'fire+cold': { result: 'steam', color: 'text-gray-300' },
     
     // Life Forms
     'water+plant': { result: 'algae', color: 'text-green-300' },
@@ -137,6 +148,14 @@ const LittleAlchemy = () => {
   useEffect(() => {
     localStorage.setItem(WORKSPACE_KEY, JSON.stringify(workspace));
   }, [workspace]);
+
+  // Rotate announcements
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentAnnouncement(prev => (prev + 1) % announcements.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [announcements.length]);
 
   const showNotification = (discovery) => {
     setNotification(discovery);
@@ -209,6 +228,24 @@ const LittleAlchemy = () => {
 
   return (
     <div className="flex flex-col space-y-6">
+      {/* Announcement Bar */}
+      <div className="fixed top-0 left-0 right-0 bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 text-white py-2 overflow-hidden z-50">
+        <div className="animate-marquee whitespace-nowrap">
+          {announcements.map((announcement, index) => (
+            <div
+              key={announcement.id}
+              className={`inline-block mx-4 transition-opacity duration-500 ${
+                index === currentAnnouncement ? 'opacity-100' : 'opacity-0'
+              }`}
+            >
+              <span className="font-bold">{announcement.title}</span>
+              <span className="mx-2">•</span>
+              <span>{announcement.message}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Notification */}
       {notification && (
         <div className={`fixed top-4 right-4 p-4 rounded-lg shadow-lg flex items-center gap-3 transition-all transform ${
