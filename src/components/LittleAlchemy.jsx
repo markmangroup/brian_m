@@ -29,6 +29,13 @@ const ANNOUNCEMENTS = [
     message: 'Chris discovered duplicate combinations in the game! Thanks to his sharp eyes, we fixed the issue and now have exactly 45 unique combinations.',
     type: 'achievement',
     date: new Date().toISOString()
+  },
+  {
+    id: 'sports-update-1',
+    title: 'Football Frenzy! 🏈',
+    message: '10 new football elements added! Can you find the secret "Jets Stink" combo? (Easter egg for Chris!)',
+    type: 'update',
+    date: new Date().toISOString()
   }
 ];
 
@@ -122,7 +129,22 @@ const LittleAlchemy = () => {
     // Abstract
     'life+time': { result: 'death', color: 'text-gray-800' },
     'life+death': { result: 'ghost', color: 'text-gray-200' },
-    'water+rainbow': { result: 'magic', color: 'text-purple-500' }
+    'water+rainbow': { result: 'magic', color: 'text-purple-500' },
+
+    // --- SPORTS/FOOTBALL THEME ---
+    'mud+air': { result: 'football', color: 'text-brown-700' },
+    'football+air': { result: 'field goal', color: 'text-green-400' },
+    'football+fire': { result: 'touchdown', color: 'text-orange-500' },
+    'football+water': { result: 'fumble', color: 'text-blue-400' },
+    'football+earth': { result: 'turf', color: 'text-green-700' },
+    'football+energy': { result: 'quarterback', color: 'text-yellow-400' },
+    'quarterback+air': { result: 'pass', color: 'text-cyan-400' },
+    'quarterback+earth': { result: 'sack', color: 'text-gray-600' },
+    'quarterback+fire': { result: 'hail mary', color: 'text-red-500' },
+    'football+plant': { result: 'Jets', color: 'text-green-500' },
+    'Jets+air': { result: 'Jets Stink', color: 'text-gray-400' }, // Easter egg for Chris
+    'Jets+fire': { result: 'Jets Lose', color: 'text-red-400' },
+    'Jets+magic': { result: 'Jets Win', color: 'text-yellow-300' }, // rare!
   };
 
   // Get recipes for a category
@@ -448,4 +470,4 @@ const LittleAlchemy = () => {
   );
 };
 
-export default LittleAlchemy; 
+export default LittleAlchemy;
