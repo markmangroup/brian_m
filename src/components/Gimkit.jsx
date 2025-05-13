@@ -579,6 +579,7 @@ function Gimkit() {
   const [consumablesOwned, setConsumablesOwned] = useState(() => loadState('gimkitConsumables', {}));
   const [showAchievement, setShowAchievement] = useState(false);
   const [lastAchievement, setLastAchievement] = useState(null);
+  const [gameMode, setGameMode] = useState('CLASSIC');
 
   // Initialize first question
   useEffect(() => {
