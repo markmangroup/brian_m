@@ -1,0 +1,59 @@
+.app-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.pill-nav {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.nav-pill {
+  padding: 0.5rem 1.5rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.nav-pill:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+.nav-pill.active {
+  background: #3b82f6;
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+}
+
+.nav-pill.grade-3 {
+  background: linear-gradient(45deg, #f59e0b, #ef4444);
+}
+
+.nav-pill.grade-3:hover {
+  background: linear-gradient(45deg, #f97316, #dc2626);
+}
+
+.nav-pill.grade-3.active {
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.5);
+}
+
+.content {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2rem;
+  border-radius: 1rem;
+}
+
+.nav-separator {
+  width: 2px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 0 0.5rem;
+  border-radius: 2px;
+} 
