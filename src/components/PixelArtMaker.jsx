@@ -1,17 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { FaPaintBrush, FaEraser, FaSave, FaImages, FaCloudUploadAlt, FaLock } from 'react-icons/fa';
-import { db, storage } from '../firebase';
-import { collection, addDoc, getDocs, query, orderBy } from 'firebase/firestore';
-import { ref, uploadString, getDownloadURL } from 'firebase/storage';
+import { FaPaintBrush, FaEraser, FaLock, FaImages } from 'react-icons/fa';
 
 const PixelArtMaker = () => {
   const [selectedColor, setSelectedColor] = useState('#00ff00');
   const [tool, setTool] = useState('brush');
   const [pixels, setPixels] = useState(Array(256).fill('#1f2937'));
   const [showGallery, setShowGallery] = useState(false);
-  const [publicGallery, setPublicGallery] = useState([]);
   const [privateGallery, setPrivateGallery] = useState([]);
-  const [saving, setSaving] = useState(false);
   const canvasRef = useRef(null);
 
   const colors = [
@@ -37,16 +32,6 @@ const PixelArtMaker = () => {
     setPrivateGallery(priv);
   }, []);
 
-  // Load public gallery from Firebase
-  useEffect(() => {
-    async function fetchGallery() {
-      const q = query(collection(db, 'pixelArtGallery'), orderBy('created', 'desc'));
-      const snap = await getDocs(q);
-      setPublicGallery(snap.docs.map(doc => doc.data()));
-    }
-    if (showGallery) fetchGallery();
-  }, [showGallery]);
-
   // Handle pixel click
   const handlePixelClick = (i) => {
     setPixels(pixels => {
@@ -65,27 +50,6 @@ const PixelArtMaker = () => {
     localStorage.setItem('pixelArtPrivateGallery', JSON.stringify(updated));
     setPrivateGallery(updated);
     alert('Saved to your private gallery!');
-  };
-
-  // Save to public gallery (Firebase)
-  const savePublic = async () => {
-    setSaving(true);
-    try {
-      const dataUrl = canvasRef.current.toDataURL();
-      // Upload image to Firebase Storage
-      const imageRef = ref(storage, `pixelArtGallery/${Date.now()}.png`);
-      await uploadString(imageRef, dataUrl, 'data_url');
-      const url = await getDownloadURL(imageRef);
-      // Save metadata to Firestore
-      await addDoc(collection(db, 'pixelArtGallery'), {
-        image: url,
-        created: Date.now()
-      });
-      alert('Added to the public gallery!');
-    } catch (e) {
-      alert('Error saving to public gallery.');
-    }
-    setSaving(false);
   };
 
   return (
@@ -147,15 +111,7 @@ const PixelArtMaker = () => {
             onClick={savePrivate}
           >
             <FaLock />
-            <span>Keep in Private Gallery</span>
-          </button>
-          <button
-            className="flex items-center space-x-2 bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg"
-            onClick={savePublic}
-            disabled={saving}
-          >
-            <FaCloudUploadAlt />
-            <span>{saving ? 'Saving...' : 'Add to Public Gallery'}</span>
+            <span>Save to Private Gallery</span>
           </button>
           <button
             className="flex items-center space-x-2 bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg"
@@ -177,13 +133,6 @@ const PixelArtMaker = () => {
             >
               Close
             </button>
-            <h2 className="text-2xl font-bold text-cyan-300 mb-4">Public Gallery</h2>
-            <div className="grid grid-cols-4 gap-4 mb-8">
-              {publicGallery.map((art, i) => (
-                <img key={i} src={art.image} alt="Public Art" className="rounded-lg border border-cyan-700" />
-              ))}
-              {publicGallery.length === 0 && <div className="text-white">No public art yet.</div>}
-            </div>
             <h2 className="text-2xl font-bold text-gray-300 mb-4">Your Private Gallery</h2>
             <div className="grid grid-cols-4 gap-4">
               {privateGallery.map((art, i) => (
