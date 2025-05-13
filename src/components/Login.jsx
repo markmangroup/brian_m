@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { FaUser, FaLock, FaEnvelope } from 'react-icons/fa';
+import { FaUser, FaLock, FaEnvelope, FaPlay } from 'react-icons/fa';
 
 export default function Login() {
   const [isLogin, setIsLogin] = useState(true);
@@ -8,7 +8,7 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { signup, login } = useAuth();
+  const { signup, login, skipLogin } = useAuth();
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -34,6 +34,9 @@ export default function Login() {
           <h2 className="mt-6 text-center text-3xl font-extrabold text-white">
             {isLogin ? 'Sign in to your account' : 'Create a new account'}
           </h2>
+          <p className="mt-2 text-center text-sm text-gray-400">
+            Or skip login to try the app now
+          </p>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           {error && (
@@ -70,7 +73,7 @@ export default function Login() {
             </div>
           </div>
 
-          <div>
+          <div className="space-y-4">
             <button
               type="submit"
               disabled={loading}
@@ -82,6 +85,17 @@ export default function Login() {
                 </span>
               ) : null}
               {isLogin ? 'Sign in' : 'Sign up'}
+            </button>
+
+            <button
+              type="button"
+              onClick={skipLogin}
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+            >
+              <span className="absolute left-0 inset-y-0 flex items-center pl-3">
+                <FaPlay className="h-5 w-5 text-green-300" />
+              </span>
+              Skip Login & Play Now
             </button>
           </div>
         </form>

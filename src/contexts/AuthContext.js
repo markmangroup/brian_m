@@ -29,6 +29,15 @@ export function AuthProvider({ children }) {
     return signOut(auth);
   }
 
+  function skipLogin() {
+    // Set a temporary user object
+    setCurrentUser({
+      uid: 'temp-user',
+      email: 'guest@example.com',
+      isAnonymous: true
+    });
+  }
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
@@ -42,7 +51,8 @@ export function AuthProvider({ children }) {
     currentUser,
     signup,
     login,
-    logout
+    logout,
+    skipLogin
   };
 
   return (
