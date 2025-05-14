@@ -46,7 +46,7 @@ function AppContent() {
           <Link to="/lego-build"     className="px-3 py-1.5 rounded-full bg-red-600    hover:bg-red-500    transition-colors">Build Mode</Link>
           <Link to="/lego-inventory" className="px-3 py-1.5 rounded-full bg-yellow-600 hover:bg-yellow-500 transition-colors">Inventory</Link>
           <Link to="/little-alchemy" className="px-3 py-1.5 rounded-full bg-cyan-600   hover:bg-cyan-500   transition-colors">Little Alchemy</Link>
-          <Link to="/snack-trail"    className="px-3 py-1.5 rounded-full bg-yellow-400 hover:bg-yellow-300 text-black transition-colors">Snack Trail</Link> {/* NEW */}
+          <Link to="/snack-trail"    className="px-3 py-1.5 rounded-full bg-yellow-400 hover:bg-yellow-300 text-black transition-colors">Snack Trail</Link>
 
           {currentUser && (
             <button
@@ -71,7 +71,7 @@ function AppContent() {
           <Route path="/lego-build"     element={<PrivateRoute><LegoBuildMode   /></PrivateRoute>} />
           <Route path="/lego-inventory" element={<PrivateRoute><LegoInventory   /></PrivateRoute>} />
           <Route path="/little-alchemy" element={<PrivateRoute><LittleAlchemy   /></PrivateRoute>} />
-          <Route path="/snack-trail"    element={<PrivateRoute><SnackTrail      /></PrivateRoute>} /> {/* NEW */}
+          <Route path="/snack-trail"    element={<PrivateRoute><SnackTrail      /></PrivateRoute>} />
 
           <Route path="/" element={<Navigate to="/gimkit" />} />
         </Routes>
