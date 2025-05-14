@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, NavLink, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
-import Gimkit from './components/Gimkit';
 import PixelArtMaker from './components/PixelArtMaker';
 import RobotLab from './components/RobotLab';
 import LegoBuildMode from './components/LegoBuildMode';
@@ -33,7 +32,7 @@ function AppContent() {
               }`
             }
           >
-            Gimkit
+            {/* Gimkit removed */}
           </NavLink>
           <Link to="/pixel-art" className="px-4 py-2 rounded-full bg-blue-600 hover:bg-blue-500 transition-colors">
             Pixel Art
@@ -65,14 +64,7 @@ function AppContent() {
       <div className="container mx-auto p-4">
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route
-            path="/gimkit"
-            element={
-              <PrivateRoute>
-                <Gimkit />
-              </PrivateRoute>
-            }
-          />
+          <Route path="/gimkit" element={<div />} />
           <Route
             path="/pixel-art"
             element={
