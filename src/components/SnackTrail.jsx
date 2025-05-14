@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import TrailScene from './TrailScene';
 import TrailScenePlus from './TrailScenePlus';
+import { PRESET_EVENTS } from '../data/presetEvents';
 
 const TOTAL_DAYS = 15;
 const DEFAULT_AVATARS = ['🧢', '🎧', '🐱'];
@@ -29,29 +29,9 @@ export default function SnackTrail() {
     }
   }, [sparkleMember]);
 
-  const events = [
-    { msg: 'You dropped your slushie 😱', snack: -3 },
-    { msg: 'Grandma hands you cookies ❤️', snack: +4 },
-    { msg: 'Sibling tax! You share some chips 😓', snack: -2 },
-    { msg: 'Found candy on the ground 🍬', snack: +1 },
-    { msg: 'Your ice cream melted 🍦😢', snack: -1 },
-    { msg: 'A friend gave you snacks 🤗', snack: +2 },
-    { msg: 'Your pet stole a snack 🐶', snack: -1 },
-    { msg: 'You found a hidden stash of snacks 🎉', snack: +3 },
-    { msg: 'You sneak a snack from the pantry 🥷🍪', snack: +1 },
-    { msg: 'Oops! You sat on a snack 😅', snack: -1 },
-    { msg: 'You traded a snack for a toy 🤖', snack: -1 },
-    { msg: 'Lucky day! You get an extra snack 🍀', snack: +1 }
-  ];
-
-  const titlesByDay = [
-    { day: 5, title: "Trail Scout" },
-    { day: 10, title: "Snack Survivor" }
-  ];
-
-  const extractEmoji = (message) => {
+  const extractEmoji = (text) => {
     const emojiRegex = /([\u231A-\uD83E\uDDFF])/;
-    const match = message.match(emojiRegex);
+    const match = text.match(emojiRegex);
     return match ? match[0] : "";
   };
 
@@ -65,23 +45,13 @@ export default function SnackTrail() {
     const newCrew = prevCrew.map(member => ({ ...member }));
     const logsForThisDay = [];
 
-    let eventTargets = [];
-    newCrew.forEach((_, idx) => {
-      if (Math.random() < 0.6) eventTargets.push(idx);
-    });
-    if (eventTargets.length === 0) {
-      eventTargets.push(Math.floor(Math.random() * newCrew.length));
-    }
-
-    eventTargets.forEach(idx => {
-      const member = newCrew[idx];
-      const event = events[Math.floor(Math.random() * events.length)];
+    newCrew.forEach((member, idx) => {
+      const event = PRESET_EVENTS[(day + idx) % PRESET_EVENTS.length];
       const oldSnacks = member.snacks;
-      const change = event.snack;
-      const newSnacks = Math.max(oldSnacks + change, 0);
+      const newSnacks = Math.max(oldSnacks + event.snack, 0);
       member.snacks = newSnacks;
-      member.lastEmoji = extractEmoji(event.msg) || DEFAULT_AVATARS[idx];
-      logsForThisDay.push(`Day ${day}: ${member.name}: ${event.msg} (${newSnacks} snacks left)`);
+      member.lastEmoji = event.emoji || DEFAULT_AVATARS[idx];
+      logsForThisDay.push(`Day ${day}: ${member.name}: ${event.text} (${newSnacks} snacks left)`);
       if (oldSnacks < 50 && newSnacks >= 50) {
         triggerSparkle(idx);
       }
@@ -106,13 +76,18 @@ export default function SnackTrail() {
 
   const progressPercent = Math.min((currentDay / TOTAL_DAYS) * 100, 100);
 
+  const titlesByDay = [
+    { day: 5, title: "Trail Scout" },
+    { day: 10, title: "Snack Survivor" }
+  ];
+
   return (
     <div className={`${arcadeMode ? 'bg-purple-900 text-green-300 border-pink-500' : 'bg-gray-900 text-yellow-400'} p-4 pt-2 rounded-xl max-w-md mx-auto mt-2`}>
 
       <h2 className="text-xl font-bold flex items-center justify-center mb-1">🍔 Snack Trail</h2>
       <p className="text-center text-sm mb-3">Day {currentDay} of {TOTAL_DAYS}</p>
 
-<TrailScenePlus crew={crew} day={currentDay} arcadeMode={arcadeMode} />
+      <TrailScenePlus crew={crew} day={currentDay} arcadeMode={arcadeMode} />
 
       {title && (
         <div className="text-center mb-2">
