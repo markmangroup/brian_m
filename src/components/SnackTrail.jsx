@@ -88,7 +88,7 @@ export default function SnackTrail() {
       <h2 className="text-xl font-bold flex items-center justify-center mb-1">🍔 Snack Trail</h2>
       <p className="text-center text-sm mb-3">Day {currentDay} of {TOTAL_DAYS}</p>
 
-      <TrailScenePlus crew={crew} day={currentDay} arcadeMode={arcadeMode} />
+<RaceTrackScene crew={crew} />
 
       {title && (
         <div className="text-center mb-2">
