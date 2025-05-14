@@ -39,7 +39,7 @@ function AppContent() {
             Pixel Art
           </Link>
           <Link to="/robot-lab" className="px-4 py-2 rounded-full bg-green-600 hover:bg-green-500 transition-colors">
-            Robot Lab
+            Tank Evolution
           </Link>
           <Link to="/lego-build" className="px-4 py-2 rounded-full bg-red-600 hover:bg-red-500 transition-colors">
             Build Mode

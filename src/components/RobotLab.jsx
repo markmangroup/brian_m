@@ -195,7 +195,7 @@ const RobotLab = () => {
     <ErrorBoundary>
       <div className="flex flex-col items-center">
         <h1 className="text-4xl font-bold text-emerald-400 mb-8 flex items-center">
-          <FaRobot className="mr-4" /> Robot Laboratory
+          <FaRobot className="mr-4" /> Tank Evolution
         </h1>
 
         <div className="bg-gray-800/50 p-8 rounded-2xl shadow-xl backdrop-blur-sm border border-emerald-500/20 w-full max-w-4xl">
