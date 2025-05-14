@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
-import SnackNav from './components/SnackNav';
+import Navigation from './components/Navigation';
 import SnackTrailHUD from './components/SnackTrailHUD';
 
 import PixelArtMaker from './components/PixelArtMaker';
@@ -15,13 +15,16 @@ export default function App() {
   return (
     <Router>
       <div className="min-h-screen bg-gray-900 text-white pt-16 relative">
-        <SnackNav />
+        <Navigation />
         <Routes>
-          <Route path="/snack-trail" element={
-            <SnackTrailHUD>
-              <SnackTrail />
-            </SnackTrailHUD>
-          } />
+          <Route
+            path="/snack-trail"
+            element={
+              <SnackTrailHUD>
+                <SnackTrail />
+              </SnackTrailHUD>
+            }
+          />
           <Route path="/pixel-art" element={<PixelArtMaker />} />
           <Route path="/robot-lab" element={<RobotLab />} />
           <Route path="/lego-build" element={<LegoBuildMode />} />
