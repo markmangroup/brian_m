@@ -1,102 +1,175 @@
-import React, { useState } from 'react';
-import { FaHamburger, FaLaugh } from 'react-icons/fa';
-
-const events = [
-  { msg: 'A seagull steals your fries!', snack: -5 },
-  { msg: 'Grandma hands you cookies ❤', snack: +8 },
-  { msg: 'You dropped your slushie 😱', snack: -4 },
-  { msg: 'Found pizza samples at the mall 🍕', snack: +6 },
-  { msg: 'Sibling tax! You share some chips.', snack: -3 },
-];
+import React, { useState, useEffect } from 'react';
 
 export default function SnackTrail() {
+  // Initial crew of three with name, snacks, and an emoji placeholder for last event.
   const [crew, setCrew] = useState([
-    { name: 'Brian', snacks: 20 },
-    { name: 'Chris', snacks: 20 },
-    { name: 'Mel',   snacks: 20 },          // renamed third player
+    { name: "Brian", snacks: 20, lastEmoji: "" },
+    { name: "Chris", snacks: 20, lastEmoji: "" },
+    { name: "Kid-You", snacks: 15, lastEmoji: "" }
   ]);
-  const [day, setDay]   = useState(1);
-  const [log, setLog]   = useState([]);
+  const [day, setDay] = useState(0);
+  const [log, setLog] = useState([]);
+  const [title, setTitle] = useState("");
+  const [arcadeMode, setArcadeMode] = useState(false);
+  const [sparkleMember, setSparkleMember] = useState(null);
 
-  const tick = () => {
-    setCrew(prev =>
-      prev.map(kid => {
-        const ev = events[Math.floor(Math.random() * events.length)];
-        const s  = Math.max(kid.snacks + ev.snack, 0);
+  // Effect to remove sparkle effect after a short duration
+  useEffect(() => {
+    if (sparkleMember !== null) {
+      const timer = setTimeout(() => setSparkleMember(null), 1200);
+      return () => clearTimeout(timer);
+    }
+  }, [sparkleMember]);
 
-        setLog(l => [
-          { text: `${kid.name}: ${ev.msg} (${s} snacks left)`, day },
-          ...l.slice(0, 5),
-        ]);
+  // List of possible random events (message and snack count change)
+  const events = [
+    { msg: "You dropped your slushie 😱", delta: -3 },
+    { msg: "Grandma hands you cookies ❤️", delta: +4 },
+    { msg: "Sibling tax! You share some chips 😓", delta: -2 },
+    { msg: "Found candy on the ground 🍬", delta: +1 },
+    { msg: "Your ice cream melted 🍦😢", delta: -1 },
+    { msg: "A friend gave you snacks 🤗", delta: +2 },
+    { msg: "Your pet stole a snack 🐶", delta: -1 },
+    { msg: "You found a hidden stash of snacks 🎉", delta: +3 },
+    { msg: "You had to share with your sibling 🤝", delta: -2 },
+    { msg: "You sneak a snack from the pantry 🥷🍪", delta: +1 },
+    { msg: "Oops! You sat on a snack 😅", delta: -1 },
+    { msg: "You traded a snack for a toy 🤖", delta: -1 },
+    { msg: "Lucky day! You get an extra snack 🍀", delta: +1 }
+  ];
 
-        return { ...kid, snacks: s };
-      })
-    );
-    setDay(d => d + 1);
+  // Title/badge thresholds by days survived
+  const titlesByDay = [
+    { day: 5, title: "Trail Scout" },
+    { day: 10, title: "Snack Survivor" },
+    { day: 20, title: "Master Forager" }
+  ];
+
+  // Helper to extract an emoji from an event message (returns first emoji found, or empty string if none)
+  const extractEmoji = (message) => {
+    const match = message.match(/[\u{1F300}-\u{1F9FF}\u{2700}-\u{27BF}]/u);
+    return match ? match[0] : "";
   };
 
-  const everyoneHungry = crew.every(k => k.snacks === 0);
-  const goalReached    = day > 5 && !everyoneHungry;
+  // Trigger a sparkle animation for a specific crew member index
+  const triggerSparkle = (index) => {
+    setSparkleMember(index);
+  };
 
-  /* ---------- UI ---------- */
+  // Handle advancing to the next day
+  const handleNextDay = () => {
+    const nextDay = day + 1;
+    setDay(nextDay);
+
+    // Prepare new log entries for this day
+    const logsForThisDay = [];
+    let newCrew = crew.map(member => ({ ...member })); // copy crew state
+
+    // Determine which crew members have events this day
+    let eventTargets = [];
+    newCrew.forEach((member, idx) => {
+      if (Math.random() < 0.6) {
+        eventTargets.push(idx);
+      }
+    });
+    // Ensure at least one event happens per day
+    if (eventTargets.length === 0) {
+      eventTargets.push(Math.floor(Math.random() * newCrew.length));
+    }
+
+    // Apply events to each chosen crew member
+    eventTargets.forEach(idx => {
+      const member = newCrew[idx];
+      const event = events[Math.floor(Math.random() * events.length)];
+      // Determine snack change
+      const oldSnacks = member.snacks;
+      const change = (typeof event.delta === "function") ? event.delta(member) : event.delta;
+      let newSnacks = oldSnacks + change;
+      if (newSnacks < 0) newSnacks = 0; // don't go below 0 snacks
+      // Update the crew member's snacks and last event emoji
+      newCrew[idx].snacks = newSnacks;
+      newCrew[idx].lastEmoji = extractEmoji(event.msg);
+      // Log the event
+      logsForThisDay.push(`Day ${nextDay}: ${member.name}: ${event.msg} (${newSnacks} snacks left)`);
+      // Check for snack milestone crossing (e.g., crossing 50 snacks)
+      if (oldSnacks < 50 && newSnacks >= 50) {
+        triggerSparkle(idx);
+      }
+    });
+
+    // Check for title unlocks based on days survived
+    const achievedTitle = titlesByDay.slice().reverse().find(t => nextDay >= t.day);
+    if (achievedTitle && achievedTitle.title !== title) {
+      setTitle(achievedTitle.title);
+      logsForThisDay.push(`Day ${nextDay}: 🏅 Unlocked title: ${achievedTitle.title}!`);
+    }
+
+    // Check for Arcade mode activation (reached day 10)
+    if (!arcadeMode && nextDay >= 10) {
+      setArcadeMode(true);
+      logsForThisDay.push(`Day ${nextDay}: ✨ You've reached the Arcade! The world shifts into neon colors! ✨`);
+    }
+
+    // Update state with new crew and appended log entries
+    setCrew(newCrew);
+    setLog(prevLog => [...prevLog, ...logsForThisDay]);
+  };
+
   return (
-    <div className="flex flex-col items-center p-4">
-      <h1 className="text-4xl font-extrabold text-yellow-400 flex items-center mb-6">
-        <FaHamburger className="mr-3" /> Snack Trail
-      </h1>
+    <div className={`${arcadeMode ? 'bg-purple-900 text-green-400 border-4 border-pink-500' : 'bg-gray-900 text-yellow-500'} p-4 rounded-xl max-w-md mx-auto mt-4`}>
+      {/* Game Title */}
+      <h2 className="text-2xl font-bold flex items-center justify-center mb-4">
+        <span className="mr-2">🍔</span> Snack Trail
+      </h2>
 
-      <p className="text-yellow-300 mb-4">Day {day}</p>
+      {/* Unlocked Title/Badge Display */}
+      {title && (
+        <div className="text-center mb-4">
+          <span className="inline-block bg-yellow-500 text-gray-900 text-base px-3 py-1 rounded-full">
+            🏅 {title}
+          </span>
+        </div>
+      )}
 
-      <div className="w-full max-w-md bg-gray-800/60 p-6 rounded-2xl space-y-4">
-        {crew.map(kid => (
-          <div key={kid.name} className="flex items-center">
-            <span className="w-24 text-gray-300">{kid.name}</span>
-            <div className="flex-1 h-3 bg-gray-700 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-yellow-400 transition-all duration-300"
-                style={{ width: `${kid.snacks * 5}%` }}
-              />
+      {/* Crew Snack Status List */}
+      <div className="space-y-2 mb-4">
+        {crew.map((member, index) => (
+          <div key={index} className="relative flex items-center bg-gray-800 bg-opacity-50 rounded-lg px-3 py-2">
+            {/* Name and last event emoji */}
+            <div className="w-1/2 flex items-center">
+              <span className="font-semibold">{member.name}</span>
+              {member.lastEmoji && <span className="ml-1">{member.lastEmoji}</span>}
             </div>
-            <span className="ml-3 text-yellow-300 w-8 text-right">{kid.snacks}</span>
+            {/* Snack count bar and number */}
+            <div className="flex-1 flex items-center">
+              <div className="w-full bg-gray-700 h-4 rounded-full overflow-hidden">
+                <div className={`${arcadeMode ? 'bg-pink-500' : 'bg-yellow-500'} h-4`} style={{ width: `${Math.min(member.snacks, 100)}%` }}></div>
+              </div>
+              <span className="ml-3 text-sm font-medium">{member.snacks}</span>
+              {/* Badge icon for high snack count */}
+              {member.snacks >= 50 && <span className="ml-1">🌟</span>}
+            </div>
+            {/* Sparkle animation overlay */}
+            {sparkleMember === index && (
+              <div className="absolute inset-0 flex justify-center items-center pointer-events-none">
+                <span className="text-yellow-400 text-3xl animate-ping">✨</span>
+              </div>
+            )}
           </div>
         ))}
       </div>
 
-      {!goalReached && !everyoneHungry && (
-        <button
-          onClick={tick}
-          className="mt-6 w-40 py-2 rounded-lg bg-yellow-500 hover:bg-yellow-600 text-black font-semibold shadow-lg"
-        >
-          Next Day
-        </button>
-      )}
+      {/* Next Day button */}
+      <button 
+        onClick={handleNextDay} 
+        className={`w-full py-2 rounded-lg font-bold ${arcadeMode ? 'bg-pink-500 text-white animate-pulse' : 'bg-yellow-500 text-gray-900 hover:bg-yellow-400'}`}>
+        Next Day
+      </button>
 
-      {(goalReached || everyoneHungry) && (
-        <div className="text-center mt-6">
-          <FaLaugh className="text-4xl mx-auto mb-2 text-yellow-300" />
-          <p className="text-xl font-bold text-yellow-300">
-            {goalReached
-              ? '🎉 You made it to the arcade—snacks intact!'
-              : '💀 Everyone ran out of snacks! Try again?'}
-          </p>
-          <button
-            onClick={() => {
-              setCrew(crew.map(k => ({ ...k, snacks: 20 })));
-              setDay(1);
-              setLog([]);
-            }}
-            className="mt-3 px-4 py-1 bg-gray-700 rounded text-gray-200"
-          >
-            Restart
-          </button>
-        </div>
-      )}
-
-      <div className="w-full max-w-md h-28 overflow-y-auto bg-gray-900/50 p-3 rounded mt-6">
-        {log.map((l, i) => (
-          <p key={i} className="text-xs text-gray-400">
-            Day {l.day}: {l.text}
-          </p>
+      {/* Event Log */}
+      <div className="mt-4 max-h-40 overflow-y-auto text-sm space-y-1 text-gray-300">
+        {log.map((entry, i) => (
+          <div key={i}>{entry}</div>
         ))}
       </div>
     </div>
