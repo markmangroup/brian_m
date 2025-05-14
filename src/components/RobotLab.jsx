@@ -190,7 +190,7 @@ const RobotLab = () => {
               <div className="flex flex-col items-center space-y-4">
                 <div className={`text-${robot.color}-400 text-5xl relative`}>
                   <FaCog className="animate-spin-slow absolute -left-4 -top-4 opacity-30" />
-                  <robot.icon />
+                  {robot.icon ? <robot.icon /> : <FaRobot />}
                   <FaCog className="animate-spin-slow absolute -right-4 -bottom-4 opacity-30" />
                 </div>
                 <h3 className={`text-${robot.color}-400 font-bold text-xl`}>{robot.name}</h3>
@@ -280,6 +280,7 @@ const RobotLab = () => {
               <span className="ml-3 text-red-400">{opponentHealth} / {opponent.stats.health}</span>
             </div>
             <div className="flex gap-2 mb-2">
+              {opponent.icon ? <opponent.icon className="text-red-400" /> : <FaRobot className="text-red-400" />}
               <FaShieldAlt className="text-red-400" />
               <span className="text-gray-400">Level {level}</span>
             </div>
