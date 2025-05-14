@@ -193,7 +193,12 @@ const RobotLab = () => {
 
   return (
     <ErrorBoundary>
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center min-h-screen" style={{
+        background: 'linear-gradient(to bottom, #23272f 60%, #3a3f47 100%)',
+        backgroundImage: 'url(https://www.transparenttextures.com/patterns/camo.png), linear-gradient(to bottom, #23272f 60%, #3a3f47 100%)',
+        backgroundRepeat: 'repeat',
+        backgroundSize: 'auto',
+      }}>
         <h1 className="text-4xl font-bold text-emerald-400 mb-8 flex items-center">
           <FaRobot className="mr-4" /> Tank Evolution
         </h1>
