@@ -1,7 +1,7 @@
 import React from 'react';
 import { WORLD_LORE } from '../data/worldLore';
 
-export default function LoreDrawer({ section }) {
+export default function LoreDrawer({ section = 'lore' }) {
   if (section === 'lore') {
     return (
       <div>
@@ -39,11 +39,10 @@ export default function LoreDrawer({ section }) {
     return (
       <div>
         <h3 className="font-semibold mb-2">What’s Happened So Far</h3>
-        <p>This section could show major game highlights, wins, losses, or event summaries.</p>
-        <p>We can wire it to actual game data next.</p>
+        <p>Game log will eventually go here.</p>
       </div>
     );
   }
 
-  return null;
+  return <p className="text-gray-500">Nothing to show yet.</p>;
 }
