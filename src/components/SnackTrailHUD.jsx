@@ -1,49 +1,42 @@
-import React from 'react';
-import { WORLD_LORE } from '../data/worldLore';
+import React, { useState } from 'react';
+import LoreDrawer from './LoreDrawer';
 
-export default function LoreDrawer({ section }) {
-  if (section === 'lore') {
-    return (
-      <div>
-        <p className="mb-2">{WORLD_LORE.setting}</p>
-        <h3 className="font-semibold mb-1">Factions</h3>
-        <ul className="list-disc pl-5 mb-4">
-          {WORLD_LORE.factions.map((f, i) => (
-            <li key={i}><strong>{f.name}</strong>: {f.traits}</li>
-          ))}
-        </ul>
-        <h3 className="font-semibold mb-1">How to Play</h3>
-        <ol className="list-decimal pl-5">
-          {WORLD_LORE.rules.map((r, i) => (
-            <li key={i}>{r}</li>
-          ))}
-        </ol>
+export default function SnackTrailHUD({ children }) {
+  const [open, setOpen] = useState(false);
+  const [section, setSection] = useState('lore');
+
+  const toggleDrawer = () => setOpen(!open);
+  const changeSection = (target) => {
+    setSection(target);
+    setOpen(true);
+  };
+
+  return (
+    <div className="relative w-full">
+      {/* Left HUD menu */}
+      <div className="fixed top-20 left-2 z-50 flex flex-col gap-2 bg-white/20 backdrop-blur-md rounded-lg p-2 shadow-md">
+        <button onClick={() => changeSection('lore')} className="text-sm rounded-full px-3 py-1 hover:bg-white/30">📖</button>
+        <button onClick={() => changeSection('runners')} className="text-sm rounded-full px-3 py-1 hover:bg-white/30">🏃</button>
+        <button onClick={() => changeSection('log')} className="text-sm rounded-full px-3 py-1 hover:bg-white/30">🗒️</button>
       </div>
-    );
-  }
 
-  if (section === 'runners') {
-    return (
-      <div>
-        <h3 className="font-semibold mb-2">Meet the Racers</h3>
-        <ul className="space-y-2">
-          <li>🧢 Brian — Leader of the Crunch Crew</li>
-          <li>🎧 Chris — Tactician of the Sweet Scouts</li>
-          <li>🐱 Mel — Underdog from the Fizz Force</li>
-        </ul>
+      {/* Side Drawer */}
+      {open && (
+        <div className="fixed top-0 left-14 bottom-0 w-64 z-40 bg-white text-black rounded-r-xl shadow-xl overflow-y-auto">
+          <div className="flex justify-between items-center p-3 border-b">
+            <h2 className="text-lg font-bold capitalize">{section || 'Section'}</h2>
+            <button onClick={toggleDrawer} className="text-xl font-bold">×</button>
+          </div>
+          <div className="p-4 text-sm">
+            <LoreDrawer section={section || 'lore'} />
+          </div>
+        </div>
+      )}
+
+      {/* Main content */}
+      <div className="pt-2 pl-20">
+        {children}
       </div>
-    );
-  }
-
-  if (section === 'log') {
-    return (
-      <div>
-        <h3 className="font-semibold mb-2">What’s Happened So Far</h3>
-        <p>This section could show major game highlights, wins, losses, or event summaries.</p>
-        <p>We can wire it to actual game data next.</p>
-      </div>
-    );
-  }
-
-  return null;
+    </div>
+  );
 }
