@@ -14,18 +14,22 @@ export default function Navigation() {
   const { pathname } = useLocation();
 
   return (
-    <nav className="fixed top-2 left-1/2 transform -translate-x-1/2 bg-white/70 backdrop-blur-md shadow-xl rounded-full px-4 py-2 flex gap-2 z-50">
-      {navItems.map(({ name, path, color }) => (
-        <Link
-          key={path}
-          to={path}
-          className={`text-sm px-3 py-1 rounded-full font-semibold hover:scale-105 transition-all duration-200 whitespace-nowrap ${
-            pathname === path ? `${color} shadow-md` : 'bg-gray-200 text-gray-700'
-          }`}
-        >
-          {name}
-        </Link>
-      ))}
-    </nav>
+    <div className="fixed top-2 left-0 right-0 z-50">
+      <div className="overflow-x-auto px-4">
+        <nav className="flex w-max gap-2 bg-white/80 backdrop-blur-md shadow-xl rounded-full px-4 py-2 mx-auto">
+          {navItems.map(({ name, path, color }) => (
+            <Link
+              key={path}
+              to={path}
+              className={`text-sm px-3 py-1 rounded-full font-semibold whitespace-nowrap hover:scale-105 transition-all duration-200 ${
+                pathname === path ? `${color} shadow-md` : 'bg-gray-200 text-gray-700'
+              }`}
+            >
+              {name}
+            </Link>
+          ))}
+        </nav>
+      </div>
+    </div>
   );
 }
