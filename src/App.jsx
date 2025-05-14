@@ -6,7 +6,7 @@ import RobotLab        from './components/RobotLab';
 import LegoBuilder     from './components/LegoBuilder';
 import LegoInventory   from './components/LegoInventory';
 import LittleAlchemy   from './components/LittleAlchemy';
-import SnackTrail      from './components/SnackTrail';   // ← NEW
+import SnackTrail from './features/SnackTrail/SnackTrail';
 
 function App() {
   return (
