@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import TrailScene from './TrailScene';
+import TrailScenePlus from './TrailScenePlus';
 
 const TOTAL_DAYS = 15;
 const DEFAULT_AVATARS = ['🧢', '🎧', '🐱'];
@@ -111,7 +112,7 @@ export default function SnackTrail() {
       <h2 className="text-xl font-bold flex items-center justify-center mb-1">🍔 Snack Trail</h2>
       <p className="text-center text-sm mb-3">Day {currentDay} of {TOTAL_DAYS}</p>
 
-      <TrailScene crew={crew} day={currentDay} />
+<TrailScenePlus crew={crew} day={currentDay} arcadeMode={arcadeMode} />
 
       {title && (
         <div className="text-center mb-2">
