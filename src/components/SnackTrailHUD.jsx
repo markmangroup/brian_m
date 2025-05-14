@@ -7,7 +7,7 @@ export default function SnackTrailHUD({ children }) {
 
   const toggleDrawer = (target) => {
     if (section === target && open) {
-      setOpen(false); // collapse if already open
+      setOpen(false);
     } else {
       setSection(target);
       setOpen(true);
@@ -29,12 +29,12 @@ export default function SnackTrailHUD({ children }) {
           <h2 className="text-lg font-bold capitalize">{section}</h2>
           <button onClick={() => setOpen(false)} className="text-xl font-bold">×</button>
         </div>
-        <div className="p-4 text-sm">
+        <div className="p-4 text-sm pr-6">
           <LoreDrawer section={section} />
         </div>
       </div>
 
-      {/* Main Game Content — no forced padding */}
+      {/* Main Game Content */}
       <div className="pt-2">
         {children}
       </div>
