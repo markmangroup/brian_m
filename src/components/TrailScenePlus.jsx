@@ -10,7 +10,7 @@ export default function TrailScenePlus({ crew, day, arcadeMode }) {
         const percent = Math.min(member.snacks / maxSnacks, 1);
         const leftPos = `calc(${percent * 100}% - 20px)`;
         const lineOffset = idx * 48 + 16;
-        const animateClass = member.snacks > 30 ? 'animate-bounce' : member.snacks < 10 ? 'animate-ping' : '';
+const animateClass = member.fx || '';
 
         return (
           <div key={member.name} className="relative h-12">
