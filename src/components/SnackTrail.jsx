@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import TrailScenePlus from './TrailScenePlus';
 import { PRESET_EVENTS } from '../data/presetEvents';
+import RaceTrackScene from './RaceTrackScene';
 
 const TOTAL_DAYS = 15;
 const DEFAULT_AVATARS = ['🧢', '🎧', '🐱'];
