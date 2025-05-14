@@ -1,43 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import TrailScenePlus from './TrailScenePlus';
-import { PRESET_EVENTS } from '../data/presetEvents';
 import RaceTrackScene from './RaceTrackScene';
+import { PRESET_EVENTS } from '../data/presetEvents';
 
 const TOTAL_DAYS = 15;
 const DEFAULT_AVATARS = ['🧢', '🎧', '🐱'];
 
 export default function SnackTrail() {
   const initialCrew = [
-    { name: "Brian", snacks: 20, lastEmoji: '' },
-    { name: "Chris", snacks: 20, lastEmoji: '' },
-    { name: "Mel", snacks: 20, lastEmoji: '' }
+    { name: "Brian", snacks: 0, position: 0, lastEmoji: '', fx: '' },
+    { name: "Chris", snacks: 0, position: 0, lastEmoji: '', fx: '' },
+    { name: "Mel", snacks: 0, position: 0, lastEmoji: '', fx: '' }
   ];
 
   const [timeline, setTimeline] = useState([{ crew: initialCrew, log: [] }]);
   const [currentDay, setCurrentDay] = useState(0);
   const [title, setTitle] = useState("");
   const [arcadeMode, setArcadeMode] = useState(false);
-  const [sparkleMember, setSparkleMember] = useState(null);
-  const [journeyComplete, setJourneyComplete] = useState(false);
+  const [winner, setWinner] = useState(null);
 
   const crew = timeline[currentDay].crew;
   const log = timeline.flatMap(day => day.log).slice(0, 8);
 
   useEffect(() => {
-    if (sparkleMember !== null) {
-      const timer = setTimeout(() => setSparkleMember(null), 1200);
-      return () => clearTimeout(timer);
-    }
-  }, [sparkleMember]);
+    if (winner) setArcadeMode(true);
+  }, [winner]);
 
   const extractEmoji = (text) => {
     const emojiRegex = /([\u231A-\uD83E\uDDFF])/;
     const match = text.match(emojiRegex);
     return match ? match[0] : "";
-  };
-
-  const triggerSparkle = (index) => {
-    setSparkleMember(index);
   };
 
   const handleNextDay = () => {
@@ -48,20 +39,24 @@ export default function SnackTrail() {
 
     newCrew.forEach((member, idx) => {
       const event = PRESET_EVENTS[(day + idx) % PRESET_EVENTS.length];
-      const oldSnacks = member.snacks;
-      const newSnacks = Math.max(oldSnacks + event.snack, 0);
-      member.snacks = newSnacks;
+      member.snacks = Math.max(member.snacks + event.snack, 0);
+      member.position = Math.min(member.position + 1 + (Math.random() < 0.3 ? 1 : 0), TOTAL_DAYS);
       member.lastEmoji = event.emoji || DEFAULT_AVATARS[idx];
-      logsForThisDay.push(`Day ${day}: ${member.name}: ${event.text} (${newSnacks} snacks left)`);
-      if (oldSnacks < 50 && newSnacks >= 50) {
-        triggerSparkle(idx);
-      }
+      member.fx = event.fx || '';
+      logsForThisDay.push(`Day ${day}: ${member.name}: ${event.text} (Position: ${member.position}, Snacks: ${member.snacks})`);
     });
 
-    if (!arcadeMode && day >= 10) setArcadeMode(true);
-    if (day === TOTAL_DAYS) setJourneyComplete(true);
+    const reached = newCrew.find(m => m.position >= TOTAL_DAYS);
+    if (reached && !winner) {
+      setWinner(reached.name);
+      logsForThisDay.unshift(`🏁 ${reached.name} has reached the Arcade Temple!`);
+    }
 
-    const achievedTitle = titlesByDay.slice().reverse().find(t => day >= t.day);
+    const achievedTitle = [
+      { day: 5, title: "Trail Scout" },
+      { day: 10, title: "Snack Survivor" }
+    ].slice().reverse().find(t => day >= t.day);
+
     if (achievedTitle && achievedTitle.title !== title) {
       setTitle(achievedTitle.title);
       logsForThisDay.unshift(`🏅 Unlocked title: ${achievedTitle.title}!`);
@@ -75,20 +70,19 @@ export default function SnackTrail() {
     if (currentDay > 0) setCurrentDay(currentDay - 1);
   };
 
-  const progressPercent = Math.min((currentDay / TOTAL_DAYS) * 100, 100);
-
-  const titlesByDay = [
-    { day: 5, title: "Trail Scout" },
-    { day: 10, title: "Snack Survivor" }
-  ];
-
   return (
     <div className={`${arcadeMode ? 'bg-purple-900 text-green-300 border-pink-500' : 'bg-gray-900 text-yellow-400'} p-4 pt-2 rounded-xl max-w-md mx-auto mt-2`}>
 
       <h2 className="text-xl font-bold flex items-center justify-center mb-1">🍔 Snack Trail</h2>
       <p className="text-center text-sm mb-3">Day {currentDay} of {TOTAL_DAYS}</p>
 
-<RaceTrackScene crew={crew} />
+      <RaceTrackScene crew={crew} />
+
+      {winner && (
+        <div className="text-center text-lg font-bold text-pink-300 my-3">
+          🎉 {winner} wins the race to the Arcade!
+        </div>
+      )}
 
       {title && (
         <div className="text-center mb-2">
@@ -97,29 +91,6 @@ export default function SnackTrail() {
           </span>
         </div>
       )}
-
-      <div className="space-y-1.5 mb-3">
-        {crew.map((member, index) => (
-          <div key={index} className="relative flex items-center bg-gray-800/60 rounded-lg px-3 py-1.5">
-            <div className="w-1/2 flex items-center text-sm font-medium">
-              {member.name}
-              <span className="ml-1">{member.lastEmoji || DEFAULT_AVATARS[index]}</span>
-            </div>
-            <div className="flex-1 flex items-center">
-              <div className="w-full bg-gray-700 h-3 rounded-full overflow-hidden">
-                <div className={`${arcadeMode ? 'bg-pink-500' : 'bg-yellow-500'} h-3`} style={{ width: `${Math.min(member.snacks, 100)}%` }}></div>
-              </div>
-              <span className="ml-2 text-xs">{member.snacks}</span>
-              {member.snacks >= 50 && <span className="ml-1">🌟</span>}
-            </div>
-            {sparkleMember === index && (
-              <div className="absolute inset-0 flex justify-center items-center pointer-events-none">
-                <span className="text-yellow-400 text-2xl animate-ping">✨</span>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
 
       <div className="flex justify-between gap-2">
         <button
@@ -132,7 +103,7 @@ export default function SnackTrail() {
         <button
           onClick={handleNextDay}
           className={`w-1/2 py-2 rounded-md font-bold text-sm ${arcadeMode ? 'bg-pink-500 text-white animate-pulse' : 'bg-yellow-500 text-gray-900 hover:bg-yellow-400'}`}
-          disabled={journeyComplete || currentDay >= TOTAL_DAYS}
+          disabled={winner !== null || currentDay >= TOTAL_DAYS}
         >
           Next Day
         </button>
