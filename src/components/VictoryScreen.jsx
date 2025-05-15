@@ -4,7 +4,7 @@ export default function VictoryScreen({ crew, winner, onRestart }) {
   return (
     <div className="text-center p-6 space-y-6">
       <h2 className="text-2xl font-bold text-yellow-300 mb-4">🏁 Race Complete!</h2>
-      <p className="text-lg text-white">🎉 <strong>{winner}</strong> reached the Arcade Temple first!</p>
+      <p className="text-lg text-white">🎉 <strong>{winner}</strong> activated the Arcade Temple beacon first!</p>
 
       <div className="bg-gray-800/70 p-4 rounded-lg shadow-lg">
         <h3 className="text-sm font-semibold text-gray-300 mb-2">Final Standings</h3>
@@ -25,6 +25,10 @@ export default function VictoryScreen({ crew, winner, onRestart }) {
       >
         Play Again
       </button>
+
+      <p className="text-xs text-gray-400 italic mt-2">
+        Will a new champion rise?
+      </p>
     </div>
   );
 }
