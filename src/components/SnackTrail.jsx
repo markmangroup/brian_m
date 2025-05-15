@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import RaceTrackScene from './RaceTrackScene';
+import VictoryScreen from './VictoryScreen';
 import { PRESET_EVENTS } from '../data/presetEvents';
 import { DAY_FEATURES } from '../data/dayFeatures';
 
@@ -59,7 +60,6 @@ export default function SnackTrail() {
     if (featureTag) {
       setFeaturePopup(`⭐ ${featureTag.replace(/-/g, ' ').toUpperCase()}!`);
 
-      // Feature behavior logic
       if (featureTag === 'all-players-boost') {
         newCrew.forEach(member => {
           member.position = Math.min(member.position + 1, TOTAL_DAYS);
@@ -95,7 +95,6 @@ export default function SnackTrail() {
 
   return (
     <div className={`${arcadeMode ? 'bg-purple-900 text-green-300 border-pink-500' : 'bg-gray-900 text-yellow-400'} p-4 pt-2 rounded-xl max-w-md mx-auto mt-2`}>
-
       {featurePopup && (
         <div className="fixed top-20 left-1/2 -translate-x-1/2 bg-yellow-300 text-black px-4 py-2 rounded-full shadow-xl z-50 animate-pulse text-sm font-bold">
           {featurePopup}
@@ -105,12 +104,14 @@ export default function SnackTrail() {
       <h2 className="text-xl font-bold flex items-center justify-center mb-1">🍔 Snack Trail</h2>
       <p className="text-center text-sm mb-3">Day {currentDay} of {TOTAL_DAYS}</p>
 
-      <RaceTrackScene crew={crew} />
-
-      {winner && (
-        <div className="text-center text-lg font-bold text-pink-300 my-3">
-          🎉 {winner} wins the race to the Arcade!
-        </div>
+      {winner ? (
+        <VictoryScreen
+          crew={crew}
+          winner={winner}
+          onRestart={() => window.location.reload()}
+        />
+      ) : (
+        <RaceTrackScene crew={crew} />
       )}
 
       {title && (
