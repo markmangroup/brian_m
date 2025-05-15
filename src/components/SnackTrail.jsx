@@ -58,6 +58,15 @@ export default function SnackTrail() {
     const featureTag = DAY_FEATURES[day];
     if (featureTag) {
       setFeaturePopup(`⭐ ${featureTag.replace(/-/g, ' ').toUpperCase()}!`);
+
+      // Feature behavior logic
+      if (featureTag === 'all-players-boost') {
+        newCrew.forEach(member => {
+          member.position = Math.min(member.position + 1, TOTAL_DAYS);
+          member.fx = 'animate-bounce';
+        });
+        logsForThisDay.unshift(`🚀 Everyone got a burst of energy and moved ahead!`);
+      }
     }
 
     const reached = newCrew.find(m => m.position >= TOTAL_DAYS);
