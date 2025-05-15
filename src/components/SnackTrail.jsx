@@ -109,11 +109,7 @@ export default function SnackTrail() {
         </button>
       </div>
 
-      <div className="mt-4 max-h-36 overflow-y-auto text-sm space-y-1 text-gray-300 leading-snug">
-        {log.map((entry, i) => (
-          <div key={i}>{entry}</div>
-        ))}
-      </div>
+      
     </div>
   );
 }
