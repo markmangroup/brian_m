@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import RaceTrackScene from './RaceTrackScene';
 import { PRESET_EVENTS } from '../data/presetEvents';
+import { DAY_FEATURES } from '../data/dayFeatures';
 
 const TOTAL_DAYS = 15;
 const DEFAULT_AVATARS = ['🧢', '🎧', '🐱'];
@@ -45,6 +46,12 @@ export default function SnackTrail() {
       member.fx = event.fx || '';
       logsForThisDay.push(`Day ${day}: ${member.name}: ${event.text} (Position: ${member.position}, Snacks: ${member.snacks})`);
     });
+
+    // Trigger optional feature tag
+    const featureTag = DAY_FEATURES[day];
+    if (featureTag) {
+      logsForThisDay.unshift(`⭐ Special event triggered: ${featureTag}`);
+    }
 
     const reached = newCrew.find(m => m.position >= TOTAL_DAYS);
     if (reached && !winner) {
@@ -108,8 +115,6 @@ export default function SnackTrail() {
           Next Day
         </button>
       </div>
-
-      
     </div>
   );
 }
