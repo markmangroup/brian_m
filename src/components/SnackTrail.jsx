@@ -18,6 +18,7 @@ export default function SnackTrail() {
   const [title, setTitle] = useState("");
   const [arcadeMode, setArcadeMode] = useState(false);
   const [winner, setWinner] = useState(null);
+  const [featurePopup, setFeaturePopup] = useState(null);
 
   const crew = timeline[currentDay].crew;
   const log = timeline.flatMap(day => day.log).slice(0, 8);
@@ -25,6 +26,13 @@ export default function SnackTrail() {
   useEffect(() => {
     if (winner) setArcadeMode(true);
   }, [winner]);
+
+  useEffect(() => {
+    if (featurePopup) {
+      const timer = setTimeout(() => setFeaturePopup(null), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [featurePopup]);
 
   const extractEmoji = (text) => {
     const emojiRegex = /([\u231A-\uD83E\uDDFF])/;
@@ -47,10 +55,9 @@ export default function SnackTrail() {
       logsForThisDay.push(`Day ${day}: ${member.name}: ${event.text} (Position: ${member.position}, Snacks: ${member.snacks})`);
     });
 
-    // Trigger optional feature tag
     const featureTag = DAY_FEATURES[day];
     if (featureTag) {
-      logsForThisDay.unshift(`⭐ Special event triggered: ${featureTag}`);
+      setFeaturePopup(`⭐ ${featureTag.replace(/-/g, ' ').toUpperCase()}!`);
     }
 
     const reached = newCrew.find(m => m.position >= TOTAL_DAYS);
@@ -79,6 +86,12 @@ export default function SnackTrail() {
 
   return (
     <div className={`${arcadeMode ? 'bg-purple-900 text-green-300 border-pink-500' : 'bg-gray-900 text-yellow-400'} p-4 pt-2 rounded-xl max-w-md mx-auto mt-2`}>
+
+      {featurePopup && (
+        <div className="fixed top-20 left-1/2 -translate-x-1/2 bg-yellow-300 text-black px-4 py-2 rounded-full shadow-xl z-50 animate-pulse text-sm font-bold">
+          {featurePopup}
+        </div>
+      )}
 
       <h2 className="text-xl font-bold flex items-center justify-center mb-1">🍔 Snack Trail</h2>
       <p className="text-center text-sm mb-3">Day {currentDay} of {TOTAL_DAYS}</p>
