@@ -21,3 +21,17 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 } 
+
+@keyframes matrix-progress {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+
+.loading-bar {
+  animation: matrix-progress 3s linear forwards;
+}
+
+.neon-text {
+  color: #39ff14;
+  text-shadow: 0 0 5px #39ff14, 0 0 10px #39ff14, 0 0 20px #39ff14;
+}
