@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
-const navItems = [
+export const navItems = [
   { name: 'The Trail',      path: '/snack-trail',      color: 'bg-yellow-400 text-black' },
   { name: 'Pixel Lab',      path: '/pixel-art',        color: 'bg-blue-500' },
   { name: 'Robot Room',     path: '/robot-lab',        color: 'bg-green-500' },
