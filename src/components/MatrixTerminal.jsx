@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { NAOE_QUOTES } from '../data/naoeQuotes';
+import useTypewriterEffect from './useTypewriterEffect';
 
 export default function MatrixTerminal() {
   const [code, setCode] = useState('');
   const [message, setMessage] = useState('');
+  const [typedMessage, done] = useTypewriterEffect(message);
   const secret = 'thereisnospoon';
 
   const handleSubmit = (e) => {
@@ -15,6 +17,8 @@ export default function MatrixTerminal() {
       setMessage('Access denied. Try again.');
     }
   };
+
+  const success = message.startsWith('Access granted');
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-black text-green-500 font-mono space-y-6">
@@ -32,7 +36,14 @@ export default function MatrixTerminal() {
           Hack
         </button>
       </form>
-      {message && <p className="text-xl">{message}</p>}
+      {message && (
+        <p
+          className="text-xl text-green-400"
+          style={success ? { textShadow: '0 0 8px #00ff00' } : undefined}
+        >
+          {success ? typedMessage : message}
+        </p>
+      )}
     </div>
   );
 }
