@@ -1,13 +1,16 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import TheMatrix from '../components/TheMatrix';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, Routes, Route } from 'react-router-dom';
 
 // helper to enter the matrix by submitting a name
 async function enterMatrix(name = 'Neo') {
   render(
     <MemoryRouter initialEntries={["/the-matrix"]}>
-      <TheMatrix />
+      <Routes>
+        <Route path="/the-matrix" element={<TheMatrix />} />
+        <Route path="/the-matrix/terminal" element={<div>Matrix Terminal</div>} />
+      </Routes>
     </MemoryRouter>
   );
   const input = screen.getByPlaceholderText(/player name/i);

@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function TheMatrix() {
   const [name, setName] = useState('');
   const [entered, setEntered] = useState(false);
   const [pill, setPill] = useState(null);
+  const navigate = useNavigate();
 
   /* ───────────── 1. name prompt ───────────── */
   const handleSubmit = (e) => {
@@ -46,7 +48,10 @@ export default function TheMatrix() {
           <p className="text-xl">You are now inside the Matrix.</p>
           <div className="flex space-x-4">
             <button
-              onClick={() => setPill('red')}
+              onClick={() => {
+                setPill('red');
+                navigate('/the-matrix/terminal');
+              }}
               className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-500"
             >
               Red Pill
