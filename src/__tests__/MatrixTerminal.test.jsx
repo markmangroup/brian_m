@@ -2,16 +2,19 @@ import { render, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import MatrixTerminal from '../components/MatrixTerminal';
+import { UserProvider } from '../components/UserContext';
 
 function setup(initialEntries = ['/the-matrix/terminal']) {
   render(
-    <MemoryRouter initialEntries={initialEntries}>
-      <Routes>
-        <Route path="/the-matrix/terminal" element={<MatrixTerminal />} />
-        <Route path="/the-matrix/transition" element={<div>Transition</div>} />
-        <Route path="/the-matrix/portal" element={<div>Portal</div>} />
-      </Routes>
-    </MemoryRouter>
+    <UserProvider>
+      <MemoryRouter initialEntries={initialEntries}>
+        <Routes>
+          <Route path="/the-matrix/terminal" element={<MatrixTerminal />} />
+          <Route path="/the-matrix/transition" element={<div>Transition</div>} />
+          <Route path="/the-matrix/portal" element={<div>Portal</div>} />
+        </Routes>
+      </MemoryRouter>
+    </UserProvider>
   );
 }
 

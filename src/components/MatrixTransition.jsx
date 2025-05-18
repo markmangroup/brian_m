@@ -1,18 +1,22 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { UserContext } from './UserContext';
 
 export default function MatrixTransition() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { userName } = useContext(UserContext);
 
   // 3-sec “code rain” splash, then jump to the portal
+  const name = location.state?.name || userName;
+
   useEffect(() => {
     const t = setTimeout(
-      () => navigate('/the-matrix/portal', { state: location.state }),
+      () => navigate('/the-matrix/portal', { state: { name } }),
       3000
     );
     return () => clearTimeout(t);
-  }, [navigate, location.state]);
+  }, [navigate, name]);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-black text-green-400 font-mono space-y-6">

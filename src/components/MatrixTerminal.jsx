@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { UserContext } from './UserContext';
 import { NAOE_QUOTES } from '../data/naoeQuotes';
 
 export default function MatrixTerminal() {
+  const { userName }     = useContext(UserContext);
   const [code, setCode]   = useState('');
   const [msg,  setMsg]    = useState('');
   const [ok,   setOk]     = useState(false);
   const navigate          = useNavigate();
   const location          = useLocation();
   const secret            = 'thereisnospoon';
+  const stateName         = location.state?.name || userName;
 
   /* restore previous access */
   useEffect(() => {
@@ -23,7 +26,7 @@ export default function MatrixTerminal() {
     setOk(true);
     localStorage.setItem('matrixAccess', 'true');
     setTimeout(() =>
-      navigate('/the-matrix/transition', { state: location.state }),
+      navigate('/the-matrix/transition', { state: { name: stateName } }),
     2500);
   };
 
