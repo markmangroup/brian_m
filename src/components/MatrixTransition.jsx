@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router-dom';
 export default function MatrixTransition() {
   const navigate = useNavigate();
 
-  // 3-sec “code rain” splash, then jump to the terminal
+  // 3-sec “code rain” splash, then jump to the portal
   useEffect(() => {
-    const t = setTimeout(() => navigate('/the-matrix/terminal'), 3000);
+    const t = setTimeout(() => navigate('/portal'), 3000);
     return () => clearTimeout(t);
   }, [navigate]);
 

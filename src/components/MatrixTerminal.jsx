@@ -21,7 +21,7 @@ export default function MatrixTerminal() {
     setMsg(`Access granted. Welcome to the real world. ${q.text} — ${q.attribution}`);
     setOk(true);
     localStorage.setItem('matrixAccess', 'true');
-    setTimeout(() => navigate('/the-matrix/puzzle'), 2500);
+    setTimeout(() => navigate('/matrix-transition'), 2500);
   };
 
   const handleSubmit = (e) => {
