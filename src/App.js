@@ -12,7 +12,6 @@ import LittleAlchemy from './components/LittleAlchemy';
 import TheMatrix from './components/TheMatrix';
 import MatrixTransition from './components/MatrixTransition';
 import MatrixTerminal   from './components/MatrixTerminal';
-import MatrixPuzzle     from './components/MatrixPuzzle';
 import MatrixPortal     from './components/MatrixPortal';
 
 
@@ -29,10 +28,9 @@ export default function App() {
           <Route path="/lego-inventory" element={<LegoInventory />} />
   <Route path="/little-alchemy" element={<LittleAlchemy />} />
           <Route path="/the-matrix" element={<TheMatrix />} />
-          <Route path="/matrix-transition" element={<MatrixTransition />} />
-  <Route path="/the-matrix/terminal"   element={<MatrixTerminal   />} />
-  <Route path="/the-matrix/puzzle"     element={<MatrixPuzzle     />} />
-          <Route path="/portal" element={<MatrixPortal />} />
+          <Route path="/the-matrix/terminal"   element={<MatrixTerminal   />} />
+          <Route path="/the-matrix/transition" element={<MatrixTransition />} />
+          <Route path="/the-matrix/portal"     element={<MatrixPortal     />} />
 
           <Route path="*" element={<Navigate to="/snack-trail" />} />
         </Routes>
