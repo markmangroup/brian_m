@@ -18,9 +18,9 @@ const animateClass = member.fx || '';
             <div className="absolute top-1/2 left-4 right-4 h-2 bg-gradient-to-r from-gray-600 to-gray-800 rounded-full" />
 
             {/* Milestones */}
-            {idx === 0 && <div className="absolute top-0 left-[33%] text-sm animate-pulse">🏕️</div>}
+            {idx === 0 && <div className="absolute top-0 left-[33%] text-sm animate-pulse">🏕</div>️</div>}
             {idx === 0 && <div className="absolute top-0 left-[66%] text-sm animate-pulse">⛺</div>}
-            {idx === 0 && <div className="absolute top-0 right-4 text-sm animate-bounce">🕹️</div>}
+            {idx === 0 && <div className="absolute top-0 right-4 text-sm animate-bounce">🕹</div>️</div>}
 
             {/* Avatar */}
             <div
