@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import mermaid from 'mermaid';
 
 export default function MatrixFlowDrawer() {
   const [open, setOpen] = useState(false);
   const [diagram, setDiagram] = useState('');
+  const diagramRef = useRef(null);
 
   useEffect(() => {
     fetch(process.env.PUBLIC_URL + '/matrix-flow.mmd')
@@ -10,6 +12,16 @@ export default function MatrixFlowDrawer() {
       .then(setDiagram)
       .catch(() => {});
   }, []);
+
+  useEffect(() => {
+    if (open && diagram && diagramRef.current) {
+      // Render the mermaid diagram into the div
+      mermaid.initialize({ startOnLoad: false });
+      mermaid.render('matrixFlow', diagram, (svgCode) => {
+        diagramRef.current.innerHTML = svgCode;
+      });
+    }
+  }, [open, diagram]);
 
   return (
     <div className="fixed bottom-4 right-4 z-50 text-sm">
@@ -28,7 +40,7 @@ export default function MatrixFlowDrawer() {
             <button onClick={() => setOpen(false)} className="text-xl font-bold" aria-label="Close">×</button>
           </div>
           <div className="p-2">
-            {diagram && <pre className="mermaid text-xs">{diagram}</pre>}
+            <div ref={diagramRef} />
           </div>
         </div>
       )}
