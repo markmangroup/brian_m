@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { NAOE_QUOTES } from '../data/naoeQuotes';
 
 export default function MatrixTerminal() {
   const [code, setCode] = useState('');
@@ -8,7 +9,8 @@ export default function MatrixTerminal() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (code.toLowerCase() === secret) {
-      setMessage('Access granted. Welcome to the real world.');
+      const quote = NAOE_QUOTES[Math.floor(Math.random() * NAOE_QUOTES.length)];
+      setMessage(`Access granted. Welcome to the real world. ${quote.text} — ${quote.attribution}`);
     } else {
       setMessage('Access denied. Try again.');
     }
