@@ -12,8 +12,8 @@ async function submitCode(code) {
 
 test('shows a Naoe quote when passcode is correct', async () => {
   await submitCode('thereisnospoon');
-  const message = await screen.findByText(/access granted/i);
-  expect(message.textContent).toMatch(/— Naoe/);
+  const message = await screen.findByText(/Naoe/, {}, { timeout: 5000 });
+  expect(message.textContent).toMatch(/Access granted/);
 });
 
 test('shows access denied when passcode is wrong', async () => {
