@@ -1,10 +1,12 @@
 
 import { NAOE_QUOTES } from '../data/naoeQuotes';
 import useTypewriterEffect from './useTypewriterEffect';
+import { useNavigate } from 'react-router-dom';
 
 export default function MatrixTerminal() {
   const [code, setCode] = useState('');
   const [message, setMessage] = useState('');
+
 
   const secret = 'thereisnospoon';
 
@@ -23,7 +25,6 @@ export default function MatrixTerminal() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (code.toLowerCase() === secret) {
-      const quote = NAOE_QUOTES[Math.floor(Math.random() * NAOE_QUOTES.length)];
 
     } else {
       setMessage('Access denied. Try again.');
