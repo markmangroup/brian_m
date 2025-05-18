@@ -20,6 +20,8 @@ export default function SnackTrail() {
   const [arcadeMode, setArcadeMode] = useState(false);
   const [winner, setWinner] = useState(null);
   const [featurePopup, setFeaturePopup] = useState(null);
+  const [customizing, setCustomizing] = useState(false);
+  const [crewInputs, setCrewInputs] = useState(initialCrew.map(member => member.name));
 
   const crew = timeline[currentDay].crew;
   const log = timeline.flatMap(day => day.log).slice(0, 8);
@@ -34,12 +36,6 @@ export default function SnackTrail() {
       return () => clearTimeout(timer);
     }
   }, [featurePopup]);
-
-  const extractEmoji = (text) => {
-    const emojiRegex = /([\u231A-\uD83E\uDDFF])/;
-    const match = text.match(emojiRegex);
-    return match ? match[0] : "";
-  };
 
   const handleNextDay = () => {
     const day = currentDay + 1;
@@ -93,6 +89,15 @@ export default function SnackTrail() {
     if (currentDay > 0) setCurrentDay(currentDay - 1);
   };
 
+  const handleCrewChange = () => {
+    const newCrew = crewInputs
+      .filter(name => name.trim() !== '')
+      .map(name => ({ name, snacks: 0, position: 0, lastEmoji: '', fx: '' }));
+    setTimeline([{ crew: newCrew, log: [] }]);
+    setCurrentDay(0);
+    setCustomizing(false);
+  };
+
   return (
     <div className={`${arcadeMode ? 'bg-purple-900 text-green-300 border-pink-500' : 'bg-gray-900 text-yellow-400'} p-4 pt-2 rounded-xl max-w-md mx-auto mt-2`}>
       {featurePopup && (
@@ -103,6 +108,56 @@ export default function SnackTrail() {
 
       <h2 className="text-xl font-bold flex items-center justify-center mb-1">🍔 Snack Trail</h2>
       <p className="text-center text-sm mb-3">Day {currentDay} of {TOTAL_DAYS}</p>
+
+      <button
+        onClick={() => setCustomizing(!customizing)}
+        className="mb-3 text-xs underline text-blue-300 hover:text-white block mx-auto"
+      >
+        {customizing ? 'Cancel' : 'Customize Crew'}
+      </button>
+
+      {customizing && (
+        <div className="mb-3 bg-gray-800 p-3 rounded-xl">
+          {crewInputs.map((name, idx) => (
+            <input
+              key={idx}
+              type="text"
+              value={name}
+              onChange={e => {
+                const copy = [...crewInputs];
+                copy[idx] = e.target.value;
+                setCrewInputs(copy);
+              }}
+              placeholder={`Crewmate ${idx + 1}`}
+              className="block w-full bg-gray-700 text-white px-2 py-1 rounded-md my-1 text-sm"
+            />
+          ))}
+          <div className="flex justify-between gap-2 mt-2">
+            <button
+              onClick={() => setCrewInputs([...crewInputs, ''])}
+              disabled={crewInputs.length >= 6}
+              className="flex-1 py-1 rounded-md text-sm bg-blue-500 text-white"
+            >
+              + Add Crewmate
+            </button>
+            <button
+              onClick={() => {
+                if (crewInputs.length > 2) setCrewInputs(crewInputs.slice(0, -1));
+              }}
+              disabled={crewInputs.length <= 2}
+              className="flex-1 py-1 rounded-md text-sm bg-red-500 text-white"
+            >
+              - Remove Last
+            </button>
+          </div>
+          <button
+            onClick={handleCrewChange}
+            className="mt-2 w-full py-1 bg-green-400 text-black rounded-md font-bold"
+          >
+            Save Crew
+          </button>
+        </div>
+      )}
 
       {winner ? (
         <VictoryScreen
