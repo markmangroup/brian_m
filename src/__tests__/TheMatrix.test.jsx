@@ -3,16 +3,19 @@ import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import TheMatrix from '../components/TheMatrix';
 import MatrixTerminal from '../components/MatrixTerminal';
+import { UserProvider } from '../components/UserContext';
 
 
 function setup() {
   render(
-    <MemoryRouter initialEntries={["/the-matrix"]}>
-      <Routes>
-        <Route path="/the-matrix" element={<TheMatrix />} />
-        <Route path="/the-matrix/terminal" element={<MatrixTerminal />} />
-      </Routes>
-    </MemoryRouter>
+    <UserProvider>
+      <MemoryRouter initialEntries={["/the-matrix"]}>
+        <Routes>
+          <Route path="/the-matrix" element={<TheMatrix />} />
+          <Route path="/the-matrix/terminal" element={<MatrixTerminal />} />
+        </Routes>
+      </MemoryRouter>
+    </UserProvider>
   );
 }
 

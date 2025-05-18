@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import UserIcon from './UserIcon';
 
 export const navItems = [
   { name: 'The Trail',      path: '/snack-trail',      color: 'bg-yellow-400 text-black' },
@@ -31,6 +32,7 @@ export default function Navigation() {
           ))}
         </nav>
       </div>
+      <UserIcon />
     </div>
   );
 }

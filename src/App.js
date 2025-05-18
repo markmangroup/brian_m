@@ -1,6 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
+import { UserProvider } from './components/UserContext';
+
 import Navigation from './components/Navigation';
 import SnackTrailPage from './components/SnackTrailPage';
 
@@ -17,10 +19,11 @@ import MatrixPortal     from './components/MatrixPortal';
 
 export default function App() {
   return (
-    <Router>
-      <div className="min-h-screen bg-gray-900 text-white pt-16 relative">
-        <Navigation />
-        <Routes>
+    <UserProvider>
+      <Router>
+        <div className="min-h-screen bg-gray-900 text-white pt-16 relative">
+          <Navigation />
+          <Routes>
           <Route path="/snack-trail" element={<SnackTrailPage />} />
           <Route path="/pixel-art" element={<PixelArtMaker />} />
           <Route path="/robot-lab" element={<RobotLab />} />
@@ -36,5 +39,6 @@ export default function App() {
         </Routes>
       </div>
     </Router>
+    </UserProvider>
   );
 }

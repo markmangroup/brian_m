@@ -1,15 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from './UserContext';
 
 export default function TheMatrix() {
-  const [name, setName] = useState('');
-  const [entered, setEntered] = useState(false);
+  const { userName, setUserName } = useContext(UserContext);
+  const [name, setName] = useState(userName || '');
+  const [entered, setEntered] = useState(!!userName);
   const navigate = useNavigate();
 
   /* ───────────── 1. name prompt ───────────── */
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (name.trim()) setEntered(true);
+    const trimmed = name.trim();
+    if (trimmed) {
+      setUserName(trimmed);
+      setEntered(true);
+    }
   };
 
   if (!entered) {
@@ -37,13 +43,14 @@ export default function TheMatrix() {
   }
 
   /* ───────────── 2. inside the Matrix ───────────── */
+  const displayName = userName || name;
   return (
     <div className="flex flex-col items-center justify-center py-20 text-green-500 font-mono space-y-6">
-      <h1 className="text-5xl font-bold animate-pulse">Welcome, {name}</h1>
+      <h1 className="text-5xl font-bold animate-pulse">Welcome, {displayName}</h1>
       <p className="text-xl">You are now inside the Matrix.</p>
       <div className="flex space-x-4">
         <button
-          onClick={() => navigate('/the-matrix/terminal', { state: { name } })}
+          onClick={() => navigate('/the-matrix/terminal', { state: { name: displayName } })}
           className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-500"
         >
           Red Pill
