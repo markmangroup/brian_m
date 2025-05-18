@@ -5,7 +5,7 @@ import { navItems } from './Navigation';
 import useTypewriterEffect from './useTypewriterEffect';
 import { NAOE_QUOTES } from '../data/naoeQuotes';
 import MatrixFlowDrawer from './MatrixFlowDrawer';
-import Matrix from 'react-matrix-effect';
+import MatrixRain from './MatrixRain';
 
 export default function MatrixPortal() {
   const { state } = useLocation();
@@ -19,7 +19,7 @@ export default function MatrixPortal() {
     <div className="p-8 text-center space-y-6 min-h-screen relative overflow-hidden">
       {/* Matrix Rain background for portal (client-only) */}
       {typeof window !== 'undefined' && (
-        <Matrix fullscreen={true} zIndex={0} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
+        <MatrixRain zIndex={0} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
       )}
       {/* Storyboard: User sees portal welcome, quote, and navigation options */}
       <div className="relative z-10 flex flex-col items-center space-y-6">

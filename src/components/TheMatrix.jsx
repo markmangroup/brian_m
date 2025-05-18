@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from './UserContext';
 import useTypewriterEffect from './useTypewriterEffect';
-import Matrix from 'react-matrix-effect';
+import MatrixRain from './MatrixRain';
 
 export default function TheMatrix() {
   const { userName, setUserName } = useContext(UserContext);
@@ -29,7 +29,7 @@ export default function TheMatrix() {
       <div className="flex flex-col items-center justify-center py-20 space-y-6 min-h-screen relative overflow-hidden">
         {/* Matrix Rain background for name prompt (client-only) */}
         {typeof window !== 'undefined' && (
-          <Matrix fullscreen={true} zIndex={0} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
+          <MatrixRain zIndex={0} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
         )}
         {/* Storyboard: User sees welcome and prompt, enters name */}
         <div className="relative z-10 flex flex-col items-center space-y-6">
@@ -60,7 +60,7 @@ export default function TheMatrix() {
     <div className="flex flex-col items-center justify-center py-20 text-green-500 font-mono space-y-6 min-h-screen relative overflow-hidden">
       {/* Matrix Rain background for inside the Matrix (client-only) */}
       {typeof window !== 'undefined' && (
-        <Matrix fullscreen={true} zIndex={0} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
+        <MatrixRain zIndex={0} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
       )}
       {/* Storyboard: User greeted, chooses red/blue pill */}
       <div className="relative z-10 flex flex-col items-center space-y-6">

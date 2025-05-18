@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { UserContext } from './UserContext';
 import { NAOE_QUOTES } from '../data/naoeQuotes';
 import useTypewriterEffect from './useTypewriterEffect';
-import Matrix from 'react-matrix-effect';
+import MatrixRain from './MatrixRain';
 
 export default function MatrixTerminal() {
   const { userName }     = useContext(UserContext);
@@ -49,7 +49,7 @@ export default function MatrixTerminal() {
     <div className="min-h-screen flex flex-col items-center justify-center bg-black text-green-500 font-mono space-y-6 relative overflow-hidden">
       {/* Matrix Rain background for terminal (client-only) */}
       {typeof window !== 'undefined' && (
-        <Matrix fullscreen={true} zIndex={0} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
+        <MatrixRain zIndex={0} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
       )}
       {/* Storyboard: User enters passcode, sees access/denied message, can log out */}
       <div className="relative z-10 flex flex-col items-center space-y-6 w-full">
