@@ -1,0 +1,19 @@
+flowchart TD
+    A[Visit /the-matrix]
+    A --> B[Enter Name]
+    B --> C{Choose Pill}
+    C -->|Blue Pill| H[Home (/)]
+    C -->|Red Pill| T[Terminal (/the-matrix/terminal)]
+
+    T -->|Wrong passcode| D[Access Denied]
+    D --> T
+    T -->|Correct passcode| X[Transition (/the-matrix/transition)]
+
+    X -->|After 3s| P[Portal (/the-matrix/portal)]
+
+    P --> S[/snack-trail]
+    P --> P1[/pixel-art]
+    P --> P2[/robot-lab]
+    P --> P3[/lego-build]
+    P --> P4[/lego-inventory]
+    P --> P5[/little-alchemy]
