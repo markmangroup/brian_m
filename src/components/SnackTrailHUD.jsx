@@ -20,7 +20,7 @@ export default function SnackTrailHUD({ children }) {
       <div className="fixed top-20 left-2 z-50 flex flex-col gap-2 bg-white/20 backdrop-blur-md rounded-lg p-2 shadow-md">
         <button onClick={() => toggleDrawer('lore')} className={`text-sm rounded-full px-3 py-1 hover:bg-white/30 ${section === 'lore' && open ? 'bg-white/30' : ''}`}>📖</button>
         <button onClick={() => toggleDrawer('runners')} className={`text-sm rounded-full px-3 py-1 hover:bg-white/30 ${section === 'runners' && open ? 'bg-white/30' : ''}`}>🏃</button>
-        <button onClick={() => toggleDrawer('log')} className={`text-sm rounded-full px-3 py-1 hover:bg-white/30 ${section === 'log' && open ? 'bg-white/30' : ''}`}>🗒️</button>
+        <button onClick={() => toggleDrawer('log')} className={`text-sm rounded-full px-3 py-1 hover:bg-white/30 ${section === 'log' && open ? 'bg-white/30' : ''}`}>🗒</button>
       </div>
 
       {/* Slide-out Drawer */}
