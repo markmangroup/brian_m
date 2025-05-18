@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function MatrixPuzzle() {
   const [answer, setAnswer] = useState('');
   const [solved, setSolved] = useState(false);
+  const navigate            = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (answer.trim().toLowerCase() === 'red') {
       setSolved(true);
+      setTimeout(() => navigate('/portal'), 1000);
     }
   };
 
