@@ -73,7 +73,7 @@ export default function TheMatrix() {
         <p className="text-xl">You take the blue pill and wake up in your bed.</p>
       )}
 
-      {pill !== null && (
+      {(pill === 'red' || pill === 'blue') && (
         <button
           onClick={() => setPill(null)}
           className="px-4 py-2 mt-4 rounded bg-gray-700 text-white hover:bg-gray-600"
