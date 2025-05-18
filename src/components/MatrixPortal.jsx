@@ -5,6 +5,7 @@ import { navItems } from './Navigation';
 import useTypewriterEffect from './useTypewriterEffect';
 import { NAOE_QUOTES } from '../data/naoeQuotes';
 import MatrixFlowDrawer from './MatrixFlowDrawer';
+import Matrix from 'react-matrix-effect';
 
 export default function MatrixPortal() {
   const { state } = useLocation();
@@ -15,23 +16,28 @@ export default function MatrixPortal() {
   const [quoteText, quoteDone] = useTypewriterEffect(`${q.text} — ${q.attribution}`, 50);
 
   return (
-    <div className="p-8 text-center space-y-6">
-      <h1 className="text-4xl font-bold text-purple-400">{welcomeText}</h1>
-      <p className="text-lg text-center max-w-md">{quoteText}</p>
-      <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4">
-        {navItems
-          .filter((item) => item.path !== '/the-matrix')
-          .map(({ name, path, color }) => (
-            <Link
-              key={path}
-              to={path}
-              className={`block py-2 rounded-lg font-semibold shadow-md hover:scale-105 transition-transform ${color}`}
-            >
-              {name}
-            </Link>
-          ))}
+    <div className="p-8 text-center space-y-6 min-h-screen relative overflow-hidden">
+      {/* Matrix Rain background for portal */}
+      <Matrix fullscreen={true} zIndex={0} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
+      {/* Storyboard: User sees portal welcome, quote, and navigation options */}
+      <div className="relative z-10 flex flex-col items-center space-y-6">
+        <h1 className="text-4xl font-bold text-purple-400">{welcomeText}</h1>
+        <p className="text-lg text-center max-w-md">{quoteText}</p>
+        <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4">
+          {navItems
+            .filter((item) => item.path !== '/the-matrix')
+            .map(({ name, path, color }) => (
+              <Link
+                key={path}
+                to={path}
+                className={`block py-2 rounded-lg font-semibold shadow-md hover:scale-105 transition-transform ${color}`}
+              >
+                {name}
+              </Link>
+            ))}
+        </div>
+        <MatrixFlowDrawer />
       </div>
-      <MatrixFlowDrawer />
     </div>
   );
 }

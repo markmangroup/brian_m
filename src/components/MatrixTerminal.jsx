@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { UserContext } from './UserContext';
 import { NAOE_QUOTES } from '../data/naoeQuotes';
 import useTypewriterEffect from './useTypewriterEffect';
+import Matrix from 'react-matrix-effect';
 
 export default function MatrixTerminal() {
   const { userName }     = useContext(UserContext);
@@ -45,30 +46,35 @@ export default function MatrixTerminal() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-black text-green-500 font-mono space-y-6">
-      <h1 className="text-4xl font-bold">Matrix Terminal</h1>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-black text-green-500 font-mono space-y-6 relative overflow-hidden">
+      {/* Matrix Rain background for terminal */}
+      <Matrix fullscreen={true} zIndex={0} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
+      {/* Storyboard: User enters passcode, sees access/denied message, can log out */}
+      <div className="relative z-10 flex flex-col items-center space-y-6 w-full">
+        <h1 className="text-4xl font-bold">Matrix Terminal</h1>
 
-      {!ok && (
-        <form onSubmit={handleSubmit} className="flex space-x-2">
-          <input
-            value={code}
-            onChange={(e) => setCode(e.target.value)}
-            placeholder="enter passcode"
-            className="px-4 py-2 rounded bg-black border border-green-700 text-green-500 placeholder-green-700 focus:outline-none"
-          />
-          <button className="px-4 py-2 rounded bg-green-700 text-black hover:bg-green-600">
-            Hack
+        {!ok && (
+          <form onSubmit={handleSubmit} className="flex space-x-2">
+            <input
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
+              placeholder="enter passcode"
+              className="px-4 py-2 rounded bg-black border border-green-700 text-green-500 placeholder-green-700 focus:outline-none"
+            />
+            <button className="px-4 py-2 rounded bg-green-700 text-black hover:bg-green-600">
+              Hack
+            </button>
+          </form>
+        )}
+
+        {msg && <p className="text-lg text-center max-w-md">{typedMsg}</p>}
+
+        {ok && (
+          <button onClick={logout} className="text-sm underline text-green-400">
+            log out
           </button>
-        </form>
-      )}
-
-      {msg && <p className="text-lg text-center max-w-md">{typedMsg}</p>}
-
-      {ok && (
-        <button onClick={logout} className="text-sm underline text-green-400">
-          log out
-        </button>
-      )}
+        )}
+      </div>
     </div>
   );
 }
