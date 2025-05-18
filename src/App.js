@@ -9,6 +9,7 @@ import RobotLab from './components/RobotLab';
 import LegoBuildMode from './components/LegoBuildMode';
 import LegoInventory from './components/LegoInventory';
 import LittleAlchemy from './components/LittleAlchemy';
+import TheMatrix from './components/TheMatrix';
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
           <Route path="/lego-build" element={<LegoBuildMode />} />
           <Route path="/lego-inventory" element={<LegoInventory />} />
           <Route path="/little-alchemy" element={<LittleAlchemy />} />
+          <Route path="/the-matrix" element={<TheMatrix />} />
           <Route path="*" element={<Navigate to="/snack-trail" />} />
         </Routes>
       </div>
