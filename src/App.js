@@ -10,8 +10,7 @@ import LegoBuildMode from './components/LegoBuildMode';
 import LegoInventory from './components/LegoInventory';
 import LittleAlchemy from './components/LittleAlchemy';
 import TheMatrix from './components/TheMatrix';
-import MatrixTerminal from './components/MatrixTerminal';
-import MatrixTransition from './components/MatrixTransition';
+
 
 export default function App() {
   return (
@@ -26,8 +25,7 @@ export default function App() {
           <Route path="/lego-inventory" element={<LegoInventory />} />
           <Route path="/little-alchemy" element={<LittleAlchemy />} />
           <Route path="/the-matrix" element={<TheMatrix />} />
-          <Route path="/matrix-terminal" element={<MatrixTerminal />} />
-          <Route path="/matrix-transition" element={<MatrixTransition />} />
+
           <Route path="*" element={<Navigate to="/snack-trail" />} />
         </Routes>
       </div>
