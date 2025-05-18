@@ -21,7 +21,7 @@ export default function SnackTrailPage() {
       <div className="flex flex-col gap-2 p-2 pt-20 bg-white/20 backdrop-blur-md shadow-md z-40">
         <button onClick={() => toggleDrawer('lore')} className={`rounded px-3 py-1 ${section === 'lore' && drawerOpen ? 'bg-white/30' : ''}`}>📖</button>
         <button onClick={() => toggleDrawer('runners')} className={`rounded px-3 py-1 ${section === 'runners' && drawerOpen ? 'bg-white/30' : ''}`}>🏃</button>
-        <button onClick={() => toggleDrawer('log')} className={`rounded px-3 py-1 ${section === 'log' && drawerOpen ? 'bg-white/30' : ''}`}>🗒️</button>
+        <button onClick={() => toggleDrawer('log')} className={`rounded px-3 py-1 ${section === 'log' && drawerOpen ? 'bg-white/30' : ''}`}>🗒</button>️</button>
       </div>
 
       {/* Collapsible Drawer */}
