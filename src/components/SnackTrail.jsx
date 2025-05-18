@@ -5,23 +5,31 @@ import { PRESET_EVENTS } from '../data/presetEvents';
 import { DAY_FEATURES } from '../data/dayFeatures';
 
 const TOTAL_DAYS = 15;
-const DEFAULT_AVATARS = ['🧢', '🎧', '🐱'];
+const DEFAULT_AVATARS = ['🧢', '🎧', '🐱', '🐶', '🐸', '👻'];
 
 export default function SnackTrail() {
-  const initialCrew = [
-    { name: "Brian", snacks: 0, position: 0, lastEmoji: '', fx: '' },
-    { name: "Chris", snacks: 0, position: 0, lastEmoji: '', fx: '' },
-    { name: "Mel", snacks: 0, position: 0, lastEmoji: '', fx: '' }
-  ];
+  const loadSavedCrew = () => {
+    try {
+      const saved = JSON.parse(localStorage.getItem('snackTrailCrew'));
+      if (Array.isArray(saved) && saved.length >= 2) {
+        return saved.map(member => ({ ...member, snacks: 0, position: 0, fx: '', lastEmoji: '' }));
+      }
+    } catch {}
+    return [
+      { name: "Brian", avatar: '🧢', snacks: 0, position: 0, lastEmoji: '', fx: '' },
+      { name: "Chris", avatar: '🎧', snacks: 0, position: 0, lastEmoji: '', fx: '' },
+      { name: "Mel", avatar: '🐱', snacks: 0, position: 0, lastEmoji: '', fx: '' }
+    ];
+  };
 
-  const [timeline, setTimeline] = useState([{ crew: initialCrew, log: [] }]);
+  const [timeline, setTimeline] = useState([{ crew: loadSavedCrew(), log: [] }]);
   const [currentDay, setCurrentDay] = useState(0);
   const [title, setTitle] = useState("");
   const [arcadeMode, setArcadeMode] = useState(false);
   const [winner, setWinner] = useState(null);
   const [featurePopup, setFeaturePopup] = useState(null);
   const [customizing, setCustomizing] = useState(false);
-  const [crewInputs, setCrewInputs] = useState(initialCrew.map(member => member.name));
+  const [crewInputs, setCrewInputs] = useState(() => timeline[0].crew.map(member => ({ name: member.name, avatar: member.avatar || DEFAULT_AVATARS[0] })));
 
   const crew = timeline[currentDay].crew;
   const log = timeline.flatMap(day => day.log).slice(0, 8);
@@ -47,7 +55,7 @@ export default function SnackTrail() {
       const event = PRESET_EVENTS[(day + idx) % PRESET_EVENTS.length];
       member.snacks = Math.max(member.snacks + event.snack, 0);
       member.position = Math.min(member.position + 1 + (Math.random() < 0.3 ? 1 : 0), TOTAL_DAYS);
-      member.lastEmoji = event.emoji || DEFAULT_AVATARS[idx];
+      member.lastEmoji = event.emoji || member.avatar || DEFAULT_AVATARS[idx];
       member.fx = event.fx || '';
       logsForThisDay.push(`Day ${day}: ${member.name}: ${event.text} (Position: ${member.position}, Snacks: ${member.snacks})`);
     });
@@ -91,8 +99,16 @@ export default function SnackTrail() {
 
   const handleCrewChange = () => {
     const newCrew = crewInputs
-      .filter(name => name.trim() !== '')
-      .map(name => ({ name, snacks: 0, position: 0, lastEmoji: '', fx: '' }));
+      .filter(member => member.name.trim() !== '')
+      .map((member, i) => ({
+        name: member.name,
+        avatar: member.avatar || DEFAULT_AVATARS[i % DEFAULT_AVATARS.length],
+        snacks: 0,
+        position: 0,
+        lastEmoji: '',
+        fx: ''
+      }));
+    localStorage.setItem('snackTrailCrew', JSON.stringify(newCrew));
     setTimeline([{ crew: newCrew, log: [] }]);
     setCurrentDay(0);
     setCustomizing(false);
@@ -118,23 +134,37 @@ export default function SnackTrail() {
 
       {customizing && (
         <div className="mb-3 bg-gray-800 p-3 rounded-xl">
-          {crewInputs.map((name, idx) => (
-            <input
-              key={idx}
-              type="text"
-              value={name}
-              onChange={e => {
-                const copy = [...crewInputs];
-                copy[idx] = e.target.value;
-                setCrewInputs(copy);
-              }}
-              placeholder={`Crewmate ${idx + 1}`}
-              className="block w-full bg-gray-700 text-white px-2 py-1 rounded-md my-1 text-sm"
-            />
+          {crewInputs.map((member, idx) => (
+            <div key={idx} className="flex gap-2 mb-2 items-center">
+              <input
+                type="text"
+                value={member.name}
+                onChange={e => {
+                  const copy = [...crewInputs];
+                  copy[idx].name = e.target.value;
+                  setCrewInputs(copy);
+                }}
+                placeholder={`Crewmate ${idx + 1}`}
+                className="flex-1 bg-gray-700 text-white px-2 py-1 rounded-md text-sm"
+              />
+              <select
+                value={member.avatar}
+                onChange={e => {
+                  const copy = [...crewInputs];
+                  copy[idx].avatar = e.target.value;
+                  setCrewInputs(copy);
+                }}
+                className="bg-gray-700 text-white rounded-md px-2 py-1 text-sm"
+              >
+                {DEFAULT_AVATARS.map(emoji => (
+                  <option key={emoji} value={emoji}>{emoji}</option>
+                ))}
+              </select>
+            </div>
           ))}
           <div className="flex justify-between gap-2 mt-2">
             <button
-              onClick={() => setCrewInputs([...crewInputs, ''])}
+              onClick={() => setCrewInputs([...crewInputs, { name: '', avatar: DEFAULT_AVATARS[crewInputs.length % DEFAULT_AVATARS.length] }])}
               disabled={crewInputs.length >= 6}
               className="flex-1 py-1 rounded-md text-sm bg-blue-500 text-white"
             >
