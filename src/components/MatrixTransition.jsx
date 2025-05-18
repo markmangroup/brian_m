@@ -1,14 +1,18 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export default function MatrixTransition() {
   const navigate = useNavigate();
+  const location = useLocation();
 
-  // 3-sec “code rain” splash, then jump to the terminal
+  // 3-sec “code rain” splash, then jump to the portal
   useEffect(() => {
-    const t = setTimeout(() => navigate('/the-matrix/terminal'), 3000);
+    const t = setTimeout(
+      () => navigate('/the-matrix/portal', { state: location.state }),
+      3000
+    );
     return () => clearTimeout(t);
-  }, [navigate]);
+  }, [navigate, location.state]);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-black text-green-400 font-mono space-y-6">

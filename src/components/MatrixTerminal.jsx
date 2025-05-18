@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { NAOE_QUOTES } from '../data/naoeQuotes';
 
 export default function MatrixTerminal() {
@@ -7,6 +7,7 @@ export default function MatrixTerminal() {
   const [msg,  setMsg]    = useState('');
   const [ok,   setOk]     = useState(false);
   const navigate          = useNavigate();
+  const location          = useLocation();
   const secret            = 'thereisnospoon';
 
   /* restore previous access */
@@ -21,7 +22,9 @@ export default function MatrixTerminal() {
     setMsg(`Access granted. Welcome to the real world. ${q.text} — ${q.attribution}`);
     setOk(true);
     localStorage.setItem('matrixAccess', 'true');
-    setTimeout(() => navigate('/the-matrix/puzzle'), 2500);
+    setTimeout(() =>
+      navigate('/the-matrix/transition', { state: location.state }),
+    2500);
   };
 
   const handleSubmit = (e) => {
