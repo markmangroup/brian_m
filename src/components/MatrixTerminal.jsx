@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { UserContext } from './UserContext';
 import { NAOE_QUOTES } from '../data/naoeQuotes';
+import useTypewriterEffect from './useTypewriterEffect';
 
 export default function MatrixTerminal() {
   const { userName }     = useContext(UserContext);
@@ -12,6 +13,7 @@ export default function MatrixTerminal() {
   const location          = useLocation();
   const secret            = 'thereisnospoon';
   const stateName         = location.state?.name || userName;
+  const [typedMsg, typedMsgDone] = useTypewriterEffect(msg, 50);
 
   /* restore previous access */
   useEffect(() => {
@@ -60,7 +62,7 @@ export default function MatrixTerminal() {
         </form>
       )}
 
-      {msg && <p className="text-lg text-center max-w-md">{msg}</p>}
+      {msg && <p className="text-lg text-center max-w-md">{typedMsg}</p>}
 
       {ok && (
         <button onClick={logout} className="text-sm underline text-green-400">
