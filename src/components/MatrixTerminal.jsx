@@ -1,18 +1,23 @@
 import React, { useState } from 'react';
 import { NAOE_QUOTES } from '../data/naoeQuotes';
 import useTypewriterEffect from './useTypewriterEffect';
+import { useNavigate } from 'react-router-dom';
 
 export default function MatrixTerminal() {
   const [code, setCode] = useState('');
   const [message, setMessage] = useState('');
   const [typedMessage, done] = useTypewriterEffect(message);
+  const [quote, setQuote] = useState(null);
+  const navigate = useNavigate();
   const secret = 'thereisnospoon';
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (code.toLowerCase() === secret) {
-      const quote = NAOE_QUOTES[Math.floor(Math.random() * NAOE_QUOTES.length)];
-      setMessage(`Access granted. Welcome to the real world. ${quote.text} — ${quote.attribution}`);
+      const newQuote = NAOE_QUOTES[Math.floor(Math.random() * NAOE_QUOTES.length)];
+      setQuote(newQuote);
+      setMessage('Access granted. Welcome to the real world.');
+      navigate('/matrix-transition', { state: { quote: newQuote } });
     } else {
       setMessage('Access denied. Try again.');
     }
