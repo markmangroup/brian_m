@@ -1,10 +1,15 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import TheMatrix from '../components/TheMatrix';
+import { MemoryRouter } from 'react-router-dom';
 
 // helper to enter the matrix by submitting a name
 async function enterMatrix(name = 'Neo') {
-  render(<TheMatrix />);
+  render(
+    <MemoryRouter initialEntries={["/the-matrix"]}>
+      <TheMatrix />
+    </MemoryRouter>
+  );
   const input = screen.getByPlaceholderText(/player name/i);
   await userEvent.type(input, name);
   await userEvent.click(screen.getByRole('button', { name: /enter/i }));
@@ -19,8 +24,8 @@ test('pill buttons appear and change state when clicked', async () => {
   expect(redButton).toBeInTheDocument();
   expect(blueButton).toBeInTheDocument();
 
-  // clicking red pill hides the buttons and shows red pill text
+  // clicking red pill navigates to the terminal
   await userEvent.click(redButton);
-  expect(screen.getByText(/you take the red pill/i)).toBeInTheDocument();
+  expect(await screen.findByText(/matrix terminal/i)).toBeInTheDocument();
 });
 
