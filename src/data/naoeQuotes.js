@@ -1,0 +1,22 @@
+export const NAOE_QUOTES = [
+  { text: "Fearing the rainstorm will not prevent the flood.", attribution: 'Naoe' },
+  { text: "A single drop of water can start a ripple that becomes a wave.", attribution: 'Naoe' },
+  { text: "The sharpest blade cannot cut the wind.", attribution: 'Naoe' },
+  { text: "The moon’s reflection is not the moon itself.", attribution: 'Naoe' },
+  { text: "A shadow cannot exist without light.", attribution: 'Naoe' },
+  { text: "Roots unseen still anchor the tallest tree.", attribution: 'Naoe' },
+  { text: "The mountain does not notice the footsteps of the traveler.", attribution: 'Naoe' },
+  { text: "Patience is the silent strength of the bamboo.", attribution: 'Naoe' },
+  { text: "The river flows, whether watched or not.", attribution: 'Naoe' },
+  { text: "To chase two rabbits is to catch none.", attribution: 'Naoe' },
+  { text: "A closed fist cannot hold water.", attribution: 'Naoe' },
+  { text: "The crane stands alone, yet is never lonely.", attribution: 'Naoe' },
+  { text: "The spider’s web is delicate, but it endures the storm.", attribution: 'Naoe' },
+  { text: "The falling leaf returns to its roots.", attribution: 'Naoe' },
+  { text: "The stone in the stream shapes the water, and is shaped in return.", attribution: 'Naoe' },
+  { text: "Even the smallest lantern can banish the darkness.", attribution: 'Naoe' },
+  { text: "A broken branch still reaches for the sun.", attribution: 'Naoe' },
+  { text: "The silent pond reflects the sky.", attribution: 'Naoe' },
+  { text: "The wind whispers secrets to those who listen.", attribution: 'Naoe' },
+  { text: "Only in stillness does the heart find its path.", attribution: 'Naoe' }
+];

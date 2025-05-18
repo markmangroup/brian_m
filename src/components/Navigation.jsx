@@ -1,13 +1,14 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
-const navItems = [
+export const navItems = [
   { name: 'The Trail',      path: '/snack-trail',      color: 'bg-yellow-400 text-black' },
   { name: 'Pixel Lab',      path: '/pixel-art',        color: 'bg-blue-500' },
   { name: 'Robot Room',     path: '/robot-lab',        color: 'bg-green-500' },
   { name: 'Build Mode',     path: '/lego-build',       color: 'bg-red-500' },
   { name: 'Inventory',      path: '/lego-inventory',   color: 'bg-yellow-600' },
-  { name: 'Alchemy',        path: '/little-alchemy',   color: 'bg-cyan-500' }
+  { name: 'Alchemy',        path: '/little-alchemy',   color: 'bg-cyan-500' },
+  { name: 'The Matrix',     path: '/the-matrix',       color: 'bg-green-700 text-black' }
 ];
 
 export default function Navigation() {

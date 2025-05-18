@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import RaceTrackScene from './RaceTrackScene';
 import VictoryScreen from './VictoryScreen';
+import GameOverScreen from './GameOverScreen';
 import { PRESET_EVENTS } from '../data/presetEvents';
 import { DAY_FEATURES } from '../data/dayFeatures';
 
@@ -27,6 +28,7 @@ export default function SnackTrail() {
   const [title, setTitle] = useState("");
   const [arcadeMode, setArcadeMode] = useState(false);
   const [winner, setWinner] = useState(null);
+  const [gameOver, setGameOver] = useState(null); // 'outOfSnacks' | 'outOfTime'
   const [featurePopup, setFeaturePopup] = useState(null);
   const [customizing, setCustomizing] = useState(false);
   const [crewInputs, setCrewInputs] = useState(() => timeline[0].crew.map(member => ({ name: member.name, avatar: member.avatar || DEFAULT_AVATARS[0] })));
@@ -77,6 +79,14 @@ export default function SnackTrail() {
     if (reached && !winner) {
       setWinner(reached.name);
       logsForThisDay.unshift(`🏁 ${reached.name} has reached the Arcade Temple!`);
+    } else {
+      if (newCrew.every(m => m.snacks === 0)) {
+        setGameOver('outOfSnacks');
+        logsForThisDay.unshift('💀 Everyone ran out of snacks!');
+      } else if (day >= TOTAL_DAYS) {
+        setGameOver('outOfTime');
+        logsForThisDay.unshift('⌛ The trail ended before anyone reached the Arcade Temple.');
+      }
     }
 
     const achievedTitle = [
@@ -195,6 +205,12 @@ export default function SnackTrail() {
           winner={winner}
           onRestart={() => window.location.reload()}
         />
+      ) : gameOver ? (
+        <GameOverScreen
+          crew={crew}
+          reason={gameOver}
+          onRestart={() => window.location.reload()}
+        />
       ) : (
         <RaceTrackScene crew={crew} />
       )}
@@ -218,7 +234,7 @@ export default function SnackTrail() {
         <button
           onClick={handleNextDay}
           className={`w-1/2 py-2 rounded-md font-bold text-sm ${arcadeMode ? 'bg-pink-500 text-white animate-pulse' : 'bg-yellow-500 text-gray-900 hover:bg-yellow-400'}`}
-          disabled={winner !== null || currentDay >= TOTAL_DAYS}
+          disabled={winner !== null || gameOver !== null || currentDay >= TOTAL_DAYS}
         >
           Next Day
         </button>

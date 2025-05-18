@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Robottab() {
+function RobotTab() {
   return (
     <div>
       <h1>Robot Tab</h1>
@@ -9,4 +9,4 @@ function Robottab() {
   );
 }
 
-export default Robottab; 
+export default RobotTab;
