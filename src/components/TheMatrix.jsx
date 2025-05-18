@@ -1,23 +1,21 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 export default function TheMatrix() {
   const [name, setName] = useState('');
   const [entered, setEntered] = useState(false);
   const [pill, setPill] = useState(null);
-  const navigate = useNavigate();
 
+  /* ───────────── 1. name prompt ───────────── */
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (name.trim() !== '') {
-      setEntered(true);
-    }
+    if (name.trim()) setEntered(true);
   };
 
   if (!entered) {
     return (
       <div className="flex flex-col items-center justify-center py-20 space-y-6">
         <h1 className="text-4xl font-bold text-green-500 font-mono">Enter the Matrix</h1>
+
         <form onSubmit={handleSubmit} className="flex space-x-2">
           <input
             type="text"
@@ -37,15 +35,18 @@ export default function TheMatrix() {
     );
   }
 
+  /* ───────────── 2. inside the Matrix ───────────── */
   return (
     <div className="flex flex-col items-center justify-center py-20 text-green-500 font-mono space-y-6">
       <h1 className="text-5xl font-bold animate-pulse">Welcome, {name}</h1>
+
+      {/* Pill choice */}
       {pill === null && (
         <>
           <p className="text-xl">You are now inside the Matrix.</p>
           <div className="flex space-x-4">
             <button
-
+              onClick={() => setPill('red')}
               className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-500"
             >
               Red Pill
@@ -60,13 +61,24 @@ export default function TheMatrix() {
         </>
       )}
 
-
+      {/* Outcomes */}
+      {pill === 'red' && (
+        <p className="text-xl">You take the red pill and see how deep the rabbit hole goes…</p>
+      )}
 
       {pill === 'blue' && (
         <p className="text-xl">You take the blue pill and wake up in your bed.</p>
       )}
 
-
+      {/* Reset button shown after a pill is chosen */}
+      {pill && (
+        <button
+          onClick={() => {
+            setEntered(false);
+            setName('');
+            setPill(null);
+          }}
+          className="px-4 py-2 rounded bg-green-700 text-black hover:bg-green-600"
         >
           Reset
         </button>
