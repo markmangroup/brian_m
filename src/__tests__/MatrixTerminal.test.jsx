@@ -4,7 +4,7 @@ import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import MatrixTerminal from '../components/MatrixTerminal';
 import MatrixTransition from '../components/MatrixTransition';
 
-// helper to submit passcode within router
+
 async function submitCode(code) {
   render(
     <MemoryRouter initialEntries={["/matrix-terminal"]}>
@@ -28,4 +28,11 @@ test('navigates to transition screen on correct passcode', async () => {
 test('shows access denied when passcode is wrong', async () => {
   await submitCode('wrong');
   expect(screen.getByText(/access denied/i)).toBeInTheDocument();
+});
+
+test('shows quote automatically when access stored in localStorage', async () => {
+  localStorage.setItem('matrixAccess', 'true');
+  render(<MatrixTerminal />);
+  const message = await screen.findByText(/access granted/i);
+  expect(message.textContent).toMatch(/— Naoe/);
 });
