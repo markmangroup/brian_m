@@ -4,6 +4,7 @@ import { UserContext } from './UserContext';
 import { navItems } from './Navigation';
 import useTypewriterEffect from './useTypewriterEffect';
 import { NAOE_QUOTES } from '../data/naoeQuotes';
+import MatrixFlowDrawer from './MatrixFlowDrawer';
 
 export default function MatrixPortal() {
   const { state } = useLocation();
@@ -30,6 +31,7 @@ export default function MatrixPortal() {
             </Link>
           ))}
       </div>
+      <MatrixFlowDrawer />
     </div>
   );
 }
