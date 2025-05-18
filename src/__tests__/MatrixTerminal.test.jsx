@@ -2,6 +2,10 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import MatrixTerminal from '../components/MatrixTerminal';
 
+afterEach(() => {
+  localStorage.clear();
+});
+
 // helper to submit passcode
 async function submitCode(code) {
   render(<MatrixTerminal />);
@@ -19,4 +23,11 @@ test('shows a Naoe quote when passcode is correct', async () => {
 test('shows access denied when passcode is wrong', async () => {
   await submitCode('wrong');
   expect(screen.getByText(/access denied/i)).toBeInTheDocument();
+});
+
+test('shows quote automatically when access stored in localStorage', async () => {
+  localStorage.setItem('matrixAccess', 'true');
+  render(<MatrixTerminal />);
+  const message = await screen.findByText(/access granted/i);
+  expect(message.textContent).toMatch(/— Naoe/);
 });
