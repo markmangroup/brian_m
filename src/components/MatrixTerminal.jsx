@@ -1,24 +1,24 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { NAOE_QUOTES } from '../data/naoeQuotes';
 import useTypewriterEffect from './useTypewriterEffect';
 
 export default function MatrixTerminal() {
   const [code, setCode] = useState('');
   const [message, setMessage] = useState('');
-  const [typedMessage, done] = useTypewriterEffect(message);
+  const [typedMessage] = useTypewriterEffect(message);
+  const navigate = useNavigate();
   const secret = 'thereisnospoon';
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (code.toLowerCase() === secret) {
       const quote = NAOE_QUOTES[Math.floor(Math.random() * NAOE_QUOTES.length)];
-      setMessage(`Access granted. Welcome to the real world. ${quote.text} — ${quote.attribution}`);
+      navigate('/matrix-transition', { state: { quote } });
     } else {
       setMessage('Access denied. Try again.');
     }
   };
-
-  const success = message.startsWith('Access granted');
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-black text-green-500 font-mono space-y-6">
@@ -37,12 +37,7 @@ export default function MatrixTerminal() {
         </button>
       </form>
       {message && (
-        <p
-          className="text-xl text-green-400"
-          style={success ? { textShadow: '0 0 8px #00ff00' } : undefined}
-        >
-          {success ? typedMessage : message}
-        </p>
+        <p className="text-xl text-green-400">{typedMessage}</p>
       )}
     </div>
   );
