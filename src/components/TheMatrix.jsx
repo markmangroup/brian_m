@@ -45,7 +45,7 @@ export default function TheMatrix() {
           <p className="text-xl">You are now inside the Matrix.</p>
           <div className="flex space-x-4">
             <button
-              onClick={() => setPill('red')}
+
               className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-500"
             >
               Red Pill
@@ -60,31 +60,13 @@ export default function TheMatrix() {
         </>
       )}
 
-      {pill === 'red' && (
-        <>
-          <p className="text-xl">You take the red pill and follow the white rabbit.</p>
-          <div className="w-full overflow-hidden h-10">
-            <div className="animate-marquee whitespace-nowrap">
-              {Array(20).fill('0101010101111001010101').join(' ')}
-            </div>
-          </div>
-          <button
-            onClick={() => navigate('/matrix-puzzle')}
-            className="px-4 py-2 mt-4 rounded bg-green-700 text-black hover:bg-green-600"
-          >
-            Follow the White Rabbit
-          </button>
-        </>
-      )}
+
 
       {pill === 'blue' && (
         <p className="text-xl">You take the blue pill and wake up in your bed.</p>
       )}
 
-      {pill !== null && (
-        <button
-          onClick={() => setPill(null)}
-          className="px-4 py-2 rounded bg-gray-700 hover:bg-gray-600"
+
         >
           Reset
         </button>
