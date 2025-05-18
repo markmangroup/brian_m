@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 export default function TheMatrix() {
   const [name, setName] = useState('');
   const [entered, setEntered] = useState(false);
+  const [pill, setPill] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -37,12 +38,40 @@ export default function TheMatrix() {
   return (
     <div className="flex flex-col items-center justify-center py-20 text-green-500 font-mono space-y-6">
       <h1 className="text-5xl font-bold animate-pulse">Welcome, {name}</h1>
-      <p className="text-xl">You are now inside the Matrix.</p>
-      <div className="w-full overflow-hidden h-10">
-        <div className="animate-marquee whitespace-nowrap">
-          {Array(20).fill('0101010101111001010101').join(' ')}
-        </div>
-      </div>
+      {pill === null && (
+        <>
+          <p className="text-xl">You are now inside the Matrix.</p>
+          <div className="flex space-x-4">
+            <button
+              onClick={() => setPill('red')}
+              className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-500"
+            >
+              Red Pill
+            </button>
+            <button
+              onClick={() => setPill('blue')}
+              className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-500"
+            >
+              Blue Pill
+            </button>
+          </div>
+        </>
+      )}
+
+      {pill === 'red' && (
+        <>
+          <p className="text-xl">You take the red pill and follow the white rabbit.</p>
+          <div className="w-full overflow-hidden h-10">
+            <div className="animate-marquee whitespace-nowrap">
+              {Array(20).fill('0101010101111001010101').join(' ')}
+            </div>
+          </div>
+        </>
+      )}
+
+      {pill === 'blue' && (
+        <p className="text-xl">You take the blue pill and wake up in your bed.</p>
+      )}
     </div>
   );
 }
