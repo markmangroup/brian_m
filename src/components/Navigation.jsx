@@ -8,7 +8,9 @@ export const navItems = [
   { name: 'Build Mode',     path: '/lego-build',       color: 'bg-red-500' },
   { name: 'Inventory',      path: '/lego-inventory',   color: 'bg-yellow-600' },
   { name: 'Alchemy',        path: '/little-alchemy',   color: 'bg-cyan-500' },
-  { name: 'The Matrix',     path: '/the-matrix',       color: 'bg-green-700 text-black' }
+  { name: 'The Matrix',     path: '/the-matrix',       color: 'bg-green-700 text-black' },
+  { name: 'Matrix Transition', path: '/matrix-transition', color: 'bg-green-600' },
+  { name: 'Portal',         path: '/portal',           color: 'bg-purple-600' }
 ];
 
 export default function Navigation() {
