@@ -12,7 +12,8 @@ export default function MatrixTerminal() {
   const [ok,   setOk]     = useState(false);
   const navigate          = useNavigate();
   const location          = useLocation();
-  const secret            = 'thereisnospoon';
+  const secret =
+    process.env.REACT_APP_MATRIX_CODE || 'thereisnospoon';
   const stateName         = location.state?.name || userName;
   const [typedMsg, typedMsgDone] = useTypewriterEffect(msg, 50);
 

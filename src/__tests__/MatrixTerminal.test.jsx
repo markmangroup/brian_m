@@ -1,3 +1,5 @@
+process.env.REACT_APP_MATRIX_CODE = 'thereisnospoon';
+
 import { render, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
@@ -38,7 +40,7 @@ test('shows access denied when passcode is wrong', async () => {
 test('accepts correct passcode and moves to transition', async () => {
   jest.useFakeTimers();
   setup();
-  await submitCode('thereisnospoon');
+  await submitCode(process.env.REACT_APP_MATRIX_CODE);
   expect(screen.getByText(/access granted/i)).toBeInTheDocument();
   act(() => jest.advanceTimersByTime(2500));
   expect(await screen.findByText(/transition/i)).toBeInTheDocument();
