@@ -24,6 +24,11 @@ async function submitCode(code) {
   await userEvent.click(screen.getByRole('button', { name: /hack/i }));
 }
 
+afterEach(() => {
+  localStorage.clear();
+  jest.useRealTimers();
+});
+
 test('shows access denied when passcode is wrong', async () => {
   setup();
   await submitCode('wrong');
