@@ -30,7 +30,7 @@ This repository hosts a collection of small React experiments and mini‑games. 
 - **Build Mode** – A simple LEGO building interface where you place pieces, choose colors and follow small build instructions.
 - **Inventory** – Search and filter a sample LEGO inventory to keep track of your pieces.
 - **Alchemy** – Mix and match elements in a playful Little Alchemy‑style puzzle.
-- **The Matrix** – Enter your name, pick a pill and see how deep the rabbit hole goes. Includes a boot transition, terminal challenge and small puzzle.
+- **The Matrix** – Enter your name, pick a pill and see how deep the rabbit hole goes. Includes a boot transition, terminal challenge.
 - **Matrix Portal** – A portal page (work in progress) intended for future connectivity between Matrix features.
 
 Enjoy exploring the different experiments contained in this project!
