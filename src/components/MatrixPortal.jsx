@@ -25,15 +25,17 @@ export default function MatrixPortal() {
       <div className="relative z-10 flex flex-col items-center space-y-6">
         <h1 className="text-4xl font-bold text-purple-400">{welcomeText}</h1>
         <p className="text-lg text-center max-w-md">{quoteText}</p>
+        <p className="text-sm text-gray-300">Select a destination</p>
         <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4">
           {navItems
             .filter((item) => item.path !== '/the-matrix')
-            .map(({ name, path, color }) => (
+            .map(({ name, path, color, icon: Icon }) => (
               <Link
                 key={path}
                 to={path}
-                className={`block py-2 rounded-lg font-semibold shadow-md hover:scale-105 transition-transform ${color}`}
+                className={`flex flex-col items-center py-4 rounded-lg font-semibold shadow-md hover:scale-105 transition-transform ${color}`}
               >
+                {Icon && <Icon className="mb-1 text-xl" />}
                 {name}
               </Link>
             ))}
