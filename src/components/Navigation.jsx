@@ -8,7 +8,8 @@ import {
   FaCube,
   FaBox,
   FaFlask,
-  FaCodeBranch
+  FaCodeBranch,
+  FaPaperPlane
 } from 'react-icons/fa';
 
 export const navItems = [
@@ -23,6 +24,7 @@ export const navItems = [
   { name: 'Build Mode', path: '/lego-build', color: 'bg-red-500', icon: FaCube },
   { name: 'Inventory', path: '/lego-inventory', color: 'bg-yellow-600', icon: FaBox },
   { name: 'Alchemy', path: '/little-alchemy', color: 'bg-cyan-500', icon: FaFlask },
+  { name: 'RC Plane', path: '/rc-plane', color: 'bg-cyan-400', icon: FaPaperPlane },
   {
     name: 'The Matrix',
     path: '/the-matrix',

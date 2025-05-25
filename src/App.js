@@ -11,6 +11,7 @@ import RobotLab from './components/RobotLab';
 import LegoBuildMode from './components/LegoBuildMode';
 import LegoInventory from './components/LegoInventory';
 import LittleAlchemy from './components/LittleAlchemy';
+import RCPlaneDesigner from './components/RCPlaneDesigner';
 import TheMatrix from './components/TheMatrix';
 import MatrixTransition from './components/MatrixTransition';
 import MatrixTerminal   from './components/MatrixTerminal';
@@ -29,6 +30,7 @@ export default function App() {
           <Route path="/robot-lab" element={<RobotLab />} />
           <Route path="/lego-build" element={<LegoBuildMode />} />
           <Route path="/lego-inventory" element={<LegoInventory />} />
+          <Route path="/rc-plane" element={<RCPlaneDesigner />} />
   <Route path="/little-alchemy" element={<LittleAlchemy />} />
           <Route path="/the-matrix" element={<TheMatrix />} />
           <Route path="/the-matrix/terminal"   element={<MatrixTerminal   />} />
