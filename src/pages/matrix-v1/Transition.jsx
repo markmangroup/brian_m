@@ -17,8 +17,9 @@ export default function Transition() {
       navigate('/matrix-v1/terminal');
       return;
     }
+    const MESSAGE_ROUTE = '/matrix-v1/message';
     const t = setTimeout(
-      () => navigate('/matrix-v1/message', { state: { name } }),
+      () => navigate(MESSAGE_ROUTE, { state: { name } }),
       3000
     );
     return () => clearTimeout(t);
