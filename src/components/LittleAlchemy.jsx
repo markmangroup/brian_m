@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  FaFire, FaWater, FaWind, FaMountain, FaLeaf, FaPlus, 
+import {
+  FaFire, FaWater, FaWind, FaMountain, FaLeaf,
   FaCloud, FaSun, FaMoon, FaTree, FaStar, FaSpider,
-  FaDragon, FaSnowflake, FaTimes, FaQuestionCircle, FaChevronDown
+  FaDragon, FaSnowflake, FaTimes, FaQuestionCircle
 } from 'react-icons/fa';
 
 const STORAGE_KEY = 'littleAlchemyDiscoveries';
@@ -21,23 +21,6 @@ const CATEGORIES = [
   'Abstract'
 ];
 
-// Add announcement system
-const ANNOUNCEMENTS = [
-  {
-    id: 'bug-fix-1',
-    title: 'Bug Hunter Award! 🏆',
-    message: 'Chris discovered duplicate combinations in the game! Thanks to his sharp eyes, we fixed the issue and now have exactly 45 unique combinations.',
-    type: 'achievement',
-    date: new Date().toISOString()
-  },
-  {
-    id: 'sports-update-1',
-    title: 'Football Frenzy! 🏈',
-    message: '10 new football elements added! Can you find the secret "Jets Stink" combo? (Easter egg for Chris!)',
-    type: 'update',
-    date: new Date().toISOString()
-  }
-];
 
 const LittleAlchemy = () => {
   const [workspace, setWorkspace] = useState(() => {
@@ -53,8 +36,6 @@ const LittleAlchemy = () => {
   const [notification, setNotification] = useState(null);
   const [showCheatList, setShowCheatList] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [announcements, setAnnouncements] = useState(ANNOUNCEMENTS);
-  const [currentAnnouncement, setCurrentAnnouncement] = useState(0);
 
   const baseElements = [
     { id: 'fire', name: 'Fire', icon: FaFire, color: 'text-red-500' },
@@ -171,13 +152,6 @@ const LittleAlchemy = () => {
     localStorage.setItem(WORKSPACE_KEY, JSON.stringify(workspace));
   }, [workspace]);
 
-  // Rotate announcements
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentAnnouncement(prev => (prev + 1) % announcements.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [announcements.length]);
 
   const showNotification = (discovery) => {
     setNotification(discovery);
@@ -250,23 +224,7 @@ const LittleAlchemy = () => {
 
   return (
     <div className="flex flex-col space-y-6">
-      {/* Announcement Bar */}
-      <div className="fixed top-0 left-0 right-0 bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 text-white py-2 overflow-hidden z-50">
-        <div className="animate-marquee whitespace-nowrap">
-          {announcements.map((announcement, index) => (
-            <div
-              key={announcement.id}
-              className={`inline-block mx-4 transition-opacity duration-500 ${
-                index === currentAnnouncement ? 'opacity-100' : 'opacity-0'
-              }`}
-            >
-              <span className="font-bold">{announcement.title}</span>
-              <span className="mx-2">•</span>
-              <span>{announcement.message}</span>
-            </div>
-          ))}
-        </div>
-      </div>
+
 
       {/* Notification */}
       {notification && (

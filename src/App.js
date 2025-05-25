@@ -16,6 +16,7 @@ import TheMatrix from './components/TheMatrix';
 import MatrixTransition from './components/MatrixTransition';
 import MatrixTerminal   from './components/MatrixTerminal';
 import MatrixPortal     from './components/MatrixPortal';
+import Updates from './components/Updates';
 
 
 export default function App() {
@@ -31,7 +32,8 @@ export default function App() {
           <Route path="/lego-build" element={<LegoBuildMode />} />
           <Route path="/lego-inventory" element={<LegoInventory />} />
           <Route path="/rc-plane" element={<RCPlaneDesigner />} />
-  <Route path="/little-alchemy" element={<LittleAlchemy />} />
+          <Route path="/little-alchemy" element={<LittleAlchemy />} />
+          <Route path="/updates" element={<Updates />} />
           <Route path="/the-matrix" element={<TheMatrix />} />
           <Route path="/the-matrix/terminal"   element={<MatrixTerminal   />} />
           <Route path="/the-matrix/transition" element={<MatrixTransition />} />
