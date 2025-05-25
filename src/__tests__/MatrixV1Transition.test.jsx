@@ -7,19 +7,19 @@ function setup(initialEntries = ['/matrix-v1/transition']) {
     <MemoryRouter initialEntries={initialEntries}>
       <Routes>
         <Route path="/matrix-v1/transition" element={<Transition />} />
-        <Route path="/matrix-v1/puzzle" element={<div>Puzzle</div>} />
+        <Route path="/matrix-v1/message" element={<div>Message</div>} />
       </Routes>
     </MemoryRouter>
   );
 }
 
-test('auto-navigates to puzzle after timeout', async () => {
+test('auto-navigates to message after timeout', async () => {
   jest.useFakeTimers();
   localStorage.setItem('matrixV1Access', 'true');
   setup();
   act(() => {
     jest.advanceTimersByTime(3000);
   });
-  expect(await screen.findByText(/puzzle/i)).toBeInTheDocument();
+  expect(await screen.findByText(/message/i)).toBeInTheDocument();
   jest.useRealTimers();
 });

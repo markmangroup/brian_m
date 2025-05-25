@@ -18,7 +18,7 @@ export default function Transition() {
       return;
     }
     const t = setTimeout(
-      () => navigate('/matrix-v1/puzzle', { state: { name } }),
+      () => navigate('/matrix-v1/message', { state: { name } }),
       3000
     );
     return () => clearTimeout(t);
