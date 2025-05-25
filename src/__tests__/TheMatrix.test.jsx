@@ -29,13 +29,11 @@ test('choosing the red pill navigates to the terminal', async () => {
   setup();
   await enterName();
 
-  // first story screen
-  act(() => jest.runOnlyPendingTimers());
-  await userEvent.click(await screen.findByRole('button', { name: /next/i }));
-
-  // second story screen
-  act(() => jest.runOnlyPendingTimers());
-  await userEvent.click(await screen.findByRole('button', { name: /next/i }));
+  // advance through the story
+  for (let i = 0; i < 4; i++) {
+    act(() => jest.runOnlyPendingTimers());
+    await userEvent.click(await screen.findByRole('button', { name: /next/i }));
+  }
 
   act(() => jest.runOnlyPendingTimers());
   const red = await screen.findByRole('button', { name: /red pill/i });
