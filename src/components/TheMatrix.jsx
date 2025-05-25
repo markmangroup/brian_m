@@ -8,11 +8,18 @@ export default function TheMatrix() {
   const { userName, setUserName } = useContext(UserContext);
   const [name, setName] = useState(userName || '');
   const [entered, setEntered] = useState(!!userName);
+  const [step, setStep] = useState(0);
   const navigate = useNavigate();
-  const [welcomeText, welcomeDone] = useTypewriterEffect('Welcome to the Matrix', 50);
-  const [promptText, promptDone] = useTypewriterEffect('Enter your name to begin:', 50);
+  const [welcomeText] = useTypewriterEffect('Welcome to the Matrix', 50);
+  const [promptText] = useTypewriterEffect('Enter your name to begin:', 50);
+
   const displayName = userName || name;
-  const [welcomeMessage, welcomeMessageDone] = useTypewriterEffect(`Welcome, ${displayName}. You are now inside the Matrix.`, 50);
+
+  const story = [
+    { speaker: '😎 Morpheus', text: `Hello, ${displayName}. I am Morpheus.` },
+    { speaker: '👓 Trinity', text: 'We have been looking for you.' },
+    { speaker: '😎 Morpheus', text: 'This is your chance to learn the truth.' }
+  ];
 
   /* ───────────── 1. name prompt ───────────── */
   const handleSubmit = (e) => {
@@ -55,30 +62,45 @@ export default function TheMatrix() {
     );
   }
 
-  /* ───────────── 2. inside the Matrix ───────────── */
+  /* ───────────── 2. story steps ───────────── */
+  const current = story[step];
+  const [storyText, storyDone] = useTypewriterEffect(current.text, 50);
+
   return (
     <div className="flex flex-col items-center justify-center py-20 text-green-500 font-mono space-y-6 min-h-screen relative overflow-hidden">
       {/* Matrix Rain background for inside the Matrix (client-only) */}
       {typeof window !== 'undefined' && (
         <MatrixRain zIndex={0} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
       )}
-      {/* Storyboard: User greeted, chooses red/blue pill */}
-      <div className="relative z-10 flex flex-col items-center space-y-6">
-        <h1 className="text-5xl font-bold animate-pulse">{welcomeMessage}</h1>
-        <div className="flex space-x-4">
+      <div className="relative z-10 flex flex-col items-center space-y-6 text-center px-4">
+        <p className="text-xl">
+          <span className="font-bold mr-2">{current.speaker}:</span> {storyText}
+        </p>
+        {step < story.length - 1 && (
           <button
-            onClick={() => navigate('/the-matrix/terminal', { state: { name: displayName } })}
-            className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-500"
+            onClick={() => setStep(step + 1)}
+            className="px-4 py-2 rounded bg-green-700 text-black hover:bg-green-600"
+            disabled={!storyDone}
           >
-            Red Pill
+            Next
           </button>
-          <button
-            onClick={() => navigate('/')}
-            className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-500"
-          >
-            Blue Pill
-          </button>
-        </div>
+        )}
+        {step === story.length - 1 && storyDone && (
+          <div className="flex space-x-4">
+            <button
+              onClick={() => navigate('/the-matrix/terminal', { state: { name: displayName } })}
+              className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-500"
+            >
+              Red Pill
+            </button>
+            <button
+              onClick={() => navigate('/')}
+              className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-500"
+            >
+              Blue Pill
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
