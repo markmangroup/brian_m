@@ -5,6 +5,7 @@ import useTypewriterEffect from '../../components/useTypewriterEffect';
 import { NAOE_QUOTES } from '../../data/naoeQuotes';
 import FlowDrawer from './components/FlowDrawer';
 import Rain from './components/Rain';
+import NPC from './components/NPC';
 
 export default function Portal() {
   const navigate = useNavigate();
@@ -43,6 +44,11 @@ export default function Portal() {
             ))}
         </div>
         <FlowDrawer />
+        <NPC
+          name="Morpheus"
+          quote="Where you go from here is a choice I leave to you."
+          style="mentor"
+        />
       </div>
     </div>
   );

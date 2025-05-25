@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import useTypewriterEffect from '../../components/useTypewriterEffect';
 import { NAOE_QUOTES } from '../../data/naoeQuotes';
 import Rain from './components/Rain';
+import NPC from './components/NPC';
 
 export default function Terminal() {
   const navigate = useNavigate();
@@ -11,6 +12,7 @@ export default function Terminal() {
   const [code, setCode] = useState('');
   const [msg, setMsg] = useState('');
   const [ok, setOk] = useState(false);
+  const [attempts, setAttempts] = useState(0);
   const secret = 'thereisnospoon';
   const [typedMsg] = useTypewriterEffect(msg, 50);
 
@@ -30,9 +32,12 @@ export default function Terminal() {
 
   const submit = (e) => {
     e.preventDefault();
-    code.trim().toLowerCase() === secret
-      ? grant()
-      : setMsg('Access Denied');
+    if (code.trim().toLowerCase() === secret) {
+      grant();
+    } else {
+      setMsg('Access Denied');
+      setAttempts((a) => a + 1);
+    }
   };
 
   const logout = () => {
@@ -63,6 +68,13 @@ export default function Terminal() {
           </form>
         )}
         {msg && <p className="text-lg text-center max-w-md">{typedMsg}</p>}
+        {!ok && attempts >= 3 && (
+          <NPC
+            name="Agent Echo"
+            quote="You're not supposed to be here."
+            style="agent"
+          />
+        )}
         {ok && (
           <button onClick={logout} className="text-sm underline text-green-400">
             log out

@@ -21,6 +21,9 @@ test('responds with a quote to thoughtful answer', async () => {
   await userEvent.type(input, 'no, I make my own choice');
   await userEvent.click(screen.getByRole('button', { name: /submit/i }));
   expect(screen.getByText(/naoe/i)).toBeInTheDocument();
+  expect(
+    screen.getByText(/you've got the gift, but it looks like you're waiting/i)
+  ).toBeInTheDocument();
 });
 
 test('responds with glitch to silly answer', async () => {
@@ -29,5 +32,6 @@ test('responds with glitch to silly answer', async () => {
   await userEvent.type(input, 'pizza time');
   await userEvent.click(screen.getByRole('button', { name: /submit/i }));
   expect(screen.getByText(/system glitch/i)).toBeInTheDocument();
+  expect(screen.getByText(/you're cute. now get serious./i)).toBeInTheDocument();
 });
 
