@@ -18,7 +18,12 @@ export default function TheMatrix() {
   const story = [
     { speaker: '😎 Morpheus', text: `Hello, ${displayName}. I am Morpheus.` },
     { speaker: '👓 Trinity', text: 'We have been looking for you.' },
-    { speaker: '😎 Morpheus', text: 'This is your chance to learn the truth.' }
+    { speaker: '😎 Morpheus', text: 'This is your chance to learn the truth.' },
+    {
+      speaker: '😎 Morpheus',
+      text: 'Follow the white rabbit and see how deep the hole goes.'
+    },
+    { speaker: '🐇 ???', text: 'Ready to choose your destiny?' }
   ];
 
   const current = story[step];
@@ -77,15 +82,14 @@ export default function TheMatrix() {
         <p className="text-xl">
           <span className="font-bold mr-2">{current.speaker}:</span> {storyText}
         </p>
-        {step < story.length - 1 && (
-          <button
-            onClick={() => setStep(step + 1)}
-            className="px-4 py-2 rounded bg-green-700 text-black hover:bg-green-600"
-            disabled={!storyDone}
-          >
-            Next
-          </button>
-        )}
+          {step < story.length - 1 && (
+            <button
+              onClick={() => setStep(step + 1)}
+              className="px-4 py-2 rounded bg-green-700 text-black hover:bg-green-600"
+            >
+              Next
+            </button>
+          )}
         {step === story.length - 1 && storyDone && (
           <div className="flex space-x-4">
             <button
