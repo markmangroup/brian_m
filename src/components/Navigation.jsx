@@ -9,7 +9,8 @@ import {
   FaBox,
   FaFlask,
   FaCodeBranch,
-  FaPaperPlane
+  FaPaperPlane,
+  FaBug
 } from 'react-icons/fa';
 
 export const navItems = [
@@ -25,6 +26,7 @@ export const navItems = [
   { name: 'Inventory', path: '/lego-inventory', color: 'bg-yellow-600', icon: FaBox },
   { name: 'Alchemy', path: '/little-alchemy', color: 'bg-cyan-500', icon: FaFlask },
   { name: 'RC Plane', path: '/rc-plane', color: 'bg-cyan-400', icon: FaPaperPlane },
+  { name: 'Updates', path: '/updates', color: 'bg-indigo-500', icon: FaBug },
   {
     name: 'The Matrix',
     path: '/the-matrix',
