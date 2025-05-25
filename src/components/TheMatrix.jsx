@@ -20,6 +20,7 @@ export default function TheMatrix() {
     { speaker: '👓 Trinity', text: 'We have been looking for you.' },
     { speaker: '😎 Morpheus', text: 'This is your chance to learn the truth.' }
   ];
+>>> master
 
   /* ───────────── 1. name prompt ───────────── */
   const handleSubmit = (e) => {
@@ -63,8 +64,6 @@ export default function TheMatrix() {
   }
 
   /* ───────────── 2. story steps ───────────── */
-  const current = story[step];
-  const [storyText, storyDone] = useTypewriterEffect(current.text, 50);
 
   return (
     <div className="flex flex-col items-center justify-center py-20 text-green-500 font-mono space-y-6 min-h-screen relative overflow-hidden">
