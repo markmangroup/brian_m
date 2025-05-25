@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import TheMatrix from '../components/TheMatrix';
@@ -25,11 +25,22 @@ async function enterName(name = 'Neo') {
 }
 
 test('choosing the red pill navigates to the terminal', async () => {
+  jest.useFakeTimers();
   setup();
   await enterName();
 
+  // first story screen
+  act(() => jest.runOnlyPendingTimers());
+  await userEvent.click(await screen.findByRole('button', { name: /next/i }));
+
+  // second story screen
+  act(() => jest.runOnlyPendingTimers());
+  await userEvent.click(await screen.findByRole('button', { name: /next/i }));
+
+  act(() => jest.runOnlyPendingTimers());
   const red = await screen.findByRole('button', { name: /red pill/i });
   await userEvent.click(red);
 
   expect(await screen.findByText(/matrix terminal/i)).toBeInTheDocument();
+  jest.useRealTimers();
 });
