@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { UserProvider } from './components/UserContext';
 
 import Navigation from './components/Navigation';
+import Breadcrumbs from './components/Breadcrumbs';
 import SnackTrailPage from './components/SnackTrailPage';
 
 import PixelArtMaker from './components/PixelArtMaker';
@@ -25,6 +26,7 @@ export default function App() {
       <Router>
         <div className="min-h-screen bg-gray-900 text-white pt-16 relative">
           <Navigation />
+          <Breadcrumbs />
           <Routes>
           <Route path="/snack-trail" element={<SnackTrailPage />} />
           <Route path="/pixel-art" element={<PixelArtMaker />} />
