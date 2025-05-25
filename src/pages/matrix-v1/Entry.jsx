@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useTypewriterEffect from '../../components/useTypewriterEffect';
 import Rain from './components/Rain';
+import NPC from './components/NPC';
 
 export default function Entry() {
   const [name, setName] = useState(() => localStorage.getItem('matrixV1Name') || '');
@@ -47,6 +48,12 @@ export default function Entry() {
         )}
         {entered && (
           <>
+            <NPC
+              name="Morpheus"
+              quote={`I've been waiting for you, ${name}. You've felt it, haven't you?`}
+              style="mentor"
+              className="mb-2"
+            />
             <p className="text-lg">Hello, {name}. Choose your destiny.</p>
             <div className="flex space-x-4">
               <button onClick={red} className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-500">

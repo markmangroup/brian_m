@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { NAOE_QUOTES } from '../../data/naoeQuotes';
 import Rain from './components/Rain';
+import NPC from './components/NPC';
 
 export default function Puzzle() {
   const navigate = useNavigate();
   const [answer, setAnswer] = useState('');
   const [response, setResponse] = useState('');
+  const [npc, setNpc] = useState(null);
 
   useEffect(() => {
     if (localStorage.getItem('matrixV1Access') !== 'true') {
@@ -22,11 +24,22 @@ export default function Puzzle() {
 
     if (sillyWords.some((w) => clean.includes(w))) {
       setResponse('*** SYSTEM GLITCH ***');
+      setNpc({
+        name: 'Oracle',
+        quote: "You're cute. Now get serious.",
+        style: 'oracle',
+      });
     } else if (wiseWords.some((w) => clean.includes(w))) {
       const q = NAOE_QUOTES[Math.floor(Math.random() * NAOE_QUOTES.length)];
       setResponse(`${q.text} — ${q.attribution}`);
+      setNpc({
+        name: 'Oracle',
+        quote: "You've got the gift, but it looks like you're waiting for something...",
+        style: 'oracle',
+      });
     } else {
       setResponse('Interesting...');
+      setNpc(null);
     }
   };
 
@@ -47,6 +60,9 @@ export default function Puzzle() {
           <button className="px-4 py-2 rounded bg-green-700 text-black hover:bg-green-600">Submit</button>
         </form>
         {response && <p className="text-lg text-center max-w-md">{response}</p>}
+        {npc && (
+          <NPC name={npc.name} quote={npc.quote} style={npc.style} />
+        )}
         {response && (
           <button onClick={() => navigate('/matrix-v1/portal')} className="px-4 py-2 rounded bg-purple-600 text-white hover:bg-purple-500">
             Continue

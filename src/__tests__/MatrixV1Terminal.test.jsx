@@ -41,3 +41,12 @@ test('accepts code and navigates to transition', async () => {
   jest.useRealTimers();
 });
 
+test('shows agent after three failed attempts', async () => {
+  setup();
+  await submit('wrong1');
+  await submit('wrong2');
+  await submit('wrong3');
+  expect(screen.getByText(/agent echo/i)).toBeInTheDocument();
+  expect(screen.getByText(/not supposed to be here/i)).toBeInTheDocument();
+});
+
