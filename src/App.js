@@ -19,6 +19,13 @@ import MatrixTerminal   from './components/MatrixTerminal';
 import MatrixPortal     from './components/MatrixPortal';
 import Updates from './components/Updates';
 
+// Matrix v1 pages
+import Entry from './pages/matrix-v1/Entry';
+import Terminal from './pages/matrix-v1/Terminal';
+import Transition from './pages/matrix-v1/Transition';
+import Puzzle from './pages/matrix-v1/Puzzle';
+import Portal from './pages/matrix-v1/Portal';
+
 
 export default function App() {
   return (
@@ -40,6 +47,13 @@ export default function App() {
           <Route path="/the-matrix/terminal"   element={<MatrixTerminal   />} />
           <Route path="/the-matrix/transition" element={<MatrixTransition />} />
           <Route path="/the-matrix/portal"     element={<MatrixPortal     />} />
+
+          {/* Matrix v1 journey */}
+          <Route path="/matrix-v1" element={<Entry />} />
+          <Route path="/matrix-v1/terminal" element={<Terminal />} />
+          <Route path="/matrix-v1/transition" element={<Transition />} />
+          <Route path="/matrix-v1/puzzle" element={<Puzzle />} />
+          <Route path="/matrix-v1/portal" element={<Portal />} />
 
           <Route path="*" element={<Navigate to="/snack-trail" />} />
         </Routes>
