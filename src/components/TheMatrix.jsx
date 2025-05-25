@@ -20,7 +20,9 @@ export default function TheMatrix() {
     { speaker: '👓 Trinity', text: 'We have been looking for you.' },
     { speaker: '😎 Morpheus', text: 'This is your chance to learn the truth.' }
   ];
->>> master
+
+  const current = story[step];
+  const [storyText, storyDone] = useTypewriterEffect(current.text, 50);
 
   /* ───────────── 1. name prompt ───────────── */
   const handleSubmit = (e) => {
