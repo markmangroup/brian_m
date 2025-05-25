@@ -64,7 +64,7 @@ export default function Puzzle() {
           <NPC name={npc.name} quote={npc.quote} style={npc.style} />
         )}
         {response && (
-          <button onClick={() => navigate('/matrix-v1/portal')} className="px-4 py-2 rounded bg-purple-600 text-white hover:bg-purple-500">
+          <button onClick={() => navigate('/matrix-v1/trace')} className="px-4 py-2 rounded bg-purple-600 text-white hover:bg-purple-500">
             Continue
           </button>
         )}

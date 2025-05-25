@@ -9,7 +9,7 @@ function setup() {
     <MemoryRouter initialEntries={['/matrix-v1/puzzle']}>
       <Routes>
         <Route path="/matrix-v1/puzzle" element={<Puzzle />} />
-        <Route path="/matrix-v1/portal" element={<div>Portal</div>} />
+        <Route path="/matrix-v1/trace" element={<div>Trace</div>} />
       </Routes>
     </MemoryRouter>
   );
