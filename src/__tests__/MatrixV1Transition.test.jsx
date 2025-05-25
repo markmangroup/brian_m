@@ -15,6 +15,7 @@ function setup(initialEntries = ['/matrix-v1/transition']) {
 
 test('auto-navigates to puzzle after timeout', async () => {
   jest.useFakeTimers();
+  localStorage.setItem('matrixV1Access', 'true');
   setup();
   act(() => {
     jest.advanceTimersByTime(3000);

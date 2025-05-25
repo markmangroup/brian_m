@@ -13,7 +13,14 @@ export default function Transition() {
   const [quoteText] = useTypewriterEffect(`${q.text} — ${q.attribution}`, 50);
 
   useEffect(() => {
-    const t = setTimeout(() => navigate('/matrix-v1/puzzle', { state: { name } }), 3000);
+    if (localStorage.getItem('matrixV1Access') !== 'true') {
+      navigate('/matrix-v1/terminal');
+      return;
+    }
+    const t = setTimeout(
+      () => navigate('/matrix-v1/puzzle', { state: { name } }),
+      3000
+    );
     return () => clearTimeout(t);
   }, [navigate, name]);
 

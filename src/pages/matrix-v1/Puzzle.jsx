@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { NAOE_QUOTES } from '../../data/naoeQuotes';
 import Rain from './components/Rain';
@@ -8,14 +8,25 @@ export default function Puzzle() {
   const [answer, setAnswer] = useState('');
   const [response, setResponse] = useState('');
 
+  useEffect(() => {
+    if (localStorage.getItem('matrixV1Access') !== 'true') {
+      navigate('/matrix-v1/terminal');
+    }
+  }, [navigate]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const clean = answer.trim().toLowerCase();
-    if (clean === 'yes' || clean === 'y') {
+    const wiseWords = ['no', 'choice', 'control'];
+    const sillyWords = ['pizza', 'cat', 'dog', 'burger'];
+
+    if (sillyWords.some((w) => clean.includes(w))) {
+      setResponse('*** SYSTEM GLITCH ***');
+    } else if (wiseWords.some((w) => clean.includes(w))) {
       const q = NAOE_QUOTES[Math.floor(Math.random() * NAOE_QUOTES.length)];
       setResponse(`${q.text} — ${q.attribution}`);
     } else {
-      setResponse('*** SYSTEM GLITCH ***');
+      setResponse('Interesting...');
     }
   };
 
