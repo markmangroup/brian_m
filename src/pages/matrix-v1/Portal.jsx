@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { navItems } from '../../components/Navigation';
 import useTypewriterEffect from '../../components/useTypewriterEffect';
 import { NAOE_QUOTES } from '../../data/naoeQuotes';
@@ -7,10 +7,17 @@ import FlowDrawer from './components/FlowDrawer';
 import Rain from './components/Rain';
 
 export default function Portal() {
+  const navigate = useNavigate();
   const name = localStorage.getItem('matrixV1Name') || 'Traveler';
   const q = NAOE_QUOTES[Math.floor(Math.random() * NAOE_QUOTES.length)];
-  const [welcomeText] = useTypewriterEffect(`Welcome, ${name}`, 50);
+  const [welcomeText] = useTypewriterEffect(`Welcome back, ${name}`, 50);
   const [quoteText] = useTypewriterEffect(`${q.text} — ${q.attribution}`, 50);
+
+  useEffect(() => {
+    if (localStorage.getItem('matrixV1Access') !== 'true') {
+      navigate('/matrix-v1/terminal');
+    }
+  }, [navigate]);
 
   return (
     <div className="p-8 text-center space-y-6 min-h-screen relative overflow-hidden">
