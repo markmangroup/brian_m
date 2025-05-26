@@ -18,7 +18,7 @@ export default function MatrixTransition() {
 
   useEffect(() => {
     const t = setTimeout(
-      () => navigate('/the-matrix/portal', { state: { name } }),
+      () => navigate('/matrix-v1/portal', { state: { name } }),
       3000
     );
     return () => clearTimeout(t);

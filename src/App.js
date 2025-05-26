@@ -12,10 +12,9 @@ import LegoBuildMode from './components/LegoBuildMode';
 import LegoInventory from './components/LegoInventory';
 import LittleAlchemy from './components/LittleAlchemy';
 import TheMatrix from './components/TheMatrix';
+import MatrixV1Terminal from './components/MatrixV1Terminal';
 import MatrixTransition from './components/MatrixTransition';
-import MatrixTerminal   from './components/MatrixTerminal';
-import MatrixPortal     from './components/MatrixPortal';
-
+import MatrixPortal from './components/MatrixPortal';
 
 export default function App() {
   return (
@@ -24,21 +23,26 @@ export default function App() {
         <div className="min-h-screen bg-gray-900 text-white pt-16 relative">
           <Navigation />
           <Routes>
-          <Route path="/snack-trail" element={<SnackTrailPage />} />
-          <Route path="/pixel-art" element={<PixelArtMaker />} />
-          <Route path="/robot-lab" element={<RobotLab />} />
-          <Route path="/lego-build" element={<LegoBuildMode />} />
-          <Route path="/lego-inventory" element={<LegoInventory />} />
-  <Route path="/little-alchemy" element={<LittleAlchemy />} />
-          <Route path="/the-matrix" element={<TheMatrix />} />
-          <Route path="/the-matrix/terminal"   element={<MatrixTerminal   />} />
-          <Route path="/the-matrix/transition" element={<MatrixTransition />} />
-          <Route path="/the-matrix/portal"     element={<MatrixPortal     />} />
+            <Route path="/snack-trail" element={<SnackTrailPage />} />
+            <Route path="/pixel-art" element={<PixelArtMaker />} />
+            <Route path="/robot-lab" element={<RobotLab />} />
+            <Route path="/lego-build" element={<LegoBuildMode />} />
+            <Route path="/lego-inventory" element={<LegoInventory />} />
+            <Route path="/little-alchemy" element={<LittleAlchemy />} />
+            
+            {/* Matrix V1 Routes */}
+            <Route path="/matrix-v1" element={<TheMatrix />} />
+            <Route path="/matrix-v1/terminal" element={<MatrixV1Terminal />} />
+            <Route path="/matrix-v1/transition" element={<MatrixTransition />} />
+            <Route path="/matrix-v1/portal" element={<MatrixPortal />} />
+            
+            {/* Legacy Matrix Routes - Redirect to V1 */}
+            <Route path="/the-matrix/*" element={<Navigate to="/matrix-v1" replace />} />
 
-          <Route path="*" element={<Navigate to="/snack-trail" />} />
-        </Routes>
-      </div>
-    </Router>
+            <Route path="*" element={<Navigate to="/snack-trail" />} />
+          </Routes>
+        </div>
+      </Router>
     </UserProvider>
   );
 }

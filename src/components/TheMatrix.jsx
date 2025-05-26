@@ -67,7 +67,7 @@ export default function TheMatrix() {
         <h1 className="text-5xl font-bold animate-pulse">{welcomeMessage}</h1>
         <div className="flex space-x-4">
           <button
-            onClick={() => navigate('/the-matrix/terminal', { state: { name: displayName } })}
+            onClick={() => navigate('/matrix-v1/terminal', { state: { name: displayName } })}
             className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-500"
           >
             Red Pill
