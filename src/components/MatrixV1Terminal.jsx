@@ -22,7 +22,7 @@ export default function MatrixV1Terminal() {
   const stateName = location.state?.name || userName;
   const [typedMsg, typedMsgDone] = useTypewriterEffect(msg, 50);
   const [morpheusText, morpheusDone] = useTypewriterEffect(
-    'Morpheus: "I'm going to show you how deep the rabbit hole goes. Answer this question to prove you are The One..."',
+    "Morpheus: \"I'm going to show you how deep the rabbit hole goes. Answer this question to prove you are The One...\"",
     50
   );
 
