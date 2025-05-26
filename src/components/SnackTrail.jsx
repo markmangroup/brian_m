@@ -33,6 +33,18 @@ export default function SnackTrail() {
   const [customizing, setCustomizing] = useState(false);
   const [crewInputs, setCrewInputs] = useState(() => timeline[0].crew.map(member => ({ name: member.name, avatar: member.avatar || DEFAULT_AVATARS[0] })));
 
+  const restartGame = () => {
+    const freshCrew = loadSavedCrew();
+    setTimeline([{ crew: freshCrew, log: [] }]);
+    setCurrentDay(0);
+    setArcadeMode(false);
+    setWinner(null);
+    setGameOver(null);
+    setTitle('');
+    setCrewInputs(freshCrew.map(member => ({ name: member.name, avatar: member.avatar || DEFAULT_AVATARS[0] })));
+    setCustomizing(false);
+  };
+
   const crew = timeline[currentDay].crew;
   const log = timeline.flatMap(day => day.log).slice(0, 8);
 
@@ -203,13 +215,13 @@ export default function SnackTrail() {
         <VictoryScreen
           crew={crew}
           winner={winner}
-          onRestart={() => window.location.reload()}
+          onRestart={restartGame}
         />
       ) : gameOver ? (
         <GameOverScreen
           crew={crew}
           reason={gameOver}
-          onRestart={() => window.location.reload()}
+          onRestart={restartGame}
         />
       ) : (
         <RaceTrackScene crew={crew} />

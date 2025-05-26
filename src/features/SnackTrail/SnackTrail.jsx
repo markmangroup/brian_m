@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { FaHamburger, FaLaugh } from 'react-icons/fa';
 
+// NOTE: This file represents an early Snack Trail prototype.
+// The main game component now lives in src/components/SnackTrail.jsx
+
 /* tiny event pool – add more lines whenever the kids think of them */
 const events = [
   { msg: "A seagull steals your fries!", snack: -5 },
