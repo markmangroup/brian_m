@@ -14,25 +14,13 @@ import {
 } from 'react-icons/fa';
 
 export const navItems = [
-  {
-    name: 'The Trail',
-    path: '/snack-trail',
-    color: 'bg-yellow-400 text-black',
-    icon: FaRoad
-  },
-  { name: 'Pixel Lab', path: '/pixel-art', color: 'bg-blue-500', icon: FaPaintBrush },
-  { name: 'Robot Room', path: '/robot-lab', color: 'bg-green-500', icon: FaRobot },
-  { name: 'Build Mode', path: '/lego-build', color: 'bg-red-500', icon: FaCube },
-  { name: 'Inventory', path: '/lego-inventory', color: 'bg-yellow-600', icon: FaBox },
-  { name: 'Alchemy', path: '/little-alchemy', color: 'bg-cyan-500', icon: FaFlask },
-  { name: 'RC Plane', path: '/rc-plane', color: 'bg-cyan-400', icon: FaPaperPlane },
-  { name: 'Updates', path: '/updates', color: 'bg-indigo-500', icon: FaBug },
-  {
-    name: 'The Matrix',
-    path: '/the-matrix',
-    color: 'bg-green-700 text-black',
-    icon: FaCodeBranch
-  }
+  { name: 'The Trail',      path: '/snack-trail',      color: 'bg-yellow-400 text-black' },
+  { name: 'Pixel Lab',      path: '/pixel-art',        color: 'bg-blue-500' },
+  { name: 'Robot Room',     path: '/robot-lab',        color: 'bg-green-500' },
+  { name: 'Build Mode',     path: '/lego-build',       color: 'bg-red-500' },
+  { name: 'Inventory',      path: '/lego-inventory',   color: 'bg-yellow-600' },
+  { name: 'Alchemy',        path: '/little-alchemy',   color: 'bg-cyan-500' },
+  { name: 'The Matrix',     path: '/matrix-v1',        color: 'bg-green-700 text-black' }
 ];
 
 export default function Navigation() {
