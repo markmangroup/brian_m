@@ -37,7 +37,7 @@ export default function Trace() {
           <>
             <p className="text-xl">Connection re-established.</p>
             <button
-              onClick={() => navigate('/matrix-v1/portal')}
+              onClick={() => navigate('/matrix-v1/observer')}
               className="px-4 py-2 rounded bg-purple-600 text-white hover:bg-purple-500"
             >
               Enter the Portal
