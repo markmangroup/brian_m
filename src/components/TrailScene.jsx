@@ -8,8 +8,11 @@ export default function TrailScene({ crew, day }) {
       {/* Trail line */}
       <div className="absolute top-1/2 left-4 right-4 h-2 bg-gray-600 rounded-full" />
 
-      {/* Milestones */}
-
+        {/* Milestones */}
+        <div className="absolute top-0 left-2 text-sm">🚩</div>
+        <div className="absolute top-0 left-[33%] text-sm animate-pulse">🏕</div>
+        <div className="absolute top-0 left-[66%] text-sm animate-pulse">⛺</div>
+        <div className="absolute top-0 right-2 text-sm animate-bounce">🕹</div>
 
       {/* Avatars based on snack performance */}
       {crew.map((member, idx) => {
