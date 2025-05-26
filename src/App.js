@@ -13,9 +13,6 @@ import LegoBuildMode from './components/LegoBuildMode';
 import LegoInventory from './components/LegoInventory';
 import LittleAlchemy from './components/LittleAlchemy';
 import RCPlaneDesigner from './components/RCPlaneDesigner';
-import TheMatrix from './components/TheMatrix';
-import MatrixV1Terminal from './components/MatrixV1Terminal';
-import MatrixTransition from './components/MatrixTransition';
 import Updates from './components/Updates';
 
 // Matrix V1 Pages
