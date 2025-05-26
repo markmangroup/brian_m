@@ -22,6 +22,11 @@ const TRAITS = [
 
 export default function Observer() {
   const navigate = useNavigate();
+  useEffect(() => {
+    if (localStorage.getItem('matrixV1Access') !== 'true') {
+      navigate('/matrix-v1/terminal');
+    }
+  }, [navigate]);
   const [messageIndex, setMessageIndex] = useState(0);
   const [showButtons, setShowButtons] = useState(false);
   const [isProfiling, setIsProfiling] = useState(false);
