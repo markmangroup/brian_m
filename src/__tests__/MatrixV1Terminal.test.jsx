@@ -14,10 +14,9 @@ function setup(initialEntries = ['/matrix-v1/terminal']) {
   );
 }
 
-async function submit(code) {
-  const input = screen.getByPlaceholderText(/enter passcode/i);
-  await userEvent.type(input, code);
-  await userEvent.click(screen.getByRole('button', { name: /hack/i }));
+async function selectAnswer(answer) {
+  const button = screen.getByRole('button', { name: answer });
+  await userEvent.click(button);
 }
 
 afterEach(() => {
@@ -25,28 +24,28 @@ afterEach(() => {
   jest.useRealTimers();
 });
 
-test('shows access denied with wrong code', async () => {
+test('shows access denied with wrong answer', async () => {
   setup();
-  await submit('wrong');
+  await selectAnswer('Door');
   expect(screen.getByText(/access denied/i)).toBeInTheDocument();
 });
 
-test('accepts code and navigates to transition', async () => {
+test('accepts correct answer and navigates to transition', async () => {
   jest.useFakeTimers();
   setup();
-  await submit('thereisnospoon');
+  await selectAnswer('Spoon');
   expect(screen.getByText(/access granted/i)).toBeInTheDocument();
-  act(() => jest.advanceTimersByTime(2500));
+  act(() => jest.advanceTimersByTime(2000));
   expect(await screen.findByText(/transition/i)).toBeInTheDocument();
   jest.useRealTimers();
 });
 
 test('shows agent after three failed attempts', async () => {
   setup();
-  await submit('wrong1');
-  await submit('wrong2');
-  await submit('wrong3');
+  await selectAnswer('Door');
+  await selectAnswer('Exit');
+  await selectAnswer('Escape');
   expect(screen.getByText(/agent echo/i)).toBeInTheDocument();
-  expect(screen.getByText(/not supposed to be here/i)).toBeInTheDocument();
+  expect(screen.getByText(/not the one/i)).toBeInTheDocument();
 });
 
