@@ -20,7 +20,7 @@ export default function Transition() {
     const MESSAGE_ROUTE = '/matrix-v1/message';
     const t = setTimeout(
       () => navigate(MESSAGE_ROUTE, { state: { name } }),
-      3000
+      6000
     );
     return () => clearTimeout(t);
   }, [navigate, name]);
@@ -34,7 +34,7 @@ export default function Transition() {
         <p className="text-xl animate-pulse">{bootText}</p>
         <p className="text-lg text-center max-w-md">{quoteText}</p>
         <div className="w-64 h-2 bg-green-900 overflow-hidden rounded">
-          <div className="h-full bg-green-500 animate-progress" />
+          <div className="h-full bg-green-500 animate-progress-slow" />
         </div>
       </div>
     </div>
