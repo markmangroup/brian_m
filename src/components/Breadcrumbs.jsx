@@ -14,7 +14,7 @@ export default function Breadcrumbs() {
   });
 
   return (
-    <nav className="fixed top-14 left-0 right-0 z-40 px-4 py-2 bg-white/70 backdrop-blur-md shadow rounded-b-lg">
+    <nav className="sticky top-14 z-40 w-full px-4 py-2 bg-white/70 backdrop-blur-md shadow rounded-b-lg">
       <ol className="flex text-sm text-gray-700 space-x-2">
         <li>
           <Link to="/" className="hover:underline">Home</Link>
