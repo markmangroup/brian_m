@@ -37,10 +37,10 @@ export default function MatrixV1Terminal() {
     setMsg(`Access granted. Welcome to the real world. ${q.text} — ${q.attribution}`);
     setOk(true);
     setIsTransitioning(true);
-    localStorage.setItem('matrixAccess', 'true');
+    localStorage.setItem('matrixV1Access', 'true');
     setTimeout(() =>
       navigate('/matrix-v1/transition', { state: { name: stateName } }),
-    2500);
+    2000);
   };
 
   const handleAnswer = (answer) => {
@@ -57,7 +57,7 @@ export default function MatrixV1Terminal() {
   };
 
   const logout = () => {
-    localStorage.removeItem('matrixAccess');
+    localStorage.removeItem('matrixV1Access');
     setOk(false);
     setMsg('');
     setAttempts(0);
