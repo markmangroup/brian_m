@@ -57,16 +57,29 @@ const statusBadge = {
 };
 
 export default function CustomNode({ data, type, selected }) {
+  let className = '';
+  if (selected) {
+    className += ' matrix-glow-green';
+  } else if (data.recommended) {
+    className += ' matrix-glow-purple';
+  } else if (data.type === 'trap') {
+    className += ' matrix-trap-red';
+  } else if (data.type === 'choice') {
+    className += ' matrix-gradient-purple';
+  } else if (data.type === 'character') {
+    className += ' matrix-glow-green';
+  }
+
   const style = nodeStyles[data.type] || nodeStyles.unknown;
   const badge = statusBadge[data.status] || '';
-  // Matrix glow for current node (selected or hardcoded)
-  const glow = selected ? { boxShadow: '0 0 24px 4px #00ff00, 0 0 8px #00ff00' } : {};
+
   return (
     <div
-      style={{ ...style, ...glow, position: 'relative', cursor: 'pointer' }}
+      className={className + ' relative cursor-pointer font-semibold rounded-lg px-4 py-3 min-w-[110px] text-center'}
       title={data.tooltip || data.label}
+      style={{ position: 'relative' }}
     >
-      <span style={{ fontSize: 18, fontWeight: 700 }}>{data.label}</span>
+      <span className="block text-lg font-bold">{data.label}</span>
       {badge && (
         <span
           style={{

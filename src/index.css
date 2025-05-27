@@ -73,3 +73,19 @@ code {
     @apply transform scale-75 origin-top;
   }
 }
+
+.matrix-glow-green {
+  @apply shadow-[0_0_12px_#00ff00] border-2 border-green-400 animate-pulse;
+}
+
+.matrix-glow-purple {
+  @apply shadow-[0_0_12px_#8000ff] border-2 border-purple-400 animate-pulse;
+}
+
+.matrix-trap-red {
+  @apply bg-red-800 text-white border border-red-500;
+}
+
+.matrix-gradient-purple {
+  @apply bg-gradient-to-br from-purple-700 to-fuchsia-600 text-white;
+}
