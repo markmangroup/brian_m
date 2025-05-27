@@ -3,7 +3,8 @@ import { useState, useEffect, useRef } from 'react';
 export default function useTypewriterEffect(fullText = '', speed = 50) {
   const [text, setText] = useState('');
   const [done, setDone] = useState(false);
-  const prevTextRef = useRef(fullText);
+  // initialize ref as null so first render triggers effect
+  const prevTextRef = useRef(null);
   const timeoutRef = useRef();
 
   useEffect(() => {
