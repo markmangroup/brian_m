@@ -73,24 +73,13 @@ export default function Stabilize() {
       return () => clearTimeout(t);
     }
     if (fadeOut) {
-      const t = setTimeout(() => setShowSequence(false), 600);
+      const t = setTimeout(() => {
+        setShowSequence(false);
+        setReady(true);
+      }, 600);
       return () => clearTimeout(t);
     }
   }, [sequenceStep, sequence.length, fadeOut]);
-
-  // After fade, show Ready button
-  useEffect(() => {
-    if (!showSequence && !ready) {
-      setTimeout(() => setReady(true), 200);
-    }
-  }, [showSequence, ready]);
-
-  // Show grid after Ready
-  useEffect(() => {
-    if (ready && !showGrid) {
-      setShowGrid(true);
-    }
-  }, [ready, showGrid]);
 
   // Handle status changes
   useEffect(() => {
