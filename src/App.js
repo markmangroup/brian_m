@@ -77,6 +77,10 @@ export default function App() {
             <Route path="/matrix-v1/ghost-access" element={<GhostAccess />} />
             <Route path="/matrix-v1/ded" element={<Ded />} />
             <Route path="/matrix-v1/ghost-layer-1" element={<GhostLayer1 />} />
+            {/* Matrix V1 Dead-End Catch-All */}
+            <Route path="/matrix-v1/*" element={<Ded />} />
+            {/* Global 404 fallback */}
+            <Route path="*" element={<Ded />} />
             {/* Legacy Matrix Routes - Redirect to V1 */}
             <Route path="/the-matrix/*" element={<Navigate to="/matrix-v1" replace />} />
             <Route path="*" element={<Navigate to="/snack-trail" />} />

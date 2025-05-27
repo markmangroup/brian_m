@@ -12,29 +12,36 @@ const TYPEWRITER_LINES = [
 
 export default function GhostLayer1() {
   const navigate = useNavigate();
-  const [displayed, setDisplayed] = useState([]);
+  const [typedLines, setTypedLines] = useState([]); // lines that are fully typed
+  const [currentLine, setCurrentLine] = useState(''); // currently typing line
   const [lineIdx, setLineIdx] = useState(0);
   const [charIdx, setCharIdx] = useState(0);
+  const [showButtons, setShowButtons] = useState(false);
 
-  // Typewriter effect
+  // Typewriter effect: type one line at a time
   useEffect(() => {
-    if (lineIdx >= TYPEWRITER_LINES.length) return;
+    if (lineIdx >= TYPEWRITER_LINES.length) {
+      setTimeout(() => setShowButtons(true), 400); // fade in buttons after all lines
+      return;
+    }
     if (charIdx < TYPEWRITER_LINES[lineIdx].length) {
       const t = setTimeout(() => setCharIdx(charIdx + 1), 22);
       return () => clearTimeout(t);
     } else {
-      setDisplayed((prev) => [...prev, TYPEWRITER_LINES[lineIdx]]);
       setTimeout(() => {
+        setTypedLines((prev) => [...prev, TYPEWRITER_LINES[lineIdx]]);
+        setCurrentLine('');
         setLineIdx(lineIdx + 1);
         setCharIdx(0);
-      }, 300);
+      }, 250);
     }
   }, [lineIdx, charIdx]);
 
-  const linesToShow = [...displayed];
-  if (lineIdx < TYPEWRITER_LINES.length) {
-    linesToShow.push(TYPEWRITER_LINES[lineIdx].slice(0, charIdx));
-  }
+  useEffect(() => {
+    if (lineIdx < TYPEWRITER_LINES.length) {
+      setCurrentLine(TYPEWRITER_LINES[lineIdx].slice(0, charIdx));
+    }
+  }, [charIdx, lineIdx]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-black text-green-400 font-mono relative overflow-hidden">
@@ -43,12 +50,15 @@ export default function GhostLayer1() {
       )}
       <div className="relative z-10 flex flex-col items-center justify-center w-full h-full animate-fade-in">
         <div className="bg-black/90 rounded-lg px-8 py-10 shadow-2xl border-2 border-green-700 max-w-xl w-full text-center space-y-2 mb-12">
-          {linesToShow.map((line, i) => (
-            <div key={i} className="text-lg md:text-2xl tracking-widest font-mono text-green-400 animate-typewriter whitespace-pre-line">{line}</div>
+          {typedLines.map((line, i) => (
+            <div key={i} className="text-lg md:text-2xl tracking-widest font-mono text-green-400 whitespace-pre-line">{line}</div>
           ))}
+          {lineIdx < TYPEWRITER_LINES.length && (
+            <div className="text-lg md:text-2xl tracking-widest font-mono text-green-400 animate-typewriter whitespace-pre-line">{currentLine}</div>
+          )}
         </div>
-        {lineIdx >= TYPEWRITER_LINES.length && (
-          <div className="flex flex-col md:flex-row gap-8 mt-2">
+        {showButtons && (
+          <div className="flex flex-col md:flex-row gap-8 mt-2 transition-opacity duration-700 opacity-100 animate-fade-in">
             <button
               className="px-10 py-4 text-2xl font-bold rounded-lg bg-black border-2 border-cyan-400 text-cyan-300 shadow-lg transition-all duration-200 hover:scale-105 hover:shadow-cyan-400/60 focus:outline-none focus:ring-4 focus:ring-cyan-400/40 animate-glow"
               style={{ textShadow: '0 0 12px #22d3ee, 0 0 2px #fff' }}
