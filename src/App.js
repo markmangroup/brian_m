@@ -33,6 +33,8 @@ import Interference from './pages/matrix-v1/Interference';
 import PathBGlitch from './pages/matrix-v1/PathBGlitch';
 import Factions from './pages/matrix-v1/Factions';
 import Align from './pages/matrix-v1/Align';
+import Stabilize from './pages/matrix-v1/Stabilize';
+import GhostAccess from './pages/matrix-v1/GhostAccess';
 
 export default function App() {
   return (
@@ -69,6 +71,8 @@ export default function App() {
             <Route path="/matrix-v1/path-b-glitch" element={<PathBGlitch />} />
             <Route path="/matrix-v1/factions" element={<Factions />} />
             <Route path="/matrix-v1/align-:slug" element={<Align />} />
+            <Route path="/matrix-v1/stabilize" element={<Stabilize />} />
+            <Route path="/matrix-v1/ghost-access" element={<GhostAccess />} />
             {/* Legacy Matrix Routes - Redirect to V1 */}
             <Route path="/the-matrix/*" element={<Navigate to="/matrix-v1" replace />} />
             <Route path="*" element={<Navigate to="/snack-trail" />} />
