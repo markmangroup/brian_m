@@ -1,17 +1,10 @@
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import Map from '../pages/matrix-v1/Map';
 
-const originalFetch = global.fetch;
-
-beforeEach(() => {
-  global.fetch = jest.fn(() =>
-    Promise.resolve({ text: () => Promise.resolve('graph TD;') })
-  );
-});
-
 afterEach(() => {
-  global.fetch = originalFetch;
+  localStorage.clear();
 });
 
 function setup(initialEntries = ['/matrix-v1/map']) {
@@ -24,8 +17,16 @@ function setup(initialEntries = ['/matrix-v1/map']) {
   );
 }
 
-test('renders matrix story map heading', () => {
+test('highlights current node from localStorage', () => {
+  localStorage.setItem('currentNodeId', 'start');
   setup();
-  expect(screen.getByRole('heading', { name: /matrix story map/i })).toBeInTheDocument();
-  expect(global.fetch).toHaveBeenCalled();
+  expect(document.querySelector('.matrix-glow-green')).toBeInTheDocument();
+});
+
+test('toggles dev view legend', async () => {
+  setup();
+  const button = screen.getByRole('button', { name: /dev view/i });
+  expect(screen.queryByText(/legend/i)).not.toBeInTheDocument();
+  await userEvent.click(button);
+  expect(screen.getByText(/legend/i)).toBeInTheDocument();
 });

@@ -4,6 +4,7 @@ import { UserContext } from './UserContext';
 import { NAOE_QUOTES } from '../data/naoeQuotes';
 import useTypewriterEffect from './useTypewriterEffect';
 import MatrixRain from './MatrixRain';
+import useMatrixProgress from './useMatrixProgress';
 
 const QUOTE_OPTIONS = [
   { text: 'There is no...', options: ['Door', 'Spoon', 'Exit', 'Escape'], correct: 'Spoon' },
@@ -13,6 +14,7 @@ const QUOTE_OPTIONS = [
 
 export default function MatrixV1Terminal() {
   const { userName } = useContext(UserContext);
+  useMatrixProgress('start');
   const [selectedQuote, setSelectedQuote] = useState(null);
   const [msg, setMsg] = useState('');
   const [ok, setOk] = useState(false);
