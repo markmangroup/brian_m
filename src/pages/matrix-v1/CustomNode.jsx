@@ -41,25 +41,25 @@ const nodeStyles = {
     background: '#0f172a',
     border: '2px solid #14b8a6', // teal default
     color: '#14b8a6',
-    fontWeight: 700,
-    borderRadius: 14,
-    padding: 14,
-    minWidth: 140,
+    fontWeight: 800,
+    borderRadius: 18,
+    padding: 22,
+    minWidth: 180,
     textAlign: 'center',
-    fontSize: 17,
-    boxShadow: '0 0 12px #14b8a655',
+    fontSize: 20,
+    boxShadow: '0 0 18px #14b8a655',
   },
   training: {
     background: 'linear-gradient(135deg, #222 70%, #a259ff 100%)',
     border: '2px solid #a259ff',
     color: '#fff',
-    fontWeight: 700,
-    borderRadius: 16,
-    padding: 14,
-    minWidth: 130,
+    fontWeight: 800,
+    borderRadius: 28,
+    padding: 24,
+    minWidth: 200,
     textAlign: 'center',
-    fontSize: 16,
-    boxShadow: '0 0 12px #a259ff55',
+    fontSize: 22,
+    boxShadow: '0 0 18px #a259ff55',
   },
   unknown: {
     background: '#444',
@@ -84,17 +84,17 @@ const factionColors = {
   teal: {
     border: '2px solid #14b8a6',
     color: '#14b8a6',
-    boxShadow: '0 0 12px #14b8a655',
+    boxShadow: '0 0 18px #14b8a655',
   },
   gray: {
     border: '2px solid #64748b',
     color: '#64748b',
-    boxShadow: '0 0 12px #64748b55',
+    boxShadow: '0 0 18px #64748b55',
   },
   gold: {
     border: '2px solid #fbbf24',
     color: '#fbbf24',
-    boxShadow: '0 0 12px #fbbf2455',
+    boxShadow: '0 0 18px #fbbf2455',
   },
 };
 
@@ -134,13 +134,13 @@ export default function CustomNode({ data, type, selected }) {
 
   return (
     <div
-      className={className + ' relative cursor-pointer font-semibold rounded-lg px-4 py-3 min-w-[110px] text-center'}
+      className={className + ' relative cursor-pointer font-extrabold rounded-lg px-4 py-3 min-w-[110px] text-center'}
       title={data.tooltip || data.label}
       style={{ position: 'relative', ...style }}
     >
-      <span className="block text-lg font-bold">{data.label}</span>
+      <span className="block text-xl font-extrabold">{data.label}</span>
       {data.guardian && (
-        <span className="block text-xs mt-1 opacity-80">{data.guardian}</span>
+        <span className="block text-sm mt-1 opacity-80">{data.guardian}</span>
       )}
       {badge && (
         <span
@@ -148,7 +148,7 @@ export default function CustomNode({ data, type, selected }) {
             position: 'absolute',
             top: 2,
             right: 6,
-            fontSize: 18,
+            fontSize: 22,
             filter: 'drop-shadow(0 0 2px #000)',
           }}
           aria-label={data.status}
@@ -168,7 +168,7 @@ export default function CustomNode({ data, type, selected }) {
           color: '#fff',
           padding: '4px 10px',
           borderRadius: 6,
-          fontSize: 13,
+          fontSize: 15,
           whiteSpace: 'nowrap',
           zIndex: 10,
         }}
