@@ -42,9 +42,9 @@ export default function Stage3() {
   const handlePath = (path) => {
     localStorage.setItem('matrixV1Fork', path);
     if (path === 'A') {
-      navigate('/profile-report');
+      navigate('/matrix-v1/path-a');
     } else {
-      navigate('/hidden-path');
+      navigate('/matrix-v1/path-b');
     }
   };
 
