@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactFlow from 'reactflow';
-import 'reactflow/dist/style.css';
+import 'reactflow/dist/base.css';
 import { nodes } from './nodes';
 import { edges } from './edges';
 
