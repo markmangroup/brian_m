@@ -92,6 +92,7 @@ export default function Stabilize() {
       if (attempts >= 2) setInvalid(true);
       setTimeout(() => {
         if (attempts >= 2) {
+          console.log('Redirecting to DED screen after 3 failed attempts...');
           setFlicker(true);
           setTimeout(() => navigate('/matrix-v1/ded'), 600);
         } else {
