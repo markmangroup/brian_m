@@ -35,11 +35,12 @@ import Factions from './pages/matrix-v1/Factions';
 import Align from './pages/matrix-v1/Align';
 import Stabilize from './pages/matrix-v1/Stabilize';
 import GhostAccess from './pages/matrix-v1/GhostAccess';
+import Ded from './pages/matrix-v1/Ded';
 
 export default function App() {
   return (
     <UserProvider>
-      <Router>
+      <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <div className="min-h-screen bg-gray-900 text-white pt-16 relative">
           <Navigation />
           <Breadcrumbs />
@@ -73,6 +74,7 @@ export default function App() {
             <Route path="/matrix-v1/align-:slug" element={<Align />} />
             <Route path="/matrix-v1/stabilize" element={<Stabilize />} />
             <Route path="/matrix-v1/ghost-access" element={<GhostAccess />} />
+            <Route path="/matrix-v1/ded" element={<Ded />} />
             {/* Legacy Matrix Routes - Redirect to V1 */}
             <Route path="/the-matrix/*" element={<Navigate to="/matrix-v1" replace />} />
             <Route path="*" element={<Navigate to="/snack-trail" />} />
