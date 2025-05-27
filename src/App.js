@@ -36,6 +36,7 @@ import Align from './pages/matrix-v1/Align';
 import Stabilize from './pages/matrix-v1/Stabilize';
 import GhostAccess from './pages/matrix-v1/GhostAccess';
 import Ded from './pages/matrix-v1/Ded';
+import GhostLayer1 from './pages/matrix-v1/GhostLayer1';
 
 export default function App() {
   return (
@@ -75,6 +76,7 @@ export default function App() {
             <Route path="/matrix-v1/stabilize" element={<Stabilize />} />
             <Route path="/matrix-v1/ghost-access" element={<GhostAccess />} />
             <Route path="/matrix-v1/ded" element={<Ded />} />
+            <Route path="/matrix-v1/ghost-layer-1" element={<GhostLayer1 />} />
             {/* Legacy Matrix Routes - Redirect to V1 */}
             <Route path="/the-matrix/*" element={<Navigate to="/matrix-v1" replace />} />
             <Route path="*" element={<Navigate to="/snack-trail" />} />
