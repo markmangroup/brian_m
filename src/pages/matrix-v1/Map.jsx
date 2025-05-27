@@ -9,8 +9,10 @@ export default function Map() {
   const diagramRef = useRef(null);
   const location = useLocation();
 
+  // Hardcoded minimal diagram for debugging
+  const HARDCODED_DIAGRAM = `graph TD\n  A[Start] --> B[End]`;
+
   useEffect(() => {
-    // Initialize Mermaid with dark theme and tooltips
     mermaid.initialize({
       startOnLoad: false,
       theme: 'dark',
@@ -31,39 +33,49 @@ export default function Map() {
     // Fetch the diagram content
     fetch(process.env.PUBLIC_URL + '/anomaly-route.mmd')
       .then(res => res.text())
-      .then(setDiagram)
-      .catch(() => {});
+      .then(text => {
+        console.log('[MatrixV1 Map] Loaded diagram from file:', text);
+        setDiagram(text);
+      })
+      .catch((err) => {
+        console.error('[MatrixV1 Map] Error loading diagram:', err);
+        setDiagram('');
+      });
   }, []);
 
   useEffect(() => {
-    // Update current path when location changes
     setCurrentPath(location.pathname);
   }, [location]);
 
   useEffect(() => {
-    if (diagram && diagramRef.current) {
-      // Render the diagram
-      mermaid.render('anomalyRouteMap', diagram, svg => {
-        diagramRef.current.innerHTML = svg;
-        
-        // Add hover effects and tooltips
-        const nodes = diagramRef.current.querySelectorAll('.node');
-        nodes.forEach(node => {
-          const nodeId = node.id;
-          const isCurrentPath = nodeId.toLowerCase().includes(currentPath.replace(/\//g, '-').toLowerCase());
-          
-          if (isCurrentPath) {
-            node.classList.add('animate-pulse');
-            node.style.filter = 'brightness(1.2)';
-          }
-          
-          // Add tooltip
-          const title = node.querySelector('title');
-          if (title) {
-            node.setAttribute('data-tooltip', title.textContent);
-          }
+    // Try rendering the loaded diagram, then fallback to hardcoded
+    let toRender = diagram && diagram.trim().length > 0 ? diagram : HARDCODED_DIAGRAM;
+    console.log('[MatrixV1 Map] Rendering diagram:', toRender);
+    if (diagramRef.current) {
+      try {
+        mermaid.render('anomalyRouteMap', toRender, svg => {
+          diagramRef.current.innerHTML = svg;
+          // Add hover effects and tooltips
+          const nodes = diagramRef.current.querySelectorAll('.node');
+          nodes.forEach(node => {
+            const nodeId = node.id;
+            const isCurrentPath = nodeId.toLowerCase().includes(currentPath.replace(/\//g, '-').toLowerCase());
+            if (isCurrentPath) {
+              node.classList.add('animate-pulse');
+              node.style.filter = 'brightness(1.2)';
+            }
+            const title = node.querySelector('title');
+            if (title) {
+              node.setAttribute('data-tooltip', title.textContent);
+            }
+          });
         });
-      });
+      } catch (err) {
+        console.error('[MatrixV1 Map] Mermaid render error:', err);
+        if (diagramRef.current) {
+          diagramRef.current.innerHTML = '<div style="color:red">Mermaid render error: ' + err + '</div>';
+        }
+      }
     }
   }, [diagram, currentPath]);
 
