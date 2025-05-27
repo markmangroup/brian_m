@@ -22,7 +22,7 @@ export default function Stabilize() {
   const [grid, setGrid] = useState([]);
   const [sequenceStep, setSequenceStep] = useState(-1); // -1 = not started, 0+ = animating
   const [fadeOut, setFadeOut] = useState(false);
-  const [puzzlePhase, setPuzzlePhase] = useState('showing'); // 'showing' | 'waiting' | 'guessing'
+  const [puzzlePhase, setPuzzlePhase] = useState('showing'); // 'showing' | 'waiting' | 'fading' | 'guessing'
   const [selected, setSelected] = useState([]);
   const [attempts, setAttempts] = useState(0);
   const [status, setStatus] = useState(null); // 'success' | 'fail'
@@ -71,17 +71,20 @@ export default function Stabilize() {
       return () => clearTimeout(t);
     }
     if (sequenceStep === sequence.length) {
-      // Hold for rest of 3.5s, then fade out, then show Ready
-      const totalDelay = Math.max(0, 3500 - sequence.length * 600);
-      const t = setTimeout(() => {
-        setFadeOut(true);
-        setTimeout(() => {
-          setPuzzlePhase('waiting');
-        }, 600); // fade duration
-      }, totalDelay);
-      return () => clearTimeout(t);
+      setPuzzlePhase('waiting');
     }
   }, [sequenceStep, sequence.length, puzzlePhase]);
+
+  // Fade out sequence and show grid after Ready
+  useEffect(() => {
+    if (puzzlePhase === 'fading') {
+      setFadeOut(true);
+      const t = setTimeout(() => {
+        setPuzzlePhase('guessing');
+      }, 600);
+      return () => clearTimeout(t);
+    }
+  }, [puzzlePhase]);
 
   // Handle status changes
   useEffect(() => {
@@ -90,7 +93,7 @@ export default function Stabilize() {
       setTimeout(() => {
         if (attempts >= 2) {
           setFlicker(true);
-          setTimeout(() => navigate('/matrix-v1/error-loop'), 600);
+          setTimeout(() => navigate('/matrix-v1/ded'), 600);
         } else {
           setSelected([]);
           setStatus(null);
@@ -166,22 +169,23 @@ export default function Stabilize() {
           style="mentor"
         />
         {/* Sequence display with animation */}
-        {puzzlePhase === 'showing' && (
-          <div className={`flex space-x-4 text-4xl transition-opacity duration-500 ${fadeOut ? 'opacity-0' : 'opacity-100'}`} data-testid="sequence-display">
-            {sequence.map((s, i) => (
-              <span key={i} className={`inline-block transition-all duration-300 ${sequenceStep >= i ? 'scale-110 text-white' : 'scale-90 text-gray-700 opacity-40'}`}>{s}</span>
-            ))}
+        {(puzzlePhase === 'showing' || puzzlePhase === 'waiting' || puzzlePhase === 'fading') && (
+          <div className={`flex flex-col items-center`}>
+            <div className={`flex space-x-4 text-4xl transition-opacity duration-500 ${fadeOut ? 'opacity-0' : 'opacity-100'}`} data-testid="sequence-display">
+              {sequence.map((s, i) => (
+                <span key={i} className={`inline-block transition-all duration-300 ${sequenceStep >= i ? 'scale-110 text-white' : 'scale-90 text-gray-700 opacity-40'}`}>{s}</span>
+              ))}
+            </div>
+            {puzzlePhase === 'waiting' && (
+              <button
+                className="mt-8 px-6 py-2 rounded bg-green-800 text-green-200 hover:bg-green-700 text-xl font-bold shadow-lg animate-fade-in"
+                style={{ minWidth: 180 }}
+                onClick={() => setPuzzlePhase('fading')}
+              >
+                Ready?
+              </button>
+            )}
           </div>
-        )}
-        {/* Ready button after sequence */}
-        {puzzlePhase === 'waiting' && (
-          <button
-            className="px-6 py-2 rounded bg-green-800 text-green-200 hover:bg-green-700 text-xl font-bold shadow-lg animate-fade-in"
-            style={{ minWidth: 180 }}
-            onClick={() => setPuzzlePhase('guessing')}
-          >
-            Ready?
-          </button>
         )}
         {/* Symbol grid */}
         {puzzlePhase === 'guessing' && (
