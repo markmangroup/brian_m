@@ -29,8 +29,9 @@ This repository hosts a collection of small React experiments and mini‑games. 
 - **Robot Room** – Assemble robots from hundreds of randomly generated parts. Each robot has unique stats that change as you swap components.
 - **Build Mode** – A simple LEGO building interface where you place pieces, choose colors and follow small build instructions.
 - **Inventory** – Search and filter a sample LEGO inventory to keep track of your pieces.
+- **RC Plane Designer** – Pick a style and color to craft a custom remote control plane.
 - **Alchemy** – Mix and match elements in a playful Little Alchemy‑style puzzle.
-- **The Matrix** – Enter your name, pick a pill and see how deep the rabbit hole goes. Includes a boot transition, terminal challenge and small puzzle.
+- **The Matrix** – Enter your name, pick a pill and see how deep the rabbit hole goes. Includes a boot transition, terminal challenge.
 - **Matrix Portal** – A portal page (work in progress) intended for future connectivity between Matrix features.
 
 Enjoy exploring the different experiments contained in this project!

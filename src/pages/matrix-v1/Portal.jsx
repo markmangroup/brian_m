@@ -1,27 +1,30 @@
-import React, { useContext } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { UserContext } from './UserContext';
-import { navItems } from './Navigation';
-import useTypewriterEffect from './useTypewriterEffect';
-import { NAOE_QUOTES } from '../data/naoeQuotes';
-import MatrixFlowDrawer from './MatrixFlowDrawer';
-import MatrixRain from './MatrixRain';
+import React, { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { navItems } from '../../components/Navigation';
+import useTypewriterEffect from '../../components/useTypewriterEffect';
+import { NAOE_QUOTES } from '../../data/naoeQuotes';
+import FlowDrawer from './components/FlowDrawer';
+import Rain from './components/Rain';
+import NPC from './components/NPC';
 
-export default function MatrixPortal() {
-  const { state } = useLocation();
-  const { userName } = useContext(UserContext);
-  const name = state?.name || userName;
+export default function Portal() {
+  const navigate = useNavigate();
+  const name = localStorage.getItem('matrixV1Name') || 'Traveler';
   const q = NAOE_QUOTES[Math.floor(Math.random() * NAOE_QUOTES.length)];
-  const [welcomeText, welcomeDone] = useTypewriterEffect(`Welcome, ${name}`, 50);
-  const [quoteText, quoteDone] = useTypewriterEffect(`${q.text} — ${q.attribution}`, 50);
+  const [welcomeText] = useTypewriterEffect(`Welcome back, ${name}`, 50);
+  const [quoteText] = useTypewriterEffect(`${q.text} — ${q.attribution}`, 50);
+
+  useEffect(() => {
+    if (localStorage.getItem('matrixV1Access') !== 'true') {
+      navigate('/matrix-v1/terminal');
+    }
+  }, [navigate]);
 
   return (
     <div className="p-8 text-center space-y-6 min-h-screen relative overflow-hidden">
-      {/* Matrix Rain background for portal (client-only) */}
       {typeof window !== 'undefined' && (
-        <MatrixRain zIndex={0} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
+        <Rain zIndex={0} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
       )}
-      {/* Storyboard: User sees portal welcome, quote, and navigation options */}
       <div className="relative z-10 flex flex-col items-center space-y-6">
         <h1 className="text-4xl font-bold text-purple-400">{welcomeText}</h1>
         <p className="text-lg text-center max-w-md">{quoteText}</p>
@@ -40,7 +43,12 @@ export default function MatrixPortal() {
               </Link>
             ))}
         </div>
-        <MatrixFlowDrawer />
+        <FlowDrawer />
+        <NPC
+          name="Morpheus"
+          quote="Where you go from here is a choice I leave to you."
+          style="mentor"
+        />
       </div>
     </div>
   );

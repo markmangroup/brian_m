@@ -1,6 +1,17 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import UserIcon from './UserIcon';
+import {
+  FaRoad,
+  FaPaintBrush,
+  FaRobot,
+  FaCube,
+  FaBox,
+  FaFlask,
+  FaCodeBranch,
+  FaPaperPlane,
+  FaBug
+} from 'react-icons/fa';
 
 export const navItems = [
   { name: 'The Trail',      path: '/snack-trail',      color: 'bg-yellow-400 text-black' },
@@ -19,7 +30,7 @@ export default function Navigation() {
     <div className="fixed top-2 left-0 right-0 z-50">
       <div className="overflow-x-auto px-4">
         <nav className="flex w-max gap-2 bg-white/80 backdrop-blur-md shadow-xl rounded-full px-4 py-2 mx-auto">
-          {navItems.map(({ name, path, color }) => (
+          {navItems.map(({ name, path, color, icon: Icon }) => (
             <Link
               key={path}
               to={path}
@@ -27,6 +38,7 @@ export default function Navigation() {
                 pathname === path ? `${color} shadow-md` : 'bg-gray-200 text-gray-700'
               }`}
             >
+              {Icon && <Icon className="inline mr-1" />}
               {name}
             </Link>
           ))}

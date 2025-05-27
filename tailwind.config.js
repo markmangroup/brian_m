@@ -15,6 +15,7 @@ module.exports = {
         'bounce': 'bounce 0.5s ease-in-out infinite',
         'float': 'float 3s ease-in-out infinite',
         'marquee': 'marquee 20s linear infinite',
+        'progress-slow': 'progress 6s linear forwards',
       },
       keyframes: {
         twinkle: {
@@ -28,6 +29,10 @@ module.exports = {
         marquee: {
           '0%': { transform: 'translateX(100%)' },
           '100%': { transform: 'translateX(-100%)' },
+        },
+        progress: {
+          '0%': { width: '0%' },
+          '100%': { width: '100%' },
         },
       },
       backgroundImage: {

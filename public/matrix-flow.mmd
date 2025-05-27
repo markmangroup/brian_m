@@ -1,15 +1,18 @@
 flowchart TD
-    A[Visit /the-matrix]
+    A[Visit /matrix-v1]
     A --> B[Enter Name]
     B --> C{Choose Pill}
     C -->|Blue Pill| H[Home (/)]
-    C -->|Red Pill| T[Terminal (/the-matrix/terminal)]
+    C -->|Red Pill| T[Terminal (/matrix-v1/terminal)]
 
     T -->|Wrong passcode| D[Access Denied]
     D --> T
-    T -->|Correct passcode| X[Transition (/the-matrix/transition)]
+    T -->|Correct passcode| X[Transition (/matrix-v1/transition)]
 
-    X -->|After 3s| P[Portal (/the-matrix/portal)]
+    X -->|After 3s| M[Message (/matrix-v1/message)]
+    M -->|Continue| Z[Puzzle (/matrix-v1/puzzle)]
+    Z -->|Answer| TR[Trace (/matrix-v1/trace)]
+    TR -->|After countdown| P[Portal (/matrix-v1/portal)]
 
     P --> S[/snack-trail]
     P --> P1[/pixel-art]
