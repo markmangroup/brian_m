@@ -1,23 +1,7 @@
 graph TD
-  Start["/anomaly-route\nAgent Echo"]
-
-  Start -->|Mask Signature| PathBGlitch["/path-b-glitch\nArchivist (Simulated Recovery)"]
-  Start -->|Inject Static| Interference["/interference\nAgent Shadow"]
-
-  %% Glitch Branch
-  PathBGlitch -->|Play Along| SafeMode["/safe-mode\n(Fabricated Timeline)"]
-  PathBGlitch -->|Attempt Reset| Entry["/entry\n(Restart)"]
-
-  %% Interference Branch
-  Interference -->|Try to Stabilize| Stabilize["/stabilize\n(Puzzle Challenge)"]
-  Interference -->|Descend Further| ErrorLoop["/error-loop\n(Recursive Void)"]
-
-  %% Styling
-  classDef default fill:#1a1a1a,stroke:#333,color:#fff
-  classDef active fill:#2d3748,stroke:#4a5568,color:#48bb78
-  classDef guardian fill:#2d3748,stroke:#4a5568,color:#9f7aea
-  classDef danger fill:#2d3748,stroke:#4a5568,color:#f56565
-
-  class Start,PathBGlitch,Interference guardian
-  class SafeMode,Entry,Stabilize active
-  class ErrorLoop danger 
+  Start --> PathBGlitch
+  Start --> Interference
+  PathBGlitch --> SafeMode
+  PathBGlitch --> Entry
+  Interference --> Stabilize
+  Interference --> ErrorLoop 
