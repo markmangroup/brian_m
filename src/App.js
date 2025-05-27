@@ -27,6 +27,7 @@ import Stage2 from './pages/matrix-v1/Stage2';
 import Stage3 from './pages/matrix-v1/Stage3';
 import PathA from './pages/matrix-v1/PathA';
 import PathB from './pages/matrix-v1/PathB';
+import DeeperProfile from './pages/matrix-v1/DeeperProfile';
 
 export default function App() {
   return (
@@ -57,6 +58,7 @@ export default function App() {
             <Route path="/matrix-v1/stage-3" element={<Stage3 />} />
             <Route path="/matrix-v1/path-a" element={<PathA />} />
             <Route path="/matrix-v1/path-b" element={<PathB />} />
+            <Route path="/matrix-v1/deeper-profile" element={<DeeperProfile />} />
             {/* Legacy Matrix Routes - Redirect to V1 */}
             <Route path="/the-matrix/*" element={<Navigate to="/matrix-v1" replace />} />
             <Route path="*" element={<Navigate to="/snack-trail" />} />
