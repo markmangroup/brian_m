@@ -20,14 +20,12 @@ export default function Stabilize() {
   const navigate = useNavigate();
   const [sequence, setSequence] = useState([]);
   const [grid, setGrid] = useState([]);
-  const [showSequence, setShowSequence] = useState(true);
   const [sequenceStep, setSequenceStep] = useState(-1); // -1 = not started, 0+ = animating
   const [fadeOut, setFadeOut] = useState(false);
-  const [ready, setReady] = useState(false);
+  const [puzzlePhase, setPuzzlePhase] = useState('showing'); // 'showing' | 'waiting' | 'guessing'
   const [selected, setSelected] = useState([]);
   const [attempts, setAttempts] = useState(0);
   const [status, setStatus] = useState(null); // 'success' | 'fail'
-  const [showGrid, setShowGrid] = useState(false);
   const [showTypewriter, setShowTypewriter] = useState(false);
   const [typewriterMsg, setTypewriterMsg] = useState('');
   const [flicker, setFlicker] = useState(false);
@@ -39,6 +37,11 @@ export default function Stabilize() {
       navigate('/matrix-v1/terminal');
     }
   }, [navigate]);
+
+  // Diagnostic log
+  useEffect(() => {
+    console.log('Puzzle phase:', puzzlePhase);
+  }, [puzzlePhase]);
 
   // Sequence setup and animation
   useEffect(() => {
@@ -53,8 +56,7 @@ export default function Stabilize() {
     setGrid(symbols);
     setSequenceStep(-1);
     setFadeOut(false);
-    setReady(false);
-    setShowGrid(false);
+    setPuzzlePhase('showing');
     setSelected([]);
     setStatus(null);
     setInvalid(false);
@@ -63,23 +65,23 @@ export default function Stabilize() {
 
   // Animate sequence in
   useEffect(() => {
+    if (puzzlePhase !== 'showing') return;
     if (sequenceStep >= 0 && sequenceStep < sequence.length) {
       const t = setTimeout(() => setSequenceStep(sequenceStep + 1), 600);
       return () => clearTimeout(t);
     }
     if (sequenceStep === sequence.length) {
-      // Hold for rest of 3.5s, then fade out
-      const t = setTimeout(() => setFadeOut(true), Math.max(0, 3500 - sequence.length * 600));
-      return () => clearTimeout(t);
-    }
-    if (fadeOut) {
+      // Hold for rest of 3.5s, then fade out, then show Ready
+      const totalDelay = Math.max(0, 3500 - sequence.length * 600);
       const t = setTimeout(() => {
-        setShowSequence(false);
-        setReady(true);
-      }, 600);
+        setFadeOut(true);
+        setTimeout(() => {
+          setPuzzlePhase('waiting');
+        }, 600); // fade duration
+      }, totalDelay);
       return () => clearTimeout(t);
     }
-  }, [sequenceStep, sequence.length, fadeOut]);
+  }, [sequenceStep, sequence.length, puzzlePhase]);
 
   // Handle status changes
   useEffect(() => {
@@ -121,7 +123,7 @@ export default function Stabilize() {
 
   // Handle symbol selection
   const handleSelect = (sym) => {
-    if (status || !showGrid) return;
+    if (status || puzzlePhase !== 'guessing') return;
     if (selected.length >= sequence.length) return;
     const next = [...selected, sym];
     setSelected(next);
@@ -137,7 +139,7 @@ export default function Stabilize() {
 
   // Handle backspace (undo)
   const handleBackspace = () => {
-    if (status || !showGrid || selected.length === 0) return;
+    if (status || puzzlePhase !== 'guessing' || selected.length === 0) return;
     setSelected(selected.slice(0, -1));
   };
 
@@ -164,7 +166,7 @@ export default function Stabilize() {
           style="mentor"
         />
         {/* Sequence display with animation */}
-        {showSequence && (
+        {puzzlePhase === 'showing' && (
           <div className={`flex space-x-4 text-4xl transition-opacity duration-500 ${fadeOut ? 'opacity-0' : 'opacity-100'}`} data-testid="sequence-display">
             {sequence.map((s, i) => (
               <span key={i} className={`inline-block transition-all duration-300 ${sequenceStep >= i ? 'scale-110 text-white' : 'scale-90 text-gray-700 opacity-40'}`}>{s}</span>
@@ -172,16 +174,17 @@ export default function Stabilize() {
           </div>
         )}
         {/* Ready button after sequence */}
-        {ready && !showGrid && (
+        {puzzlePhase === 'waiting' && (
           <button
             className="px-6 py-2 rounded bg-green-800 text-green-200 hover:bg-green-700 text-xl font-bold shadow-lg animate-fade-in"
-            onClick={() => setShowGrid(true)}
+            style={{ minWidth: 180 }}
+            onClick={() => setPuzzlePhase('guessing')}
           >
             Ready?
           </button>
         )}
         {/* Symbol grid */}
-        {showGrid && (
+        {puzzlePhase === 'guessing' && (
           <>
             <div className="grid grid-cols-4 gap-4" data-testid="symbol-grid">
               {grid.map((s, i) => {
