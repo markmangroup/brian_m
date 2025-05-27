@@ -10,7 +10,8 @@ import {
   FaFlask,
   FaCodeBranch,
   FaPaperPlane,
-  FaBug
+  FaBug,
+  FaCompass
 } from 'react-icons/fa';
 
 export const navItems = [
@@ -20,7 +21,8 @@ export const navItems = [
   { name: 'Build Mode',     path: '/lego-build',       color: 'bg-red-500' },
   { name: 'Inventory',      path: '/lego-inventory',   color: 'bg-yellow-600' },
   { name: 'Alchemy',        path: '/little-alchemy',   color: 'bg-cyan-500' },
-  { name: 'The Matrix',     path: '/matrix-v1',        color: 'bg-green-700 text-black' }
+  { name: 'The Matrix',     path: '/matrix-v1',        color: 'bg-green-700 text-black' },
+  { name: 'Story Map',      path: '/matrix-v1/map',    color: 'bg-purple-500', icon: FaCompass }
 ];
 
 export default function Navigation() {

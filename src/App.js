@@ -28,6 +28,7 @@ import Stage3 from './pages/matrix-v1/Stage3';
 import PathA from './pages/matrix-v1/PathA';
 import PathB from './pages/matrix-v1/PathB';
 import DeeperProfile from './pages/matrix-v1/DeeperProfile';
+import Map from './pages/matrix-v1/Map';
 import Interference from './pages/matrix-v1/Interference';
 import PathBGlitch from './pages/matrix-v1/PathBGlitch';
 import Factions from './pages/matrix-v1/Factions';
@@ -62,6 +63,7 @@ export default function App() {
             <Route path="/matrix-v1/stage-3" element={<Stage3 />} />
             <Route path="/matrix-v1/path-a" element={<PathA />} />
             <Route path="/matrix-v1/path-b" element={<PathB />} />
+            <Route path="/matrix-v1/map" element={<Map />} />
             <Route path="/matrix-v1/deeper-profile" element={<DeeperProfile />} />
             <Route path="/matrix-v1/interference" element={<Interference />} />
             <Route path="/matrix-v1/path-b-glitch" element={<PathBGlitch />} />
