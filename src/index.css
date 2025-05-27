@@ -35,3 +35,41 @@ code {
     animation: progress 3s linear forwards;
   }
 }
+
+/* Mermaid Diagram Styles */
+.mermaid-diagram {
+  @apply text-sm;
+}
+
+.mermaid-diagram .node {
+  @apply transition-all duration-300;
+}
+
+.mermaid-diagram .node:hover {
+  @apply filter brightness-110;
+}
+
+.mermaid-diagram .node[data-tooltip] {
+  @apply relative;
+}
+
+.mermaid-diagram .node[data-tooltip]:hover::after {
+  content: attr(data-tooltip);
+  @apply absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 bg-gray-800 text-white text-xs rounded opacity-0 transition-opacity duration-200 whitespace-nowrap;
+  opacity: 1;
+}
+
+.mermaid-diagram .edgeLabel {
+  @apply bg-gray-800 text-white px-2 py-1 rounded text-xs;
+}
+
+.mermaid-diagram .edgePath path {
+  @apply stroke-gray-500;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 640px) {
+  .mermaid-diagram {
+    @apply transform scale-75 origin-top;
+  }
+}
