@@ -29,6 +29,10 @@ import PathA from './pages/matrix-v1/PathA';
 import PathB from './pages/matrix-v1/PathB';
 import DeeperProfile from './pages/matrix-v1/DeeperProfile';
 import Map from './pages/matrix-v1/Map';
+import Interference from './pages/matrix-v1/Interference';
+import PathBGlitch from './pages/matrix-v1/PathBGlitch';
+import Factions from './pages/matrix-v1/Factions';
+import Align from './pages/matrix-v1/Align';
 
 export default function App() {
   return (
@@ -61,6 +65,10 @@ export default function App() {
             <Route path="/matrix-v1/path-b" element={<PathB />} />
             <Route path="/matrix-v1/map" element={<Map />} />
             <Route path="/matrix-v1/deeper-profile" element={<DeeperProfile />} />
+            <Route path="/matrix-v1/interference" element={<Interference />} />
+            <Route path="/matrix-v1/path-b-glitch" element={<PathBGlitch />} />
+            <Route path="/matrix-v1/factions" element={<Factions />} />
+            <Route path="/matrix-v1/align-:slug" element={<Align />} />
             {/* Legacy Matrix Routes - Redirect to V1 */}
             <Route path="/the-matrix/*" element={<Navigate to="/matrix-v1" replace />} />
             <Route path="*" element={<Navigate to="/snack-trail" />} />
