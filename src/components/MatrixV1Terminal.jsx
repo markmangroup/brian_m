@@ -39,7 +39,7 @@ export default function MatrixV1Terminal() {
     setIsTransitioning(true);
     localStorage.setItem('matrixV1Access', 'true');
     setTimeout(() =>
-      navigate('/matrix-v1/transition', { state: { name: stateName } }),
+      navigate('/matrix-v1/checkpoint', { state: { name: stateName } }),
     2000);
   };
 

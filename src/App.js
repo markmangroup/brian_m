@@ -17,7 +17,7 @@ import Updates from './components/Updates';
 // Matrix V1 Pages
 import Entry from './pages/matrix-v1/Entry';
 import Terminal from './pages/matrix-v1/Terminal';
-import Transition from './pages/matrix-v1/Transition';
+import Checkpoint from './pages/matrix-v1/Checkpoint';
 import Message from './pages/matrix-v1/Message';
 import Puzzle from './pages/matrix-v1/Puzzle';
 import Trace from './pages/matrix-v1/Trace';
@@ -42,7 +42,7 @@ export default function App() {
             {/* Matrix V1 Routes */}
             <Route path="/matrix-v1" element={<Entry />} />
             <Route path="/matrix-v1/terminal" element={<Terminal />} />
-            <Route path="/matrix-v1/transition" element={<Transition />} />
+            <Route path="/matrix-v1/checkpoint" element={<Checkpoint />} />
             <Route path="/matrix-v1/message" element={<Message />} />
             <Route path="/matrix-v1/puzzle" element={<Puzzle />} />
             <Route path="/matrix-v1/trace" element={<Trace />} />

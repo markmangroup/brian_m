@@ -8,13 +8,15 @@ function setup(initialEntries = ['/matrix-v1/terminal']) {
     <MemoryRouter initialEntries={initialEntries}>
       <Routes>
         <Route path="/matrix-v1/terminal" element={<Terminal />} />
-        <Route path="/matrix-v1/transition" element={<div>Transition</div>} />
+        <Route path="/matrix-v1/checkpoint" element={<div>Checkpoint</div>} />
       </Routes>
     </MemoryRouter>
   );
 }
-async function choose(answer) {
-  await userEvent.click(screen.getByRole('button', { name: answer }));
+
+async function selectAnswer(answer) {
+  const button = screen.getByRole('button', { name: answer });
+  await userEvent.click(button);
 }
 
 beforeEach(() => {
@@ -29,26 +31,26 @@ afterEach(() => {
 
 test('shows access denied with wrong answer', async () => {
   setup();
-  await choose('Door');
+  await selectAnswer('Door');
   expect(screen.getByText(/access denied/i)).toBeInTheDocument();
 });
 
-test('accepts answer and navigates to transition', async () => {
+test('accepts correct answer and navigates to checkpoint', async () => {
   jest.useFakeTimers();
   setup();
-  await choose('Spoon');
+  await selectAnswer('Spoon');
   expect(screen.getByText(/access granted/i)).toBeInTheDocument();
   act(() => jest.advanceTimersByTime(2000));
-  expect(await screen.findByText(/transition/i)).toBeInTheDocument();
+  expect(await screen.findByText(/checkpoint/i)).toBeInTheDocument();
   jest.useRealTimers();
 });
 
 test('shows agent after three failed attempts', async () => {
   setup();
-  await choose('Door');
-  await choose('Door');
-  await choose('Door');
+  await selectAnswer('Door');
+  await selectAnswer('Exit');
+  await selectAnswer('Escape');
   expect(screen.getByText(/agent echo/i)).toBeInTheDocument();
-  expect(screen.getByText(/not supposed to be here/i)).toBeInTheDocument();
+  expect(screen.getByText(/not the one/i)).toBeInTheDocument();
 });
 
