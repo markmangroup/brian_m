@@ -37,6 +37,11 @@ import Stabilize from './pages/matrix-v1/Stabilize';
 import GhostAccess from './pages/matrix-v1/GhostAccess';
 import Ded from './pages/matrix-v1/Ded';
 import GhostLayer1 from './pages/matrix-v1/GhostLayer1';
+import ShardInit from './pages/matrix-v1/ShardInit';
+import ShardInsert from './pages/matrix-v1/ShardInsert';
+import EchoLoop from './pages/matrix-v1/EchoLoop';
+import EchoVerify from './pages/matrix-v1/EchoVerify';
+import GhostLayer2 from './pages/matrix-v1/GhostLayer2';
 
 export default function App() {
   return (
@@ -77,6 +82,11 @@ export default function App() {
             <Route path="/matrix-v1/ghost-access" element={<GhostAccess />} />
             <Route path="/matrix-v1/ded" element={<Ded />} />
             <Route path="/matrix-v1/ghost-layer-1" element={<GhostLayer1 />} />
+            <Route path="/matrix-v1/shard-init" element={<ShardInit />} />
+            <Route path="/matrix-v1/shard-insert" element={<ShardInsert />} />
+            <Route path="/matrix-v1/echo-loop" element={<EchoLoop />} />
+            <Route path="/matrix-v1/echo-verify" element={<EchoVerify />} />
+            <Route path="/matrix-v1/ghost-layer-2" element={<GhostLayer2 />} />
             {/* Matrix V1 Dead-End Catch-All */}
             <Route path="/matrix-v1/*" element={<Ded />} />
             {/* Global 404 fallback */}

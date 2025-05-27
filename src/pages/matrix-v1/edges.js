@@ -15,4 +15,15 @@ export const edges = [
   { id: 'e12', source: 'guardian-call', target: 'data-filter', label: 'AWAKEN', style: { stroke: '#a259ff', strokeDasharray: '6 3' }, type: 'smoothstep', animated: true, markerEnd: { type: 'arrowclosed' }, labelStyle: { fontSize: 16, fill: '#fff', textShadow: '0 1px 4px #000' }, labelBgStyle: { fill: '#111', opacity: 0.85 }, labelYOffset: -18 },
   { id: 'e13', source: 'data-filter', target: 'code-match', label: 'Find Signal', style: { stroke: '#a259ff', strokeDasharray: '6 3' }, type: 'smoothstep', animated: true, markerEnd: { type: 'arrowclosed' }, labelStyle: { fontSize: 16, fill: '#fff', textShadow: '0 1px 4px #000' }, labelBgStyle: { fill: '#111', opacity: 0.85 }, labelYOffset: -18 },
   { id: 'e14', source: 'code-match', target: 'training-hub', label: 'Retry', style: { stroke: '#a259ff', strokeDasharray: '6 3' }, type: 'smoothstep', animated: true, markerEnd: { type: 'arrowclosed' }, labelStyle: { fontSize: 16, fill: '#fff', textShadow: '0 1px 4px #000' }, labelBgStyle: { fill: '#111', opacity: 0.85 }, labelYOffset: 24 },
+
+  // Ghost Layer Branches
+  { id: 'e100', source: 'ghost-access', target: 'ghost-layer-1', label: '', style: { stroke: '#22d3ee', strokeDasharray: '6 3' }, type: 'smoothstep', animated: true, markerEnd: { type: 'arrowclosed' } },
+  { id: 'e101', source: 'ghost-layer-1', target: 'shard-init', label: 'SHARD.EXE', style: { stroke: '#f87171', strokeDasharray: '6 3' }, type: 'smoothstep', animated: true, markerEnd: { type: 'arrowclosed' } },
+  { id: 'e102', source: 'ghost-layer-1', target: 'echo-loop', label: 'ECHO.BIN', style: { stroke: '#4ade80', strokeDasharray: '6 3' }, type: 'smoothstep', animated: true, markerEnd: { type: 'arrowclosed' } },
+  { id: 'e103', source: 'shard-init', target: 'shard-insert', label: '', style: { stroke: '#f87171', strokeDasharray: '6 3' }, type: 'smoothstep', animated: true, markerEnd: { type: 'arrowclosed' } },
+  { id: 'e104', source: 'shard-insert', target: 'ghost-layer-2', label: '', style: { stroke: '#22d3ee', strokeDasharray: '6 3' }, type: 'smoothstep', animated: true, markerEnd: { type: 'arrowclosed' } },
+  { id: 'e105', source: 'echo-loop', target: 'echo-verify', label: '', style: { stroke: '#4ade80', strokeDasharray: '6 3' }, type: 'smoothstep', animated: true, markerEnd: { type: 'arrowclosed' } },
+  { id: 'e106', source: 'echo-verify', target: 'ghost-layer-2', label: '', style: { stroke: '#22d3ee', strokeDasharray: '6 3' }, type: 'smoothstep', animated: true, markerEnd: { type: 'arrowclosed' } },
+  // Fallback to DED
+  { id: 'e107', source: 'ghost-layer-2', target: 'ded', label: 'Fallback', style: { stroke: '#f87171', strokeDasharray: '2 2' }, type: 'smoothstep', animated: true, markerEnd: { type: 'arrowclosed' } },
 ]; 
