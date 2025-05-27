@@ -64,18 +64,15 @@ export default function Message() {
           Message {currentIndex + 1} of {MESSAGES.length}
         </div>
 
-        {/* Show button and attribution only when current message is done */}
-        {done && (
-          <div className="flex flex-col items-center space-y-4">
-            <p className="text-sm text-green-700">— Morpheus</p>
-            <button
-              onClick={handleNext}
-              className="px-6 py-3 rounded bg-green-700 text-black hover:bg-green-600 transition-colors"
-            >
-              {currentIndex < MESSAGES.length - 1 ? 'Next' : 'Continue'}
-            </button>
-          </div>
-        )}
+        <div className="flex flex-col items-center space-y-4">
+          {done && <p className="text-sm text-green-700">— Morpheus</p>}
+          <button
+            onClick={handleNext}
+            className="px-6 py-3 rounded bg-green-700 text-black hover:bg-green-600 transition-colors"
+          >
+            {currentIndex < MESSAGES.length - 1 ? 'Next' : 'Continue'}
+          </button>
+        </div>
       </div>
     </div>
   );
