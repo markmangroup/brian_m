@@ -41,7 +41,7 @@ export default function Message() {
     if (currentIndex < MESSAGES.length - 1) {
       setCurrentIndex(prev => prev + 1);
     } else {
-      navigate('/matrix-v1/puzzle');
+      navigate('/matrix-v1/stage-1');
     }
   };
 
