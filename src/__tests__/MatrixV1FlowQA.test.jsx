@@ -6,7 +6,7 @@ import Entry from '../pages/matrix-v1/Entry';
 import Terminal from '../pages/matrix-v1/Terminal';
 import Transition from '../pages/matrix-v1/Transition';
 import Message from '../pages/matrix-v1/Message';
-import Puzzle from '../pages/matrix-v1/Puzzle';
+import Stage1 from '../pages/matrix-v1/Stage1';
 
 function setup(initialEntries = ['/matrix-v1']) {
   render(
@@ -16,7 +16,7 @@ function setup(initialEntries = ['/matrix-v1']) {
         <Route path="/matrix-v1/terminal" element={<Terminal />} />
         <Route path="/matrix-v1/transition" element={<Transition />} />
         <Route path="/matrix-v1/message" element={<Message />} />
-        <Route path="/matrix-v1/puzzle" element={<Puzzle />} />
+        <Route path="/matrix-v1/stage-1" element={<Stage1 />} />
       </Routes>
     </MemoryRouter>
   );
@@ -57,5 +57,5 @@ test('MatrixV1 full flow journey', async () => {
 
   act(() => jest.advanceTimersByTime(8000));
   await userEvent.click(screen.getByRole('button', { name: /continue the path/i }));
-  expect(await screen.findByText(/do you believe in fate/i)).toBeInTheDocument();
+  expect(await screen.findByText(/the first gate/i)).toBeInTheDocument();
 });

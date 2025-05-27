@@ -24,7 +24,8 @@ export default function Message() {
   useEffect(() => {
     console.log('Message State:', {
       currentIndex,
-      currentText: message,
+      currentMessage: MESSAGES[currentIndex],
+      typedText: message,
       isDone: done,
       totalMessages: MESSAGES.length
     });
@@ -54,7 +55,7 @@ export default function Message() {
       
       <div className="relative z-10 flex flex-col items-center space-y-6 w-full max-w-2xl px-4">
         {/* Always show current message */}
-        <div className="bg-black/50 p-6 rounded-lg border border-green-700 w-full">
+        <div className="bg-black/50 p-6 rounded-lg border border-green-700 w-full min-h-32">
           <p className="text-lg text-center whitespace-pre-line">{message}</p>
         </div>
 

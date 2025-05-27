@@ -8,7 +8,7 @@ function setup(initialEntries = ['/matrix-v1/message']) {
     <MemoryRouter initialEntries={initialEntries}>
       <Routes>
         <Route path="/matrix-v1/message" element={<Message />} />
-        <Route path="/matrix-v1/puzzle" element={<div>Puzzle</div>} />
+        <Route path="/matrix-v1/stage-1" element={<div>Stage1</div>} />
         <Route path="/matrix-v1" element={<div>Entry</div>} />
       </Routes>
     </MemoryRouter>
@@ -42,7 +42,7 @@ test('shows next button after message is done', async () => {
   expect(screen.getByRole('button', { name: /next/i })).toBeInTheDocument();
 });
 
-test('navigates through all messages and to puzzle', async () => {
+test('navigates through all messages and to stage1', async () => {
   localStorage.setItem('matrixV1Access', 'true');
   setup();
   
@@ -61,5 +61,5 @@ test('navigates through all messages and to puzzle', async () => {
 
   // Click final continue button
   await userEvent.click(screen.getByRole('button', { name: /continue/i }));
-  expect(screen.getByText(/puzzle/i)).toBeInTheDocument();
+  expect(screen.getByText(/stage1/i)).toBeInTheDocument();
 });
