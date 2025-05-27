@@ -37,6 +37,30 @@ const nodeStyles = {
     fontSize: 15,
     boxShadow: '0 0 8px #ff444455',
   },
+  faction: {
+    background: '#0f172a',
+    border: '2px solid #14b8a6', // teal default
+    color: '#14b8a6',
+    fontWeight: 700,
+    borderRadius: 14,
+    padding: 14,
+    minWidth: 140,
+    textAlign: 'center',
+    fontSize: 17,
+    boxShadow: '0 0 12px #14b8a655',
+  },
+  training: {
+    background: 'linear-gradient(135deg, #222 70%, #a259ff 100%)',
+    border: '2px solid #a259ff',
+    color: '#fff',
+    fontWeight: 700,
+    borderRadius: 16,
+    padding: 14,
+    minWidth: 130,
+    textAlign: 'center',
+    fontSize: 16,
+    boxShadow: '0 0 12px #a259ff55',
+  },
   unknown: {
     background: '#444',
     border: '2px dashed #bbb',
@@ -56,6 +80,24 @@ const statusBadge = {
   stub: '❌',
 };
 
+const factionColors = {
+  teal: {
+    border: '2px solid #14b8a6',
+    color: '#14b8a6',
+    boxShadow: '0 0 12px #14b8a655',
+  },
+  gray: {
+    border: '2px solid #64748b',
+    color: '#64748b',
+    boxShadow: '0 0 12px #64748b55',
+  },
+  gold: {
+    border: '2px solid #fbbf24',
+    color: '#fbbf24',
+    boxShadow: '0 0 12px #fbbf2455',
+  },
+};
+
 export default function CustomNode({ data, type, selected }) {
   let className = '';
   if (selected) {
@@ -68,18 +110,38 @@ export default function CustomNode({ data, type, selected }) {
     className += ' matrix-gradient-purple';
   } else if (data.type === 'character') {
     className += ' matrix-glow-green';
+  } else if (data.type === 'training') {
+    className += ' matrix-gradient-purple';
   }
 
-  const style = nodeStyles[data.type] || nodeStyles.unknown;
+  let style = nodeStyles[data.type] || nodeStyles.unknown;
+  if (data.type === 'faction') {
+    // Override with faction color if present
+    if (data.color && factionColors[data.color]) {
+      style = {
+        ...nodeStyles.faction,
+        ...factionColors[data.color],
+      };
+    } else {
+      style = nodeStyles.faction;
+    }
+  }
+  if (data.type === 'training') {
+    style = nodeStyles.training;
+  }
+
   const badge = statusBadge[data.status] || '';
 
   return (
     <div
       className={className + ' relative cursor-pointer font-semibold rounded-lg px-4 py-3 min-w-[110px] text-center'}
       title={data.tooltip || data.label}
-      style={{ position: 'relative' }}
+      style={{ position: 'relative', ...style }}
     >
       <span className="block text-lg font-bold">{data.label}</span>
+      {data.guardian && (
+        <span className="block text-xs mt-1 opacity-80">{data.guardian}</span>
+      )}
       {badge && (
         <span
           style={{
