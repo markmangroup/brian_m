@@ -98,12 +98,14 @@ const factionColors = {
   },
 };
 
-export default function CustomNode({ data, type, selected }) {
+export default function CustomNode({ data, type, selected, visited }) {
   let className = '';
   if (selected) {
     className += ' matrix-glow-green';
   } else if (data.recommended) {
     className += ' matrix-glow-purple';
+  } else if (visited) {
+    className += ' matrix-glow-green';
   } else if (data.type === 'trap') {
     className += ' matrix-trap-red';
   } else if (data.type === 'choice') {
@@ -128,6 +130,10 @@ export default function CustomNode({ data, type, selected }) {
   }
   if (data.type === 'training') {
     style = nodeStyles.training;
+  }
+
+  if (selected) {
+    style = { ...style, border: '4px solid #00ff00' };
   }
 
   const badge = statusBadge[data.status] || '';
