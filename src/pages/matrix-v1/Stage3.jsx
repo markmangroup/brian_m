@@ -42,9 +42,9 @@ export default function Stage3() {
   const handlePath = (path) => {
     localStorage.setItem('matrixV1Fork', path);
     if (path === 'A') {
-      navigate('/matrix-v1/path-a');
+      navigate('/matrix-v1/compliance-route');
     } else {
-      navigate('/matrix-v1/path-b');
+      navigate('/matrix-v1/anomaly-route');
     }
   };
 
@@ -64,13 +64,13 @@ export default function Stage3() {
                 onClick={() => handlePath('A')}
                 className="px-6 py-2 rounded bg-green-900 text-green-500 hover:bg-green-800 transition-colors"
               >
-                Path A
+                Compliance Route
               </button>
               <button
                 onClick={() => handlePath('B')}
                 className="px-6 py-2 rounded bg-green-900 text-green-500 hover:bg-green-800 transition-colors"
               >
-                Path B
+                Anomaly Route
               </button>
             </div>
           </div>

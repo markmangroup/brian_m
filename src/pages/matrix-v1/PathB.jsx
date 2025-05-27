@@ -57,25 +57,42 @@ export default function PathB() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-black text-green-400 font-mono relative overflow-hidden">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-black text-green-500 font-mono space-y-6 relative overflow-hidden">
       {typeof window !== 'undefined' && (
         <MatrixRain zIndex={0} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
       )}
-      {/* distortion overlay */}
-      <div className="absolute inset-0 pointer-events-none z-20 animate-pulse" style={{ mixBlendMode: 'screen', opacity: 0.2 }} />
-      <div className={`relative z-10 flex flex-col items-center space-y-6 ${glitch ? 'animate-glitch' : ''}`}>
-        {!showOptions && <p className="text-xl text-center max-w-md">{typedMsg}</p>}
-        {showOptions ? (
-          <>
-            <NPC name="Agent Echo" quote="You thought you could hide. But you've been tagged." style="agent" />
-            <div className="flex flex-col items-center space-y-4">
-              <button onClick={mask} className="px-6 py-2 rounded bg-purple-900 text-purple-400 hover:bg-purple-800">Mask signature</button>
-              <button onClick={inject} className="px-6 py-2 rounded bg-red-900 text-red-400 hover:bg-red-800">Inject static</button>
+      <div className="relative z-10 flex flex-col items-center space-y-6 w-full max-w-md px-4">
+        <div className="text-xs text-green-400 uppercase tracking-widest">System Guardian: Echo</div>
+        <p className="text-lg text-center whitespace-pre-line">{typedMsg}</p>
+        {showOptions && (
+          <div className="flex flex-col items-center space-y-4">
+            <div className="text-xl font-mono">Choose your action:</div>
+            <div className="flex flex-col space-y-4 w-full">
+              <button
+                onClick={mask}
+                className="px-6 py-3 rounded bg-green-900 text-green-500 hover:bg-green-800 transition-colors relative group"
+              >
+                <span>Mask Signature</span>
+                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 bg-black text-xs text-green-400 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                  Hide your digital footprint (lower detection risk)
+                </div>
+              </button>
+              <button
+                onClick={inject}
+                className="px-6 py-3 rounded bg-red-900 text-red-500 hover:bg-red-800 transition-colors relative group"
+              >
+                <span>Inject Static</span>
+                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 bg-black text-xs text-red-400 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                  Trigger system interference (risk unknown)
+                </div>
+              </button>
             </div>
-          </>
-        ) : null}
+          </div>
+        )}
         {injecting && (
-          <p className="text-2xl font-bold animate-pulse">{count}</p>
+          <div className="text-xl font-mono animate-pulse">
+            Injecting in {count}...
+          </div>
         )}
       </div>
     </div>

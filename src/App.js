@@ -61,8 +61,8 @@ export default function App() {
             <Route path="/matrix-v1/stage-1" element={<Stage1 />} />
             <Route path="/matrix-v1/stage-2" element={<Stage2 />} />
             <Route path="/matrix-v1/stage-3" element={<Stage3 />} />
-            <Route path="/matrix-v1/path-a" element={<PathA />} />
-            <Route path="/matrix-v1/path-b" element={<PathB />} />
+            <Route path="/matrix-v1/compliance-route" element={<PathA />} />
+            <Route path="/matrix-v1/anomaly-route" element={<PathB />} />
             <Route path="/matrix-v1/map" element={<Map />} />
             <Route path="/matrix-v1/deeper-profile" element={<DeeperProfile />} />
             <Route path="/matrix-v1/interference" element={<Interference />} />

@@ -43,8 +43,8 @@ export default function DeeperProfile() {
     }
   }, [lineDone, lineIndex]);
 
-  const toFactions = () => navigate('/matrix-v1/message');
-  const toPathB = () => navigate('/matrix-v1/path-b');
+  const toFactions = () => navigate('/matrix-v1/factions');
+  const toPathB = () => navigate('/matrix-v1/anomaly-route');
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-black text-green-400 font-mono relative overflow-hidden space-y-6">

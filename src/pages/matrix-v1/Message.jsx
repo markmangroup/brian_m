@@ -3,18 +3,20 @@ import { useNavigate } from 'react-router-dom';
 import MatrixRain from '../../components/MatrixRain';
 import useTypewriterEffect from '../../components/useTypewriterEffect';
 
-const MESSAGES = [
-  'The Matrix is a system, Neo. That system is our enemy.',
-  'But when you\'re inside, you look around, what do you see? Businessmen, teachers, lawyers, carpenters.',
-  'The very minds of the people we are trying to save.',
-  'But until we do, these people are still a part of that system and that makes them our enemy.',
-  'You have to understand, most of these people are not ready to be unplugged.',
-  'And many of them are so inured, so hopelessly dependent on the system, that they will fight to protect it.'
-];
-
 export default function Message() {
   const navigate = useNavigate();
+  const playerName = typeof window !== 'undefined' ? localStorage.getItem('matrixV1Name') || 'Traveler' : 'Traveler';
   const [currentIndex, setCurrentIndex] = useState(0);
+  
+  const MESSAGES = [
+    `The Matrix is a system, ${playerName}. That system is our enemy.`,
+    'But when you\'re inside, you look around, what do you see? Businessmen, teachers, lawyers, carpenters.',
+    'The very minds of the people we are trying to save.',
+    'But until we do, these people are still a part of that system and that makes them our enemy.',
+    'You have to understand, most of these people are not ready to be unplugged.',
+    'And many of them are so inured, so hopelessly dependent on the system, that they will fight to protect it.'
+  ];
+
   const [message, done] = useTypewriterEffect(
     MESSAGES[currentIndex] || 'Error: Message not found',
     50
