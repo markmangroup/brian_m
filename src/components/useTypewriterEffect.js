@@ -7,6 +7,13 @@ export default function useTypewriterEffect(fullText = '', speed = 50) {
   const prevTextRef = useRef(null);
   const timeoutRef = useRef();
 
+  const skip = () => {
+    clearInterval(timeoutRef.current);
+    prevTextRef.current = fullText;
+    setText(fullText);
+    setDone(true);
+  };
+
   useEffect(() => {
     if (prevTextRef.current === fullText) return;
     prevTextRef.current = fullText;
@@ -28,5 +35,5 @@ export default function useTypewriterEffect(fullText = '', speed = 50) {
     return () => clearInterval(timeoutRef.current);
   }, [fullText, speed]);
 
-  return [text, done];
+  return [text, done, skip];
 }
