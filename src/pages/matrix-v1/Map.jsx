@@ -5,11 +5,50 @@ import { nodes } from './nodes';
 import { edges } from './edges';
 import CustomNode from './CustomNode';
 
-const nodeTypes = {
-  npc: (props) => <CustomNode {...props} type="npc" selected={props.id === 'start'} />,
-  choice: (props) => <CustomNode {...props} type="choice" selected={false} />,
-  end: (props) => <CustomNode {...props} type="end" selected={false} />,
-};
+function createNodeTypes(currentId, visited) {
+  return {
+    npc: (props) => (
+      <CustomNode
+        {...props}
+        type="npc"
+        selected={props.id === currentId}
+        visited={visited.includes(props.id)}
+      />
+    ),
+    choice: (props) => (
+      <CustomNode
+        {...props}
+        type="choice"
+        selected={props.id === currentId}
+        visited={visited.includes(props.id)}
+      />
+    ),
+    end: (props) => (
+      <CustomNode
+        {...props}
+        type="end"
+        selected={props.id === currentId}
+        visited={visited.includes(props.id)}
+      />
+    ),
+    faction: (props) => (
+      <CustomNode
+        {...props}
+        type="faction"
+        selected={props.id === currentId}
+        visited={visited.includes(props.id)}
+      />
+    ),
+    training: (props) => (
+      <CustomNode
+        {...props}
+        type="training"
+        selected={props.id === currentId}
+        visited={visited.includes(props.id)}
+      />
+    ),
+  };
+}
 
 export default function MapPage() {
   const [devView, setDevView] = useState(false);
