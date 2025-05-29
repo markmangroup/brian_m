@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import MatrixRouteBanner from '../../components/MatrixRouteBanner';
+import MatrixSceneWrapper from '../../components/MatrixSceneWrapper';
 
 export default function GuardianCall({ testSequence }) {
   const navigate = useNavigate();
@@ -79,10 +79,11 @@ export default function GuardianCall({ testSequence }) {
 
   return (
     <div className="min-h-screen flex flex-col bg-black text-green-500 font-mono relative">
-      <MatrixRouteBanner
+      <MatrixSceneWrapper
         title="Synchronize with Guardian"
         subtitle="Identify the sync points"
         status="🧠 Active"
+
       />
       <div className="mt-8 flex flex-col items-center min-h-[60vh] space-y-4">
         {alreadyLinked ? (
@@ -122,6 +123,34 @@ export default function GuardianCall({ testSequence }) {
           </>
         )}
       </div>
+
+      >
+      <div className={`grid grid-cols-2 gap-4 ${shake ? 'animate-shake' : ''} ${successFlash ? 'animate-flash-green' : ''}`}>
+        {squares.map((sq) => (
+          <div
+            key={sq}
+            role="button"
+            aria-label={`square-${sq}`}
+            onClick={() => handleSelect(sq)}
+            className={`w-20 h-20 border-2 border-green-500 transition-all ${active === sq ? 'bg-green-400 animate-glow-green' : 'bg-gray-800'} ${inputEnabled ? 'cursor-pointer hover:brightness-110 active:scale-95' : ''}`}
+          />
+        ))}
+      </div>
+      <div className="h-6 text-center">
+        {message && (
+          <p className={`${successFlash ? 'text-green-400 animate-pulse' : 'text-red-400'}`}>{message}</p>
+        )}
+      </div>
+      {successFlash && (
+        <button
+          onClick={startRound}
+          className="px-4 py-2 rounded bg-green-700 text-black hover:bg-green-600"
+        >
+          Retry Synchronization
+        </button>
+      )}
+      </MatrixSceneWrapper>
+
     </div>
   );
 }
