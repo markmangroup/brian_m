@@ -69,6 +69,9 @@ export default function MapPage() {
 
   const nodeTypes = createNodeTypes(currentId, visited);
 
+  // Debug: Log nodes and edges to verify they are present
+  console.log("NODES:", nodes, "EDGES:", edges);
+
   return (
     <div className="relative bg-black bg-gradient-to-br from-gray-900 to-black min-h-screen p-8 overflow-hidden">
       <div style={{ position: 'absolute', top: 10, right: 20, zIndex: 10 }}>
