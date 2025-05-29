@@ -2,24 +2,23 @@ import React from 'react';
 import ReactFlow, { ReactFlowProvider } from 'reactflow';
 import 'reactflow/dist/base.css';
 import ZoomHUD from './ZoomHUD';
-import { SceneNode } from './CustomNode';
+
+const nodeTypes = {
+  scene: () => (
+    <div style={{ background: 'lime', color: 'black', padding: 20 }}>
+      ✅ It works
+    </div>
+  )
+};
 
 const testNodes = [
   {
     id: 'test1',
     type: 'scene',
-    position: { x: 100, y: 100 },
-    data: {
-      title: 'Forced Scene',
-      description: 'This is a known-good render',
-      setting: 'Override test'
-    }
+    position: { x: 0, y: 0 },
+    data: {}
   }
 ];
-
-const nodeTypes = {
-  scene: SceneNode
-};
 
 export default function MapCanvas() {
   return (
