@@ -83,74 +83,46 @@ export default function GuardianCall({ testSequence }) {
         title="Synchronize with Guardian"
         subtitle="Identify the sync points"
         status="🧠 Active"
-
-      />
-      <div className="mt-8 flex flex-col items-center min-h-[60vh] space-y-4">
-        {alreadyLinked ? (
-          <p className="text-green-400 text-xl">Already Linked</p>
-        ) : (
-          <>
-            <div
-              className={`grid grid-cols-3 gap-4 ${shake ? 'animate-shake' : ''} ${
-                successFlash ? 'animate-flash-green' : ''
-              }`}
-            >
-              {tiles.map((t) => (
-                <div
-                  key={t}
-                  role="button"
-                  aria-label={`square-${t}`}
-                  onClick={() => handleSelect(t)}
-                  className={`w-16 h-16 border-2 border-green-500 transition-all ${
-                    highlighted.includes(t) ? 'bg-green-400 animate-glow-green' : 'bg-gray-800'
-                  } ${inputEnabled ? 'cursor-pointer hover:brightness-110 active:scale-95' : ''}`}
-                />
-              ))}
-            </div>
-            <div className="h-6 text-center">
-              {message && (
-                <p className={`${successFlash ? 'text-green-400 animate-pulse' : 'text-red-400'}`}>{message}</p>
-              )}
-            </div>
-            {showRetry && (
-              <button
-                onClick={startRound}
-                className="px-4 py-2 rounded bg-green-700 text-black hover:bg-green-600"
-              >
-                Retry
-              </button>
-            )}
-          </>
-        )}
-      </div>
-
       >
-      <div className={`grid grid-cols-2 gap-4 ${shake ? 'animate-shake' : ''} ${successFlash ? 'animate-flash-green' : ''}`}>
-        {squares.map((sq) => (
-          <div
-            key={sq}
-            role="button"
-            aria-label={`square-${sq}`}
-            onClick={() => handleSelect(sq)}
-            className={`w-20 h-20 border-2 border-green-500 transition-all ${active === sq ? 'bg-green-400 animate-glow-green' : 'bg-gray-800'} ${inputEnabled ? 'cursor-pointer hover:brightness-110 active:scale-95' : ''}`}
-          />
-        ))}
-      </div>
-      <div className="h-6 text-center">
-        {message && (
-          <p className={`${successFlash ? 'text-green-400 animate-pulse' : 'text-red-400'}`}>{message}</p>
-        )}
-      </div>
-      {successFlash && (
-        <button
-          onClick={startRound}
-          className="px-4 py-2 rounded bg-green-700 text-black hover:bg-green-600"
-        >
-          Retry Synchronization
-        </button>
-      )}
+        <div className="mt-8 flex flex-col items-center min-h-[60vh] space-y-4">
+          {alreadyLinked ? (
+            <p className="text-green-400 text-xl">Already Linked</p>
+          ) : (
+            <>
+              <div
+                className={`grid grid-cols-3 gap-4 ${shake ? 'animate-shake' : ''} ${
+                  successFlash ? 'animate-flash-green' : ''
+                }`}
+              >
+                {tiles.map((t) => (
+                  <div
+                    key={t}
+                    role="button"
+                    aria-label={`square-${t}`}
+                    onClick={() => handleSelect(t)}
+                    className={`w-16 h-16 border-2 border-green-500 transition-all ${
+                      highlighted.includes(t) ? 'bg-green-400 animate-glow-green' : 'bg-gray-800'
+                    } ${inputEnabled ? 'cursor-pointer hover:brightness-110 active:scale-95' : ''}`}
+                  />
+                ))}
+              </div>
+              <div className="h-6 text-center">
+                {message && (
+                  <p className={`${successFlash ? 'text-green-400 animate-pulse' : 'text-red-400'}`}>{message}</p>
+                )}
+              </div>
+              {showRetry && (
+                <button
+                  onClick={startRound}
+                  className="px-4 py-2 rounded bg-green-700 text-black hover:bg-green-600"
+                >
+                  Retry
+                </button>
+              )}
+            </>
+          )}
+        </div>
       </MatrixSceneWrapper>
-
     </div>
   );
 }
