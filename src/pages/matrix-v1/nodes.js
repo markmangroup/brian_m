@@ -1,4 +1,97 @@
 export const nodes = [
+  // Scene Nodes
+  {
+    id: 'scene-1',
+    type: 'scene',
+    position: { x: 0, y: 0 },
+    data: {
+      title: 'The Matrix',
+      description: 'A dark room filled with monitors. The air hums with digital energy.',
+      setting: 'Neo\'s Apartment'
+    }
+  },
+  {
+    id: 'scene-2',
+    type: 'scene',
+    position: { x: 200, y: 0 },
+    data: {
+      title: 'The Construct',
+      description: 'An endless white space where anything is possible.',
+      setting: 'Training Program'
+    }
+  },
+
+  // Dialogue Nodes
+  {
+    id: 'dialogue-1',
+    type: 'dialogue',
+    position: { x: 0, y: 200 },
+    data: {
+      character: 'Morpheus',
+      dialogue: 'I'm going to show you how deep the rabbit hole goes.',
+      emotion: 'serious'
+    }
+  },
+  {
+    id: 'dialogue-2',
+    type: 'dialogue',
+    position: { x: 200, y: 200 },
+    data: {
+      character: 'Neo',
+      dialogue: 'I know kung fu.',
+      emotion: 'confident'
+    }
+  },
+
+  // Choice Nodes
+  {
+    id: 'choice-1',
+    type: 'choice',
+    position: { x: 0, y: 400 },
+    data: {
+      prompt: 'Choose your path',
+      options: [
+        'Take the red pill',
+        'Take the blue pill'
+      ]
+    }
+  },
+  {
+    id: 'choice-2',
+    type: 'choice',
+    position: { x: 200, y: 400 },
+    data: {
+      prompt: 'How do you proceed?',
+      options: [
+        'Fight the agents',
+        'Run and hide',
+        'Try to reason with them'
+      ]
+    }
+  },
+
+  // Ending Nodes
+  {
+    id: 'ending-1',
+    type: 'ending',
+    position: { x: 0, y: 600 },
+    data: {
+      title: 'The One',
+      outcome: 'Victory',
+      description: 'You've become the One, capable of bending the Matrix to your will.'
+    }
+  },
+  {
+    id: 'ending-2',
+    type: 'ending',
+    position: { x: 200, y: 600 },
+    data: {
+      title: 'System Failure',
+      outcome: 'Defeat',
+      description: 'The agents have caught you. Your consciousness is lost in the Matrix.'
+    }
+  },
+
   // Anomaly Route (center)
   { id: 'start', position: { x: 0, y: 0 }, data: { label: 'Agent Echo', tooltip: 'System Guardian: Echo', type: 'character', status: 'live', guardian: 'Echo' }, type: 'npc' },
   { id: 'glitch', position: { x: -200, y: 150 }, data: { label: 'Archivist (Simulated Recovery)', tooltip: 'Archivist: Simulated Recovery', type: 'character', status: 'wip', guardian: 'Archivist' }, type: 'npc' },
