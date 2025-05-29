@@ -9,6 +9,7 @@ import {
   EndingNode
 } from './CustomNode';
 import { edges } from './edges';
+import { realMatrixNodes, realMatrixEdges } from './realMatrixFlow';
 
 const nodeTypes = {
   scene: SceneNode,
@@ -84,6 +85,7 @@ function MapCanvasInner({ nodes }) {
   const [isDragging, setIsDragging] = useState(false);
   const reactFlowInstance = useReactFlow();
   const [cursor, setCursor] = useState('grab');
+  const [showRealPath, setShowRealPath] = useState(true);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -191,6 +193,14 @@ function MapCanvasInner({ nodes }) {
           />
           <span>Show path from start</span>
         </label>
+        <button
+          onClick={() => setShowRealPath(!showRealPath)}
+          className={`text-xs px-3 py-1 rounded font-mono border ml-4 ${
+            showRealPath ? 'bg-cyan-900 text-cyan-200 border-cyan-500' : 'bg-black text-white border-neutral-700'
+          } hover:scale-105 transition`}
+        >
+          📍 Real User Path
+        </button>
       </div>
       <div style={{ height: '100vh' }} className="relative">
         <div className="relative h-full w-full bg-[#121212] rounded-md shadow-md bg-grid-small">
@@ -227,6 +237,23 @@ function MapCanvasInner({ nodes }) {
               </marker>
             </defs>
           </ReactFlow>
+          {showRealPath && (
+            <ReactFlow
+              nodes={realMatrixNodes}
+              edges={realMatrixEdges}
+              nodeTypes={nodeTypes}
+              edgeOptions={{
+                style: { stroke: '#06b6d4', strokeWidth: 3, strokeDasharray: '4 2' },
+                markerEnd: { type: MarkerType.Arrow, color: '#06b6d4' }
+              }}
+              panOnDrag={false}
+              zoomOnScroll={false}
+              nodesDraggable={false}
+              edgesUpdatable={false}
+              fitView
+              style={{ position: 'absolute', top: 0, left: 0, zIndex: 5, pointerEvents: 'none' }}
+            />
+          )}
         </div>
         <ZoomHUD />
         <button
