@@ -72,6 +72,14 @@ export default function MapPage() {
   // Debug: Log nodes and edges to verify they are present
   console.log("NODES:", nodes, "EDGES:", edges);
 
+  // TEMP: Test with a simple node and edge
+  const testNodes = [
+    { id: '1', position: { x: 0, y: 0 }, data: { label: 'Test Node' }, type: 'default' },
+  ];
+  const testEdges = [
+    { id: 'e1-2', source: '1', target: '1', label: 'Self', type: 'default' },
+  ];
+
   return (
     <div className="relative bg-black bg-gradient-to-br from-gray-900 to-black min-h-screen p-8 overflow-hidden">
       <div style={{ position: 'absolute', top: 10, right: 20, zIndex: 10 }}>
@@ -110,7 +118,8 @@ export default function MapPage() {
           <div>✅ built, 🛠 in progress, ❌ planned</div>
         </div>
       )}
-      <ReactFlow nodes={nodes} edges={edges} nodeTypes={nodeTypes} fitView />
+      {/* TEMP: Render test node and edge only */}
+      <ReactFlow nodes={testNodes} edges={testEdges} fitView />
     </div>
   );
 }
