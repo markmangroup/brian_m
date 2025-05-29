@@ -10,22 +10,24 @@ const testNodes = [
     type: 'scene',
     position: { x: 100, y: 100 },
     data: {
-      title: 'Test Scene',
-      description: 'This is a test scene.',
-      setting: 'Forest'
+      title: 'Forced Scene',
+      description: 'This is a known-good render',
+      setting: 'Override test'
     }
   }
 ];
 
-export default function MapCanvas({ edges, nodeTypes }) {
-  console.log('MapCanvas nodes:', testNodes);
-  console.log('MapCanvas nodeTypes:', nodeTypes);
+const nodeTypes = {
+  scene: SceneNode
+};
+
+export default function MapCanvas() {
   return (
     <ReactFlowProvider>
       <div className="pt-24">
         <ReactFlow
           nodes={testNodes}
-          edges={edges}
+          edges={[]}
           nodeTypes={nodeTypes}
           fitView
           style={{ height: '80vh', backgroundColor: '#111' }}
