@@ -2,13 +2,22 @@ import React from 'react';
 import ReactFlow, { ReactFlowProvider } from 'reactflow';
 import 'reactflow/dist/base.css';
 import ZoomHUD from './ZoomHUD';
+import {
+  SceneNode,
+  DialogueNode,
+  ChoiceNode,
+  EndingNode
+} from './CustomNode';
 
 const nodeTypes = {
-  scene: () => (
-    <div style={{ background: 'lime', color: 'black', padding: 20 }}>
-      ✅ It works
-    </div>
-  )
+  scene: SceneNode,
+  dialogue: DialogueNode,
+  choice: ChoiceNode,
+  ending: EndingNode,
+  npc: SceneNode,
+  end: EndingNode,
+  faction: SceneNode,
+  training: DialogueNode,
 };
 
 const testNodes = [
@@ -20,13 +29,13 @@ const testNodes = [
   }
 ];
 
-export default function MapCanvas() {
+export default function MapCanvas({ nodes, edges }) {
   return (
     <ReactFlowProvider>
       <div className="pt-24">
         <ReactFlow
-          nodes={testNodes}
-          edges={[]}
+          nodes={nodes}
+          edges={edges}
           nodeTypes={nodeTypes}
           fitView
           style={{ height: '80vh', backgroundColor: '#111' }}
