@@ -8,6 +8,10 @@ import Navigation from '../../components/Navigation';
 import Breadcrumbs from '../../components/Breadcrumbs';
 import { getVisited, getCurrentNode } from './MatrixRouteMemory';
 
+// Debug logs for imported data
+console.log('Imported nodes:', nodes);
+console.log('Imported edges:', edges);
+
 function createNodeTypes(currentId, visited) {
   return {
     npc: (props) => (
@@ -105,7 +109,18 @@ export default function MapPage() {
   ];
   const fallbackEdge = [];
 
-  console.log('Map nodes:', nodes, 'edges:', edges);
+  // Test nodes for ReactFlow verification
+  const testNode = [
+    { 
+      id: 'test', 
+      position: { x: 100, y: 100 }, 
+      data: { label: 'Forced Node' }, 
+      type: 'default' 
+    }
+  ];
+  const testEdge = [];
+
+  console.log('Rendering with testNode:', testNode);
 
   return (
     <div className="relative bg-black bg-gradient-to-br from-gray-900 to-black min-h-screen p-8 overflow-hidden">
@@ -149,8 +164,8 @@ export default function MapPage() {
         </div>
       )}
       <MapCanvas
-        nodes={nodes.length ? nodes : fallbackNode}
-        edges={trailEdges.length ? trailEdges : fallbackEdge}
+        nodes={testNode}
+        edges={testEdge}
         nodeTypes={nodeTypes}
       />
     </div>
