@@ -4,8 +4,6 @@ import { nodes } from './nodes';
 import { edges } from './edges';
 import { SceneNode, DialogueNode, ChoiceNode, EndingNode } from './CustomNode';
 import MapCanvas from './MapCanvas';
-import Navigation from '../../components/Navigation';
-import Breadcrumbs from '../../components/Breadcrumbs';
 
 const nodeTypes = {
   scene: SceneNode,
@@ -23,8 +21,6 @@ export default function MapPage() {
 
   return (
     <div className="relative bg-black bg-gradient-to-br from-gray-900 to-black min-h-screen p-8 overflow-hidden">
-      <Navigation />
-      <Breadcrumbs />
       <h1 className="sr-only">Matrix Story Map</h1>
       <div style={{ position: 'absolute', top: 10, right: 20, zIndex: 10 }}>
         <button
