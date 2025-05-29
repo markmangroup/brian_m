@@ -140,11 +140,13 @@ export default function CustomNode({ data, type, selected, visited }) {
 
   return (
     <div
-      className={className + ' relative cursor-pointer font-extrabold rounded-lg px-4 py-3 min-w-[110px] text-center'}
+      className={className + ' relative cursor-pointer font-extrabold rounded-lg px-4 py-3 min-w-[110px] text-center m-2'}
       title={data.tooltip || data.label}
       style={{ position: 'relative', ...style }}
     >
-      <span className="block text-xl font-extrabold">{data.label}</span>
+      <span className="text-sm md:text-base px-2 py-1 rounded-md bg-white bg-opacity-80 text-black shadow-md hover:scale-105 transition-transform cursor-pointer">
+        {data.label}
+      </span>
       {data.guardian && (
         <span className="block text-sm mt-1 opacity-80">{data.guardian}</span>
       )}
