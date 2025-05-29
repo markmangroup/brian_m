@@ -89,3 +89,13 @@ code {
 .matrix-gradient-purple {
   @apply bg-gradient-to-br from-purple-700 to-fuchsia-600 text-white;
 }
+
+@layer utilities {
+  @keyframes glow-green {
+    0%, 100% { text-shadow: 0 0 6px #00ff00; }
+    50% { text-shadow: 0 0 12px #00ff00; }
+  }
+  .animate-glow-green {
+    animation: glow-green 2s ease-in-out infinite;
+  }
+}
