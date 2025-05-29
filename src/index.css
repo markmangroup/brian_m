@@ -89,3 +89,21 @@ code {
 .matrix-gradient-purple {
   @apply bg-gradient-to-br from-purple-700 to-fuchsia-600 text-white;
 }
+@layer utilities {
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-4px); }
+    40%, 80% { transform: translateX(4px); }
+  }
+  .animate-shake {
+    animation: shake 0.5s;
+  }
+  @keyframes flash-once {
+    0% { opacity: 1; }
+    50% { opacity: 0.3; }
+    100% { opacity: 1; }
+  }
+  .animate-flash-once {
+    animation: flash-once 0.5s ease-in-out;
+  }
+}
