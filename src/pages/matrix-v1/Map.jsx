@@ -78,9 +78,8 @@ export default function MapPage() {
 
   return (
     <ReactFlowProvider>
-      <div className="relative h-[90vh] bg-gradient-to-b from-black via-neutral-900 to-black">
-        <h1 className="absolute top-2 left-4 text-xl font-bold">Matrix Story Map</h1>
-        <div className="absolute top-2 right-4 z-10 flex items-center gap-2">
+      <div className="relative bg-black bg-gradient-to-br from-gray-900 to-black min-h-screen p-8 overflow-hidden">
+        <div style={{ position: 'absolute', top: 10, right: 20, zIndex: 10 }}>
           <button
             onClick={() => setDevView((v) => !v)}
             style={{
@@ -128,11 +127,13 @@ export default function MapPage() {
             <div>✅ built, 🛠 in progress, ❌ planned</div>
           </div>
         )}
-        <ReactFlow nodes={nodes} edges={edges} nodeTypes={nodeTypes} fitView className="w-full h-full">
-          <Background color="#222" />
-          <MiniMap className="bg-black/60" />
-          <Controls />
-        </ReactFlow>
+        <ReactFlow
+          nodes={nodes}
+          edges={edges}
+          nodeTypes={nodeTypes}
+          fitView
+          style={{ height: '80vh', backgroundColor: '#111' }}
+        />
       </div>
     </ReactFlowProvider>
   );
