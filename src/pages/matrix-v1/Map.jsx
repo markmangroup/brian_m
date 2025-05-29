@@ -22,7 +22,7 @@ export default function MapPage() {
   return (
     <div className="relative bg-black bg-gradient-to-br from-gray-900 to-black min-h-screen p-8 overflow-hidden">
       <h1 className="sr-only">Matrix Story Map</h1>
-      <div style={{ position: 'absolute', top: 10, right: 20, zIndex: 10 }}>
+      <div style={{ position: 'fixed', bottom: 20, left: 20, zIndex: 50 }}>
         <button
           onClick={() => setDevView((v) => !v)}
           style={{
@@ -43,15 +43,15 @@ export default function MapPage() {
       {devView && (
         <div
           style={{
-            position: 'absolute',
-            top: 60,
-            right: 20,
+            position: 'fixed',
+            bottom: 70,
+            left: 20,
             background: '#111',
             color: '#fff',
             padding: '8px 12px',
             borderRadius: 8,
             fontSize: 14,
-            zIndex: 10,
+            zIndex: 50,
           }}
         >
           <div className="font-bold mb-1">Legend</div>

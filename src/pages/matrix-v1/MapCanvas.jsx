@@ -210,7 +210,8 @@ function MapCanvasInner({ nodes }) {
         <ZoomHUD />
         <button
           onClick={() => setShowEdges(e => !e)}
-          className="absolute top-4 right-4 px-3 py-1 rounded border border-white bg-gray-900 text-white shadow hover:bg-gray-700 transition-colors duration-200 z-50"
+          className="fixed bottom-6 right-6 px-3 py-1 rounded border border-white bg-gray-900 text-white shadow hover:bg-gray-700 transition-colors duration-200 z-50"
+          style={{ zIndex: 60 }}
         >
           {showEdges ? 'Hide Edges' : 'Show Edges'}
         </button>

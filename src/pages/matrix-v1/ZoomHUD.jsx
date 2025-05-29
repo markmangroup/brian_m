@@ -6,7 +6,7 @@ export default function ZoomHUD() {
   const handleReset = () => setViewport({ x: 0, y: 0, zoom: 1, duration: 400 });
 
   return (
-    <div className="absolute top-2 right-4 z-10 text-sm text-white bg-black/50 px-2 py-1 rounded shadow flex items-center gap-2">
+    <div className="absolute top-6 right-8 z-50 text-sm text-white bg-black/50 px-2 py-1 rounded shadow flex items-center gap-2">
       <span>Zoom: {(zoom * 100).toFixed(0)}%</span>
       <button
         onClick={handleReset}
