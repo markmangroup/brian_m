@@ -103,20 +103,20 @@ export default function CustomNode(props) {
 
   // Compose className for spacing, font, hover, etc.
   let className = '';
-  if (selected) {
-    className += ' matrix-glow-green';
-  } else if (data.recommended) {
-    className += ' matrix-glow-purple';
-  } else if (visited) {
-    className += ' matrix-glow-green';
-  } else if (data.type === 'trap') {
+  if (data.type === 'trap') {
     className += ' matrix-trap-red';
-  } else if (data.type === 'choice') {
+  } else if (data.type === 'choice' || data.type === 'training') {
     className += ' matrix-gradient-purple';
   } else if (data.type === 'character') {
     className += ' matrix-glow-green';
-  } else if (data.type === 'training') {
-    className += ' matrix-gradient-purple';
+  }
+
+  if (visited) {
+    className += ' opacity-50 hover:opacity-100 transition';
+  }
+
+  if (selected) {
+    className += ' animate-glow-green ring-2 ring-lime-400';
   }
 
   let style = nodeStyles[data.type] || nodeStyles.unknown;
@@ -134,7 +134,7 @@ export default function CustomNode(props) {
     style = nodeStyles.training;
   }
   if (selected) {
-    style = { ...style, border: '4px solid #00ff00' };
+    style = { ...style, border: '2px solid #22c55e' };
   }
   const badge = statusBadge[data.status] || '';
 
