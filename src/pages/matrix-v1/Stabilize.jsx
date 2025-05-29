@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import MatrixRouteBanner from '../../components/MatrixRouteBanner';
+import MatrixSceneWrapper from '../../components/MatrixSceneWrapper';
 
 export default function Stabilize({ testSequence }) {
   const navigate = useNavigate();
@@ -79,12 +79,11 @@ export default function Stabilize({ testSequence }) {
   const squares = [0, 1, 2, 3];
   return (
     <div className="min-h-screen flex flex-col bg-black text-green-500 font-mono relative">
-      <MatrixRouteBanner
+      <MatrixSceneWrapper
         title="Stabilize the System"
         subtitle={`Sequence: ${userInput.length} of ${sequence.length}`}
         status="🧠 Active"
-      />
-      <div className="flex-1 flex flex-col items-center justify-center space-y-4">
+      >
       <div className={`grid grid-cols-2 gap-4 ${shake ? 'animate-shake' : ''} ${successFlash ? 'animate-flash-green' : ''}`}>
         {squares.map((sq) => (
           <div
@@ -109,7 +108,7 @@ export default function Stabilize({ testSequence }) {
           Try another sequence
         </button>
       )}
-      </div>
+      </MatrixSceneWrapper>
     </div>
   );
 }

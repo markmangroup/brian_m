@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import MatrixRouteBanner from '../../components/MatrixRouteBanner';
+import MatrixSceneWrapper from '../../components/MatrixSceneWrapper';
 
 export default function GuardianCall({ testSequence }) {
   const navigate = useNavigate();
@@ -79,12 +79,11 @@ export default function GuardianCall({ testSequence }) {
   const attempt = Math.min(userInput.length + 1, sequence.length);
   return (
     <div className="min-h-screen flex flex-col bg-black text-green-500 font-mono relative">
-      <MatrixRouteBanner
+      <MatrixSceneWrapper
         title="Synchronize with Guardian"
         subtitle={`Attempt ${attempt} of ${sequence.length}`}
         status="🧠 Active"
-      />
-      <div className="mt-8 flex-1 flex flex-col items-center justify-center min-h-[60vh] space-y-4">
+      >
       <div className={`grid grid-cols-2 gap-4 ${shake ? 'animate-shake' : ''} ${successFlash ? 'animate-flash-green' : ''}`}>
         {squares.map((sq) => (
           <div
@@ -109,7 +108,7 @@ export default function GuardianCall({ testSequence }) {
           Retry Synchronization
         </button>
       )}
-      </div>
+      </MatrixSceneWrapper>
     </div>
   );
 }
