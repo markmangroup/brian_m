@@ -22,14 +22,15 @@ export default function MapCanvas({ edges, nodeTypes }) {
   console.log('MapCanvas nodeTypes:', nodeTypes);
   return (
     <ReactFlowProvider>
-      <SceneNode data={{ title: 'Inline Test', description: 'Rendered directly', setting: 'Test Lab' }} />
-      <ReactFlow
-        nodes={testNodes}
-        edges={edges}
-        nodeTypes={nodeTypes}
-        fitView
-        style={{ height: '80vh', backgroundColor: '#111' }}
-      />
+      <div className="pt-24">
+        <ReactFlow
+          nodes={testNodes}
+          edges={edges}
+          nodeTypes={nodeTypes}
+          fitView
+          style={{ height: '80vh', backgroundColor: '#111' }}
+        />
+      </div>
       <ZoomHUD />
     </ReactFlowProvider>
   );
