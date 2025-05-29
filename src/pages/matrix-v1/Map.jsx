@@ -7,15 +7,22 @@ import MapCanvas from './MapCanvas';
 import Navigation from '../../components/Navigation';
 import Breadcrumbs from '../../components/Breadcrumbs';
 
+const nodeTypes = {
+  scene: (props) => {
+    console.log('SceneNode props inside ReactFlow:', props);
+    return (
+      <div className="bg-purple-200 border border-purple-600 text-sm p-4 rounded shadow-lg">
+        {props.data?.title || 'No Title'}
+      </div>
+    );
+  },
+  dialogue: DialogueNode,
+  choice: ChoiceNode,
+  ending: EndingNode
+};
+
 export default function MapPage() {
   const [devView, setDevView] = useState(false);
-
-  const nodeTypes = {
-    scene: SceneNode,
-    dialogue: DialogueNode,
-    choice: ChoiceNode,
-    ending: EndingNode
-  };
 
   console.log('Rendering nodes:', nodes);
 
