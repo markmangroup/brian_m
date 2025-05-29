@@ -92,6 +92,18 @@ export default function MapPage() {
 
   const nodeTypes = createNodeTypes(currentId, visited);
 
+  console.log('Map nodes:', nodes);
+  console.log('edges:', edges);
+
+  const fallbackNode = [
+    {
+      id: 'debug',
+      position: { x: 100, y: 100 },
+      data: { label: 'Debug Node' },
+      type: 'default',
+    },
+  ];
+
 
   return (
     <div className="relative bg-black bg-gradient-to-br from-gray-900 to-black min-h-screen p-8 overflow-hidden">
@@ -134,7 +146,11 @@ export default function MapPage() {
           <div>✅ built, 🛠 in progress, ❌ planned</div>
         </div>
       )}
-      <MapCanvas nodes={nodes} edges={trailEdges} nodeTypes={nodeTypes} />
+      <MapCanvas
+        nodes={nodes.length > 0 ? nodes : fallbackNode}
+        edges={trailEdges}
+        nodeTypes={nodeTypes}
+      />
     </div>
   );
 }
