@@ -3,11 +3,26 @@ import ReactFlow, { ReactFlowProvider } from 'reactflow';
 import 'reactflow/dist/base.css';
 import ZoomHUD from './ZoomHUD';
 
-export default function MapCanvas({ nodes, edges, nodeTypes }) {
+const testNodes = [
+  {
+    id: 'test1',
+    type: 'scene',
+    position: { x: 100, y: 100 },
+    data: {
+      title: 'Test Scene',
+      description: 'This is a test scene.',
+      setting: 'Forest'
+    }
+  }
+];
+
+export default function MapCanvas({ edges, nodeTypes }) {
+  console.log('MapCanvas nodes:', testNodes);
+  console.log('MapCanvas nodeTypes:', nodeTypes);
   return (
     <ReactFlowProvider>
       <ReactFlow
-        nodes={nodes}
+        nodes={testNodes}
         edges={edges}
         nodeTypes={nodeTypes}
         fitView
