@@ -23,6 +23,7 @@ code {
 }
 
 @layer utilities {
+  /* Animation: Progress (Used for bars/sliders) */
   @keyframes progress {
     from {
       transform: translateX(-100%);
@@ -34,35 +35,57 @@ code {
   .animate-progress {
     animation: progress 3s linear forwards;
   }
+
+  /* Animation: Glow Green (used in MatrixRouteBanner + nodes) */
+  @keyframes glow-green {
+    0%, 100% { text-shadow: 0 0 6px #00ff00; }
+    50% { text-shadow: 0 0 12px #00ff00; }
+  }
+  .animate-glow-green {
+    animation: glow-green 2s ease-in-out infinite;
+  }
+
+  /* Animation: Shake (used in fail states) */
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+  }
+  .animate-shake {
+    animation: shake 0.3s;
+  }
+
+  /* Animation: Flash Green (used in puzzle success flashes) */
+  @keyframes flash-green {
+    0%, 100% { background-color: transparent; }
+    50% { background-color: rgba(16, 185, 129, 0.5); }
+  }
+  .flash-green {
+    animation: flash-green 0.5s;
+  }
 }
 
 /* Mermaid Diagram Styles */
 .mermaid-diagram {
   @apply text-sm;
 }
-
 .mermaid-diagram .node {
   @apply transition-all duration-300;
 }
-
 .mermaid-diagram .node:hover {
   @apply filter brightness-110;
 }
-
 .mermaid-diagram .node[data-tooltip] {
   @apply relative;
 }
-
 .mermaid-diagram .node[data-tooltip]:hover::after {
   content: attr(data-tooltip);
   @apply absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 bg-gray-800 text-white text-xs rounded opacity-0 transition-opacity duration-200 whitespace-nowrap;
   opacity: 1;
 }
-
 .mermaid-diagram .edgeLabel {
   @apply bg-gray-800 text-white px-2 py-1 rounded text-xs;
 }
-
 .mermaid-diagram .edgePath path {
   @apply stroke-gray-500;
 }
@@ -74,35 +97,16 @@ code {
   }
 }
 
+/* Matrix-specific Visual Classes */
 .matrix-glow-green {
   @apply shadow-[0_0_12px_#00ff00] border-2 border-green-400 animate-pulse;
 }
-
 .matrix-glow-purple {
   @apply shadow-[0_0_12px_#8000ff] border-2 border-purple-400 animate-pulse;
 }
-
 .matrix-trap-red {
   @apply bg-red-800 text-white border border-red-500;
 }
-
 .matrix-gradient-purple {
   @apply bg-gradient-to-br from-purple-700 to-fuchsia-600 text-white;
-}
-
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-4px); }
-  75% { transform: translateX(4px); }
-}
-.animate-shake {
-  animation: shake 0.3s;
-}
-
-@keyframes flash-green {
-  0%, 100% { background-color: transparent; }
-  50% { background-color: rgba(16, 185, 129, 0.5); }
-}
-.flash-green {
-  animation: flash-green 0.5s;
 }
