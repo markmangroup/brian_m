@@ -99,7 +99,12 @@ const factionColors = {
 };
 
 export default function CustomNode(props) {
-  const { data, type, selected, visited } = props;
+  const {
+    data = {},
+    type,
+    selected = false,
+    visited = false,
+  } = props || {};
 
   // Compose className for spacing, font, hover, etc.
   let className = '';

@@ -15,7 +15,7 @@ function createNodeTypes(currentId, visited) {
         {...props}
         type="npc"
         selected={props.id === currentId}
-        visited={visited.includes(props.id)}
+        visited={Array.isArray(visited) && visited.includes(props.id)}
       />
     ),
     choice: (props) => (
@@ -23,7 +23,7 @@ function createNodeTypes(currentId, visited) {
         {...props}
         type="choice"
         selected={props.id === currentId}
-        visited={visited.includes(props.id)}
+        visited={Array.isArray(visited) && visited.includes(props.id)}
       />
     ),
     end: (props) => (
@@ -31,7 +31,7 @@ function createNodeTypes(currentId, visited) {
         {...props}
         type="end"
         selected={props.id === currentId}
-        visited={visited.includes(props.id)}
+        visited={Array.isArray(visited) && visited.includes(props.id)}
       />
     ),
     faction: (props) => (
@@ -39,7 +39,7 @@ function createNodeTypes(currentId, visited) {
         {...props}
         type="faction"
         selected={props.id === currentId}
-        visited={visited.includes(props.id)}
+        visited={Array.isArray(visited) && visited.includes(props.id)}
       />
     ),
     training: (props) => (
@@ -47,7 +47,7 @@ function createNodeTypes(currentId, visited) {
         {...props}
         type="training"
         selected={props.id === currentId}
-        visited={visited.includes(props.id)}
+        visited={Array.isArray(visited) && visited.includes(props.id)}
       />
     ),
   };
@@ -61,8 +61,12 @@ export default function MapPage() {
 
   useEffect(() => {
     function updateStatus() {
-      setCurrentId(getCurrentNode());
-      setVisited(getVisited());
+      const current = getCurrentNode() || 'start';
+      const visitedNodes = getVisited();
+      const safeVisited = Array.isArray(visitedNodes) ? visitedNodes : [];
+      console.log('visited', safeVisited, 'currentId', current);
+      setCurrentId(current);
+      setVisited(safeVisited);
     }
     updateStatus();
     const interval = setInterval(updateStatus, 1000);
@@ -71,7 +75,11 @@ export default function MapPage() {
 
   useEffect(() => {
     const updated = edges.map((e) => {
-      if (visited.includes(e.source) && visited.includes(e.target)) {
+      if (
+        Array.isArray(visited) &&
+        visited.includes(e.source) &&
+        visited.includes(e.target)
+      ) {
         return {
           ...e,
           style: { ...(e.style || {}), stroke: '#22c55e88' },
