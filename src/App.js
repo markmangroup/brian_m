@@ -55,8 +55,8 @@ export default function App() {
             <Route path="/rc-plane" element={<RCPlaneDesigner />} />
             <Route path="/little-alchemy" element={<LittleAlchemy />} />
             <Route path="/updates" element={<Updates />} />
-            <Route path="/echo-loop" element={<EchoLoop />} />
-            <Route path="/echo-verify" element={<EchoVerify />} />
+            <Route path="/matrix-v1/echo-loop" element={<EchoLoop />} />
+            <Route path="/matrix-v1/echo-verify" element={<EchoVerify />} />
             {/* Matrix V1 Routes */}
             <Route path="/matrix-v1" element={<Entry />} />
             <Route path="/matrix-v1/terminal" element={<Terminal />} />
