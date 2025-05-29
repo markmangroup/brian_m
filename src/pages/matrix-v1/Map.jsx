@@ -14,6 +14,8 @@ const nodeTypes = {
   ending: EndingNode
 };
 
+const commit = process.env.REACT_APP_GIT_SHA;
+
 export default function MapPage() {
   const [devView, setDevView] = useState(false);
 
@@ -60,6 +62,9 @@ export default function MapPage() {
           <div>✅ built, 🛠 in progress, ❌ planned</div>
         </div>
       )}
+      <div className="absolute top-0 right-4 text-xs text-gray-400 z-50">
+        Build: {commit || 'dev'}
+      </div>
       <MapCanvas
         nodes={nodes}
         edges={edges}
