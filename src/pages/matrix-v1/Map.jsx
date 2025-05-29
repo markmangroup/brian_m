@@ -62,7 +62,7 @@ export default function MapPage() {
           <div>✅ built, 🛠 in progress, ❌ planned</div>
         </div>
       )}
-      <div className="absolute top-0 right-4 text-xs text-gray-400 z-50">
+      <div className="fixed bottom-2 right-4 font-mono text-xs text-gray-500 bg-black/60 px-2 py-1 rounded shadow z-50">
         Build: {commit || 'dev'}
       </div>
       <MapCanvas
