@@ -84,7 +84,7 @@ export default function GuardianCall({ testSequence }) {
         subtitle={`Attempt ${attempt} of ${sequence.length}`}
         status="🧠 Active"
       />
-      <div className="flex-1 flex flex-col items-center justify-center space-y-4">
+      <div className="mt-8 flex-1 flex flex-col items-center justify-center min-h-[60vh] space-y-4">
       <div className={`grid grid-cols-2 gap-4 ${shake ? 'animate-shake' : ''} ${successFlash ? 'animate-flash-green' : ''}`}>
         {squares.map((sq) => (
           <div
