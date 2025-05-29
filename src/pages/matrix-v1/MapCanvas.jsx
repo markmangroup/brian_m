@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import ReactFlow, { ReactFlowProvider, useReactFlow } from 'reactflow';
+import ReactFlow, { ReactFlowProvider, useReactFlow, MarkerType } from 'reactflow';
 import 'reactflow/dist/base.css';
 import ZoomHUD from './ZoomHUD';
 import {
@@ -41,6 +41,41 @@ const testNodes = [
   }
 ];
 
+function layoutNodesByDepth(nodes) {
+  const spacingX = 300;
+  const spacingY = 220;
+  const manualDepths = {
+    'scene-1': 0,
+    'dialogue-1': 1,
+    'choice-1': 2,
+    'ending-1': 3,
+    'scene-2': 1,
+    'dialogue-2': 2,
+    'choice-2': 3,
+    'ending-2': 4,
+    'start': 0,
+  };
+
+  const depthBuckets = {};
+
+  return nodes.map((node, index) => {
+    const depth = manualDepths[node.id] ?? 0;
+    if (!depthBuckets[depth]) depthBuckets[depth] = 0;
+
+    const position = {
+      x: depth * spacingX,
+      y: depthBuckets[depth] * spacingY,
+    };
+
+    depthBuckets[depth]++;
+
+    return {
+      ...node,
+      position,
+    };
+  });
+}
+
 function MapCanvasInner({ nodes }) {
   const [activeTypes, setActiveTypes] = useState(() => NODE_TYPE_FILTERS.map(f => f.key));
   const [showEdges, setShowEdges] = useState(true);
@@ -60,6 +95,9 @@ function MapCanvasInner({ nodes }) {
     return nodes.filter(n => activeTypes.includes(n.type));
   }, [nodes, activeTypes]);
 
+  // 🧠 Layout nodes by depth for readability
+  const laidOutNodes = useMemo(() => layoutNodesByDepth(filteredNodes), [filteredNodes]);
+
   // Highlight edges from 'start' node if highlightPath is true
   const visibleEdges = useMemo(() => {
     const visibleNodeIds = new Set(filteredNodes.map(n => n.id));
@@ -78,6 +116,25 @@ function MapCanvasInner({ nodes }) {
         return e;
       });
   }, [filteredNodes, highlightPath]);
+
+  // 🧠 Style edges with smoothstep, arrows, and animation
+  const styledEdges = useMemo(() =>
+    (showEdges ? visibleEdges : []).map((e) => ({
+      ...e,
+      type: 'smoothstep',
+      animated: true,
+      markerEnd: {
+        type: MarkerType.ArrowClosed,
+        color: '#ccc',
+      },
+      style: {
+        strokeWidth: 1.5,
+        stroke: '#aaa',
+        ...(e.style || {}),
+      },
+    })),
+    [showEdges, visibleEdges]
+  );
 
   const handleResetFilters = () => {
     setActiveTypes(NODE_TYPE_FILTERS.map(f => f.key));
@@ -125,12 +182,12 @@ function MapCanvasInner({ nodes }) {
       </div>
       <div style={{ height: '100vh' }} className="relative">
         <ReactFlow
-          nodes={filteredNodes}
-          edges={showEdges ? visibleEdges : []}
+          nodes={laidOutNodes}
+          edges={styledEdges}
           nodeTypes={nodeTypes}
           edgeTypes={{ default: 'smoothstep' }}
           fitView
-          fitViewOptions={{ padding: 0.8 }}
+          fitViewOptions={{ padding: 0.9 }}
           style={{ height: '100%', backgroundColor: '#111' }}
           zoomOnScroll={false}
           onNodeMouseEnter={handleNodeMouseEnter}
