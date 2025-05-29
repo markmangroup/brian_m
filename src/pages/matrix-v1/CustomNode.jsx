@@ -113,6 +113,9 @@ export default function CustomNode({ data, type, selected }) {
   } else if (data.type === 'training') {
     className += ' matrix-gradient-purple';
   }
+  if (data.status === 'live') {
+    className += ' shadow-[0_0_8px_rgba(0,255,0,0.3)]';
+  }
 
   let style = nodeStyles[data.type] || nodeStyles.unknown;
   if (data.type === 'faction') {
@@ -134,11 +137,16 @@ export default function CustomNode({ data, type, selected }) {
 
   return (
     <div
-      className={className + ' relative cursor-pointer font-semibold rounded-lg px-4 py-3 min-w-[110px] text-center'}
+      className={
+        className +
+        ' relative font-semibold rounded-lg px-4 py-3 min-w-[110px] text-center transition-transform hover:scale-105 hover:ring-2 hover:ring-lime-400 cursor-pointer'
+      }
       title={data.tooltip || data.label}
       style={{ position: 'relative', ...style }}
     >
-      <span className="block text-lg font-bold">{data.label}</span>
+      <span className="block text-base px-2 py-1 rounded-md bg-white/80 text-black drop-shadow">
+        {data.label}
+      </span>
       {data.guardian && (
         <span className="block text-xs mt-1 opacity-80">{data.guardian}</span>
       )}
