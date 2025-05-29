@@ -26,6 +26,7 @@ import Observer from './pages/matrix-v1/Observer';
 import Stage1 from './pages/matrix-v1/Stage1';
 import Stage2 from './pages/matrix-v1/Stage2';
 import Stage3 from './pages/matrix-v1/Stage3';
+import GuardianCall from './pages/matrix-v1/GuardianCall';
 import PathA from './pages/matrix-v1/PathA';
 import PathB from './pages/matrix-v1/PathB';
 import DeeperProfile from './pages/matrix-v1/DeeperProfile';
@@ -63,6 +64,7 @@ export default function App() {
             <Route path="/matrix-v1/stage-1" element={<Stage1 />} />
             <Route path="/matrix-v1/stage-2" element={<Stage2 />} />
             <Route path="/matrix-v1/stage-3" element={<Stage3 />} />
+            <Route path="/matrix-v1/guardian-call" element={<GuardianCall />} />
             <Route path="/matrix-v1/compliance-route" element={<PathA />} />
             <Route path="/matrix-v1/anomaly-route" element={<PathB />} />
             <Route path="/matrix-v1/map" element={<Map />} />
