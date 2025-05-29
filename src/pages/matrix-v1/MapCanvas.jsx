@@ -2,6 +2,7 @@ import React from 'react';
 import ReactFlow, { ReactFlowProvider } from 'reactflow';
 import 'reactflow/dist/base.css';
 import ZoomHUD from './ZoomHUD';
+import { SceneNode } from './CustomNode';
 
 const testNodes = [
   {
@@ -21,6 +22,7 @@ export default function MapCanvas({ edges, nodeTypes }) {
   console.log('MapCanvas nodeTypes:', nodeTypes);
   return (
     <ReactFlowProvider>
+      <SceneNode data={{ title: 'Inline Test', description: 'Rendered directly', setting: 'Test Lab' }} />
       <ReactFlow
         nodes={testNodes}
         edges={edges}
