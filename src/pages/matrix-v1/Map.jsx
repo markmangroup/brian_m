@@ -103,7 +103,9 @@ export default function MapPage() {
       type: 'default',
     },
   ];
+  const fallbackEdge = [];
 
+  console.log('Map nodes:', nodes, 'edges:', edges);
 
   return (
     <div className="relative bg-black bg-gradient-to-br from-gray-900 to-black min-h-screen p-8 overflow-hidden">
@@ -147,8 +149,8 @@ export default function MapPage() {
         </div>
       )}
       <MapCanvas
-        nodes={nodes.length > 0 ? nodes : fallbackNode}
-        edges={trailEdges}
+        nodes={nodes.length ? nodes : fallbackNode}
+        edges={trailEdges.length ? trailEdges : fallbackEdge}
         nodeTypes={nodeTypes}
       />
     </div>
