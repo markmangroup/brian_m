@@ -1,5 +1,5 @@
-import React, { useState, useCallback } from 'react';
-import ReactFlow, { Background, Controls, MiniMap, ReactFlowProvider, useReactFlow } from 'reactflow';
+import React, { useState, useEffect, useCallback } from 'react';
+import ReactFlow, { Background, Controls, MiniMap, ReactFlowProvider, useReactFlow, useStore } from 'reactflow';
 import 'reactflow/dist/base.css';
 import { nodes } from './nodes';
 import { edges } from './edges';
@@ -13,22 +13,30 @@ const nodeTypes = {
 
 export default function MapPage() {
   const [devView, setDevView] = useState(false);
+  const [currentId, setCurrentId] = useState('start');
+  const [visited, setVisited] = useState([]);
 
-  const ResetControl = () => {
-    const { fitView } = useReactFlow();
-    const handleReset = useCallback(() => fitView(), [fitView]);
-    return (
-      <button
-        onClick={handleReset}
-        className="bg-black/50 text-white px-3 py-1 rounded hover:bg-black/70"
-        aria-label="Reset view"
-      >
-        Reset
-      </button>
-    );
-  };
+  useEffect(() => {
+    const id = localStorage.getItem('currentNodeId') || 'start';
+    let visitedList = [];
+    try {
+      visitedList = JSON.parse(localStorage.getItem('visitedNodes') || '[]');
+    } catch {
+      visitedList = [];
+    }
+    setCurrentId(id);
+    setVisited(visitedList);
+  }, []);
 
-  // For now, only highlight the start node as current
+  const nodeTypes = createNodeTypes(currentId, visited);
+
+  // Phase 1B: Zoom Utility Overlay
+  const zoom = useStore((s) => s.transform[2]);
+  const { setViewport } = useReactFlow();
+  const handleReset = useCallback(() => {
+    setViewport({ x: 0, y: 0, zoom: 1, duration: 400 });
+  }, [setViewport]);
+
   return (
     <ReactFlowProvider>
       <div className="relative h-[90vh] bg-gradient-to-b from-black via-neutral-900 to-black">
@@ -50,8 +58,37 @@ export default function MapPage() {
           >
             🧪 Dev View
           </button>
-          <ResetControl />
+          {/* Phase 1B: Zoom Utility Overlay */}
+          <div className="text-sm text-white bg-black/50 px-2 py-1 rounded shadow mt-2" title="Zoom level">
+            Zoom: {(zoom * 100).toFixed(0)}%
+            <button
+              onClick={handleReset}
+              className="ml-2 px-2 py-1 rounded bg-gray-800 text-gray-200 border border-gray-600 hover:bg-gray-700 text-xs"
+              style={{ fontSize: 12 }}
+              title="Reset zoom"
+            >
+              Reset
+            </button>
+          </div>
         </div>
+        {devView && (
+          <div
+            style={{
+              position: 'absolute',
+              top: 60,
+              right: 20,
+              background: '#111',
+              color: '#fff',
+              padding: '8px 12px',
+              borderRadius: 8,
+              fontSize: 14,
+              zIndex: 10,
+            }}
+          >
+            <div className="font-bold mb-1">Legend</div>
+            <div>✅ built, 🛠 in progress, ❌ planned</div>
+          </div>
+        )}
         <ReactFlow nodes={nodes} edges={edges} nodeTypes={nodeTypes} fitView className="w-full h-full">
           <Background color="#222" />
           <MiniMap className="bg-black/60" />
