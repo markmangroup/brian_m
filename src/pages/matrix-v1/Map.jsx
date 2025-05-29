@@ -6,6 +6,7 @@ import CustomNode from './CustomNode';
 import MapCanvas from './MapCanvas';
 import Navigation from '../../components/Navigation';
 import Breadcrumbs from '../../components/Breadcrumbs';
+import { getVisited, getCurrentNode } from './MatrixRouteMemory';
 
 function createNodeTypes(currentId, visited) {
   return {
@@ -56,18 +57,30 @@ export default function MapPage() {
   const [devView, setDevView] = useState(false);
   const [currentId, setCurrentId] = useState('start');
   const [visited, setVisited] = useState([]);
+  const [trailEdges, setTrailEdges] = useState(edges);
 
   useEffect(() => {
-    const id = localStorage.getItem('currentNodeId') || 'start';
-    let visitedList = [];
-    try {
-      visitedList = JSON.parse(localStorage.getItem('visitedNodes') || '[]');
-    } catch {
-      visitedList = [];
+    function updateStatus() {
+      setCurrentId(getCurrentNode());
+      setVisited(getVisited());
     }
-    setCurrentId(id);
-    setVisited(visitedList);
+    updateStatus();
+    const interval = setInterval(updateStatus, 1000);
+    return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    const updated = edges.map((e) => {
+      if (visited.includes(e.source) && visited.includes(e.target)) {
+        return {
+          ...e,
+          style: { ...(e.style || {}), stroke: '#22c55e88' },
+        };
+      }
+      return e;
+    });
+    setTrailEdges(updated);
+  }, [visited]);
 
   const nodeTypes = createNodeTypes(currentId, visited);
 
@@ -113,7 +126,7 @@ export default function MapPage() {
           <div>✅ built, 🛠 in progress, ❌ planned</div>
         </div>
       )}
-      <MapCanvas nodes={nodes} edges={edges} nodeTypes={nodeTypes} />
+      <MapCanvas nodes={nodes} edges={trailEdges} nodeTypes={nodeTypes} />
     </div>
   );
 }
