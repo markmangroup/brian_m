@@ -98,12 +98,17 @@ const factionColors = {
   },
 };
 
-export default function CustomNode({ data, type, selected }) {
+export default function CustomNode(props) {
+  const { data, type, selected, visited } = props;
+
+  // Compose className for spacing, font, hover, etc.
   let className = '';
   if (selected) {
     className += ' matrix-glow-green';
   } else if (data.recommended) {
     className += ' matrix-glow-purple';
+  } else if (visited) {
+    className += ' matrix-glow-green';
   } else if (data.type === 'trap') {
     className += ' matrix-trap-red';
   } else if (data.type === 'choice') {
@@ -113,13 +118,9 @@ export default function CustomNode({ data, type, selected }) {
   } else if (data.type === 'training') {
     className += ' matrix-gradient-purple';
   }
-  if (data.status === 'live') {
-    className += ' shadow-[0_0_8px_rgba(0,255,0,0.3)]';
-  }
 
   let style = nodeStyles[data.type] || nodeStyles.unknown;
   if (data.type === 'faction') {
-    // Override with faction color if present
     if (data.color && factionColors[data.color]) {
       style = {
         ...nodeStyles.faction,
@@ -132,23 +133,26 @@ export default function CustomNode({ data, type, selected }) {
   if (data.type === 'training') {
     style = nodeStyles.training;
   }
-
+  if (selected) {
+    style = { ...style, border: '4px solid #00ff00' };
+  }
   const badge = statusBadge[data.status] || '';
 
   return (
     <div
       className={
         className +
-        ' relative font-semibold rounded-lg px-4 py-3 min-w-[110px] text-center transition-transform hover:scale-105 hover:ring-2 hover:ring-lime-400 cursor-pointer'
+        ' relative cursor-pointer font-extrabold rounded-lg px-4 py-3 min-w-[110px] text-center m-2 ' +
+        'transition-transform hover:scale-105 hover:ring hover:ring-green-300'
       }
       title={data.tooltip || data.label}
       style={{ position: 'relative', ...style }}
     >
-      <span className="block text-base px-2 py-1 rounded-md bg-white/80 text-black drop-shadow">
+      <span className="text-base px-2 py-1 rounded bg-white bg-opacity-80 text-black shadow-md">
         {data.label}
       </span>
       {data.guardian && (
-        <span className="block text-xs mt-1 opacity-80">{data.guardian}</span>
+        <span className="block text-sm mt-1 opacity-80">{data.guardian}</span>
       )}
       {badge && (
         <span
@@ -156,7 +160,7 @@ export default function CustomNode({ data, type, selected }) {
             position: 'absolute',
             top: 2,
             right: 6,
-            fontSize: 18,
+            fontSize: 22,
             filter: 'drop-shadow(0 0 2px #000)',
           }}
           aria-label={data.status}
@@ -165,25 +169,27 @@ export default function CustomNode({ data, type, selected }) {
         </span>
       )}
       {/* Tooltip overlay (on hover) */}
-      <span
-        style={{
-          display: 'none',
-          position: 'absolute',
-          left: '50%',
-          bottom: '110%',
-          transform: 'translateX(-50%)',
-          background: '#222',
-          color: '#fff',
-          padding: '4px 10px',
-          borderRadius: 6,
-          fontSize: 13,
-          whiteSpace: 'nowrap',
-          zIndex: 10,
-        }}
-        className="custom-node-tooltip"
-      >
-        {data.tooltip}
-      </span>
+      {data.tooltip && (
+        <span
+          style={{
+            display: 'none',
+            position: 'absolute',
+            left: '50%',
+            bottom: '110%',
+            transform: 'translateX(-50%)',
+            background: '#222',
+            color: '#fff',
+            padding: '4px 10px',
+            borderRadius: 6,
+            fontSize: 15,
+            whiteSpace: 'nowrap',
+            zIndex: 10,
+          }}
+          className="custom-node-tooltip"
+        >
+          {data.tooltip}
+        </span>
+      )}
     </div>
   );
 } 
