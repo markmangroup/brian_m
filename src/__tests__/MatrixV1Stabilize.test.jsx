@@ -32,7 +32,8 @@ test('shows success after correct input', () => {
     jest.advanceTimersByTime(1500);
   });
   userEvent.click(screen.getByRole('button', { name: /square-0/i }));
-  expect(screen.getByText(/sequence stabilized/i)).toBeInTheDocument();
+  expect(screen.getByText(/system stabilized/i)).toBeInTheDocument();
+  expect(screen.getByRole('button', { name: /try another sequence/i })).toBeInTheDocument();
 });
 
 test('shows try again on wrong input', () => {
