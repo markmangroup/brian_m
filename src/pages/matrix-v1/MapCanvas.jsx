@@ -83,6 +83,7 @@ function MapCanvasInner({ nodes }) {
   const [highlightPath, setHighlightPath] = useState(true);
   const [isDragging, setIsDragging] = useState(false);
   const reactFlowInstance = useReactFlow();
+  const [cursor, setCursor] = useState('grab');
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -192,7 +193,7 @@ function MapCanvasInner({ nodes }) {
         </label>
       </div>
       <div style={{ height: '100vh' }} className="relative">
-        <div className="relative h-full w-full bg-[#121212] rounded-md shadow-md">
+        <div className="relative h-full w-full bg-[#121212] rounded-md shadow-md bg-grid-small">
           <div className="absolute inset-0 pointer-events-none z-0 bg-gradient-to-br from-[#1e1e1e] to-[#2a2a2a]" />
           <div className="absolute inset-0 pointer-events-none z-10" style={{backgroundImage:'linear-gradient(to right,rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(to bottom,rgba(255,255,255,0.03) 1px,transparent 1px)',backgroundSize:'40px 40px'}} />
           <ReactFlow
@@ -202,11 +203,13 @@ function MapCanvasInner({ nodes }) {
             edgeTypes={{ default: 'smoothstep' }}
             fitView
             fitViewOptions={{ padding: 0.9 }}
-            style={{ height: '100%', width: '100%', background: 'none', cursor: isDragging ? 'grabbing' : 'grab' }}
-            zoomOnScroll={false}
+            style={{ height: '100%', width: '100%', background: 'none', cursor }}
+            zoomOnScroll={true}
+            panOnScroll={true}
+            zoomOnScrollMode="ctrl"
             dragPan={true}
-            onMoveStart={() => setIsDragging(true)}
-            onMoveEnd={() => setIsDragging(false)}
+            onMoveStart={() => setCursor('grabbing')}
+            onMoveEnd={() => setCursor('grab')}
             onNodeMouseEnter={handleNodeMouseEnter}
             onNodeMouseLeave={handleNodeMouseLeave}
           >

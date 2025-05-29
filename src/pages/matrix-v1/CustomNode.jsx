@@ -1,7 +1,11 @@
 import React from 'react';
 
 const baseCard =
-  'rounded-md shadow-lg ring-1 ring-white/10 p-4 w-72 font-sans transition-opacity duration-300 ease-in-out opacity-100 hover:opacity-95 hover:scale-[1.01] transition-transform cursor-pointer hover:z-20 hover:ring-2 hover:ring-cyan-400/30';
+  'w-72 rounded-md shadow-lg ring-1 ring-white/10 bg-gradient-to-br from-[#111827] to-[#1f2937] transition-all duration-300 font-mono';
+const hoverCard =
+  'hover:scale-[1.05] hover:shadow-xl ring-2 ring-cyan-400/40 z-20 cursor-pointer';
+const headerClass = 'text-xs font-semibold uppercase tracking-wider text-white/90 font-mono';
+const bodyClass = 'text-xs leading-relaxed text-gray-300 font-mono';
 
 const accent = {
   scene: 'border-2 border-purple-500 bg-purple-100',
@@ -15,40 +19,76 @@ const accent = {
 };
 
 export const SceneNode = ({ data = {}, type = 'scene' }) => (
-  <div className={`${baseCard} ${accent[type || 'scene'] || accent.scene}`}> 
-    <h3 className="font-bold mb-2">🎬 {data.title || 'Untitled Scene'}</h3>
-    <p className="text-gray-700 mb-2">{data.description || 'No description.'}</p>
+  <div
+    className={`${baseCard} ${hoverCard}`}
+    style={{
+      '--accent': '#60a5fa',
+      borderColor: 'var(--accent)',
+    }}
+  >
+    <h3 className={headerClass} style={{ color: 'var(--accent)' }}>🎬 {data.title || 'Untitled Scene'}</h3>
+    <p className={bodyClass}>{data.description || 'No description.'}</p>
     {data.setting && (
-      <div className="text-xs text-gray-600 italic">📍 Setting: {data.setting}</div>
+      <div className="text-xs text-gray-400 italic font-mono">📍 Setting: {data.setting}</div>
+    )}
+    {data.status && (
+      <div className="inline-flex items-center text-xs font-mono px-2 py-1 rounded border mt-2" style={{ borderColor: '#22c55e', backgroundColor: 'rgba(20,83,45,0.3)' }}>✅ Built</div>
     )}
   </div>
 );
 
 export const DialogueNode = ({ data = {}, type = 'dialogue' }) => (
-  <div className={`${baseCard} ${accent[type || 'dialogue'] || accent.dialogue}`}>
-    <div className="text-blue-700 text-sm mb-1 font-semibold">{data.character || 'Unknown'}</div>
-    <p className="text-black mb-2">{data.dialogue || '...'}</p>
-    <div className="text-gray-500 text-xs">{data.emotion || 'neutral'}</div>
+  <div
+    className={`${baseCard} ${hoverCard}`}
+    style={{
+      '--accent': '#4ade80',
+      borderColor: 'var(--accent)',
+    }}
+  >
+    <div className={headerClass} style={{ color: 'var(--accent)' }}>{data.character || 'Unknown'}</div>
+    <p className={bodyClass}>{data.dialogue || '...'}</p>
+    <div className="text-gray-400 text-xs font-mono">{data.emotion || 'neutral'}</div>
+    {data.status && (
+      <div className="inline-flex items-center text-xs font-mono px-2 py-1 rounded border mt-2" style={{ borderColor: '#22c55e', backgroundColor: 'rgba(20,83,45,0.3)' }}>✅ Built</div>
+    )}
   </div>
 );
 
 export const ChoiceNode = ({ data = {}, type = 'choice' }) => (
-  <div className={`${baseCard} ${accent[type || 'choice'] || accent.choice}`}>
-    <h3 className="text-green-700 font-bold mb-2">{data.prompt || 'Make a choice...'}</h3>
+  <div
+    className={`${baseCard} ${hoverCard}`}
+    style={{
+      '--accent': '#a78bfa',
+      borderColor: 'var(--accent)',
+    }}
+  >
+    <h3 className={headerClass} style={{ color: 'var(--accent)' }}>{data.prompt || 'Make a choice...'}</h3>
     <div className="space-y-2">
       {(data.options || []).map((option, index) => (
-        <div key={index} className="text-gray-800 text-sm bg-white/80 p-2 rounded border border-green-300">
+        <div key={index} className="text-gray-200 text-xs bg-white/10 p-2 rounded border border-purple-300 font-mono">
           {option}
         </div>
       ))}
     </div>
+    {data.status && (
+      <div className="inline-flex items-center text-xs font-mono px-2 py-1 rounded border mt-2" style={{ borderColor: '#22c55e', backgroundColor: 'rgba(20,83,45,0.3)' }}>✅ Built</div>
+    )}
   </div>
 );
 
 export const EndingNode = ({ data = {}, type = 'ending' }) => (
-  <div className={`${baseCard} ${accent[type || 'ending'] || accent.ending}`}>
-    <div className="text-red-700 text-sm mb-1 font-semibold">{data.outcome || 'Unknown'}</div>
-    <h3 className="font-bold mb-2">{data.title || 'Untitled Ending'}</h3>
-    <p className="text-gray-700 text-sm">{data.description || 'No description.'}</p>
+  <div
+    className={`${baseCard} ${hoverCard}`}
+    style={{
+      '--accent': '#f87171',
+      borderColor: 'var(--accent)',
+    }}
+  >
+    <div className={headerClass} style={{ color: 'var(--accent)' }}>{data.outcome || 'Unknown'}</div>
+    <h3 className={headerClass}>{data.title || 'Untitled Ending'}</h3>
+    <p className={bodyClass}>{data.description || 'No description.'}</p>
+    {data.status && (
+      <div className="inline-flex items-center text-xs font-mono px-2 py-1 rounded border mt-2" style={{ borderColor: '#22c55e', backgroundColor: 'rgba(20,83,45,0.3)' }}>✅ Built</div>
+    )}
   </div>
 ); 

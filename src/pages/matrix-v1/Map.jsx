@@ -25,34 +25,16 @@ export default function MapPage() {
       <div style={{ position: 'fixed', bottom: 20, left: 20, zIndex: 50 }}>
         <button
           onClick={() => setDevView((v) => !v)}
-          style={{
-            background: devView ? '#222' : '#111',
-            color: devView ? '#00ff00' : '#fff',
-            border: '1px solid #00ff00',
-            borderRadius: 8,
-            padding: '6px 16px',
-            fontWeight: 600,
-            fontSize: 16,
-            cursor: 'pointer',
-            boxShadow: devView ? '0 0 8px #00ff00' : 'none',
-          }}
+          className={
+            'bg-[#111] text-white border border-[#00ff00] rounded px-4 py-1 font-mono font-semibold text-sm hover:bg-[#222] hover:text-[#00ff00] shadow-[0_0_8px_#00ff00]'
+          }
         >
           🧪 Dev View
         </button>
       </div>
       {devView && (
         <div
-          style={{
-            position: 'fixed',
-            bottom: 70,
-            left: 20,
-            background: '#111',
-            color: '#fff',
-            padding: '8px 12px',
-            borderRadius: 8,
-            fontSize: 14,
-            zIndex: 50,
-          }}
+          className="fixed bottom-16 left-5 bg-[#111] text-[#00ff00] px-4 py-2 rounded font-mono text-xs border border-[#00ff00] shadow-[0_0_8px_#00ff00] z-50"
         >
           <div className="font-bold mb-1">Legend</div>
           <div>✅ built, 🛠 in progress, ❌ planned</div>
