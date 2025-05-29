@@ -28,7 +28,7 @@ export const nodes = [
     position: { x: 0, y: 200 },
     data: {
       character: 'Morpheus',
-      dialogue: 'I'm going to show you how deep the rabbit hole goes.',
+      dialogue: 'I\'m going to show you how deep the rabbit hole goes.',
       emotion: 'serious'
     }
   },
@@ -78,7 +78,7 @@ export const nodes = [
     data: {
       title: 'The One',
       outcome: 'Victory',
-      description: 'You've become the One, capable of bending the Matrix to your will.'
+      description: 'You\'ve become the One, capable of bending the Matrix to your will.'
     }
   },
   {
