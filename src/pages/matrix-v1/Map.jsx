@@ -69,30 +69,6 @@ export default function MapPage() {
 
   const nodeTypes = createNodeTypes(currentId, visited);
 
-  // Debug: Log nodes and edges to verify they are present
-  console.log("NODES:", nodes, "EDGES:", edges);
-
-  // TEMP: Test with a simple node and edge (clear visibility)
-  const testNodes = [
-    {
-      id: '1',
-      position: { x: 250, y: 250 },
-      data: { label: '🧪 Test Node' },
-      type: 'default',
-      style: {
-        backgroundColor: '#00ff00',
-        color: '#000',
-        padding: 10,
-        borderRadius: 6,
-        fontWeight: 'bold',
-        border: '2px solid #fff',
-      },
-    },
-  ];
-  const testEdges = [
-    { id: 'e1-2', source: '1', target: '2', label: 'Fake Edge', type: 'default' },
-  ];
-
   return (
     <div className="relative bg-black bg-gradient-to-br from-gray-900 to-black min-h-screen p-8 overflow-hidden">
       <div style={{ position: 'absolute', top: 10, right: 20, zIndex: 10 }}>
@@ -131,17 +107,7 @@ export default function MapPage() {
           <div>✅ built, 🛠 in progress, ❌ planned</div>
         </div>
       )}
-      {/* TEMP: Render test node and edge only */}
-      <ReactFlow
-        nodes={testNodes}
-        edges={testEdges}
-        fitView
-        panOnScroll
-        zoomOnScroll
-        zoomOnPinch
-        fitViewOptions={{ padding: 0.5 }}
-        style={{ height: '80vh', backgroundColor: '#111' }}
-      />
+      <ReactFlow nodes={nodes} edges={edges} nodeTypes={nodeTypes} fitView />
     </div>
   );
 }
