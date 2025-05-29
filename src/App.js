@@ -14,6 +14,7 @@ import LegoInventory from './components/LegoInventory';
 import LittleAlchemy from './components/LittleAlchemy';
 import RCPlaneDesigner from './components/RCPlaneDesigner';
 import Updates from './components/Updates';
+import Home from './components/Home';
 // Matrix V1 Pages
 import Entry from './pages/matrix-v1/Entry';
 import Terminal from './pages/matrix-v1/Terminal';
@@ -42,6 +43,7 @@ export default function App() {
           <Navigation />
           <Breadcrumbs />
           <Routes>
+            <Route path="/" element={<Home />} />
             <Route path="/snack-trail" element={<SnackTrailPage />} />
             <Route path="/pixel-art" element={<PixelArtMaker />} />
             <Route path="/robot-lab" element={<RobotLab />} />
@@ -71,7 +73,7 @@ export default function App() {
             <Route path="/matrix-v1/align-:slug" element={<Align />} />
             {/* Legacy Matrix Routes - Redirect to V1 */}
             <Route path="/the-matrix/*" element={<Navigate to="/matrix-v1" replace />} />
-            <Route path="*" element={<Navigate to="/snack-trail" />} />
+            <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </div>
       </Router>

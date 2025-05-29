@@ -15,13 +15,13 @@ import {
 } from 'react-icons/fa';
 
 export const navItems = [
-  { name: 'The Trail',      path: '/snack-trail',      color: 'bg-yellow-400 text-black' },
-  { name: 'Pixel Lab',      path: '/pixel-art',        color: 'bg-blue-500' },
-  { name: 'Robot Room',     path: '/robot-lab',        color: 'bg-green-500' },
-  { name: 'Build Mode',     path: '/lego-build',       color: 'bg-red-500' },
-  { name: 'Inventory',      path: '/lego-inventory',   color: 'bg-yellow-600' },
-  { name: 'Alchemy',        path: '/little-alchemy',   color: 'bg-cyan-500' },
-  { name: 'The Matrix',     path: '/matrix-v1',        color: 'bg-green-700 text-black' },
+  { name: 'The Trail',      path: '/snack-trail',      color: 'bg-yellow-400 text-black', icon: FaRoad },
+  { name: 'Pixel Lab',      path: '/pixel-art',        color: 'bg-blue-500', icon: FaPaintBrush },
+  { name: 'Robot Room',     path: '/robot-lab',        color: 'bg-green-500', icon: FaRobot },
+  { name: 'Build Mode',     path: '/lego-build',       color: 'bg-red-500', icon: FaCube },
+  { name: 'Inventory',      path: '/lego-inventory',   color: 'bg-yellow-600', icon: FaBox },
+  { name: 'Alchemy',        path: '/little-alchemy',   color: 'bg-cyan-500', icon: FaFlask },
+  { name: 'The Matrix',     path: '/matrix-v1',        color: 'bg-green-700 text-black', icon: FaCodeBranch },
   { name: 'Story Map',      path: '/matrix-v1/map',    color: 'bg-purple-500', icon: FaCompass }
 ];
 
