@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import MatrixRouteBanner from '../../components/MatrixRouteBanner';
 
 export default function GuardianCall({ testSequence }) {
   const navigate = useNavigate();
@@ -77,11 +78,13 @@ export default function GuardianCall({ testSequence }) {
   const squares = [0, 1, 2, 3];
   const attempt = Math.min(userInput.length + 1, sequence.length);
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-black text-green-500 font-mono space-y-4">
-      <div className="bg-gray-800 px-4 py-2 rounded shadow-md text-center space-y-1">
-        <h1 className="text-xl font-bold">Synchronize with Guardian</h1>
-        <div className="text-sm text-green-400">Attempt {attempt} of {sequence.length}</div>
-      </div>
+    <div className="min-h-screen flex flex-col bg-black text-green-500 font-mono relative">
+      <MatrixRouteBanner
+        title="Synchronize with Guardian"
+        subtitle={`Attempt ${attempt} of ${sequence.length}`}
+        status="🧠 Active"
+      />
+      <div className="flex-1 flex flex-col items-center justify-center space-y-4">
       <div className={`grid grid-cols-2 gap-4 ${shake ? 'animate-shake' : ''} ${successFlash ? 'animate-flash-green' : ''}`}>
         {squares.map((sq) => (
           <div
@@ -106,6 +109,7 @@ export default function GuardianCall({ testSequence }) {
           Retry Synchronization
         </button>
       )}
+      </div>
     </div>
   );
 }
