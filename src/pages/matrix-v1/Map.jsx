@@ -4,6 +4,7 @@ import 'reactflow/dist/base.css';
 import { nodes } from './nodes';
 import { edges } from './edges';
 import CustomNode from './CustomNode';
+import ZoomHUD from './ZoomHUD';
 
 function createNodeTypes(currentId, visited) {
   return {
@@ -109,6 +110,8 @@ export default function MapPage() {
             </button>
           </div>
         </div>
+        {/* Render ZoomHUD overlay */}
+        <ZoomHUD />
         {devView && (
           <div
             style={{
