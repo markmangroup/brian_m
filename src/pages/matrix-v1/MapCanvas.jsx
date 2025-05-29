@@ -32,13 +32,14 @@ const testNodes = [
 export default function MapCanvas({ nodes, edges }) {
   return (
     <ReactFlowProvider>
-      <div className="pt-24">
+      <div style={{ height: '100vh' }}>
         <ReactFlow
           nodes={nodes}
           edges={edges}
           nodeTypes={nodeTypes}
           fitView
-          style={{ height: '80vh', backgroundColor: '#111' }}
+          fitViewOptions={{ padding: 1 }}
+          style={{ height: '100%', backgroundColor: '#111' }}
         />
       </div>
       <ZoomHUD />

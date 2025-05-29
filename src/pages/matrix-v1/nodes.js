@@ -1,4 +1,14 @@
 export const nodes = [
+  {
+    id: 'visible-test',
+    type: 'scene',
+    position: { x: 50, y: 50 },
+    data: {
+      title: 'Visible Test',
+      description: 'This should always be on screen.',
+      setting: 'Top Left'
+    }
+  },
   // Scene Nodes
   {
     id: 'scene-1',
