@@ -89,3 +89,20 @@ code {
 .matrix-gradient-purple {
   @apply bg-gradient-to-br from-purple-700 to-fuchsia-600 text-white;
 }
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+.animate-shake {
+  animation: shake 0.3s;
+}
+
+@keyframes flash-green {
+  0%, 100% { background-color: transparent; }
+  50% { background-color: rgba(16, 185, 129, 0.5); }
+}
+.flash-green {
+  animation: flash-green 0.5s;
+}
