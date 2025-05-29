@@ -15,6 +15,8 @@ import LittleAlchemy from './components/LittleAlchemy';
 import RCPlaneDesigner from './components/RCPlaneDesigner';
 import Updates from './components/Updates';
 import Home from './components/Home';
+import EchoLoop from './components/EchoLoop';
+import EchoVerify from './components/EchoVerify';
 // Matrix V1 Pages
 import Entry from './pages/matrix-v1/Entry';
 import Terminal from './pages/matrix-v1/Terminal';
@@ -52,6 +54,8 @@ export default function App() {
             <Route path="/rc-plane" element={<RCPlaneDesigner />} />
             <Route path="/little-alchemy" element={<LittleAlchemy />} />
             <Route path="/updates" element={<Updates />} />
+            <Route path="/echo-loop" element={<EchoLoop />} />
+            <Route path="/echo-verify" element={<EchoVerify />} />
             {/* Matrix V1 Routes */}
             <Route path="/matrix-v1" element={<Entry />} />
             <Route path="/matrix-v1/terminal" element={<Terminal />} />

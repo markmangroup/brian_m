@@ -16,6 +16,7 @@ module.exports = {
         'float': 'float 3s ease-in-out infinite',
         'marquee': 'marquee 20s linear infinite',
         'progress-slow': 'progress 6s linear forwards',
+        'shake': 'shake 0.4s linear',
       },
       keyframes: {
         twinkle: {
@@ -33,6 +34,11 @@ module.exports = {
         progress: {
           '0%': { width: '0%' },
           '100%': { width: '100%' },
+        },
+        shake: {
+          '0%, 100%': { transform: 'translateX(0)' },
+          '25%': { transform: 'translateX(-5px)' },
+          '75%': { transform: 'translateX(5px)' },
         },
       },
       backgroundImage: {
