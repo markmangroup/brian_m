@@ -43,6 +43,7 @@ export default function Stabilize({ testSequence }) {
     setSequence(seq);
     setUserInput([]);
     setSuccessFlash(false);
+    setMessage('');
     playPreview(seq);
   }, [playPreview, testSequence]);
 
@@ -60,7 +61,7 @@ export default function Stabilize({ testSequence }) {
         setInputEnabled(false);
         setSuccessFlash(true);
         localStorage.setItem('matrixV1Stabilize', 'complete');
-        setMessage('Sequence stabilized!');
+        setMessage('System stabilized!');
       }
     } else {
       setInputEnabled(false);
@@ -77,18 +78,34 @@ export default function Stabilize({ testSequence }) {
   const squares = [0, 1, 2, 3];
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-black text-green-500 font-mono space-y-4">
-      <div className={`grid grid-cols-2 gap-4 ${shake ? 'animate-shake' : ''} ${successFlash ? 'animate-flash-once' : ''}`}>
+      <div className="bg-gray-800 px-4 py-2 rounded shadow-md text-center space-y-1">
+        <h1 className="text-xl font-bold">Stabilize the System</h1>
+        <div className="text-sm text-green-400">Sequence: {userInput.length} of {sequence.length}</div>
+      </div>
+      <div className={`grid grid-cols-2 gap-4 ${shake ? 'animate-shake' : ''} ${successFlash ? 'animate-flash-green' : ''}`}>
         {squares.map((sq) => (
           <div
             key={sq}
             role="button"
             aria-label={`square-${sq}`}
             onClick={() => handleSelect(sq)}
-            className={`w-20 h-20 border-2 border-green-500 ${active === sq ? 'bg-green-400' : 'bg-gray-800'} ${inputEnabled ? 'cursor-pointer hover:brightness-110' : ''}`}
+            className={`w-20 h-20 border-2 border-green-500 transition-all ${active === sq ? 'bg-green-400 animate-glow-green' : 'bg-gray-800'} ${inputEnabled ? 'cursor-pointer hover:brightness-110 active:scale-95' : ''}`}
           />
         ))}
       </div>
-      <div className="h-6 text-center text-red-400">{message}</div>
+      <div className="h-6 text-center">
+        {message && (
+          <p className={`${successFlash ? 'text-green-400 animate-pulse' : 'text-red-400'}`}>{message}</p>
+        )}
+      </div>
+      {successFlash && (
+        <button
+          onClick={startRound}
+          className="px-4 py-2 rounded bg-green-700 text-black hover:bg-green-600"
+        >
+          Try another sequence
+        </button>
+      )}
     </div>
   );
 }
