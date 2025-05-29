@@ -1,13 +1,13 @@
 import React from 'react';
 
-const SceneNode = ({ data }) => {
-  const { title = 'Untitled Scene', description = 'No description', setting = 'Unknown Setting' } = data;
-  
+export const SceneNode = ({ data = {} }) => {
   return (
-    <div className="bg-gray-800 border-2 border-purple-500 rounded-lg p-4 w-64 shadow-lg">
-      <div className="text-purple-400 text-sm mb-1">{setting}</div>
-      <h3 className="text-white font-bold mb-2">{title}</h3>
-      <p className="text-gray-300 text-sm">{description}</p>
+    <div className="bg-purple-200 border border-purple-600 text-sm p-4 rounded shadow-lg w-72">
+      <h3 className="font-bold mb-2">🎬 {data.title || 'Untitled Scene'}</h3>
+      <p className="text-gray-700 mb-2">{data.description || 'No description.'}</p>
+      {data.setting && (
+        <div className="text-xs text-gray-600 italic">📍 Setting: {data.setting}</div>
+      )}
     </div>
   );
 };
@@ -53,4 +53,4 @@ const EndingNode = ({ data }) => {
   );
 };
 
-export { SceneNode, DialogueNode, ChoiceNode, EndingNode }; 
+export { DialogueNode, ChoiceNode, EndingNode }; 
