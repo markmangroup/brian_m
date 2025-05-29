@@ -1,7 +1,7 @@
 import React from 'react';
 
 const baseCard =
-  'rounded shadow-lg p-4 w-72 font-sans transition-opacity duration-300 ease-in-out opacity-100 hover:opacity-90 hover:scale-105 transition-transform';
+  'rounded-md shadow-lg ring-1 ring-white/10 p-4 w-72 font-sans transition-opacity duration-300 ease-in-out opacity-100 hover:opacity-95 hover:scale-[1.01] transition-transform cursor-pointer hover:z-20 hover:ring-2 hover:ring-cyan-400/30';
 
 const accent = {
   scene: 'border-2 border-purple-500 bg-purple-100',

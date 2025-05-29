@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import ReactFlow, { ReactFlowProvider, useReactFlow, MarkerType } from 'reactflow';
 import 'reactflow/dist/base.css';
 import ZoomHUD from './ZoomHUD';
@@ -81,7 +81,15 @@ function MapCanvasInner({ nodes }) {
   const [showEdges, setShowEdges] = useState(true);
   const [hoveredNode, setHoveredNode] = useState(null);
   const [highlightPath, setHighlightPath] = useState(true);
+  const [isDragging, setIsDragging] = useState(false);
   const reactFlowInstance = useReactFlow();
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      reactFlowInstance.fitView({ padding: 0.8, duration: 800 });
+    }, 200);
+    return () => clearTimeout(timeout);
+  }, [nodes, reactFlowInstance]);
 
   const toggleType = (type) => {
     setActiveTypes(prev =>
@@ -125,11 +133,14 @@ function MapCanvasInner({ nodes }) {
       animated: true,
       markerEnd: {
         type: MarkerType.ArrowClosed,
-        color: '#ccc',
+        color: '#fff',
+        width: 24,
+        height: 24,
       },
       style: {
-        strokeWidth: 1.5,
-        stroke: '#aaa',
+        strokeWidth: 2,
+        stroke: 'rgba(255,255,255,0.2)',
+        strokeDasharray: e.animated ? '6 3' : undefined,
         ...(e.style || {}),
       },
     })),
@@ -181,32 +192,39 @@ function MapCanvasInner({ nodes }) {
         </label>
       </div>
       <div style={{ height: '100vh' }} className="relative">
-        <ReactFlow
-          nodes={laidOutNodes}
-          edges={styledEdges}
-          nodeTypes={nodeTypes}
-          edgeTypes={{ default: 'smoothstep' }}
-          fitView
-          fitViewOptions={{ padding: 0.9 }}
-          style={{ height: '100%', backgroundColor: '#111' }}
-          zoomOnScroll={false}
-          onNodeMouseEnter={handleNodeMouseEnter}
-          onNodeMouseLeave={handleNodeMouseLeave}
-        >
-          <defs>
-            <marker
-              id="arrowhead"
-              markerWidth="8"
-              markerHeight="8"
-              refX="8"
-              refY="4"
-              orient="auto"
-              markerUnits="strokeWidth"
-            >
-              <path d="M0,0 L8,4 L0,8 Z" fill="cyan" />
-            </marker>
-          </defs>
-        </ReactFlow>
+        <div className="relative h-full w-full bg-[#121212] rounded-md shadow-md">
+          <div className="absolute inset-0 pointer-events-none z-0 bg-gradient-to-br from-[#1e1e1e] to-[#2a2a2a]" />
+          <div className="absolute inset-0 pointer-events-none z-10" style={{backgroundImage:'linear-gradient(to right,rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(to bottom,rgba(255,255,255,0.03) 1px,transparent 1px)',backgroundSize:'40px 40px'}} />
+          <ReactFlow
+            nodes={laidOutNodes}
+            edges={styledEdges}
+            nodeTypes={nodeTypes}
+            edgeTypes={{ default: 'smoothstep' }}
+            fitView
+            fitViewOptions={{ padding: 0.9 }}
+            style={{ height: '100%', width: '100%', background: 'none', cursor: isDragging ? 'grabbing' : 'grab' }}
+            zoomOnScroll={false}
+            dragPan={true}
+            onMoveStart={() => setIsDragging(true)}
+            onMoveEnd={() => setIsDragging(false)}
+            onNodeMouseEnter={handleNodeMouseEnter}
+            onNodeMouseLeave={handleNodeMouseLeave}
+          >
+            <defs>
+              <marker
+                id="arrowhead"
+                markerWidth="8"
+                markerHeight="8"
+                refX="8"
+                refY="4"
+                orient="auto"
+                markerUnits="strokeWidth"
+              >
+                <path d="M0,0 L8,4 L0,8 Z" fill="cyan" />
+              </marker>
+            </defs>
+          </ReactFlow>
+        </div>
         <ZoomHUD />
         <button
           onClick={() => setShowEdges(e => !e)}
