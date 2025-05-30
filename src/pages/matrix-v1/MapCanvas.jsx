@@ -167,20 +167,23 @@ function MapCanvasInner({ nodes }) {
       const { id } = props;
       const isExpandable = getChoiceChildren(id).length > 0;
       const isExpanded = expandedPaths.includes(id);
-      console.log('Overlay ChoiceNode', id, { isExpandable, isExpanded, props });
+      // Add a debug label and border for overlay nodes
       return (
-        <ChoiceNode
-          {...props}
-          isExpandable={isExpandable}
-          isExpanded={isExpanded}
-          onBranchToggle={() => {
-            setExpandedPaths((prev) =>
-              prev.includes(id)
-                ? prev.filter(x => x !== id)
-                : [...prev, id]
-            );
-          }}
-        />
+        <div style={{ border: '2px solid #00ffff', position: 'relative', background: 'rgba(0,255,255,0.05)' }}>
+          <div style={{ position: 'absolute', top: 2, left: 8, color: '#00ffff', fontWeight: 'bold', fontSize: 10, zIndex: 10000 }}>OVERLAY</div>
+          <ChoiceNode
+            {...props}
+            isExpandable={isExpandable}
+            isExpanded={isExpanded}
+            onBranchToggle={() => {
+              setExpandedPaths((prev) =>
+                prev.includes(id)
+                  ? prev.filter(x => x !== id)
+                  : [...prev, id]
+              );
+            }}
+          />
+        </div>
       );
     }
   };
@@ -349,7 +352,7 @@ function MapCanvasInner({ nodes }) {
               nodesDraggable={false}
               edgesUpdatable={false}
               fitView
-              style={{ position: 'absolute', top: 0, left: 0, zIndex: 5, pointerEvents: 'none' }}
+              style={{ position: 'absolute', top: 0, left: 0, zIndex: 9999, pointerEvents: 'none', background: 'rgba(0,255,255,0.02)' }}
             />
           )}
         </div>
