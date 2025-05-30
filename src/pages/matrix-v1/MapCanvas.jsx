@@ -227,9 +227,10 @@ function MapCanvasInner({ nodes }) {
 
   const overlayNodes = useMemo(() => {
     const visibleNodes = getVisibleOverlayNodes();
+    const laidOut = layoutNodesByDepth(visibleNodes);
     const focusedNodeSet = focusedOverlayNodeId ? getDownstreamNodes(focusedOverlayNodeId) : null;
-    
-    return visibleNodes.map(node => ({
+
+    return laidOut.map(node => ({
       ...node,
       className: focusedNodeSet && !focusedNodeSet.has(node.id) ? 'opacity-30' : '',
       data: {
