@@ -165,8 +165,19 @@ function MapCanvasInner({ nodes }) {
       const tgt = realMatrixNodes.find(n => n.id === e.target);
       return (!src.parentChoice && !tgt?.parentChoice) || (expandedPaths.includes(e.source));
     });
-    return base;
-  }, [expandedPaths]);
+    return base.map(edge => {
+      const isHovered = hoveredOverlayNodeId && (edge.source === hoveredOverlayNodeId || edge.target === hoveredOverlayNodeId);
+      return {
+        ...edge,
+        style: {
+          stroke: isHovered ? '#22d3ee' : '#94a3b8',
+          strokeWidth: isHovered ? 3 : 2,
+          opacity: isHovered ? 1 : 0.3,
+        },
+        className: isHovered ? 'animate-pulse-glow' : '',
+      };
+    });
+  }, [expandedPaths, hoveredOverlayNodeId]);
 
   // Overlay nodeTypes: inject branch icon for choice nodes
   const overlayNodeTypes = {
@@ -371,26 +382,6 @@ function MapCanvasInner({ nodes }) {
                 className="pointer-events-auto"
                 style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,255,255,0.02)' }}
               >
-                {overlayEdges.map((edge) => {
-                  const isHovered = hoveredOverlayNodeId && (edge.source === hoveredOverlayNodeId || edge.target === hoveredOverlayNodeId);
-                  const edgeStyle = {
-                    stroke: isHovered ? '#22d3ee' : '#94a3b8',
-                    strokeWidth: isHovered ? 3 : 2,
-                    opacity: isHovered ? 1 : 0.3,
-                  };
-                  const edgeClassName = isHovered ? 'animate-pulse-glow' : '';
-                  return (
-                    <ReactFlow.Edge
-                      key={edge.id}
-                      id={edge.id}
-                      source={edge.source}
-                      target={edge.target}
-                      animated={true}
-                      style={edgeStyle}
-                      className={edgeClassName}
-                    />
-                  );
-                })}
               </ReactFlow>
             </div>
           )}
