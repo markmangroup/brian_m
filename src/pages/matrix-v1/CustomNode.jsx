@@ -1,5 +1,6 @@
 import React from 'react';
 
+// Enhanced base styles with Matrix theme
 const baseCard =
   'w-72 rounded-md shadow-lg ring-1 ring-white/10 bg-gradient-to-br from-[#111827] to-[#1f2937] transition-all duration-300 font-mono text-white overflow-hidden';
 const hoverCard =
@@ -7,12 +8,14 @@ const hoverCard =
 const headerClass = 'text-xs font-semibold uppercase tracking-wider text-white/90 font-mono';
 const bodyClass = 'text-xs leading-relaxed text-gray-300 font-mono';
 
+// Enhanced status system with better visual feedback
 const statusStyles = {
   live: { label: 'Built', icon: '✅', color: 'emerald' },
   wip: { label: 'In Progress', icon: '🛠', color: 'yellow' },
   stub: { label: 'Planned', icon: '❌', color: 'red' },
 };
 
+// New StatusBadge component with better styling
 const StatusBadge = ({ status }) => {
   const cfg = statusStyles[status];
   if (!cfg) return null;
@@ -26,6 +29,7 @@ const StatusBadge = ({ status }) => {
   );
 };
 
+// Enhanced accent colors for different node types
 const accent = {
   scene: 'border-2 border-purple-500 bg-purple-100',
   dialogue: 'border-2 border-blue-500 bg-blue-100',

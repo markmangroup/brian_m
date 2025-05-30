@@ -33,7 +33,7 @@ const NODE_TYPE_FILTERS = [
   { key: 'end', label: '🛑 End', color: 'red' },
 ];
 
-// Simplified overlay groups
+// Enhanced overlay groups with better styling
 const overlayGroups = [
   {
     id: 'intro',
@@ -54,6 +54,55 @@ const overlayGroups = [
     bounds: { x: 720, y: 320, width: 420, height: 180 }
   }
 ];
+
+// Enhanced edge styles
+const getEdgeStyle = (edge) => {
+  const baseStyle = {
+    stroke: '#60a5fa',
+    strokeWidth: 2,
+    strokeDasharray: '5,5',
+    animation: 'flow-dash 1s linear infinite',
+  };
+
+  // Different styles for different connection types
+  if (edge.type === 'main') {
+    return {
+      ...baseStyle,
+      stroke: '#60a5fa',
+      strokeWidth: 3,
+      strokeDasharray: 'none',
+    };
+  }
+
+  if (edge.type === 'choice') {
+    return {
+      ...baseStyle,
+      stroke: '#a78bfa',
+      strokeWidth: 2,
+    };
+  }
+
+  if (edge.type === 'ending') {
+    return {
+      ...baseStyle,
+      stroke: '#f87171',
+      strokeWidth: 2,
+    };
+  }
+
+  return baseStyle;
+};
+
+// Enhanced node layout with better spacing
+const getNodeLayout = (nodes) => {
+  return nodes.map(node => ({
+    ...node,
+    style: {
+      ...node.style,
+      transition: 'all 300ms cubic-bezier(0.4, 0, 0.2, 1)',
+    },
+  }));
+};
 
 // Improved layout function - don't override positions for overlay nodes
 function layoutNodesByDepth(nodes, useOverlayPositions = false) {
