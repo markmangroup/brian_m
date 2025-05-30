@@ -15,8 +15,6 @@ import LittleAlchemy from './components/LittleAlchemy';
 import RCPlaneDesigner from './components/RCPlaneDesigner';
 import Updates from './components/Updates';
 import Home from './components/Home';
-import EchoLoop from './components/EchoLoop';
-import EchoVerify from './components/EchoVerify';
 // Matrix V1 Pages
 import Entry from './pages/matrix-v1/Entry';
 import Terminal from './pages/matrix-v1/Terminal';
@@ -40,6 +38,13 @@ import Align from './pages/matrix-v1/Align';
 import Stabilize from './pages/matrix-v1/Stabilize';
 import GuardianCall from './pages/matrix-v1/GuardianCall';
 
+// Ghost Layer and Echo Fork Components
+import ShardInit from './pages/matrix-v1/ShardInit';
+import ShardInsert from './pages/matrix-v1/ShardInsert';
+import EchoLoop from './pages/matrix-v1/EchoLoop';
+import EchoVerify from './pages/matrix-v1/EchoVerify';
+import GhostLayer2 from './pages/matrix-v1/GhostLayer2';
+
 export default function App() {
   return (
     <UserProvider>
@@ -57,8 +62,7 @@ export default function App() {
             <Route path="/rc-plane" element={<RCPlaneDesigner />} />
             <Route path="/little-alchemy" element={<LittleAlchemy />} />
             <Route path="/updates" element={<Updates />} />
-            <Route path="/matrix-v1/echo-loop" element={<EchoLoop />} />
-            <Route path="/matrix-v1/echo-verify" element={<EchoVerify />} />
+            
             {/* Matrix V1 Routes */}
             <Route path="/matrix-v1" element={<Entry />} />
             <Route path="/matrix-v1/terminal" element={<Terminal />} />
@@ -81,6 +85,14 @@ export default function App() {
             <Route path="/matrix-v1/path-b-glitch" element={<PathBGlitch />} />
             <Route path="/matrix-v1/factions" element={<Factions />} />
             <Route path="/matrix-v1/align-:slug" element={<Align />} />
+            
+            {/* Ghost Layer and Echo Fork Routes */}
+            <Route path="/matrix-v1/shard-init" element={<ShardInit />} />
+            <Route path="/matrix-v1/shard-insert" element={<ShardInsert />} />
+            <Route path="/matrix-v1/echo-loop" element={<EchoLoop />} />
+            <Route path="/matrix-v1/echo-verify" element={<EchoVerify />} />
+            <Route path="/matrix-v1/ghost-layer-2" element={<GhostLayer2 />} />
+            
             {/* Legacy Matrix Routes - Redirect to V1 */}
             <Route path="/the-matrix/*" element={<Navigate to="/matrix-v1" replace />} />
             <Route path="*" element={<Navigate to="/" />} />
