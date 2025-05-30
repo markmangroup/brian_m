@@ -692,6 +692,12 @@ export default function MapD3() {
                 {selectedNode.data?.status}
               </span>
             </div>
+            {/* Reviewed Badge */}
+            {selectedNode.data?.reviewedBy && selectedNode.data?.reviewedAt && (
+              <div className="px-2 py-1 bg-green-900/20 border border-green-400/30 rounded text-green-300 text-[10px] font-mono">
+                ✅ Reviewed by {selectedNode.data.reviewedBy} ({new Date(selectedNode.data.reviewedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })})
+              </div>
+            )}
           </div>
 
           {/* Summary */}

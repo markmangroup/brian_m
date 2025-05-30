@@ -171,7 +171,9 @@ export const realMatrixNodes = [
     data: {
       title: 'Shard Initialization',
       pageUrl: '/matrix-v1/shard-init',
-      status: 'stub',
+      status: 'live',
+      reviewedBy: 'Mike',
+      reviewedAt: '2024-06-01',
       summary: 'The terminal destabilizes. Code fragments demand reassembly.',
       characters: ['System', 'Fracture Entity'],
       puzzles: ['Code Reorder'],
@@ -190,7 +192,9 @@ export const realMatrixNodes = [
     data: {
       title: 'Echo Loop',
       pageUrl: '/matrix-v1/echo-loop',
-      status: 'stub',
+      status: 'live',
+      reviewedBy: 'Mike',
+      reviewedAt: '2024-06-01',
       summary: 'The user is caught in a recursive conversation. Only by noticing the pattern can they break it.',
       characters: ['Neo', 'Echo'],
       puzzles: ['Repeat Detection'],
@@ -209,7 +213,9 @@ export const realMatrixNodes = [
     data: {
       title: 'Shard Insert',
       pageUrl: '/matrix-v1/shard-insert',
-      status: 'stub',
+      status: 'live',
+      reviewedBy: 'Mike',
+      reviewedAt: '2024-06-01',
       summary: 'Cascading syntax errors. User must catch and resolve matching tokens.',
       characters: ['System'],
       puzzles: ['Syntax Catch'],
@@ -228,7 +234,9 @@ export const realMatrixNodes = [
     data: {
       title: 'Echo Verify',
       pageUrl: '/matrix-v1/echo-verify',
-      status: 'stub',
+      status: 'live',
+      reviewedBy: 'Mike',
+      reviewedAt: '2024-06-01',
       summary: 'A symbol rhythm pattern appears. Match the sequence or fall back into the loop.',
       characters: ['Mirror Self'],
       puzzles: ['Pattern Memory'],
