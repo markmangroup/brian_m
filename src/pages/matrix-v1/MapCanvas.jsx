@@ -365,7 +365,7 @@ function MapCanvasInner({ nodes }) {
               {overlayGroups.map(group => (
                 <div
                   key={group.id}
-                  className={`absolute rounded-md border text-xs px-3 py-2 font-mono uppercase backdrop-blur-sm ${group.color}`}
+                  className={`absolute rounded-md border text-xs px-3 py-2 font-mono uppercase backdrop-blur-sm ${group.color} animate-pulse-box pointer-events-none`}
                   style={{
                     left: group.bounds.x,
                     top: group.bounds.y,
