@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CharacterDialogue, CharacterAvatar } from '../components/CharacterSystem';
+import { CharacterDialogue, CharacterAvatar } from '../../components/CharacterSystem';
 
 export default function ZionFleet() {
   const navigate = useNavigate();

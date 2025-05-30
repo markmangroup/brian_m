@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { CharacterSpeaker } from '../components/CharacterSystem';
+import { CharacterSpeaker } from '../../components/CharacterSystem';
 
 export default function EchoLoop() {
   // Dialogue sequence that loops after line 6

@@ -17,6 +17,7 @@ const STATUS_FILTERS = [
 
 export default function MapD3() {
   const svgRef = useRef();
+  const searchInputRef = useRef();
   const [layoutType, setLayoutType] = useState(LAYOUT_TYPES.tree);
   const [statusFilter, setStatusFilter] = useState(['live', 'wip', 'stub']);
   const [selectedNode, setSelectedNode] = useState(null);
@@ -29,6 +30,33 @@ export default function MapD3() {
   const [activePuzzleFilters, setActivePuzzleFilters] = useState([]);
   const [activeInteractionFilters, setActiveInteractionFilters] = useState([]);
   const [activeFeatureFilters, setActiveFeatureFilters] = useState([]);
+  
+  // Search and UI states
+  const [searchQuery, setSearchQuery] = useState('');
+  const [collapsedSections, setCollapsedSections] = useState({
+    characters: false, // Keep characters expanded by default
+    puzzles: true,
+    interactions: true,
+    features: true
+  });
+
+  // Keyboard shortcut for search
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === '/' && !e.ctrlKey && !e.altKey && !e.metaKey) {
+        e.preventDefault();
+        if (searchInputRef.current) {
+          searchInputRef.current.focus();
+        }
+        if (!showLayerControls) {
+          setShowLayerControls(true);
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [showLayerControls]);
   
   // Extract unique values from all nodes dynamically with counts
   const filterOptions = useMemo(() => {
@@ -76,6 +104,40 @@ export default function MapD3() {
       features: Array.from(featureCounts.entries()).map(([name, count]) => ({ name, count })).sort((a, b) => a.name.localeCompare(b.name))
     };
   }, []);
+
+  // Filter options based on search query
+  const filteredOptions = useMemo(() => {
+    if (!searchQuery.trim()) return filterOptions;
+    
+    const query = searchQuery.toLowerCase();
+    return {
+      characters: filterOptions.characters.filter(item => item.name.toLowerCase().includes(query)),
+      puzzles: filterOptions.puzzles.filter(item => item.name.toLowerCase().includes(query)),
+      interactions: filterOptions.interactions.filter(item => item.name.toLowerCase().includes(query)),
+      features: filterOptions.features.filter(item => item.name.toLowerCase().includes(query))
+    };
+  }, [filterOptions, searchQuery]);
+
+  // Count total matches for search
+  const searchMatchCount = useMemo(() => {
+    if (!searchQuery.trim()) return 0;
+    return filteredOptions.characters.length + filteredOptions.puzzles.length + 
+           filteredOptions.interactions.length + filteredOptions.features.length;
+  }, [filteredOptions, searchQuery]);
+
+  // Check if a filter item matches search
+  const itemMatchesSearch = useCallback((itemName) => {
+    if (!searchQuery.trim()) return true;
+    return itemName.toLowerCase().includes(searchQuery.toLowerCase());
+  }, [searchQuery]);
+
+  // Toggle section collapse
+  const toggleSection = (section) => {
+    setCollapsedSections(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
+  };
 
   // Check if a node matches active filters
   const nodeMatchesFilters = useCallback((node) => {
@@ -136,6 +198,7 @@ export default function MapD3() {
     setActivePuzzleFilters([]);
     setActiveInteractionFilters([]);
     setActiveFeatureFilters([]);
+    setSearchQuery('');
   };
 
   // Convert data to tree structure
@@ -189,116 +252,50 @@ export default function MapD3() {
 
     const treeData = treeLayout(root);
 
-    // Position nodes for radial layout
+    // Position group for radial layout
     if (layoutType === LAYOUT_TYPES.radial) {
-      treeData.each(d => {
-        d.radius = d.depth * 100 + 40; // Increased radius spacing
-        const angle = d.x;
-        d.x = Math.cos(angle - Math.PI / 2) * d.radius;
-        d.y = Math.sin(angle - Math.PI / 2) * d.radius;
-        d.angle = angle; // Store angle for label rotation
-      });
-      g.attr('transform', `translate(${width / 2}, ${height / 2})`);
-
-      // Add central orb ring effect
-      g.append('circle')
-        .attr('cx', 0)
-        .attr('cy', 0)
-        .attr('r', 30)
-        .style('fill', 'none')
-        .style('stroke', '#06b6d4')
-        .style('stroke-width', 2)
-        .style('stroke-opacity', 0.3)
-        .style('stroke-dasharray', '5,5')
-        .style('animation', 'spin 20s linear infinite');
-
-      // Add faint orbital rings
-      [60, 120, 200, 300].forEach(radius => {
-        g.append('circle')
-          .attr('cx', 0)
-          .attr('cy', 0)
-          .attr('r', radius)
-          .style('fill', 'none')
-          .style('stroke', '#374151')
-          .style('stroke-width', 1)
-          .style('stroke-opacity', 0.1);
-      });
-
-      // Add CSS for rotation animation
-      if (!document.getElementById('radial-animation-styles')) {
-        const style = document.createElement('style');
-        style.id = 'radial-animation-styles';
-        style.textContent = `
-          @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-          }
-          @keyframes radialEntry {
-            from { 
-              transform: translate(0, 0) scale(0);
-              opacity: 0;
-            }
-            to { 
-              transform: translate(var(--final-x, 0), var(--final-y, 0)) scale(1);
-              opacity: 1;
-            }
-          }
-        `;
-        document.head.appendChild(style);
-      }
-
+      g.attr('transform', `translate(${width / 2},${height / 2})`);
     } else {
-      g.attr('transform', `translate(${margin.left}, ${margin.top})`);
+      g.attr('transform', `translate(${margin.left},${margin.top})`);
     }
 
-    // Draw links with conditional styling
+    // Add links
     const links = g.selectAll('.link')
       .data(treeData.links())
       .enter().append('path')
       .attr('class', 'link')
-      .attr('d', layoutType === LAYOUT_TYPES.radial 
-        ? d3.linkRadial()
-            .angle(d => d.angle || d.x)
-            .radius(d => d.radius || d.y)
-        : d3.linkHorizontal()
+      .attr('d', d => {
+        if (layoutType === LAYOUT_TYPES.radial) {
+          return d3.linkRadial()
+            .angle(d => d.x)
+            .radius(d => d.y)
+            (d);
+        } else {
+          return d3.linkHorizontal()
             .x(d => d.y)
-            .y(d => d.x))
-      .style('fill', 'none')
-      .style('stroke', d => {
-        const sourceMatches = nodeMatchesFilters(d.source.data);
-        const targetMatches = nodeMatchesFilters(d.target.data);
-        return (sourceMatches && targetMatches) ? '#06b6d4' : '#374151';
+            .y(d => d.x)
+            (d);
+        }
       })
+      .style('fill', 'none')
+      .style('stroke', '#4ade80')
       .style('stroke-width', 2)
-      .style('stroke-opacity', d => {
-        const sourceMatches = nodeMatchesFilters(d.source.data);
-        const targetMatches = nodeMatchesFilters(d.target.data);
-        return (sourceMatches && targetMatches) ? 0.8 : 0.3;
-      });
+      .style('stroke-opacity', 0.6);
 
-    // Draw nodes with conditional styling
+    // Add nodes
     const nodes = g.selectAll('.node')
       .data(treeData.descendants())
       .enter().append('g')
       .attr('class', 'node')
       .attr('transform', d => {
         if (layoutType === LAYOUT_TYPES.radial) {
-          // Start from center for animation
-          return `translate(0, 0)`;
+          return `rotate(${d.x * 180 / Math.PI - 90}) translate(${d.y},0)`;
+        } else {
+          return `translate(${d.y},${d.x})`;
         }
-        return `translate(${d.y}, ${d.x})`;
       })
       .style('cursor', 'pointer')
       .on('click', (event, d) => handleNodeClick(d));
-
-    // Animate nodes to final position in radial layout
-    if (layoutType === LAYOUT_TYPES.radial) {
-      nodes.transition()
-        .duration(800)
-        .delay((d, i) => i * 50) // Stagger animation
-        .attr('transform', d => `translate(${d.x}, ${d.y})`)
-        .style('opacity', 1);
-    }
 
     // Node circles with highlighting
     nodes.append('circle')
@@ -360,55 +357,57 @@ export default function MapD3() {
       .attr('dy', '.35em')
       .attr('x', d => {
         if (layoutType === LAYOUT_TYPES.radial) {
-          // Position text based on angle to avoid center overlap
-          const angle = d.angle || 0;
-          return angle > Math.PI ? -12 : 12;
+          return d.x < Math.PI === !d.children ? 6 : -6;
+        } else {
+          return d.children ? -13 : 13;
         }
-        return d.children ? -12 : 12;
-      })
-      .attr('transform', d => {
-        if (layoutType === LAYOUT_TYPES.radial) {
-          const angle = d.angle || 0;
-          let rotation = angle * 180 / Math.PI - 90;
-          // Flip text for better readability on left side
-          if (angle > Math.PI) {
-            rotation += 180;
-          }
-          return `rotate(${rotation})`;
-        }
-        return '';
       })
       .style('text-anchor', d => {
         if (layoutType === LAYOUT_TYPES.radial) {
-          const angle = d.angle || 0;
-          return angle > Math.PI ? 'end' : 'start';
+          return d.x < Math.PI === !d.children ? 'start' : 'end';
+        } else {
+          return d.children ? 'end' : 'start';
         }
-        return d.children ? 'end' : 'start';
       })
-      .style('font-size', layoutType === LAYOUT_TYPES.radial ? '10px' : '12px')
-      .style('font-family', 'monospace')
+      .attr('transform', d => {
+        if (layoutType === LAYOUT_TYPES.radial && d.x >= Math.PI) {
+          return 'rotate(180)';
+        }
+        return null;
+      })
+      .text(d => d.data.data?.title || d.data.id)
       .style('fill', d => {
         const matches = nodeMatchesFilters(d.data);
         const isUnlocked = checkUnlockConditions(d.data, realMatrixNodes);
         
         if (!isUnlocked) {
-          return '#991b1b'; // Dark red for locked nodes
+          return '#dc2626';
         }
         
-        return matches ? '#fff' : '#9ca3af';
+        return matches && (activeCharacterFilters.length > 0 || activePuzzleFilters.length > 0 || 
+                          activeInteractionFilters.length > 0 || activeFeatureFilters.length > 0)
+          ? '#10b981' : '#e5e7eb';
       })
-      .style('opacity', d => {
-        const matches = nodeMatchesFilters(d.data);
-        const isUnlocked = checkUnlockConditions(d.data, realMatrixNodes);
-        
-        if (!isUnlocked) {
-          return 0.6;
-        }
-        
-        return matches ? 1 : 0.6;
-      })
+      .style('font-size', '11px')
+      .style('font-family', 'monospace')
+      .style('pointer-events', 'none');
+
+    // Status indicators
+    nodes.append('text')
+      .attr('dy', '-10')
+      .attr('x', 0)
+      .style('text-anchor', 'middle')
+      .style('font-size', '8px')
       .style('pointer-events', 'none')
-      .text(d => d.data.data?.title || d.data.id);
+      .text(d => {
+        const status = d.data.data?.status;
+        switch (status) {
+          case 'live': return '🟢';
+          case 'wip': return '🟡';
+          case 'stub': return '🔴';
+          default: return '';
+        }
+      });
 
     // Lock icon for locked nodes
     nodes.filter(d => !checkUnlockConditions(d.data, realMatrixNodes))
@@ -519,15 +518,15 @@ export default function MapD3() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white flex">
-      {/* Layer Controls Sidebar */}
+      {/* Enhanced Layer Controls Sidebar */}
       <div className={`bg-black/95 border-r border-green-400/30 transition-all duration-300 ease-in-out flex-shrink-0 ${
         showLayerControls ? 'w-80' : 'w-0'
       } overflow-hidden`}>
-        <div className="w-80 h-full flex flex-col">
-          {/* Sidebar Header */}
-          <div className="p-4 border-b border-green-400/20">
+        <div className="w-80 max-h-[90vh] flex flex-col">
+          {/* Compact Sidebar Header */}
+          <div className="px-3 py-2 border-b border-green-400/20">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-mono text-green-400 font-bold">🎛️ Layer Filters</h3>
+              <h3 className="text-lg font-mono text-green-400 font-bold">🎛️ Filters</h3>
               <button
                 onClick={() => setShowLayerControls(false)}
                 className="text-gray-400 hover:text-white transition-colors"
@@ -535,190 +534,257 @@ export default function MapD3() {
                 ✕
               </button>
             </div>
-            
-            {/* Filter Summary */}
-            {activeFilterCount > 0 && (
-              <div className="mt-3 p-2 bg-purple-900/20 rounded border border-purple-400/30">
-                <div className="text-purple-400 font-mono text-xs font-bold mb-1">
-                  Active: {activeFilterCount} filter{activeFilterCount > 1 ? 's' : ''}
-                </div>
+          </div>
+
+          {/* Global Search Box */}
+          <div className="px-3 py-2 border-b border-gray-600/20">
+            <div className="relative">
+              <input
+                ref={searchInputRef}
+                type="text"
+                placeholder="Filter nodes... (Press / to focus)"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full px-3 py-1 text-sm bg-[#111827] border border-cyan-500 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500 placeholder-gray-400"
+              />
+              {searchQuery && (
                 <button
-                  onClick={resetAllFilters}
-                  className="text-xs text-red-300 hover:text-red-100 transition-colors"
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white text-xs"
                 >
-                  ✕ Clear All
+                  ✕
                 </button>
+              )}
+            </div>
+            {searchQuery && (
+              <div className="text-xs text-cyan-400 mt-1">
+                {searchMatchCount} matches found
               </div>
             )}
           </div>
+          
+          {/* Filter Summary */}
+          {activeFilterCount > 0 && (
+            <div className="px-3 py-1.5 bg-purple-900/20 border-b border-purple-400/30">
+              <div className="text-purple-400 font-mono text-[10px] font-bold mb-1">
+                Active: {activeFilterCount} filter{activeFilterCount > 1 ? 's' : ''}
+              </div>
+              <button
+                onClick={resetAllFilters}
+                className="text-[10px] text-red-300 hover:text-red-100 transition-colors"
+              >
+                ✕ Clear All
+              </button>
+            </div>
+          )}
 
           {/* Scrollable Filter Content */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-6">
+          <div className="flex-1 overflow-auto px-3 py-2 space-y-3">
             {/* Characters Section */}
             {filterOptions.characters.length > 0 && (
               <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-lg">🎭</span>
-                  <span className="text-purple-400 font-mono text-sm font-bold">
-                    Characters
+                <button
+                  onClick={() => toggleSection('characters')}
+                  className="flex items-center gap-2 mb-2 w-full text-left hover:bg-gray-800/30 px-2 py-1 rounded transition-colors"
+                >
+                  <span className="text-sm">🎭</span>
+                  <span className="text-purple-400 font-mono text-xs font-bold flex-1">
+                    Characters {searchQuery && `(${filteredOptions.characters.length})`}
                   </span>
-                  <span className="ml-auto bg-purple-900/40 text-purple-300 px-2 py-1 rounded text-xs font-mono">
+                  <span className="bg-purple-900/40 text-purple-300 px-1.5 py-0.5 rounded text-[10px] font-mono">
                     {activeCharacterFilters.length}
                   </span>
-                </div>
-                <div className="grid grid-cols-1 gap-2">
-                  {filterOptions.characters.map(character => (
-                    <button
-                      key={character.name}
-                      onClick={() => toggleCharacterFilter(character.name)}
-                      className={`px-3 py-2 rounded text-sm font-mono border transition-all text-left hover:scale-[1.02] flex items-center justify-between ${
-                        activeCharacterFilters.includes(character.name)
-                          ? 'bg-purple-900/40 text-purple-200 border-purple-400/60 shadow-purple-400/20 shadow ring-2 ring-purple-400/30 font-bold'
-                          : 'bg-gray-900/40 text-gray-300 border-gray-600/40 hover:border-purple-400/40 hover:text-purple-300'
-                      }`}
-                    >
-                      <span>{character.name}</span>
-                      <span className={`px-2 py-1 rounded-full text-xs font-bold ${
-                        activeCharacterFilters.includes(character.name)
-                          ? 'bg-purple-700 text-purple-100'
-                          : 'bg-purple-900/60 text-purple-400'
-                      }`}>
-                        {character.count}
-                      </span>
-                    </button>
-                  ))}
-                </div>
+                  <span className={`text-xs transition-transform ${collapsedSections.characters ? 'rotate-0' : 'rotate-90'}`}>
+                    ▶
+                  </span>
+                </button>
+                {!collapsedSections.characters && (
+                  <div className="grid grid-cols-1 gap-1.5 ml-4">
+                    {filteredOptions.characters.map(character => (
+                      <button
+                        key={character.name}
+                        onClick={() => toggleCharacterFilter(character.name)}
+                        className={`px-2 py-1.5 rounded text-[10px] font-mono border transition-all text-left hover:scale-[1.02] hover:ring-1 hover:ring-cyan-300 flex items-center justify-between ${
+                          activeCharacterFilters.includes(character.name)
+                            ? 'bg-cyan-900/30 text-cyan-200 border-cyan-400/60 ring-2 ring-cyan-400/30 ring-opacity-50 scale-[1.02]'
+                            : `bg-gray-900/40 border-gray-600/40 hover:border-cyan-400/40 ${
+                                itemMatchesSearch(character.name) ? 'text-gray-300 hover:text-cyan-300' : 'text-gray-500 opacity-50'
+                              }`
+                        }`}
+                      >
+                        <span className="truncate">{character.name}</span>
+                        <span className={`px-1.5 py-0.5 rounded-full text-[9px] font-bold ml-2 ${
+                          activeCharacterFilters.includes(character.name)
+                            ? 'bg-cyan-700 text-cyan-100'
+                            : 'bg-cyan-900/60 text-cyan-400'
+                        }`}>
+                          {character.count}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
 
             {/* Puzzles Section */}
             {filterOptions.puzzles.length > 0 && (
               <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-lg">🧩</span>
-                  <span className="text-yellow-400 font-mono text-sm font-bold">
-                    Puzzles
+                <button
+                  onClick={() => toggleSection('puzzles')}
+                  className="flex items-center gap-2 mb-2 w-full text-left hover:bg-gray-800/30 px-2 py-1 rounded transition-colors"
+                >
+                  <span className="text-sm">🧩</span>
+                  <span className="text-yellow-400 font-mono text-xs font-bold flex-1">
+                    Puzzles {searchQuery && `(${filteredOptions.puzzles.length})`}
                   </span>
-                  <span className="ml-auto bg-yellow-900/40 text-yellow-300 px-2 py-1 rounded text-xs font-mono">
+                  <span className="bg-yellow-900/40 text-yellow-300 px-1.5 py-0.5 rounded text-[10px] font-mono">
                     {activePuzzleFilters.length}
                   </span>
-                </div>
-                <div className="grid grid-cols-1 gap-2">
-                  {filterOptions.puzzles.map(puzzle => (
-                    <button
-                      key={puzzle.name}
-                      onClick={() => togglePuzzleFilter(puzzle.name)}
-                      className={`px-3 py-2 rounded text-sm font-mono border transition-all text-left hover:scale-[1.02] flex items-center justify-between ${
-                        activePuzzleFilters.includes(puzzle.name)
-                          ? 'bg-yellow-900/40 text-yellow-200 border-yellow-400/60 shadow-yellow-400/20 shadow ring-2 ring-yellow-400/30 font-bold'
-                          : 'bg-gray-900/40 text-gray-300 border-gray-600/40 hover:border-yellow-400/40 hover:text-yellow-300'
-                      }`}
-                    >
-                      <span>{puzzle.name}</span>
-                      <span className={`px-2 py-1 rounded-full text-xs font-bold ${
-                        activePuzzleFilters.includes(puzzle.name)
-                          ? 'bg-yellow-700 text-yellow-100'
-                          : 'bg-yellow-900/60 text-yellow-400'
-                      }`}>
-                        {puzzle.count}
-                      </span>
-                    </button>
-                  ))}
-                </div>
+                  <span className={`text-xs transition-transform ${collapsedSections.puzzles ? 'rotate-0' : 'rotate-90'}`}>
+                    ▶
+                  </span>
+                </button>
+                {!collapsedSections.puzzles && (
+                  <div className="grid grid-cols-1 gap-1.5 ml-4">
+                    {filteredOptions.puzzles.map(puzzle => (
+                      <button
+                        key={puzzle.name}
+                        onClick={() => togglePuzzleFilter(puzzle.name)}
+                        className={`px-2 py-1.5 rounded text-[10px] font-mono border transition-all text-left hover:scale-[1.02] hover:ring-1 hover:ring-cyan-300 flex items-center justify-between ${
+                          activePuzzleFilters.includes(puzzle.name)
+                            ? 'bg-cyan-900/30 text-cyan-200 border-cyan-400/60 ring-2 ring-cyan-400/30 ring-opacity-50 scale-[1.02]'
+                            : `bg-gray-900/40 border-gray-600/40 hover:border-cyan-400/40 ${
+                                itemMatchesSearch(puzzle.name) ? 'text-gray-300 hover:text-cyan-300' : 'text-gray-500 opacity-50'
+                              }`
+                        }`}
+                      >
+                        <span className="truncate">{puzzle.name}</span>
+                        <span className={`px-1.5 py-0.5 rounded-full text-[9px] font-bold ml-2 ${
+                          activePuzzleFilters.includes(puzzle.name)
+                            ? 'bg-cyan-700 text-cyan-100'
+                            : 'bg-cyan-900/60 text-cyan-400'
+                        }`}>
+                          {puzzle.count}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
 
             {/* Interactions Section */}
             {filterOptions.interactions.length > 0 && (
               <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-lg">🎬</span>
-                  <span className="text-blue-400 font-mono text-sm font-bold">
-                    Interactions
+                <button
+                  onClick={() => toggleSection('interactions')}
+                  className="flex items-center gap-2 mb-2 w-full text-left hover:bg-gray-800/30 px-2 py-1 rounded transition-colors"
+                >
+                  <span className="text-sm">🎬</span>
+                  <span className="text-blue-400 font-mono text-xs font-bold flex-1">
+                    Interactions {searchQuery && `(${filteredOptions.interactions.length})`}
                   </span>
-                  <span className="ml-auto bg-blue-900/40 text-blue-300 px-2 py-1 rounded text-xs font-mono">
+                  <span className="bg-blue-900/40 text-blue-300 px-1.5 py-0.5 rounded text-[10px] font-mono">
                     {activeInteractionFilters.length}
                   </span>
-                </div>
-                <div className="grid grid-cols-1 gap-2">
-                  {filterOptions.interactions.map(interaction => (
-                    <button
-                      key={interaction.name}
-                      onClick={() => toggleInteractionFilter(interaction.name)}
-                      className={`px-3 py-2 rounded text-sm font-mono border transition-all text-left hover:scale-[1.02] flex items-center justify-between ${
-                        activeInteractionFilters.includes(interaction.name)
-                          ? 'bg-blue-900/40 text-blue-200 border-blue-400/60 shadow-blue-400/20 shadow ring-2 ring-blue-400/30 font-bold'
-                          : 'bg-gray-900/40 text-gray-300 border-gray-600/40 hover:border-blue-400/40 hover:text-blue-300'
-                      }`}
-                    >
-                      <span>{interaction.name}</span>
-                      <span className={`px-2 py-1 rounded-full text-xs font-bold ${
-                        activeInteractionFilters.includes(interaction.name)
-                          ? 'bg-blue-700 text-blue-100'
-                          : 'bg-blue-900/60 text-blue-400'
-                      }`}>
-                        {interaction.count}
-                      </span>
-                    </button>
-                  ))}
-                </div>
+                  <span className={`text-xs transition-transform ${collapsedSections.interactions ? 'rotate-0' : 'rotate-90'}`}>
+                    ▶
+                  </span>
+                </button>
+                {!collapsedSections.interactions && (
+                  <div className="grid grid-cols-1 gap-1.5 ml-4">
+                    {filteredOptions.interactions.map(interaction => (
+                      <button
+                        key={interaction.name}
+                        onClick={() => toggleInteractionFilter(interaction.name)}
+                        className={`px-2 py-1.5 rounded text-[10px] font-mono border transition-all text-left hover:scale-[1.02] hover:ring-1 hover:ring-cyan-300 flex items-center justify-between ${
+                          activeInteractionFilters.includes(interaction.name)
+                            ? 'bg-cyan-900/30 text-cyan-200 border-cyan-400/60 ring-2 ring-cyan-400/30 ring-opacity-50 scale-[1.02]'
+                            : `bg-gray-900/40 border-gray-600/40 hover:border-cyan-400/40 ${
+                                itemMatchesSearch(interaction.name) ? 'text-gray-300 hover:text-cyan-300' : 'text-gray-500 opacity-50'
+                              }`
+                        }`}
+                      >
+                        <span className="truncate">{interaction.name}</span>
+                        <span className={`px-1.5 py-0.5 rounded-full text-[9px] font-bold ml-2 ${
+                          activeInteractionFilters.includes(interaction.name)
+                            ? 'bg-cyan-700 text-cyan-100'
+                            : 'bg-cyan-900/60 text-cyan-400'
+                        }`}>
+                          {interaction.count}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
 
             {/* Features Section */}
             {filterOptions.features.length > 0 && (
               <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-lg">💠</span>
-                  <span className="text-emerald-400 font-mono text-sm font-bold">
-                    Features
+                <button
+                  onClick={() => toggleSection('features')}
+                  className="flex items-center gap-2 mb-2 w-full text-left hover:bg-gray-800/30 px-2 py-1 rounded transition-colors"
+                >
+                  <span className="text-sm">💠</span>
+                  <span className="text-emerald-400 font-mono text-xs font-bold flex-1">
+                    Features {searchQuery && `(${filteredOptions.features.length})`}
                   </span>
-                  <span className="ml-auto bg-emerald-900/40 text-emerald-300 px-2 py-1 rounded text-xs font-mono">
+                  <span className="bg-emerald-900/40 text-emerald-300 px-1.5 py-0.5 rounded text-[10px] font-mono">
                     {activeFeatureFilters.length}
                   </span>
-                </div>
-                <div className="grid grid-cols-1 gap-2">
-                  {filterOptions.features.map(feature => {
-                    const getFeatureIcon = (feat) => {
-                      switch (feat.name) {
-                        case 'hasTransition': return '🌊';
-                        case 'hasCombat': return '⚔️';
-                        case 'hasChoice': return '🤔';
-                        case 'hasNPC': return '👤';
-                        case 'hasAnimation': return '✨';
-                        default: return '💠';
-                      }
-                    };
+                  <span className={`text-xs transition-transform ${collapsedSections.features ? 'rotate-0' : 'rotate-90'}`}>
+                    ▶
+                  </span>
+                </button>
+                {!collapsedSections.features && (
+                  <div className="grid grid-cols-1 gap-1.5 ml-4">
+                    {filteredOptions.features.map(feature => {
+                      const getFeatureIcon = (feat) => {
+                        switch (feat.name) {
+                          case 'hasTransition': return '🌊';
+                          case 'hasCombat': return '⚔️';
+                          case 'hasChoice': return '🤔';
+                          case 'hasNPC': return '👤';
+                          case 'hasAnimation': return '✨';
+                          default: return '💠';
+                        }
+                      };
 
-                    const getFeatureLabel = (feat) => {
-                      return feat.name.replace('has', '').replace(/([A-Z])/g, ' $1').trim();
-                    };
+                      const getFeatureLabel = (feat) => {
+                        return feat.name.replace('has', '').replace(/([A-Z])/g, ' $1').trim();
+                      };
 
-                    return (
-                      <button
-                        key={feature.name}
-                        onClick={() => toggleFeatureFilter(feature.name)}
-                        className={`px-3 py-2 rounded text-sm font-mono border transition-all text-left hover:scale-[1.02] flex items-center justify-between ${
-                          activeFeatureFilters.includes(feature.name)
-                            ? 'bg-emerald-900/40 text-emerald-200 border-emerald-400/60 shadow-emerald-400/20 shadow ring-2 ring-emerald-400/30 font-bold'
-                            : 'bg-gray-900/40 text-gray-300 border-gray-600/40 hover:border-emerald-400/40 hover:text-emerald-300'
-                        }`}
-                      >
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm">{getFeatureIcon(feature)}</span>
-                          <span>{getFeatureLabel(feature)}</span>
-                        </div>
-                        <span className={`px-2 py-1 rounded-full text-xs font-bold ${
-                          activeFeatureFilters.includes(feature.name)
-                            ? 'bg-emerald-700 text-emerald-100'
-                            : 'bg-emerald-900/60 text-emerald-400'
-                        }`}>
-                          {feature.count}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
+                      return (
+                        <button
+                          key={feature.name}
+                          onClick={() => toggleFeatureFilter(feature.name)}
+                          className={`px-2 py-1.5 rounded text-[10px] font-mono border transition-all text-left hover:scale-[1.02] hover:ring-1 hover:ring-cyan-300 flex items-center justify-between ${
+                            activeFeatureFilters.includes(feature.name)
+                              ? 'bg-cyan-900/30 text-cyan-200 border-cyan-400/60 ring-2 ring-cyan-400/30 ring-opacity-50 scale-[1.02]'
+                              : `bg-gray-900/40 border-gray-600/40 hover:border-cyan-400/40 ${
+                                  itemMatchesSearch(feature.name) ? 'text-gray-300 hover:text-cyan-300' : 'text-gray-500 opacity-50'
+                                }`
+                          }`}
+                        >
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-[10px]">{getFeatureIcon(feature)}</span>
+                            <span className="truncate">{getFeatureLabel(feature)}</span>
+                          </div>
+                          <span className={`px-1.5 py-0.5 rounded-full text-[9px] font-bold ml-2 ${
+                            activeFeatureFilters.includes(feature.name)
+                              ? 'bg-cyan-700 text-cyan-100'
+                              : 'bg-cyan-900/60 text-cyan-400'
+                          }`}>
+                            {feature.count}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -825,6 +891,7 @@ export default function MapD3() {
             <div>✋ Drag to pan</div>
             <div>🎛️ Use sidebar filters to highlight</div>
             <div>⚡ Toggle layouts & status</div>
+            <div>⌨️ Press <kbd className="bg-gray-700 px-1 rounded">/</kbd> to search</div>
           </div>
 
           {/* Active Filters Mini-Display */}
@@ -842,213 +909,33 @@ export default function MapD3() {
         </div>
       </div>
 
-      {/* Node Details Panel */}
+      {/* Node Detail Panel */}
       {selectedNode && (
-        <div className="fixed bottom-6 right-6 bg-black/95 border border-green-400/30 rounded-lg p-3 max-w-[360px] max-h-[75vh] overflow-y-auto shadow-xl backdrop-blur-sm z-30">
-          <h3 className="text-base font-mono text-green-400 mb-2 pr-6">
-            {selectedNode.data?.title || selectedNode.id}
-          </h3>
+        <div className="absolute top-20 right-4 w-80 bg-black/95 border border-green-400/30 rounded p-4 text-sm">
+          <div className="flex justify-between items-start mb-3">
+            <h3 className="text-green-400 font-bold">{selectedNode.data?.title || selectedNode.id}</h3>
+            <button
+              onClick={() => setSelectedNode(null)}
+              className="text-gray-400 hover:text-white"
+            >
+              ✕
+            </button>
+          </div>
           
-          {/* Basic Info */}
-          <div className="space-y-1 text-xs mb-3 text-gray-300">
-            <div><span className="text-gray-500">Type:</span> {selectedNode.type}</div>
-            <div><span className="text-gray-500">Group:</span> {selectedNode.group}</div>
-            <div><span className="text-gray-500">Depth:</span> {selectedNode.depth}</div>
-            <div><span className="text-gray-500">Status:</span> 
-              <span className={getStatusColor(selectedNode.data?.status)}>
-                {selectedNode.data?.status}
-              </span>
-            </div>
-            {/* Reviewed Badge */}
-            {selectedNode.data?.reviewedBy && selectedNode.data?.reviewedAt && (
-              <div className="px-2 py-1 bg-green-900/20 border border-green-400/30 rounded text-green-300 text-[10px] font-mono">
-                ✅ Reviewed by {selectedNode.data.reviewedBy} ({new Date(selectedNode.data.reviewedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })})
-              </div>
+          <div className="space-y-2 text-xs">
+            <div><span className="text-gray-400">Status:</span> {selectedNode.data?.status || 'unknown'}</div>
+            {selectedNode.data?.characters && (
+              <div><span className="text-gray-400">Characters:</span> {selectedNode.data.characters.join(', ')}</div>
             )}
-            
-            {/* Unlock Conditions */}
-            {selectedNode.unlockConditions && selectedNode.unlockConditions.length > 0 && (
-              <div className="px-2 py-1 bg-yellow-900/20 border border-yellow-400/30 rounded text-yellow-300 text-[10px] font-mono">
-                <div className="flex items-center gap-1 mb-1">
-                  <span>🔗</span>
-                  <span className="font-bold">Unlock Requirements:</span>
-                </div>
-                <div className="space-y-1">
-                  {selectedNode.unlockConditions.map((conditionId, index) => {
-                    const conditionNode = realMatrixNodes.find(n => n.id === conditionId);
-                    const isMet = checkUnlockConditions(selectedNode, realMatrixNodes);
-                    return (
-                      <div key={index} className="flex items-center gap-2">
-                        <span className={isMet ? '✅' : '❌'}></span>
-                        <span className={isMet ? 'text-green-300' : 'text-red-300'}>
-                          {conditionNode?.data?.title || conditionId}
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
-                <div className="mt-1 text-[9px] text-gray-400">
-                  {checkUnlockConditions(selectedNode, realMatrixNodes) ? 
-                    '🔓 All requirements met' : 
-                    '🔒 Complete required paths to unlock'
-                  }
-                </div>
-              </div>
+            {selectedNode.data?.puzzles && (
+              <div><span className="text-gray-400">Puzzles:</span> {selectedNode.data.puzzles.join(', ')}</div>
+            )}
+            {selectedNode.data?.summary && (
+              <div><span className="text-gray-400">Summary:</span> {selectedNode.data.summary}</div>
             )}
           </div>
-
-          {/* Summary */}
-          {selectedNode.data?.summary && (
-            <div className="mb-3 p-2 bg-gray-800/60 rounded border border-gray-600/50">
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-sm">🧠</span>
-                <span className="text-cyan-400 font-mono text-xs font-bold">Summary</span>
-              </div>
-              <p className="text-gray-300 text-xs leading-relaxed line-clamp-3 group-hover:line-clamp-none transition-all">
-                {selectedNode.data.summary}
-              </p>
-            </div>
-          )}
-
-          {/* Characters */}
-          {selectedNode.data?.characters && selectedNode.data.characters.length > 0 && (
-            <div className="mb-3">
-              <div className="flex items-center gap-1 mb-1">
-                <span className="text-sm">🎭</span>
-                <span className="text-purple-400 font-mono text-xs font-bold">Characters</span>
-              </div>
-              <div className="flex flex-wrap gap-1">
-                {selectedNode.data.characters.map((character, index) => (
-                  <span
-                    key={index}
-                    className="px-1.5 py-0.5 bg-purple-900/30 text-purple-300 rounded text-[10px] font-mono border border-purple-600/30"
-                  >
-                    {character}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Puzzles */}
-          {selectedNode.data?.puzzles && selectedNode.data.puzzles.length > 0 && (
-            <div className="mb-3">
-              <div className="flex items-center gap-1 mb-1">
-                <span className="text-sm">🧩</span>
-                <span className="text-yellow-400 font-mono text-xs font-bold">Puzzles</span>
-              </div>
-              <div className="flex flex-wrap gap-1">
-                {selectedNode.data.puzzles.map((puzzle, index) => (
-                  <span
-                    key={index}
-                    className="px-1.5 py-0.5 bg-yellow-900/30 text-yellow-300 rounded text-[10px] font-mono border border-yellow-600/30"
-                  >
-                    {puzzle}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Interactions */}
-          {selectedNode.data?.interactions && selectedNode.data.interactions.length > 0 && (
-            <div className="mb-3">
-              <div className="flex items-center gap-1 mb-1">
-                <span className="text-sm">🎬</span>
-                <span className="text-blue-400 font-mono text-xs font-bold">Interactions</span>
-              </div>
-              <div className="flex flex-wrap gap-1">
-                {selectedNode.data.interactions.map((interaction, index) => (
-                  <span
-                    key={index}
-                    className="px-1.5 py-0.5 bg-blue-900/30 text-blue-300 rounded text-[10px] font-mono border border-blue-600/30"
-                  >
-                    {interaction}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Feature Badges */}
-          {selectedNode.data?.features && (
-            <div className="mb-3">
-              <div className="flex items-center gap-1 mb-1">
-                <span className="text-sm">💠</span>
-                <span className="text-emerald-400 font-mono text-xs font-bold">Features</span>
-              </div>
-              <div className="flex flex-wrap gap-1">
-                {Object.entries(selectedNode.data.features).map(([feature, enabled]) => {
-                  if (!enabled) return null;
-                  
-                  const getFeatureIcon = (feat) => {
-                    switch (feat) {
-                      case 'hasTransition': return '🌊';
-                      case 'hasCombat': return '⚔️';
-                      case 'hasChoice': return '🤔';
-                      case 'hasNPC': return '👤';
-                      case 'hasAnimation': return '✨';
-                      default: return '💠';
-                    }
-                  };
-
-                  const getFeatureLabel = (feat) => {
-                    return feat.replace('has', '').replace(/([A-Z])/g, ' $1').trim();
-                  };
-
-                  return (
-                    <span
-                      key={feature}
-                      className="px-1.5 py-0.5 bg-emerald-900/30 text-emerald-300 rounded text-[10px] font-mono border border-emerald-600/30 flex items-center gap-1"
-                    >
-                      <span className="text-[8px]">{getFeatureIcon(feature)}</span>
-                      {getFeatureLabel(feature)}
-                    </span>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-
-          {/* Original Description */}
-          {selectedNode.data?.description && selectedNode.data.description !== selectedNode.data?.summary && (
-            <div className="mb-3 text-xs text-gray-400 border-t border-gray-700 pt-2">
-              <strong className="text-[10px] uppercase tracking-wide">Original:</strong><br />
-              <span className="text-[10px] leading-relaxed">{selectedNode.data.description}</span>
-            </div>
-          )}
-
-          {/* Component URL Link */}
-          {selectedNode.data?.pageUrl && (
-            <div className="mt-3 pt-2 border-t border-gray-600">
-              <a
-                href={selectedNode.data.pageUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors font-mono text-xs border border-cyan-400/50 rounded px-2 py-1.5 hover:border-cyan-400 hover:bg-cyan-400/10 w-full justify-center"
-              >
-                🔗 View Component
-              </a>
-            </div>
-          )}
-
-          <button
-            onClick={() => setSelectedNode(null)}
-            className="absolute top-2 right-2 text-gray-400 hover:text-white text-sm"
-          >
-            ✕
-          </button>
         </div>
       )}
     </div>
   );
-}
-
-function getStatusColor(status) {
-  switch (status) {
-    case 'live': return 'text-green-400';
-    case 'wip': return 'text-yellow-400';
-    case 'stub': return 'text-red-400';
-    default: return 'text-gray-400';
-  }
 } 

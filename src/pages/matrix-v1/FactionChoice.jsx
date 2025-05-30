@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CharacterDialogue, CharacterAvatar } from '../components/CharacterSystem';
+import { CharacterDialogue, CharacterAvatar } from '../../components/CharacterSystem';
 
 export default function FactionChoice() {
   const navigate = useNavigate();
