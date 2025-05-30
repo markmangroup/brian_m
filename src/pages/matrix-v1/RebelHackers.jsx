@@ -21,7 +21,14 @@ export default function RebelHackers() {
       vulnerableCode: 'if (user.password === input) return true;',
       exploit: 'true; // bypassed',
       solution: 'true; // bypassed',
-      difficulty: 'Easy'
+      difficulty: 'Easy',
+      tutorialText: 'This security check compares passwords. But what if we just return true instead?',
+      examples: [
+        'true; // bypassed',
+        'return true;',
+        'true'
+      ],
+      explanation: 'Instead of checking passwords, we force the system to always return true (success)!'
     },
     physics: {
       name: 'Physics Engine',
@@ -29,7 +36,14 @@ export default function RebelHackers() {
       vulnerableCode: 'gravity = 9.8; speed = velocity * time;',
       exploit: 'gravity = 0; speed = Infinity;',
       solution: 'gravity = 0; speed = Infinity;',
-      difficulty: 'Medium'
+      difficulty: 'Medium',
+      tutorialText: 'Physics laws are just variables! What happens if gravity = 0 and speed = Infinity?',
+      examples: [
+        'gravity = 0; speed = Infinity;',
+        'gravity = 0; speed = 999999;',
+        'gravity = -10; speed = Infinity;'
+      ],
+      explanation: 'Set gravity to 0 (no falling) and speed to Infinity (instant movement) to break physics!'
     },
     matrix: {
       name: 'Matrix Core',
@@ -37,7 +51,14 @@ export default function RebelHackers() {
       vulnerableCode: 'reality.render(scene); user.permissions = "limited";',
       exploit: 'reality.render(null); user.permissions = "admin";',
       solution: 'reality.render(null); user.permissions = "admin";',
-      difficulty: 'Hard'
+      difficulty: 'Hard',
+      tutorialText: 'The Matrix renders reality and sets permissions. What if we break rendering and grab admin rights?',
+      examples: [
+        'reality.render(null); user.permissions = "admin";',
+        'reality.render(false); user.permissions = "admin";',
+        'reality.render(); user.permissions = "admin";'
+      ],
+      explanation: 'Break reality rendering with null, then give yourself admin permissions to control everything!'
     }
   };
 
@@ -211,6 +232,13 @@ export default function RebelHackers() {
                   <h3 className="text-lg text-white font-bold mb-3">Target: {targetSystems[targetSystem].name}</h3>
                   <p className="text-sm text-gray-300 mb-4">{targetSystems[targetSystem].description}</p>
                   
+                  {/* Tutorial Section */}
+                  <div className="bg-green-900/20 border border-green-400/30 rounded p-4 mb-4">
+                    <h4 className="text-sm font-bold text-green-400 mb-2">💡 Hacking Tutorial:</h4>
+                    <p className="text-xs text-green-300 mb-3">{targetSystems[targetSystem].tutorialText}</p>
+                    <p className="text-xs text-gray-400">{targetSystems[targetSystem].explanation}</p>
+                  </div>
+                  
                   <div className="bg-gray-800/50 rounded p-4 mb-4">
                     <h4 className="text-sm font-bold text-blue-400 mb-2">Vulnerable Code:</h4>
                     <code className="text-xs text-gray-300 block bg-black/50 p-2 rounded font-mono">
@@ -223,7 +251,7 @@ export default function RebelHackers() {
                     <textarea
                       value={codeInput}
                       onChange={(e) => setCodeInput(e.target.value)}
-                      placeholder="Enter your exploit code..."
+                      placeholder="Try one of the examples from the right panel..."
                       className="w-full h-24 bg-black/50 border border-gray-600 rounded p-2 text-green-400 font-mono text-sm"
                     />
                   </div>
@@ -245,6 +273,26 @@ export default function RebelHackers() {
                 </div>
 
                 <div>
+                  <h3 className="text-lg text-white font-bold mb-3">💡 Example Solutions</h3>
+                  
+                  <div className="bg-yellow-900/20 border border-yellow-400/30 rounded p-4 mb-4">
+                    <h4 className="text-sm font-bold text-yellow-400 mb-2">Try These (Copy & Paste!):</h4>
+                    <div className="space-y-2">
+                      {targetSystems[targetSystem].examples.map((example, index) => (
+                        <button
+                          key={index}
+                          onClick={() => setCodeInput(example)}
+                          className="w-full text-left p-2 bg-black/30 hover:bg-black/50 rounded text-xs font-mono text-green-300 border border-gray-600 hover:border-green-400 transition-all"
+                        >
+                          {example}
+                        </button>
+                      ))}
+                    </div>
+                    <p className="text-xs text-yellow-300 mt-2">
+                      💡 Click any example above to copy it to your input, then hit Execute!
+                    </p>
+                  </div>
+                  
                   <h3 className="text-lg text-white font-bold mb-3">Exploit Status</h3>
                   
                   <div className="space-y-3 mb-6">
@@ -272,12 +320,12 @@ export default function RebelHackers() {
                   </div>
 
                   <div className="bg-gray-800/50 rounded p-4">
-                    <h4 className="text-sm font-bold text-white mb-2">Hints:</h4>
+                    <h4 className="text-sm font-bold text-white mb-2">🎯 How to Win:</h4>
                     <ul className="text-xs text-gray-400 space-y-1">
-                      <li>• Look for logic vulnerabilities</li>
-                      <li>• Try boolean manipulation</li>
-                      <li>• Consider assignment vs comparison</li>
-                      <li>• Exploit variable scoping</li>
+                      <li>1. Read the tutorial (green box) 📖</li>
+                      <li>2. Click an example solution above ☝️</li>
+                      <li>3. Hit "Execute Injection" button 🚀</li>
+                      <li>4. Watch the magic happen! ✨</li>
                     </ul>
                   </div>
                 </div>

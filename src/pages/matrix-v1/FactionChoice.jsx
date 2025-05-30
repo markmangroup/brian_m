@@ -244,20 +244,27 @@ export default function FactionChoice() {
             <div className="bg-gray-900/30 border border-gray-600/20 rounded p-4">
               <h3 className="text-lg font-bold text-white mb-3">📊 Quick Comparison</h3>
               <div className="grid grid-cols-3 gap-4 text-xs">
-                {factions.map((faction) => (
-                  <div key={faction.id} className={`
-                    text-center p-2 rounded
-                    ${faction.id === selectedFaction.id 
-                      ? getColorClasses(faction).bg + ' ' + getColorClasses(faction).border + ' border'
-                      : 'bg-gray-800/30'
-                    }
-                  `}>
-                    <div className="text-lg mb-1">{faction.icon}</div>
-                    <div className={`font-bold ${getColorClasses(faction).text}`}>
-                      {faction.name}
+                {factions.map((faction) => {
+                  const colors = getColorClasses(faction);
+                  const isSelected = faction.id === selectedFaction.id;
+                  return (
+                    <div key={faction.id} className={`
+                      text-center p-2 rounded transition-all
+                      ${isSelected 
+                        ? `${colors.bg} ${colors.border} border shadow-lg`
+                        : 'bg-gray-800/30 border border-gray-700/50'
+                      }
+                    `}>
+                      <div className="text-lg mb-1">{faction.icon}</div>
+                      <div className={`font-bold ${isSelected ? colors.text : 'text-gray-400'}`}>
+                        {faction.name}
+                      </div>
+                      {isSelected && (
+                        <div className="text-xs text-cyan-400 mt-1">✓ Selected</div>
+                      )}
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>
