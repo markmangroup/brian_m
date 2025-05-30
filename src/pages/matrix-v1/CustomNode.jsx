@@ -9,20 +9,31 @@ const headerClass = 'text-xs font-semibold uppercase tracking-wider text-white/9
 const bodyClass = 'text-xs leading-relaxed text-gray-300 font-mono';
 
 // Enhanced status system with better visual feedback
-const statusStyles = {
-  live: { label: 'Built', icon: '✅', color: 'emerald' },
-  wip: { label: 'In Progress', icon: '🛠', color: 'yellow' },
-  stub: { label: 'Planned', icon: '❌', color: 'red' },
+const statusConfig = {
+  live: { 
+    label: 'Built', 
+    icon: '✅', 
+    className: 'text-emerald-400 border-emerald-400/60 bg-emerald-900/40' 
+  },
+  wip: { 
+    label: 'In Progress', 
+    icon: '🛠', 
+    className: 'text-yellow-400 border-yellow-400/60 bg-yellow-900/40' 
+  },
+  stub: { 
+    label: 'Planned', 
+    icon: '❌', 
+    className: 'text-red-400 border-red-400/60 bg-red-900/40' 
+  },
 };
 
 // New StatusBadge component with better styling
 const StatusBadge = ({ status }) => {
-  const cfg = statusStyles[status];
+  const cfg = statusConfig[status];
   if (!cfg) return null;
+  
   return (
-    <div
-      className={`inline-flex items-center gap-1 text-xs font-mono px-2 py-1 rounded border mt-2 text-${cfg.color}-400 border-${cfg.color}-400/60 bg-${cfg.color}-900/40`}
-    >
+    <div className={`inline-flex items-center gap-1 text-xs font-mono px-2 py-1 rounded border mt-2 ${cfg.className}`}>
       <span>{cfg.icon}</span>
       <span>{cfg.label}</span>
     </div>

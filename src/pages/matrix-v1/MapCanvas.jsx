@@ -94,14 +94,22 @@ const getEdgeStyle = (edge) => {
 };
 
 // Enhanced node layout with better spacing
-const getNodeLayout = (nodes) => {
-  return nodes.map(node => ({
-    ...node,
-    style: {
-      ...node.style,
-      transition: 'all 300ms cubic-bezier(0.4, 0, 0.2, 1)',
-    },
-  }));
+const getNodeLayout = (node) => {
+  const baseLayout = {
+    position: 'relative',
+    transition: 'all 0.3s ease-in-out',
+    transform: 'translate(0, 0)',
+  };
+
+  if (node.type === 'choice' && node.data.isExpanded) {
+    return {
+      ...baseLayout,
+      zIndex: 10,
+      transform: 'scale(1.05)',
+    };
+  }
+
+  return baseLayout;
 };
 
 // Improved layout function - don't override positions for overlay nodes
@@ -326,6 +334,24 @@ function MapCanvasInner({ nodes }) {
 
   const handleNodeMouseLeave = () => setHoveredNode(null);
 
+  const handleNodeClick = (event, node) => {
+    if (node.type === 'choice') {
+      const updatedNodes = nodes.map(n => {
+        if (n.id === node.id) {
+          return {
+            ...n,
+            data: {
+              ...n.data,
+              isExpanded: !n.data.isExpanded
+            }
+          };
+        }
+        return n;
+      });
+      setNodes(updatedNodes);
+    }
+  };
+
   // Effects
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -405,6 +431,7 @@ function MapCanvasInner({ nodes }) {
             zoomOnScrollMode="ctrl"
             onNodeMouseEnter={handleNodeMouseEnter}
             onNodeMouseLeave={handleNodeMouseLeave}
+            onNodeClick={handleNodeClick}
           />
 
           {/* Overlay Layer */}

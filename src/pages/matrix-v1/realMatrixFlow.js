@@ -7,7 +7,8 @@ export const realMatrixNodes = [
     data: {
       title: 'Matrix Entry',
       description: 'First load of /matrix-v1',
-      setting: 'route: matrix-v1'
+      setting: 'route: matrix-v1',
+      status: 'live'
     }
   },
   {
@@ -17,7 +18,8 @@ export const realMatrixNodes = [
     data: {
       character: 'System',
       dialogue: 'What is your name?',
-      emotion: 'neutral'
+      emotion: 'neutral',
+      status: 'wip'
     }
   },
   {
@@ -29,7 +31,9 @@ export const realMatrixNodes = [
       options: [
         'Red Pill',
         'Blue Pill'
-      ]
+      ],
+      status: 'stub',
+      isExpanded: false
     }
   },
 
@@ -43,7 +47,8 @@ export const realMatrixNodes = [
     data: {
       title: 'Red Pill Path',
       description: 'You chose the red pill.',
-      setting: 'route: red-pill'
+      setting: 'route: red-pill',
+      status: 'live'
     }
   },
   {
@@ -55,7 +60,8 @@ export const realMatrixNodes = [
     data: {
       title: 'Red Awakening',
       description: 'You awaken in a strange room filled with old computers and cryptic messages.',
-      setting: 'The Real World'
+      setting: 'The Real World',
+      status: 'live'
     }
   },
   {
@@ -67,7 +73,8 @@ export const realMatrixNodes = [
     data: {
       title: 'Training Upload',
       description: 'Combat training begins. You feel your muscles download new knowledge.',
-      setting: 'Sim Program'
+      setting: 'Sim Program',
+      status: 'live'
     }
   },
 
@@ -81,7 +88,8 @@ export const realMatrixNodes = [
     data: {
       title: 'Blue Pill Path',
       description: 'You chose the blue pill.',
-      setting: 'route: blue-pill'
+      setting: 'route: blue-pill',
+      status: 'live'
     }
   },
   {
@@ -93,7 +101,8 @@ export const realMatrixNodes = [
     data: {
       title: 'Dream Within a Dream',
       description: 'You wake up in your bed, unsure if anything happened at all.',
-      setting: 'Neo\'s Apartment'
+      setting: 'Neo\'s Apartment',
+      status: 'live'
     }
   }
 ];
