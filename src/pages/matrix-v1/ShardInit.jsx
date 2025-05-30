@@ -1,13 +1,13 @@
 import { useState } from 'react';
 
 export default function ShardInit() {
-  // Code fragments in scrambled order
+  // Sentence fragments in scrambled order
   const [fragments, setFragments] = useState([
-    { id: 1, code: "let system = {", correct: 0 },
-    { id: 2, code: "  status: 'unstable',", correct: 1 },
-    { id: 3, code: "  core: null", correct: 2 },
-    { id: 4, code: "};", correct: 3 },
-    { id: 5, code: "system.core = new Matrix();", correct: 4 }
+    { id: 1, text: "The signal", correct: 0 },
+    { id: 2, text: "fractured upon entry,", correct: 1 },
+    { id: 3, text: "leaking packets of truth", correct: 2 },
+    { id: 4, text: "into the neural stream.", correct: 3 },
+    { id: 5, text: "Can you restore it?", correct: 4 }
   ]);
 
   const [draggedItem, setDraggedItem] = useState(null);
@@ -45,11 +45,11 @@ export default function ShardInit() {
     const isCorrect = fragments.every((fragment, index) => fragment.correct === index);
     
     if (isCorrect) {
-      setFeedback('✅ CODE RESTORED: Fragment sequence validated');
+      setFeedback('✅ SEQUENCE RESTORED: Neural clarity reestablished');
       setIsComplete(true);
     } else {
       const incorrectCount = fragments.filter((fragment, index) => fragment.correct !== index).length;
-      setFeedback(`❌ SYNTAX ERROR: ${incorrectCount} fragments misaligned`);
+      setFeedback(`❌ NEURAL STATIC: ${incorrectCount} fragments displaced`);
     }
   };
 
@@ -65,9 +65,9 @@ export default function ShardInit() {
     <div className="min-h-screen bg-black text-white p-6 font-mono">
       <div className="max-w-2xl mx-auto">
         <h1 className="text-xl text-red-400 mb-2">[Active] Shard Initialization</h1>
-        <p className="text-gray-400 text-sm mb-6">Reassemble the fragmented code sequence</p>
+        <p className="text-gray-400 text-sm mb-6">Reassemble the fragmented neural transmission</p>
         
-        {/* Code Fragments */}
+        {/* Sentence Fragments */}
         <div className="space-y-2 mb-6">
           {fragments.map((fragment, index) => (
             <div
@@ -86,7 +86,7 @@ export default function ShardInit() {
               `}
             >
               <span className="text-gray-500 text-xs mr-3">{index + 1}:</span>
-              <span className="text-cyan-300">{fragment.code}</span>
+              <span className="text-cyan-300">{fragment.text}</span>
             </div>
           ))}
         </div>
@@ -131,8 +131,8 @@ export default function ShardInit() {
         {/* Success State */}
         {isComplete && (
           <div className="border border-green-400/30 p-4 rounded bg-green-900/10 text-center">
-            <p className="text-green-400 mb-2">🔧 Fracture Entity neutralized</p>
-            <p className="text-gray-400 text-sm">Core sequence restored. Terminal stabilizing...</p>
+            <p className="text-green-400 mb-2">🧠 Neural transmission restored</p>
+            <p className="text-gray-400 text-sm">Signal coherence achieved. Stream stabilizing...</p>
             <div className="mt-4">
               <div className="inline-block px-4 py-2 border border-cyan-400/50 rounded text-cyan-300 text-sm">
                 → Ready for Shard Insert
@@ -143,7 +143,7 @@ export default function ShardInit() {
 
         {/* Debug Info */}
         <div className="mt-8 text-xs text-gray-600">
-          <p>💡 Drag fragments to reorder • Expected: const declaration → object properties → method call</p>
+          <p>💡 Drag fragments to reorder • Expected: Problem → Cause → Effect → Question</p>
         </div>
       </div>
     </div>

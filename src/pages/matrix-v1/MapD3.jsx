@@ -179,8 +179,8 @@ export default function MapD3() {
         break;
       case LAYOUT_TYPES.radial:
         treeLayout = d3.tree()
-          .size([2 * Math.PI, Math.min(width, height) / 2 - 100])
-          .separation((a, b) => (a.parent === b.parent ? 1 : 2) / a.depth);
+          .size([2 * Math.PI, Math.min(width, height) / 2 - 120]) // Increased spacing
+          .separation((a, b) => (a.parent === b.parent ? 1.5 : 2.5) / a.depth); // More separation
         break;
       default: // tree
         treeLayout = d3.tree()
@@ -192,12 +192,61 @@ export default function MapD3() {
     // Position nodes for radial layout
     if (layoutType === LAYOUT_TYPES.radial) {
       treeData.each(d => {
-        d.y = d.depth * 80;
+        d.radius = d.depth * 100 + 40; // Increased radius spacing
         const angle = d.x;
-        d.x = Math.cos(angle - Math.PI / 2) * d.y;
-        d.y = Math.sin(angle - Math.PI / 2) * d.y;
+        d.x = Math.cos(angle - Math.PI / 2) * d.radius;
+        d.y = Math.sin(angle - Math.PI / 2) * d.radius;
+        d.angle = angle; // Store angle for label rotation
       });
       g.attr('transform', `translate(${width / 2}, ${height / 2})`);
+
+      // Add central orb ring effect
+      g.append('circle')
+        .attr('cx', 0)
+        .attr('cy', 0)
+        .attr('r', 30)
+        .style('fill', 'none')
+        .style('stroke', '#06b6d4')
+        .style('stroke-width', 2)
+        .style('stroke-opacity', 0.3)
+        .style('stroke-dasharray', '5,5')
+        .style('animation', 'spin 20s linear infinite');
+
+      // Add faint orbital rings
+      [60, 120, 200, 300].forEach(radius => {
+        g.append('circle')
+          .attr('cx', 0)
+          .attr('cy', 0)
+          .attr('r', radius)
+          .style('fill', 'none')
+          .style('stroke', '#374151')
+          .style('stroke-width', 1)
+          .style('stroke-opacity', 0.1);
+      });
+
+      // Add CSS for rotation animation
+      if (!document.getElementById('radial-animation-styles')) {
+        const style = document.createElement('style');
+        style.id = 'radial-animation-styles';
+        style.textContent = `
+          @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+          }
+          @keyframes radialEntry {
+            from { 
+              transform: translate(0, 0) scale(0);
+              opacity: 0;
+            }
+            to { 
+              transform: translate(var(--final-x, 0), var(--final-y, 0)) scale(1);
+              opacity: 1;
+            }
+          }
+        `;
+        document.head.appendChild(style);
+      }
+
     } else {
       g.attr('transform', `translate(${margin.left}, ${margin.top})`);
     }
@@ -207,9 +256,13 @@ export default function MapD3() {
       .data(treeData.links())
       .enter().append('path')
       .attr('class', 'link')
-      .attr('d', d3.linkHorizontal()
-        .x(d => layoutType === LAYOUT_TYPES.radial ? d.x : d.y)
-        .y(d => layoutType === LAYOUT_TYPES.radial ? d.y : d.x))
+      .attr('d', layoutType === LAYOUT_TYPES.radial 
+        ? d3.linkRadial()
+            .angle(d => d.angle || d.x)
+            .radius(d => d.radius || d.y)
+        : d3.linkHorizontal()
+            .x(d => d.y)
+            .y(d => d.x))
       .style('fill', 'none')
       .style('stroke', d => {
         const sourceMatches = nodeMatchesFilters(d.source.data);
@@ -228,13 +281,24 @@ export default function MapD3() {
       .data(treeData.descendants())
       .enter().append('g')
       .attr('class', 'node')
-      .attr('transform', d => 
-        layoutType === LAYOUT_TYPES.radial 
-          ? `translate(${d.x}, ${d.y})`
-          : `translate(${d.y}, ${d.x})`
-      )
+      .attr('transform', d => {
+        if (layoutType === LAYOUT_TYPES.radial) {
+          // Start from center for animation
+          return `translate(0, 0)`;
+        }
+        return `translate(${d.y}, ${d.x})`;
+      })
       .style('cursor', 'pointer')
       .on('click', (event, d) => handleNodeClick(d));
+
+    // Animate nodes to final position in radial layout
+    if (layoutType === LAYOUT_TYPES.radial) {
+      nodes.transition()
+        .duration(800)
+        .delay((d, i) => i * 50) // Stagger animation
+        .attr('transform', d => `translate(${d.x}, ${d.y})`)
+        .style('opacity', 1);
+    }
 
     // Node circles with highlighting
     nodes.append('circle')
@@ -294,9 +358,34 @@ export default function MapD3() {
     // Node labels with conditional styling
     nodes.append('text')
       .attr('dy', '.35em')
-      .attr('x', d => d.children ? -12 : 12)
-      .style('text-anchor', d => d.children ? 'end' : 'start')
-      .style('font-size', '12px')
+      .attr('x', d => {
+        if (layoutType === LAYOUT_TYPES.radial) {
+          // Position text based on angle to avoid center overlap
+          const angle = d.angle || 0;
+          return angle > Math.PI ? -12 : 12;
+        }
+        return d.children ? -12 : 12;
+      })
+      .attr('transform', d => {
+        if (layoutType === LAYOUT_TYPES.radial) {
+          const angle = d.angle || 0;
+          let rotation = angle * 180 / Math.PI - 90;
+          // Flip text for better readability on left side
+          if (angle > Math.PI) {
+            rotation += 180;
+          }
+          return `rotate(${rotation})`;
+        }
+        return '';
+      })
+      .style('text-anchor', d => {
+        if (layoutType === LAYOUT_TYPES.radial) {
+          const angle = d.angle || 0;
+          return angle > Math.PI ? 'end' : 'start';
+        }
+        return d.children ? 'end' : 'start';
+      })
+      .style('font-size', layoutType === LAYOUT_TYPES.radial ? '10px' : '12px')
       .style('font-family', 'monospace')
       .style('fill', d => {
         const matches = nodeMatchesFilters(d.data);
