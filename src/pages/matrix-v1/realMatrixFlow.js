@@ -3,7 +3,8 @@ export const realMatrixNodes = [
   {
     id: 'matrix-v1-entry',
     type: 'scene',
-    position: { x: 80, y: 180 },
+    depth: 0,
+    group: 'intro',
     data: {
       title: 'Matrix Entry',
       description: 'First load of /matrix-v1',
@@ -14,7 +15,8 @@ export const realMatrixNodes = [
   {
     id: 'matrix-name-prompt',
     type: 'dialogue',
-    position: { x: 260, y: 220 },
+    depth: 1,
+    group: 'intro',
     data: {
       character: 'System',
       dialogue: 'What is your name?',
@@ -25,7 +27,8 @@ export const realMatrixNodes = [
   {
     id: 'matrix-pill-choice',
     type: 'choice',
-    position: { x: 440, y: 260 },
+    depth: 2,
+    group: 'intro',
     data: {
       prompt: 'Red or Blue?',
       options: [
@@ -41,7 +44,8 @@ export const realMatrixNodes = [
   {
     id: 'matrix-pill-choice-red',
     type: 'scene',
-    position: { x: 760, y: 100 },
+    depth: 3,
+    group: 'red-pill',
     parentChoice: 'matrix-pill-choice',
     choiceValue: 'red',
     data: {
@@ -54,7 +58,8 @@ export const realMatrixNodes = [
   {
     id: 'matrix-red-awakening',
     type: 'scene',
-    position: { x: 980, y: 100 },
+    depth: 4,
+    group: 'red-pill',
     parentChoice: 'matrix-pill-choice',
     choiceValue: 'red',
     data: {
@@ -67,7 +72,8 @@ export const realMatrixNodes = [
   {
     id: 'matrix-red-trainer',
     type: 'training',
-    position: { x: 1200, y: 100 },
+    depth: 5,
+    group: 'red-pill',
     parentChoice: 'matrix-pill-choice',
     choiceValue: 'red',
     data: {
@@ -82,7 +88,8 @@ export const realMatrixNodes = [
   {
     id: 'matrix-pill-choice-blue',
     type: 'scene',
-    position: { x: 760, y: 340 },
+    depth: 3,
+    group: 'blue-pill',
     parentChoice: 'matrix-pill-choice',
     choiceValue: 'blue',
     data: {
@@ -95,7 +102,8 @@ export const realMatrixNodes = [
   {
     id: 'matrix-blue-loop',
     type: 'scene',
-    position: { x: 980, y: 340 },
+    depth: 4,
+    group: 'blue-pill',
     parentChoice: 'matrix-pill-choice',
     choiceValue: 'blue',
     data: {
