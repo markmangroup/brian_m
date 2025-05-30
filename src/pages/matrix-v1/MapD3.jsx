@@ -120,6 +120,16 @@ export default function MapD3() {
     return matches;
   }, [activeCharacterFilters, activePuzzleFilters, activeInteractionFilters, activeFeatureFilters]);
 
+  // Check if a node's unlock conditions are met
+  const checkUnlockConditions = useCallback((node, availableNodes) => {
+    if (!node.unlockConditions || node.unlockConditions.length === 0) {
+      return true; // No conditions means always unlocked
+    }
+    
+    const availableNodeIds = new Set(availableNodes.map(n => n.id));
+    return node.unlockConditions.every(conditionId => availableNodeIds.has(conditionId));
+  }, []);
+
   // Reset all filters
   const resetAllFilters = () => {
     setActiveCharacterFilters([]);
@@ -232,25 +242,53 @@ export default function MapD3() {
       .style('fill', d => getNodeColor(d.data))
       .style('stroke', d => {
         const matches = nodeMatchesFilters(d.data);
+        const isUnlocked = checkUnlockConditions(d.data, realMatrixNodes);
+        
+        if (!isUnlocked) {
+          return '#7f1d1d'; // Dark red for locked nodes
+        }
+        
         return matches && (activeCharacterFilters.length > 0 || activePuzzleFilters.length > 0 || 
                           activeInteractionFilters.length > 0 || activeFeatureFilters.length > 0) 
           ? '#10b981' : '#fff';
       })
       .style('stroke-width', d => {
         const matches = nodeMatchesFilters(d.data);
+        const isUnlocked = checkUnlockConditions(d.data, realMatrixNodes);
+        
+        if (!isUnlocked) {
+          return 3;
+        }
+        
         return matches && (activeCharacterFilters.length > 0 || activePuzzleFilters.length > 0 || 
                           activeInteractionFilters.length > 0 || activeFeatureFilters.length > 0) 
           ? 4 : 2;
       })
       .style('opacity', d => {
         const matches = nodeMatchesFilters(d.data);
+        const isUnlocked = checkUnlockConditions(d.data, realMatrixNodes);
+        
+        if (!isUnlocked) {
+          return 0.5;
+        }
+        
         return matches ? 1 : 0.4;
       })
       .style('filter', d => {
         const matches = nodeMatchesFilters(d.data);
+        const isUnlocked = checkUnlockConditions(d.data, realMatrixNodes);
+        
+        if (!isUnlocked) {
+          return 'drop-shadow(0 0 6px rgb(127 29 29 / 0.8))';
+        }
+        
         return matches && (activeCharacterFilters.length > 0 || activePuzzleFilters.length > 0 || 
                           activeInteractionFilters.length > 0 || activeFeatureFilters.length > 0)
           ? 'drop-shadow(0 0 8px rgb(16 185 129 / 0.8))' : 'none';
+      })
+      .style('stroke-dasharray', d => {
+        const isUnlocked = checkUnlockConditions(d.data, realMatrixNodes);
+        return !isUnlocked ? '3,3' : 'none'; // Dashed outline for locked nodes
       });
 
     // Node labels with conditional styling
@@ -262,14 +300,54 @@ export default function MapD3() {
       .style('font-family', 'monospace')
       .style('fill', d => {
         const matches = nodeMatchesFilters(d.data);
+        const isUnlocked = checkUnlockConditions(d.data, realMatrixNodes);
+        
+        if (!isUnlocked) {
+          return '#991b1b'; // Dark red for locked nodes
+        }
+        
         return matches ? '#fff' : '#9ca3af';
       })
       .style('opacity', d => {
         const matches = nodeMatchesFilters(d.data);
+        const isUnlocked = checkUnlockConditions(d.data, realMatrixNodes);
+        
+        if (!isUnlocked) {
+          return 0.6;
+        }
+        
         return matches ? 1 : 0.6;
       })
       .style('pointer-events', 'none')
       .text(d => d.data.data?.title || d.data.id);
+
+    // Lock icon for locked nodes
+    nodes.filter(d => !checkUnlockConditions(d.data, realMatrixNodes))
+      .append('text')
+      .attr('dy', '0.35em')
+      .attr('x', d => d.children ? -25 : 25)
+      .style('text-anchor', 'middle')
+      .style('font-size', '10px')
+      .style('fill', '#dc2626')
+      .style('pointer-events', 'none')
+      .text('🔒');
+
+    // Conditional node indicator for nodes with unlock conditions
+    nodes.filter(d => d.data.unlockConditions && d.data.unlockConditions.length > 0)
+      .append('text')
+      .attr('dy', '-12')
+      .attr('x', 0)
+      .style('text-anchor', 'middle')
+      .style('font-size', '8px')
+      .style('fill', d => {
+        const isUnlocked = checkUnlockConditions(d.data, realMatrixNodes);
+        return isUnlocked ? '#10b981' : '#dc2626';
+      })
+      .style('pointer-events', 'none')
+      .text(d => {
+        const isUnlocked = checkUnlockConditions(d.data, realMatrixNodes);
+        return isUnlocked ? '⚡' : '⚠️';
+      });
 
     // Expand/collapse indicators
     nodes.filter(d => d.children || d._children)
@@ -696,6 +774,36 @@ export default function MapD3() {
             {selectedNode.data?.reviewedBy && selectedNode.data?.reviewedAt && (
               <div className="px-2 py-1 bg-green-900/20 border border-green-400/30 rounded text-green-300 text-[10px] font-mono">
                 ✅ Reviewed by {selectedNode.data.reviewedBy} ({new Date(selectedNode.data.reviewedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })})
+              </div>
+            )}
+            
+            {/* Unlock Conditions */}
+            {selectedNode.unlockConditions && selectedNode.unlockConditions.length > 0 && (
+              <div className="px-2 py-1 bg-yellow-900/20 border border-yellow-400/30 rounded text-yellow-300 text-[10px] font-mono">
+                <div className="flex items-center gap-1 mb-1">
+                  <span>🔗</span>
+                  <span className="font-bold">Unlock Requirements:</span>
+                </div>
+                <div className="space-y-1">
+                  {selectedNode.unlockConditions.map((conditionId, index) => {
+                    const conditionNode = realMatrixNodes.find(n => n.id === conditionId);
+                    const isMet = checkUnlockConditions(selectedNode, realMatrixNodes);
+                    return (
+                      <div key={index} className="flex items-center gap-2">
+                        <span className={isMet ? '✅' : '❌'}></span>
+                        <span className={isMet ? 'text-green-300' : 'text-red-300'}>
+                          {conditionNode?.data?.title || conditionId}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="mt-1 text-[9px] text-gray-400">
+                  {checkUnlockConditions(selectedNode, realMatrixNodes) ? 
+                    '🔓 All requirements met' : 
+                    '🔒 Complete required paths to unlock'
+                  }
+                </div>
               </div>
             )}
           </div>
