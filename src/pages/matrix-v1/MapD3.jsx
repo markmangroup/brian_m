@@ -339,7 +339,7 @@ export default function MapD3() {
 
   // Check if a node's unlock conditions are met
   const checkUnlockConditions = useCallback((node, availableNodes) => {
-    if (!node.unlockConditions || node.unlockConditions.length === 0) {
+    if (!node || !node.unlockConditions || node.unlockConditions.length === 0) {
       return true; // No conditions means always unlocked
     }
     
@@ -469,19 +469,15 @@ export default function MapD3() {
           .enter().append('line')
           .attr('class', 'network-link')
           .style('stroke', d => {
-            const isUnlocked = checkUnlockConditions(
-              realMatrixNodes.find(n => n.id === d.target), 
-              realMatrixNodes
-            );
+            const targetNode = realMatrixNodes.find(n => n.id === d.target);
+            const isUnlocked = checkUnlockConditions(targetNode, realMatrixNodes);
             return isUnlocked ? themeConfigs[currentTheme].linkColor : '#7f1d1d';
           })
           .style('stroke-width', 2)
           .style('stroke-opacity', 0.7)
           .style('stroke-dasharray', d => {
-            const isUnlocked = checkUnlockConditions(
-              realMatrixNodes.find(n => n.id === d.target), 
-              realMatrixNodes
-            );
+            const targetNode = realMatrixNodes.find(n => n.id === d.target);
+            const isUnlocked = checkUnlockConditions(targetNode, realMatrixNodes);
             return !isUnlocked ? '5,5' : 'none';
           })
           .style('filter', `drop-shadow(0 0 2px ${themeConfigs[currentTheme].linkColor})`);
