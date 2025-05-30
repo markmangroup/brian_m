@@ -343,284 +343,303 @@ export default function MapD3() {
   }, [drawTree]);
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white">
-      {/* Header Controls */}
-      <div className="bg-black/90 border-b border-green-400/20 p-4">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <h1 className="text-2xl font-mono text-green-400">🧠 Matrix Story Map D3</h1>
-          
-          {/* Layout Toggle */}
-          <div className="flex gap-2">
-            <span className="text-sm text-gray-400 mr-2">Layout:</span>
-            {Object.values(LAYOUT_TYPES).map(type => (
+    <div className="min-h-screen bg-[#0a0a0a] text-white flex">
+      {/* Layer Controls Sidebar */}
+      <div className={`bg-black/95 border-r border-green-400/30 transition-all duration-300 ease-in-out flex-shrink-0 ${
+        showLayerControls ? 'w-80' : 'w-0'
+      } overflow-hidden`}>
+        <div className="w-80 h-full flex flex-col">
+          {/* Sidebar Header */}
+          <div className="p-4 border-b border-green-400/20">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-mono text-green-400 font-bold">🎛️ Layer Filters</h3>
               <button
-                key={type}
-                onClick={() => setLayoutType(type)}
-                className={`px-3 py-1 rounded text-xs font-mono border transition-colors ${
-                  layoutType === type
-                    ? 'bg-green-900 text-green-300 border-green-400'
-                    : 'bg-gray-900 text-gray-400 border-gray-600 hover:border-gray-500'
-                }`}
+                onClick={() => setShowLayerControls(false)}
+                className="text-gray-400 hover:text-white transition-colors"
               >
-                {type}
+                ✕
               </button>
-            ))}
-          </div>
-
-          {/* Layer Controls Toggle */}
-          <div className="flex gap-2 items-center">
-            <button
-              onClick={() => setShowLayerControls(!showLayerControls)}
-              className={`px-3 py-1 rounded text-xs font-mono border transition-colors ${
-                showLayerControls || activeFilterCount > 0
-                  ? 'bg-purple-900 text-purple-300 border-purple-400'
-                  : 'bg-gray-900 text-gray-400 border-gray-600 hover:border-gray-500'
-              }`}
-            >
-              🎛️ Layers {activeFilterCount > 0 && `(${activeFilterCount})`}
-            </button>
+            </div>
             
+            {/* Filter Summary */}
             {activeFilterCount > 0 && (
-              <button
-                onClick={resetAllFilters}
-                className="px-2 py-1 rounded text-xs font-mono border border-red-400/60 bg-red-900/40 text-red-300 hover:bg-red-900/60 transition-colors"
-              >
-                ✕ Reset
-              </button>
+              <div className="mt-3 p-2 bg-purple-900/20 rounded border border-purple-400/30">
+                <div className="text-purple-400 font-mono text-xs font-bold mb-1">
+                  Active: {activeFilterCount} filter{activeFilterCount > 1 ? 's' : ''}
+                </div>
+                <button
+                  onClick={resetAllFilters}
+                  className="text-xs text-red-300 hover:text-red-100 transition-colors"
+                >
+                  ✕ Clear All
+                </button>
+              </div>
             )}
           </div>
 
-          {/* Status Filters */}
-          <div className="flex gap-2">
-            <span className="text-sm text-gray-400 mr-2">Status:</span>
-            {STATUS_FILTERS.map(({ key, label, color }) => (
-              <button
-                key={key}
-                onClick={() => toggleStatusFilter(key)}
-                className={`px-3 py-1 rounded text-xs font-mono border transition-colors ${
-                  statusFilter.includes(key)
-                    ? 'bg-blue-900 text-blue-300 border-blue-400'
-                    : 'bg-gray-900 text-gray-400 border-gray-600 hover:border-gray-500'
-                }`}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Breadcrumb Trail */}
-        {breadcrumb.length > 0 && (
-          <div className="mt-3 flex items-center gap-2 text-sm">
-            <span className="text-gray-400">Path:</span>
-            {breadcrumb.map((node, index) => (
-              <React.Fragment key={node.id}>
-                <button
-                  onClick={() => handleNodeClick({ data: node })}
-                  className="text-cyan-400 hover:text-cyan-300 font-mono"
-                >
-                  {node.data?.title || node.id}
-                </button>
-                {index < breadcrumb.length - 1 && (
-                  <span className="text-gray-600">→</span>
-                )}
-              </React.Fragment>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Layer Controls Panel */}
-      {showLayerControls && (
-        <div className="fixed top-20 right-4 bg-black/95 border border-green-400/30 rounded-lg p-4 max-w-xs max-h-[70vh] overflow-y-auto shadow-xl backdrop-blur-sm z-30">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-sm font-mono text-green-400 font-bold">🎛️ Layer Filters</h3>
-            <button
-              onClick={() => setShowLayerControls(false)}
-              className="text-gray-400 hover:text-white text-sm"
-            >
-              ✕
-            </button>
-          </div>
-
-          {/* Characters Section */}
-          {filterOptions.characters.length > 0 && (
-            <div className="mb-4">
-              <div className="flex items-center gap-1 mb-2">
-                <span className="text-sm">🎭</span>
-                <span className="text-purple-400 font-mono text-xs font-bold">
-                  Characters ({activeCharacterFilters.length})
-                </span>
-              </div>
-              <div className="grid grid-cols-1 gap-1">
-                {filterOptions.characters.map(character => (
-                  <button
-                    key={character}
-                    onClick={() => toggleCharacterFilter(character)}
-                    className={`px-2 py-1 rounded text-xs font-mono border transition-colors text-left ${
-                      activeCharacterFilters.includes(character)
-                        ? 'bg-purple-900/40 text-purple-300 border-purple-400/60'
-                        : 'bg-gray-900/40 text-gray-400 border-gray-600/40 hover:border-gray-500'
-                    }`}
-                  >
-                    {character}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Puzzles Section */}
-          {filterOptions.puzzles.length > 0 && (
-            <div className="mb-4">
-              <div className="flex items-center gap-1 mb-2">
-                <span className="text-sm">🧩</span>
-                <span className="text-yellow-400 font-mono text-xs font-bold">
-                  Puzzles ({activePuzzleFilters.length})
-                </span>
-              </div>
-              <div className="grid grid-cols-1 gap-1">
-                {filterOptions.puzzles.map(puzzle => (
-                  <button
-                    key={puzzle}
-                    onClick={() => togglePuzzleFilter(puzzle)}
-                    className={`px-2 py-1 rounded text-xs font-mono border transition-colors text-left ${
-                      activePuzzleFilters.includes(puzzle)
-                        ? 'bg-yellow-900/40 text-yellow-300 border-yellow-400/60'
-                        : 'bg-gray-900/40 text-gray-400 border-gray-600/40 hover:border-gray-500'
-                    }`}
-                  >
-                    {puzzle}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Interactions Section */}
-          {filterOptions.interactions.length > 0 && (
-            <div className="mb-4">
-              <div className="flex items-center gap-1 mb-2">
-                <span className="text-sm">🎬</span>
-                <span className="text-blue-400 font-mono text-xs font-bold">
-                  Interactions ({activeInteractionFilters.length})
-                </span>
-              </div>
-              <div className="grid grid-cols-1 gap-1">
-                {filterOptions.interactions.map(interaction => (
-                  <button
-                    key={interaction}
-                    onClick={() => toggleInteractionFilter(interaction)}
-                    className={`px-2 py-1 rounded text-xs font-mono border transition-colors text-left ${
-                      activeInteractionFilters.includes(interaction)
-                        ? 'bg-blue-900/40 text-blue-300 border-blue-400/60'
-                        : 'bg-gray-900/40 text-gray-400 border-gray-600/40 hover:border-gray-500'
-                    }`}
-                  >
-                    {interaction}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Features Section */}
-          {filterOptions.features.length > 0 && (
-            <div className="mb-4">
-              <div className="flex items-center gap-1 mb-2">
-                <span className="text-sm">💠</span>
-                <span className="text-emerald-400 font-mono text-xs font-bold">
-                  Features ({activeFeatureFilters.length})
-                </span>
-              </div>
-              <div className="grid grid-cols-1 gap-1">
-                {filterOptions.features.map(feature => {
-                  const getFeatureIcon = (feat) => {
-                    switch (feat) {
-                      case 'hasTransition': return '🌊';
-                      case 'hasCombat': return '⚔️';
-                      case 'hasChoice': return '🤔';
-                      case 'hasNPC': return '👤';
-                      case 'hasAnimation': return '✨';
-                      default: return '💠';
-                    }
-                  };
-
-                  const getFeatureLabel = (feat) => {
-                    return feat.replace('has', '').replace(/([A-Z])/g, ' $1').trim();
-                  };
-
-                  return (
+          {/* Scrollable Filter Content */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-6">
+            {/* Characters Section */}
+            {filterOptions.characters.length > 0 && (
+              <div>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-lg">🎭</span>
+                  <span className="text-purple-400 font-mono text-sm font-bold">
+                    Characters
+                  </span>
+                  <span className="ml-auto bg-purple-900/40 text-purple-300 px-2 py-1 rounded text-xs font-mono">
+                    {activeCharacterFilters.length}
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 gap-2">
+                  {filterOptions.characters.map(character => (
                     <button
-                      key={feature}
-                      onClick={() => toggleFeatureFilter(feature)}
-                      className={`px-2 py-1 rounded text-xs font-mono border transition-colors text-left flex items-center gap-1 ${
-                        activeFeatureFilters.includes(feature)
-                          ? 'bg-emerald-900/40 text-emerald-300 border-emerald-400/60'
-                          : 'bg-gray-900/40 text-gray-400 border-gray-600/40 hover:border-gray-500'
+                      key={character}
+                      onClick={() => toggleCharacterFilter(character)}
+                      className={`px-3 py-2 rounded text-sm font-mono border transition-all text-left hover:scale-[1.02] ${
+                        activeCharacterFilters.includes(character)
+                          ? 'bg-purple-900/40 text-purple-200 border-purple-400/60 shadow-purple-400/20 shadow'
+                          : 'bg-gray-900/40 text-gray-300 border-gray-600/40 hover:border-purple-400/40 hover:text-purple-300'
                       }`}
                     >
-                      <span className="text-[10px]">{getFeatureIcon(feature)}</span>
-                      {getFeatureLabel(feature)}
+                      {character}
                     </button>
-                  );
-                })}
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Puzzles Section */}
+            {filterOptions.puzzles.length > 0 && (
+              <div>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-lg">🧩</span>
+                  <span className="text-yellow-400 font-mono text-sm font-bold">
+                    Puzzles
+                  </span>
+                  <span className="ml-auto bg-yellow-900/40 text-yellow-300 px-2 py-1 rounded text-xs font-mono">
+                    {activePuzzleFilters.length}
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 gap-2">
+                  {filterOptions.puzzles.map(puzzle => (
+                    <button
+                      key={puzzle}
+                      onClick={() => togglePuzzleFilter(puzzle)}
+                      className={`px-3 py-2 rounded text-sm font-mono border transition-all text-left hover:scale-[1.02] ${
+                        activePuzzleFilters.includes(puzzle)
+                          ? 'bg-yellow-900/40 text-yellow-200 border-yellow-400/60 shadow-yellow-400/20 shadow'
+                          : 'bg-gray-900/40 text-gray-300 border-gray-600/40 hover:border-yellow-400/40 hover:text-yellow-300'
+                      }`}
+                    >
+                      {puzzle}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Interactions Section */}
+            {filterOptions.interactions.length > 0 && (
+              <div>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-lg">🎬</span>
+                  <span className="text-blue-400 font-mono text-sm font-bold">
+                    Interactions
+                  </span>
+                  <span className="ml-auto bg-blue-900/40 text-blue-300 px-2 py-1 rounded text-xs font-mono">
+                    {activeInteractionFilters.length}
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 gap-2">
+                  {filterOptions.interactions.map(interaction => (
+                    <button
+                      key={interaction}
+                      onClick={() => toggleInteractionFilter(interaction)}
+                      className={`px-3 py-2 rounded text-sm font-mono border transition-all text-left hover:scale-[1.02] ${
+                        activeInteractionFilters.includes(interaction)
+                          ? 'bg-blue-900/40 text-blue-200 border-blue-400/60 shadow-blue-400/20 shadow'
+                          : 'bg-gray-900/40 text-gray-300 border-gray-600/40 hover:border-blue-400/40 hover:text-blue-300'
+                      }`}
+                    >
+                      {interaction}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Features Section */}
+            {filterOptions.features.length > 0 && (
+              <div>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-lg">💠</span>
+                  <span className="text-emerald-400 font-mono text-sm font-bold">
+                    Features
+                  </span>
+                  <span className="ml-auto bg-emerald-900/40 text-emerald-300 px-2 py-1 rounded text-xs font-mono">
+                    {activeFeatureFilters.length}
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 gap-2">
+                  {filterOptions.features.map(feature => {
+                    const getFeatureIcon = (feat) => {
+                      switch (feat) {
+                        case 'hasTransition': return '🌊';
+                        case 'hasCombat': return '⚔️';
+                        case 'hasChoice': return '🤔';
+                        case 'hasNPC': return '👤';
+                        case 'hasAnimation': return '✨';
+                        default: return '💠';
+                      }
+                    };
+
+                    const getFeatureLabel = (feat) => {
+                      return feat.replace('has', '').replace(/([A-Z])/g, ' $1').trim();
+                    };
+
+                    return (
+                      <button
+                        key={feature}
+                        onClick={() => toggleFeatureFilter(feature)}
+                        className={`px-3 py-2 rounded text-sm font-mono border transition-all text-left flex items-center gap-2 hover:scale-[1.02] ${
+                          activeFeatureFilters.includes(feature)
+                            ? 'bg-emerald-900/40 text-emerald-200 border-emerald-400/60 shadow-emerald-400/20 shadow'
+                            : 'bg-gray-900/40 text-gray-300 border-gray-600/40 hover:border-emerald-400/40 hover:text-emerald-300'
+                        }`}
+                      >
+                        <span className="text-sm">{getFeatureIcon(feature)}</span>
+                        {getFeatureLabel(feature)}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col min-h-screen">
+        {/* Header Controls */}
+        <div className="bg-black/90 border-b border-green-400/20 p-4">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <h1 className="text-2xl font-mono text-green-400">🧠 Matrix Story Map D3</h1>
+              
+              {/* Layer Controls Toggle */}
+              <button
+                onClick={() => setShowLayerControls(!showLayerControls)}
+                className={`px-4 py-2 rounded text-sm font-mono border transition-all flex items-center gap-2 ${
+                  showLayerControls || activeFilterCount > 0
+                    ? 'bg-purple-900/40 text-purple-300 border-purple-400/60 shadow-purple-400/20 shadow'
+                    : 'bg-gray-900 text-gray-400 border-gray-600 hover:border-purple-400/60 hover:text-purple-300'
+                }`}
+              >
+                <span className="text-lg">🎛️</span>
+                <span>Filters</span>
+                {activeFilterCount > 0 && (
+                  <span className="bg-purple-500 text-white px-2 py-1 rounded-full text-xs font-bold">
+                    {activeFilterCount}
+                  </span>
+                )}
+              </button>
+            </div>
+            
+            {/* Layout Toggle */}
+            <div className="flex gap-2">
+              <span className="text-sm text-gray-400 mr-2">Layout:</span>
+              {Object.values(LAYOUT_TYPES).map(type => (
+                <button
+                  key={type}
+                  onClick={() => setLayoutType(type)}
+                  className={`px-3 py-1 rounded text-xs font-mono border transition-colors ${
+                    layoutType === type
+                      ? 'bg-green-900 text-green-300 border-green-400'
+                      : 'bg-gray-900 text-gray-400 border-gray-600 hover:border-gray-500'
+                  }`}
+                >
+                  {type}
+                </button>
+              ))}
+            </div>
+
+            {/* Status Filters */}
+            <div className="flex gap-2">
+              <span className="text-sm text-gray-400 mr-2">Status:</span>
+              {STATUS_FILTERS.map(({ key, label, color }) => (
+                <button
+                  key={key}
+                  onClick={() => toggleStatusFilter(key)}
+                  className={`px-3 py-1 rounded text-xs font-mono border transition-colors ${
+                    statusFilter.includes(key)
+                      ? 'bg-blue-900 text-blue-300 border-blue-400'
+                      : 'bg-gray-900 text-gray-400 border-gray-600 hover:border-gray-500'
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Breadcrumb Trail */}
+          {breadcrumb.length > 0 && (
+            <div className="mt-3 flex items-center gap-2 text-sm">
+              <span className="text-gray-400">Path:</span>
+              {breadcrumb.map((node, index) => (
+                <React.Fragment key={node.id}>
+                  <button
+                    onClick={() => handleNodeClick({ data: node })}
+                    className="text-cyan-400 hover:text-cyan-300 font-mono"
+                  >
+                    {node.data?.title || node.id}
+                  </button>
+                  {index < breadcrumb.length - 1 && (
+                    <span className="text-gray-600">→</span>
+                  )}
+                </React.Fragment>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Main SVG Canvas */}
+        <div className="flex-1 relative">
+          <svg
+            ref={svgRef}
+            className="w-full h-full bg-gradient-to-br from-gray-900 to-black border-l border-green-400/20"
+            style={{ minHeight: '600px' }}
+          />
+          
+          {/* Help Text */}
+          <div className="absolute top-4 left-4 bg-black/80 text-xs text-gray-400 p-3 rounded border border-gray-600 font-mono">
+            <div>🖱️ Click nodes to explore</div>
+            <div>🔍 Scroll to zoom</div>
+            <div>✋ Drag to pan</div>
+            <div>🎛️ Use sidebar filters to highlight</div>
+            <div>⚡ Toggle layouts & status</div>
+          </div>
+
+          {/* Active Filters Mini-Display */}
+          {activeFilterCount > 0 && (
+            <div className="absolute bottom-4 left-4 bg-black/90 text-xs p-3 rounded border border-purple-400/40 font-mono max-w-xs">
+              <div className="text-purple-400 font-bold mb-1">🎯 Showing filtered results</div>
+              <div className="text-gray-300">
+                {activeCharacterFilters.length > 0 && `🎭 ${activeCharacterFilters.length} characters`}
+                {activePuzzleFilters.length > 0 && ` 🧩 ${activePuzzleFilters.length} puzzles`}
+                {activeInteractionFilters.length > 0 && ` 🎬 ${activeInteractionFilters.length} interactions`}
+                {activeFeatureFilters.length > 0 && ` 💠 ${activeFeatureFilters.length} features`}
               </div>
             </div>
           )}
-
-          {/* Reset All Button */}
-          {activeFilterCount > 0 && (
-            <button
-              onClick={resetAllFilters}
-              className="w-full px-3 py-2 rounded text-xs font-mono border border-red-400/60 bg-red-900/40 text-red-300 hover:bg-red-900/60 transition-colors"
-            >
-              ✕ Reset All Filters
-            </button>
-          )}
         </div>
-      )}
-
-      {/* Main SVG Canvas */}
-      <div className="relative">
-        <svg
-          ref={svgRef}
-          className="w-full bg-gradient-to-br from-gray-900 to-black border border-green-400/20"
-          style={{ minHeight: '800px' }}
-        />
-        
-        {/* Help Text */}
-        <div className="absolute top-4 left-4 bg-black/80 text-xs text-gray-400 p-3 rounded border border-gray-600 font-mono">
-          <div>🖱️ Click nodes to explore</div>
-          <div>🔍 Scroll to zoom</div>
-          <div>✋ Drag to pan</div>
-          <div>🎛️ Use layer filters to highlight</div>
-          <div>⚡ Toggle layouts & filters</div>
-        </div>
-
-        {/* Active Filters Display */}
-        {activeFilterCount > 0 && (
-          <div className="absolute top-4 right-4 bg-black/80 text-xs p-3 rounded border border-purple-400/40 font-mono max-w-xs">
-            <div className="text-purple-400 font-bold mb-1">Active Filters:</div>
-            {activeCharacterFilters.length > 0 && (
-              <div className="text-purple-300">🎭 Characters: {activeCharacterFilters.join(', ')}</div>
-            )}
-            {activePuzzleFilters.length > 0 && (
-              <div className="text-yellow-300">🧩 Puzzles: {activePuzzleFilters.join(', ')}</div>
-            )}
-            {activeInteractionFilters.length > 0 && (
-              <div className="text-blue-300">🎬 Interactions: {activeInteractionFilters.join(', ')}</div>
-            )}
-            {activeFeatureFilters.length > 0 && (
-              <div className="text-emerald-300">💠 Features: {activeFeatureFilters.map(f => f.replace('has', '').replace(/([A-Z])/g, ' $1').trim()).join(', ')}</div>
-            )}
-          </div>
-        )}
       </div>
 
       {/* Node Details Panel */}
       {selectedNode && (
-        <div className="fixed bottom-6 right-6 bg-black/95 border border-green-400/30 rounded-lg p-3 max-w-[360px] max-h-[75vh] overflow-y-auto shadow-xl backdrop-blur-sm">
+        <div className="fixed bottom-6 right-6 bg-black/95 border border-green-400/30 rounded-lg p-3 max-w-[360px] max-h-[75vh] overflow-y-auto shadow-xl backdrop-blur-sm z-30">
           <h3 className="text-base font-mono text-green-400 mb-2 pr-6">
             {selectedNode.data?.title || selectedNode.id}
           </h3>
