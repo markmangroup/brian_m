@@ -54,6 +54,44 @@ export const realMatrixNodes = [
       description: 'You chose the blue pill.',
       setting: 'route: blue-pill'
     }
+  },
+  // Red Pill Path Expansion
+  {
+    id: 'matrix-red-awakening',
+    type: 'scene',
+    position: { x: 900, y: 60 },
+    data: {
+      title: 'Red Awakening',
+      description: 'You awaken in a strange room filled with old computers and cryptic messages.',
+      setting: 'The Real World'
+    },
+    parentChoice: 'matrix-pill-choice',
+    option: 'Red Pill'
+  },
+  {
+    id: 'matrix-red-trainer',
+    type: 'training',
+    position: { x: 1100, y: 60 },
+    data: {
+      title: 'Training Upload',
+      description: 'Combat training begins. You feel your muscles download new knowledge.',
+      setting: 'Sim Program'
+    },
+    parentChoice: 'matrix-pill-choice',
+    option: 'Red Pill'
+  },
+  // Blue Pill Path Expansion
+  {
+    id: 'matrix-blue-loop',
+    type: 'scene',
+    position: { x: 900, y: 140 },
+    data: {
+      title: 'Dream Within a Dream',
+      description: 'You wake up in your bed, unsure if anything happened at all.',
+      setting: 'Neo\'s Apartment'
+    },
+    parentChoice: 'matrix-pill-choice',
+    option: 'Blue Pill'
   }
 ];
 
@@ -61,5 +99,10 @@ export const realMatrixEdges = [
   { id: 'edge1', source: 'matrix-v1-entry', target: 'matrix-name-prompt' },
   { id: 'edge2', source: 'matrix-name-prompt', target: 'matrix-pill-choice' },
   { id: 'edge3', source: 'matrix-pill-choice', target: 'matrix-pill-choice-red', label: 'Red Pill' },
-  { id: 'edge4', source: 'matrix-pill-choice', target: 'matrix-pill-choice-blue', label: 'Blue Pill' }
+  { id: 'edge4', source: 'matrix-pill-choice', target: 'matrix-pill-choice-blue', label: 'Blue Pill' },
+  // Red Pill Path Edges
+  { id: 'edge5', source: 'matrix-pill-choice-red', target: 'matrix-red-awakening' },
+  { id: 'edge6', source: 'matrix-red-awakening', target: 'matrix-red-trainer' },
+  // Blue Pill Path Edge
+  { id: 'edge7', source: 'matrix-pill-choice-blue', target: 'matrix-blue-loop' }
 ]; 
