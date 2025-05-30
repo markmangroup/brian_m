@@ -183,6 +183,45 @@ export const realMatrixNodes = [
     }
   },
 
+  // === NEW: FACTION PORTAL ===
+  {
+    id: 'matrix-faction-portal',
+    type: 'scene',
+    depth: 5,
+    group: 'factions',
+    data: {
+      title: 'Faction Portal',
+      pageUrl: '/matrix-v1/portal/factions',
+      status: 'live',
+      summary: 'Gateway to the three resistance factions: Zion Fleet, Rebel Hackers, and Oracle Seekers.',
+      characters: ['System'],
+      puzzles: [],
+      interactions: ['FactionSelection', 'ProgressTracking'],
+      features: { hasTransition: true, hasChoice: true, hasCombat: false, hasNPC: false, hasAnimation: true },
+      dialogue: ['Choose your path through the resistance networks.', 'Each faction offers unique training and wisdom.']
+    }
+  },
+
+  // === NEW: GLITCH PORTAL (MULTIVERSE GATEWAY) ===
+  {
+    id: 'matrix-glitch-portal',
+    type: 'choice',
+    depth: 6,
+    group: 'ghost-layer',
+    data: {
+      title: 'Reality Breach Portal',
+      pageUrl: '/matrix-v1/glitch-portal',
+      status: 'live',
+      summary: 'Reality is bleeding — new signals detected from alternate universes.',
+      characters: ['System', 'Multiverse Echo'],
+      puzzles: ['Reality Switch'],
+      interactions: ['ThemeToggle', 'DimensionalShift'],
+      features: { hasTransition: true, hasChoice: true, hasCombat: false, hasNPC: false, hasAnimation: true, hasGlitch: true },
+      dialogue: ['WARNING: Reality breach detected.', 'Multiverse signals bleeding through quantum barriers.', 'Choose your dimensional reality.'],
+      options: ['Matrix Reality', 'Witcher Realm', 'Night City']
+    }
+  },
+
   // === DEPTH 6: ECHO GROUP ===
   {
     id: 'matrix-echo-loop',
@@ -292,59 +331,59 @@ export const realMatrixNodes = [
     id: 'matrix-zion-fleet',
     type: 'training',
     depth: 6,
-    group: 'zion',
+    group: 'factions',
     parentChoice: 'matrix-red-faction-choice',
     choiceValue: 'fleet',
     data: {
       title: 'Zion Fleet Training',
       pageUrl: '/matrix-v1/zion-fleet',
-      status: 'stub',
-      summary: 'Military training with the Zion fleet. Learn combat and ship operations.',
-      characters: ['Commander Locke', 'Niobe'],
-      puzzles: ['Ship Combat', 'Navigation'],
-      interactions: ['CombatSim', 'ShipControl'],
-      features: { hasTransition: true, hasCombat: true, hasChoice: false, hasPuzzle: true, hasAnimation: true, hasNPC: true },
-      dialogue: ['The machines are coming.', 'We need soldiers who can fight both in and out of the Matrix.']
+      status: 'live',
+      summary: 'Military training with Commander Locke and Niobe. Learn ship operations and combat tactics.',
+      characters: ['Locke', 'Niobe'],
+      puzzles: ['Combat Simulation', 'Ship Operations'],
+      interactions: ['CombatTraining', 'FleetCommand'],
+      features: { hasTransition: true, hasChoice: false, hasCombat: true, hasNPC: true, hasAnimation: true },
+      dialogue: ['Welcome to the Zion Fleet.', 'We are the backbone of humanity\'s resistance.']
     }
   },
 
   {
     id: 'matrix-rebel-hackers',
-    type: 'scene',
+    type: 'training',
     depth: 6,
-    group: 'hackers',
+    group: 'factions',
     parentChoice: 'matrix-red-faction-choice',
     choiceValue: 'hackers',
     data: {
-      title: 'Rebel Hacker Network',
+      title: 'Rebel Hackers Training',
       pageUrl: '/matrix-v1/rebel-hackers',
-      status: 'stub',
-      summary: 'Join the underground hacker network. Learn to bend Matrix rules.',
-      characters: ['Tank', 'Dozer', 'Mouse'],
-      puzzles: ['Code Injection', 'System Exploit'],
-      interactions: ['HackingInterface', 'RuleManipulation'],
-      features: { hasTransition: true, hasCombat: false, hasChoice: false, hasPuzzle: true, hasAnimation: true, hasNPC: true },
-      dialogue: ['The Matrix has rules. We break them.', 'Time to learn what\'s really possible.']
+      status: 'live',
+      summary: 'Hacker training with Tank and Dozer. Learn to bend Matrix rules and manipulate code.',
+      characters: ['Tank', 'Dozer'],
+      puzzles: ['Code Injection', 'Rule Manipulation'],
+      interactions: ['CodeLab', 'SystemHacking'],
+      features: { hasTransition: true, hasChoice: false, hasCombat: false, hasNPC: true, hasAnimation: true, hasPuzzle: true },
+      dialogue: ['This path risks madness from seeing too deeply.', 'But the rewards... you can rewrite reality itself.']
     }
   },
 
   {
     id: 'matrix-oracle-seekers',
-    type: 'dialogue',
+    type: 'training',
     depth: 6,
-    group: 'oracle',
+    group: 'factions',
     parentChoice: 'matrix-red-faction-choice',
     choiceValue: 'seekers',
     data: {
-      title: 'Oracle Seekers',
+      title: 'Oracle Seekers Training',
       pageUrl: '/matrix-v1/oracle-seekers',
-      status: 'stub',
-      summary: 'Seek wisdom from the Oracle. Understand the deeper purpose.',
+      status: 'live',
+      summary: 'Wisdom training with the Oracle and Seraph. Seek philosophical insights and future sight.',
       characters: ['Oracle', 'Seraph'],
-      puzzles: ['Philosophical Riddle', 'Future Sight'],
-      interactions: ['ProphecyInterface', 'WisdomTest'],
-      features: { hasTransition: true, hasCombat: false, hasChoice: false, hasPuzzle: true, hasAnimation: true, hasDialogue: true, hasNPC: true },
-      dialogue: ['You\'re not here to make the choice.', 'You\'ve already made it. You\'re here to understand why.']
+      puzzles: ['Philosophical Insight', 'Prophecy Reading'],
+      interactions: ['WisdomQuest', 'FutureSight'],
+      features: { hasTransition: true, hasChoice: false, hasCombat: false, hasNPC: true, hasAnimation: true, hasWisdom: true },
+      dialogue: ['Know thyself.', 'The path of wisdom is not for those who seek easy answers.']
     }
   },
 

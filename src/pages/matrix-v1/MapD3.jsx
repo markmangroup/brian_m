@@ -15,6 +15,50 @@ const STATUS_FILTERS = [
   { key: 'stub', label: '🔴 Stub', color: 'text-red-400' }
 ];
 
+// Visual Group Overlays for different story sections
+const VISUAL_GROUPS = {
+  factions: {
+    label: 'Factions',
+    icon: '⚔️',
+    color: 'cyan',
+    bgColor: 'bg-cyan-900/10',
+    borderColor: 'border-cyan-400/40',
+    textColor: 'text-cyan-400',
+    nodeIds: ['matrix-zion-fleet', 'matrix-rebel-hackers', 'matrix-oracle-seekers', 'matrix-faction-portal'],
+    bounds: { x: 200, y: 300, width: 600, height: 200 }
+  },
+  ghostLayer: {
+    label: 'Ghost Layer',
+    icon: '👻',
+    color: 'purple',
+    bgColor: 'bg-purple-900/10',
+    borderColor: 'border-purple-400/40',
+    textColor: 'text-purple-400',
+    nodeIds: ['matrix-glitch-portal', 'matrix-echo-loop', 'matrix-system-anomaly'],
+    bounds: { x: 50, y: 100, width: 400, height: 150 }
+  },
+  echoFork: {
+    label: 'Echo Fork',
+    icon: '🔄',
+    color: 'amber',
+    bgColor: 'bg-amber-900/10',
+    borderColor: 'border-amber-400/40',
+    textColor: 'text-amber-400',
+    nodeIds: ['matrix-echo-chamber', 'matrix-recursive-loop', 'matrix-temporal-anomaly'],
+    bounds: { x: 500, y: 50, width: 350, height: 180 }
+  },
+  mainStory: {
+    label: 'Main Story',
+    icon: '📖',
+    color: 'green',
+    bgColor: 'bg-green-900/10',
+    borderColor: 'border-green-400/40',
+    textColor: 'text-green-400',
+    nodeIds: ['matrix-v1-entry', 'matrix-pill-choice', 'matrix-awakening'],
+    bounds: { x: 100, y: 500, width: 500, height: 120 }
+  }
+};
+
 export default function MapD3() {
   const svgRef = useRef();
   const searchInputRef = useRef();
@@ -23,6 +67,11 @@ export default function MapD3() {
   const [selectedNode, setSelectedNode] = useState(null);
   const [breadcrumb, setBreadcrumb] = useState([]);
   const [expandedNodes, setExpandedNodes] = useState(new Set(['matrix-v1-entry']));
+  const [currentTheme, setCurrentTheme] = useState('matrix');
+  
+  // Visual group states
+  const [visibleGroups, setVisibleGroups] = useState(Object.keys(VISUAL_GROUPS));
+  const [focusedGroup, setFocusedGroup] = useState(null);
   
   // Layer filter states
   const [showLayerControls, setShowLayerControls] = useState(false);
@@ -39,6 +88,48 @@ export default function MapD3() {
     interactions: true,
     features: true
   });
+
+  // Theme configurations
+  const themeConfigs = {
+    matrix: {
+      bgColor: 'bg-black',
+      primaryColor: 'text-green-400',
+      accentColor: 'text-cyan-400',
+      nodeColor: '#22c55e',
+      linkColor: '#10b981',
+      gridOpacity: 0.3
+    },
+    witcher: {
+      bgColor: 'bg-amber-950',
+      primaryColor: 'text-amber-400',
+      accentColor: 'text-orange-400',
+      nodeColor: '#f59e0b',
+      linkColor: '#d97706',
+      gridOpacity: 0.2
+    },
+    cyberpunk: {
+      bgColor: 'bg-purple-950',
+      primaryColor: 'text-purple-400',
+      accentColor: 'text-pink-400',
+      nodeColor: '#a855f7',
+      linkColor: '#c084fc',
+      gridOpacity: 0.4
+    }
+  };
+
+  // Listen for theme changes
+  useEffect(() => {
+    const handleThemeChange = (event) => {
+      setCurrentTheme(event.detail.theme);
+    };
+
+    // Load initial theme
+    const savedTheme = localStorage.getItem('matrixTheme') || 'matrix';
+    setCurrentTheme(savedTheme);
+
+    window.addEventListener('themeChange', handleThemeChange);
+    return () => window.removeEventListener('themeChange', handleThemeChange);
+  }, []);
 
   // Keyboard shortcut for search
   useEffect(() => {
@@ -57,6 +148,50 @@ export default function MapD3() {
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [showLayerControls]);
+
+  // Zoom to group functionality
+  const zoomToGroup = useCallback((groupKey) => {
+    const group = VISUAL_GROUPS[groupKey];
+    if (!group || !svgRef.current) return;
+
+    const svg = d3.select(svgRef.current);
+    const { x, y, width, height } = group.bounds;
+    
+    // Calculate transform to center the group
+    const svgRect = svgRef.current.getBoundingClientRect();
+    const centerX = svgRect.width / 2;
+    const centerY = svgRect.height / 2;
+    const groupCenterX = x + width / 2;
+    const groupCenterY = y + height / 2;
+    
+    const scale = Math.min(
+      svgRect.width / (width * 1.5),
+      svgRect.height / (height * 1.5),
+      3 // Max zoom
+    );
+    
+    const translateX = centerX - groupCenterX * scale;
+    const translateY = centerY - groupCenterY * scale;
+    
+    svg.transition()
+       .duration(1000)
+       .call(
+         d3.zoom().transform,
+         d3.zoomIdentity.translate(translateX, translateY).scale(scale)
+       );
+    
+    setFocusedGroup(groupKey);
+    setTimeout(() => setFocusedGroup(null), 2000);
+  }, []);
+
+  // Toggle group visibility
+  const toggleGroup = (groupKey) => {
+    setVisibleGroups(prev => 
+      prev.includes(groupKey) 
+        ? prev.filter(g => g !== groupKey)
+        : [...prev, groupKey]
+    );
+  };
   
   // Extract unique values from all nodes dynamically with counts
   const filterOptions = useMemo(() => {
@@ -198,7 +333,6 @@ export default function MapD3() {
     setActivePuzzleFilters([]);
     setActiveInteractionFilters([]);
     setActiveFeatureFilters([]);
-    setSearchQuery('');
   };
 
   // Convert data to tree structure

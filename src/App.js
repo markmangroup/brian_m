@@ -51,6 +51,11 @@ import EchoLoop from './pages/matrix-v1/EchoLoop';
 import EchoVerify from './pages/matrix-v1/EchoVerify';
 import GhostLayer2 from './pages/matrix-v1/GhostLayer2';
 
+// New routes
+import FactionPortal from './pages/matrix-v1/FactionPortal';
+import GlitchPortal from './pages/matrix-v1/GlitchPortal';
+import OracleSeekers from './pages/matrix-v1/OracleSeekers';
+
 export default function App() {
   return (
     <UserProvider>
@@ -104,6 +109,11 @@ export default function App() {
             <Route path="/matrix-v1/echo-loop" element={<EchoLoop />} />
             <Route path="/matrix-v1/echo-verify" element={<EchoVerify />} />
             <Route path="/matrix-v1/ghost-layer-2" element={<GhostLayer2 />} />
+            
+            {/* New routes */}
+            <Route path="/matrix-v1/portal/factions" element={<FactionPortal />} />
+            <Route path="/matrix-v1/glitch-portal" element={<GlitchPortal />} />
+            <Route path="/matrix-v1/oracle-seekers" element={<OracleSeekers />} />
             
             {/* Legacy Matrix Routes - Redirect to V1 */}
             <Route path="/the-matrix/*" element={<Navigate to="/matrix-v1" replace />} />
