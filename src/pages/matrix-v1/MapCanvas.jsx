@@ -86,6 +86,61 @@ function MapCanvasInner({ nodes }) {
   const reactFlowInstance = useReactFlow();
   const [cursor, setCursor] = useState('grab');
   const [showRealPath, setShowRealPath] = useState(true);
+  const [expandedPaths, setExpandedPaths] = useState([]);
+
+  // Helper: get child nodes for a choice node
+  function getChoiceChildren(choiceId) {
+    return realMatrixNodes.filter(n => n.parentChoice === choiceId);
+  }
+  // Helper: get child edges for a choice node
+  function getChoiceEdges(choiceId) {
+    return realMatrixEdges.filter(e => e.source === choiceId);
+  }
+
+  // Compute overlay nodes/edges based on expandedPaths
+  const overlayNodes = useMemo(() => {
+    // Always show the main path up to the first choice
+    let base = realMatrixNodes.filter(n => !n.parentChoice);
+    let expanded = [];
+    expandedPaths.forEach(choiceId => {
+      expanded.push(...getChoiceChildren(choiceId));
+    });
+    return [...base, ...expanded];
+  }, [expandedPaths]);
+
+  const overlayEdges = useMemo(() => {
+    let base = realMatrixEdges.filter(e => {
+      // Only show edges between base nodes or to expanded children
+      const src = realMatrixNodes.find(n => n.id === e.source);
+      const tgt = realMatrixNodes.find(n => n.id === e.target);
+      return (!src.parentChoice && !tgt?.parentChoice) || (expandedPaths.includes(e.source));
+    });
+    return base;
+  }, [expandedPaths]);
+
+  // Overlay nodeTypes: inject branch icon for choice nodes
+  const overlayNodeTypes = {
+    ...nodeTypes,
+    choice: (props) => {
+      const { id } = props;
+      const isExpandable = getChoiceChildren(id).length > 0;
+      const isExpanded = expandedPaths.includes(id);
+      return (
+        <ChoiceNode
+          {...props}
+          isExpandable={isExpandable}
+          isExpanded={isExpanded}
+          onBranchToggle={() => {
+            setExpandedPaths((prev) =>
+              prev.includes(id)
+                ? prev.filter(x => x !== id)
+                : [...prev, id]
+            );
+          }}
+        />
+      );
+    }
+  };
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -239,9 +294,9 @@ function MapCanvasInner({ nodes }) {
           </ReactFlow>
           {showRealPath && (
             <ReactFlow
-              nodes={realMatrixNodes}
-              edges={realMatrixEdges}
-              nodeTypes={nodeTypes}
+              nodes={overlayNodes}
+              edges={overlayEdges}
+              nodeTypes={overlayNodeTypes}
               edgeOptions={{
                 style: { stroke: '#06b6d4', strokeWidth: 3, strokeDasharray: '4 2' },
                 markerEnd: { type: MarkerType.Arrow, color: '#06b6d4' }

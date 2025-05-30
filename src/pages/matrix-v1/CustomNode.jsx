@@ -54,7 +54,7 @@ export const DialogueNode = ({ data = {}, type = 'dialogue' }) => (
   </div>
 );
 
-export const ChoiceNode = ({ data = {}, type = 'choice' }) => (
+export const ChoiceNode = ({ data = {}, type = 'choice', isExpandable, isExpanded, onBranchToggle }) => (
   <div
     className={`${baseCard} ${hoverCard}`}
     style={{
@@ -62,7 +62,18 @@ export const ChoiceNode = ({ data = {}, type = 'choice' }) => (
       borderColor: 'var(--accent)',
     }}
   >
-    <h3 className={headerClass} style={{ color: 'var(--accent)' }}>{data.prompt || 'Make a choice...'}</h3>
+    <div className="flex items-center justify-between">
+      <h3 className={headerClass} style={{ color: 'var(--accent)' }}>{data.prompt || 'Make a choice...'}</h3>
+      {isExpandable && (
+        <button
+          onClick={e => { e.stopPropagation(); onBranchToggle && onBranchToggle(); }}
+          className="ml-2 text-lg font-mono text-cyan-400 hover:text-cyan-200 focus:outline-none"
+          title={isExpanded ? 'Collapse branch' : 'Expand branch'}
+        >
+          {isExpanded ? '➖' : '➕'}
+        </button>
+      )}
+    </div>
     <div className="space-y-2">
       {(data.options || []).map((option, index) => (
         <div key={index} className="text-gray-200 text-xs bg-white/10 p-2 rounded border border-purple-300 font-mono">
