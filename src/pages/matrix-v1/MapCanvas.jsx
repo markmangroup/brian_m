@@ -121,38 +121,42 @@ function layoutNodesByDepth(nodes, useOverlayPositions = false) {
       position: node.position || { x: 0, y: 0 }
     }));
   }
-  
-  // Original layout logic for main flow
+
   const spacingX = 300;
   const spacingY = 220;
-  const manualDepths = {
-    'scene-1': 0,
-    'dialogue-1': 1,
-    'choice-1': 2,
-    'ending-1': 3,
-    'scene-2': 1,
-    'dialogue-2': 2,
-    'choice-2': 3,
-    'ending-2': 4,
-    'start': 0,
+  const groupOffsets = {
+    'intro': { x: 0, y: 0 },
+    'red-pill': { x: 0, y: -100 },
+    'blue-pill': { x: 0, y: 100 },
+    'main': { x: 0, y: 0 },
+    'training': { x: 0, y: 200 },
+    'factions': { x: 0, y: 300 }
   };
 
   const depthBuckets = {};
 
-  return nodes.map((node, index) => {
-    const depth = manualDepths[node.id] ?? Math.floor(index / 2);
-    if (!depthBuckets[depth]) depthBuckets[depth] = 0;
+  return nodes.map((node, idx) => {
+    const depth = typeof node.depth === 'number' ? node.depth : 0;
+    const group = node.group || 'intro';
+    const groupOffset = groupOffsets[group] || { x: 0, y: 0 };
+
+    if (!depthBuckets[depth]) {
+      depthBuckets[depth] = {};
+    }
+    if (!depthBuckets[depth][group]) {
+      depthBuckets[depth][group] = 0;
+    }
 
     const position = {
-      x: depth * spacingX,
-      y: depthBuckets[depth] * spacingY,
+      x: depth * spacingX + groupOffset.x,
+      y: depthBuckets[depth][group] * spacingY + groupOffset.y
     };
 
-    depthBuckets[depth]++;
+    depthBuckets[depth][group]++;
 
     return {
       ...node,
-      position,
+      position: node.position || position // Always assign a position
     };
   });
 }
