@@ -9,7 +9,8 @@ export const realMatrixNodes = [
       title: 'Matrix Entry',
       description: 'First load of /matrix-v1',
       setting: 'route: matrix-v1',
-      status: 'live'
+      status: 'live',
+      pageUrl: '/matrix-v1'
     }
   },
   {
@@ -21,7 +22,8 @@ export const realMatrixNodes = [
       character: 'System',
       dialogue: 'What is your name?',
       emotion: 'neutral',
-      status: 'wip'
+      status: 'wip',
+      pageUrl: '/matrix-v1'
     }
   },
   {
@@ -36,7 +38,8 @@ export const realMatrixNodes = [
         'Blue Pill'
       ],
       status: 'stub',
-      isExpanded: false
+      isExpanded: false,
+      pageUrl: '/matrix-v1'
     }
   },
 
@@ -52,7 +55,8 @@ export const realMatrixNodes = [
       title: 'Red Pill Path',
       description: 'You chose the red pill.',
       setting: 'route: red-pill',
-      status: 'live'
+      status: 'live',
+      pageUrl: '/matrix-v1/terminal'
     }
   },
   {
@@ -66,7 +70,8 @@ export const realMatrixNodes = [
       title: 'Red Awakening',
       description: 'You awaken in a strange room filled with old computers and cryptic messages.',
       setting: 'The Real World',
-      status: 'live'
+      status: 'live',
+      pageUrl: '/matrix-v1/checkpoint'
     }
   },
   {
@@ -80,7 +85,8 @@ export const realMatrixNodes = [
       title: 'Training Upload',
       description: 'Combat training begins. You feel your muscles download new knowledge.',
       setting: 'Sim Program',
-      status: 'live'
+      status: 'live',
+      pageUrl: '/matrix-v1/guardian-call'
     }
   },
 
@@ -96,7 +102,8 @@ export const realMatrixNodes = [
       title: 'Blue Pill Path',
       description: 'You chose the blue pill.',
       setting: 'route: blue-pill',
-      status: 'live'
+      status: 'live',
+      pageUrl: '/matrix-v1/stage-1'
     }
   },
   {
@@ -110,7 +117,8 @@ export const realMatrixNodes = [
       title: 'Dream Within a Dream',
       description: 'You wake up in your bed, unsure if anything happened at all.',
       setting: 'Neo\'s Apartment',
-      status: 'live'
+      status: 'live',
+      pageUrl: '/matrix-v1/stage-2'
     }
   }
 ];

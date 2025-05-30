@@ -276,6 +276,18 @@ export default function MapD3() {
                 {selectedNode.data.description}
               </div>
             )}
+            {selectedNode.data?.pageUrl && (
+              <div className="mt-3 pt-3 border-t border-gray-600">
+                <a
+                  href={selectedNode.data.pageUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors font-mono text-sm border border-cyan-400/50 rounded px-3 py-2 hover:border-cyan-400 hover:bg-cyan-400/10"
+                >
+                  🔗 View Component
+                </a>
+              </div>
+            )}
           </div>
           <button
             onClick={() => setSelectedNode(null)}
