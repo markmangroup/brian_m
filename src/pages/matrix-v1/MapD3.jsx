@@ -258,11 +258,13 @@ export default function MapD3() {
 
       {/* Node Details Panel */}
       {selectedNode && (
-        <div className="fixed bottom-6 right-6 bg-black/90 border border-green-400/20 rounded p-4 max-w-md">
-          <h3 className="text-lg font-mono text-green-400 mb-2">
+        <div className="fixed bottom-6 right-6 bg-black/90 border border-green-400/20 rounded p-4 max-w-md max-h-[80vh] overflow-y-auto">
+          <h3 className="text-lg font-mono text-green-400 mb-3">
             {selectedNode.data?.title || selectedNode.id}
           </h3>
-          <div className="space-y-2 text-sm">
+          
+          {/* Basic Info */}
+          <div className="space-y-2 text-sm mb-4">
             <div><span className="text-gray-400">Type:</span> {selectedNode.type}</div>
             <div><span className="text-gray-400">Group:</span> {selectedNode.group}</div>
             <div><span className="text-gray-400">Depth:</span> {selectedNode.depth}</div>
@@ -271,27 +273,146 @@ export default function MapD3() {
                 {selectedNode.data?.status}
               </span>
             </div>
-            {selectedNode.data?.description && (
-              <div className="mt-3 text-gray-300">
-                {selectedNode.data.description}
-              </div>
-            )}
-            {selectedNode.data?.pageUrl && (
-              <div className="mt-3 pt-3 border-t border-gray-600">
-                <a
-                  href={selectedNode.data.pageUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors font-mono text-sm border border-cyan-400/50 rounded px-3 py-2 hover:border-cyan-400 hover:bg-cyan-400/10"
-                >
-                  🔗 View Component
-                </a>
-              </div>
-            )}
           </div>
+
+          {/* Summary */}
+          {selectedNode.data?.summary && (
+            <div className="mb-4 p-3 bg-gray-800/50 rounded border border-gray-600">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-lg">🧠</span>
+                <span className="text-cyan-400 font-mono text-sm font-bold">Summary</span>
+              </div>
+              <p className="text-gray-300 text-sm leading-relaxed">
+                {selectedNode.data.summary}
+              </p>
+            </div>
+          )}
+
+          {/* Characters */}
+          {selectedNode.data?.characters && selectedNode.data.characters.length > 0 && (
+            <div className="mb-4">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-lg">🎭</span>
+                <span className="text-purple-400 font-mono text-sm font-bold">Characters</span>
+              </div>
+              <div className="flex flex-wrap gap-1">
+                {selectedNode.data.characters.map((character, index) => (
+                  <span
+                    key={index}
+                    className="px-2 py-1 bg-purple-900/30 text-purple-300 rounded text-xs font-mono border border-purple-600/30"
+                  >
+                    {character}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Puzzles */}
+          {selectedNode.data?.puzzles && selectedNode.data.puzzles.length > 0 && (
+            <div className="mb-4">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-lg">🧩</span>
+                <span className="text-yellow-400 font-mono text-sm font-bold">Puzzles</span>
+              </div>
+              <div className="flex flex-wrap gap-1">
+                {selectedNode.data.puzzles.map((puzzle, index) => (
+                  <span
+                    key={index}
+                    className="px-2 py-1 bg-yellow-900/30 text-yellow-300 rounded text-xs font-mono border border-yellow-600/30"
+                  >
+                    {puzzle}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Interactions */}
+          {selectedNode.data?.interactions && selectedNode.data.interactions.length > 0 && (
+            <div className="mb-4">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-lg">🎬</span>
+                <span className="text-blue-400 font-mono text-sm font-bold">Interactions</span>
+              </div>
+              <div className="flex flex-wrap gap-1">
+                {selectedNode.data.interactions.map((interaction, index) => (
+                  <span
+                    key={index}
+                    className="px-2 py-1 bg-blue-900/30 text-blue-300 rounded text-xs font-mono border border-blue-600/30"
+                  >
+                    {interaction}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Feature Badges */}
+          {selectedNode.data?.features && (
+            <div className="mb-4">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-lg">💠</span>
+                <span className="text-emerald-400 font-mono text-sm font-bold">Features</span>
+              </div>
+              <div className="flex flex-wrap gap-1">
+                {Object.entries(selectedNode.data.features).map(([feature, enabled]) => {
+                  if (!enabled) return null;
+                  
+                  const getFeatureIcon = (feat) => {
+                    switch (feat) {
+                      case 'hasTransition': return '🌊';
+                      case 'hasCombat': return '⚔️';
+                      case 'hasChoice': return '🤔';
+                      case 'hasNPC': return '👤';
+                      case 'hasAnimation': return '✨';
+                      default: return '💠';
+                    }
+                  };
+
+                  const getFeatureLabel = (feat) => {
+                    return feat.replace('has', '').replace(/([A-Z])/g, ' $1').trim();
+                  };
+
+                  return (
+                    <span
+                      key={feature}
+                      className="px-2 py-1 bg-emerald-900/30 text-emerald-300 rounded text-xs font-mono border border-emerald-600/30 flex items-center gap-1"
+                    >
+                      <span className="text-xs">{getFeatureIcon(feature)}</span>
+                      {getFeatureLabel(feature)}
+                    </span>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Original Description */}
+          {selectedNode.data?.description && selectedNode.data.description !== selectedNode.data?.summary && (
+            <div className="mb-4 text-sm text-gray-400 border-t border-gray-700 pt-3">
+              <strong>Original Description:</strong><br />
+              {selectedNode.data.description}
+            </div>
+          )}
+
+          {/* Component URL Link */}
+          {selectedNode.data?.pageUrl && (
+            <div className="mt-4 pt-3 border-t border-gray-600">
+              <a
+                href={selectedNode.data.pageUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors font-mono text-sm border border-cyan-400/50 rounded px-3 py-2 hover:border-cyan-400 hover:bg-cyan-400/10 w-full justify-center"
+              >
+                🔗 View Component
+              </a>
+            </div>
+          )}
+
           <button
             onClick={() => setSelectedNode(null)}
-            className="absolute top-2 right-2 text-gray-400 hover:text-white"
+            className="absolute top-2 right-2 text-gray-400 hover:text-white text-lg"
           >
             ✕
           </button>
