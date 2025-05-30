@@ -91,7 +91,9 @@ function MapCanvasInner({ nodes }) {
 
   // Helper: get child nodes for a choice node
   function getChoiceChildren(choiceId) {
-    return realMatrixNodes.filter(n => n.parentChoice === choiceId);
+    const children = realMatrixNodes.filter(n => n.parentChoice === choiceId);
+    console.log('getChoiceChildren', choiceId, children);
+    return children;
   }
   // Helper: get child edges for a choice node
   function getChoiceEdges(choiceId) {
@@ -140,10 +142,12 @@ function MapCanvasInner({ nodes }) {
         ids.add(n.id);
       }
     });
-    return all.map(n => ({
+    const result = all.map(n => ({
       ...n,
       className: n._animate ? 'animate-fade-slide' : ''
     }));
+    console.log('Overlay nodes', result);
+    return result;
   }, [animatedOverlayNodes, overlayNodes]);
 
   const overlayEdges = useMemo(() => {
@@ -163,6 +167,7 @@ function MapCanvasInner({ nodes }) {
       const { id } = props;
       const isExpandable = getChoiceChildren(id).length > 0;
       const isExpanded = expandedPaths.includes(id);
+      console.log('Overlay ChoiceNode', id, { isExpandable, isExpanded, props });
       return (
         <ChoiceNode
           {...props}
