@@ -1,11 +1,30 @@
 import React from 'react';
 
 const baseCard =
-  'w-72 rounded-md shadow-lg ring-1 ring-white/10 bg-gradient-to-br from-[#111827] to-[#1f2937] transition-all duration-300 font-mono';
+  'w-72 rounded-md shadow-lg ring-1 ring-white/10 bg-gradient-to-br from-[#111827] to-[#1f2937] transition-all duration-300 font-mono text-white overflow-hidden';
 const hoverCard =
-  'hover:scale-[1.05] hover:shadow-xl ring-2 ring-cyan-400/40 z-20 cursor-pointer';
+  'hover:scale-[1.05] hover:shadow-2xl hover:ring-cyan-500/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 cursor-pointer';
 const headerClass = 'text-xs font-semibold uppercase tracking-wider text-white/90 font-mono';
 const bodyClass = 'text-xs leading-relaxed text-gray-300 font-mono';
+
+const statusStyles = {
+  live: { label: 'Built', icon: '✅', color: 'emerald' },
+  wip: { label: 'In Progress', icon: '🛠', color: 'yellow' },
+  stub: { label: 'Planned', icon: '❌', color: 'red' },
+};
+
+const StatusBadge = ({ status }) => {
+  const cfg = statusStyles[status];
+  if (!cfg) return null;
+  return (
+    <div
+      className={`inline-flex items-center gap-1 text-xs font-mono px-2 py-1 rounded border mt-2 text-${cfg.color}-400 border-${cfg.color}-400/60 bg-${cfg.color}-900/40`}
+    >
+      <span>{cfg.icon}</span>
+      <span>{cfg.label}</span>
+    </div>
+  );
+};
 
 const accent = {
   scene: 'border-2 border-purple-500 bg-purple-100',
@@ -23,7 +42,7 @@ export const SceneNode = ({ data = {}, type = 'scene' }) => (
     onMouseEnter={data?.onMouseEnter}
     onMouseLeave={data?.onMouseLeave}
     onClick={data?.onClick}
-    className={`${baseCard} ${hoverCard} ${data?.isOverlay ? 'cursor-pointer' : ''}`}
+    className={`${baseCard} ${hoverCard} ${data?.isOverlay ? 'cursor-pointer' : ''} animate-fade-slide`}
     style={{
       '--accent': '#60a5fa',
       borderColor: 'var(--accent)',
@@ -34,9 +53,7 @@ export const SceneNode = ({ data = {}, type = 'scene' }) => (
     {data.setting && (
       <div className="text-xs text-gray-400 italic font-mono">📍 Setting: {data.setting}</div>
     )}
-    {data.status && (
-      <div className="inline-flex items-center text-xs font-mono px-2 py-1 rounded border mt-2" style={{ borderColor: '#22c55e', backgroundColor: 'rgba(20,83,45,0.3)' }}>✅ Built</div>
-    )}
+    <StatusBadge status={data.status} />
   </div>
 );
 
@@ -45,7 +62,7 @@ export const DialogueNode = ({ data = {}, type = 'dialogue' }) => (
     onMouseEnter={data?.onMouseEnter}
     onMouseLeave={data?.onMouseLeave}
     onClick={data?.onClick}
-    className={`${baseCard} ${hoverCard} ${data?.isOverlay ? 'cursor-pointer' : ''}`}
+    className={`${baseCard} ${hoverCard} ${data?.isOverlay ? 'cursor-pointer' : ''} animate-fade-slide`}
     style={{
       '--accent': '#4ade80',
       borderColor: 'var(--accent)',
@@ -54,9 +71,7 @@ export const DialogueNode = ({ data = {}, type = 'dialogue' }) => (
     <div className={headerClass} style={{ color: 'var(--accent)' }}>{data.character || 'Unknown'}</div>
     <p className={bodyClass}>{data.dialogue || '...'}</p>
     <div className="text-gray-400 text-xs font-mono">{data.emotion || 'neutral'}</div>
-    {data.status && (
-      <div className="inline-flex items-center text-xs font-mono px-2 py-1 rounded border mt-2" style={{ borderColor: '#22c55e', backgroundColor: 'rgba(20,83,45,0.3)' }}>✅ Built</div>
-    )}
+    <StatusBadge status={data.status} />
   </div>
 );
 
@@ -70,7 +85,7 @@ export const ChoiceNode = ({ data = {}, type = 'choice' }) => {
       onMouseEnter={data?.onMouseEnter}
       onMouseLeave={data?.onMouseLeave}
       onClick={data?.onClick}
-      className={`${baseCard} ${hoverCard} ${data?.isOverlay ? 'cursor-pointer' : ''}`}
+      className={`${baseCard} ${hoverCard} ${data?.isOverlay ? 'cursor-pointer' : ''} animate-fade-slide`}
       style={{
         '--accent': '#a78bfa',
         borderColor: 'var(--accent)',
@@ -81,10 +96,10 @@ export const ChoiceNode = ({ data = {}, type = 'choice' }) => {
         {isExpandable && (
           <button
             onClick={e => { e.stopPropagation(); onBranchToggle && onBranchToggle(); }}
-            className="ml-2 text-lg font-mono text-cyan-400 hover:text-cyan-200 focus:outline-none"
+            className={`ml-2 p-1 rounded-full border border-cyan-400/50 text-cyan-400 hover:bg-cyan-900/40 transition-transform ${isExpanded ? 'rotate-90' : ''}`}
             title={isExpanded ? 'Collapse branch' : 'Expand branch'}
           >
-            {isExpanded ? '▼ Collapse' : '▶ Expand'}
+            {isExpanded ? '▲' : '▼'}
           </button>
         )}
       </div>
@@ -95,9 +110,7 @@ export const ChoiceNode = ({ data = {}, type = 'choice' }) => {
           </div>
         ))}
       </div>
-      {data.status && (
-        <div className="inline-flex items-center text-xs font-mono px-2 py-1 rounded border mt-2" style={{ borderColor: '#22c55e', backgroundColor: 'rgba(20,83,45,0.3)' }}>✅ Built</div>
-      )}
+      <StatusBadge status={data.status} />
     </div>
   );
 };
@@ -107,7 +120,7 @@ export const EndingNode = ({ data = {}, type = 'ending' }) => (
     onMouseEnter={data?.onMouseEnter}
     onMouseLeave={data?.onMouseLeave}
     onClick={data?.onClick}
-    className={`${baseCard} ${hoverCard} ${data?.isOverlay ? 'cursor-pointer' : ''}`}
+    className={`${baseCard} ${hoverCard} ${data?.isOverlay ? 'cursor-pointer' : ''} animate-fade-slide`}
     style={{
       '--accent': '#f87171',
       borderColor: 'var(--accent)',
@@ -116,8 +129,6 @@ export const EndingNode = ({ data = {}, type = 'ending' }) => (
     <div className={headerClass} style={{ color: 'var(--accent)' }}>{data.outcome || 'Unknown'}</div>
     <h3 className={headerClass}>{data.title || 'Untitled Ending'}</h3>
     <p className={bodyClass}>{data.description || 'No description.'}</p>
-    {data.status && (
-      <div className="inline-flex items-center text-xs font-mono px-2 py-1 rounded border mt-2" style={{ borderColor: '#22c55e', backgroundColor: 'rgba(20,83,45,0.3)' }}>✅ Built</div>
-    )}
+    <StatusBadge status={data.status} />
   </div>
-); 
+);
