@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { CharacterDialogue, CharacterAvatar } from '../components/CharacterSystem';
 
 export default function FactionChoice() {
   const navigate = useNavigate();
@@ -10,8 +11,8 @@ export default function FactionChoice() {
     {
       id: 'zion-fleet',
       name: 'Zion Fleet',
-      leader: 'Commander Locke',
-      mentor: 'Niobe',
+      leader: 'locke',
+      mentor: 'niobe',
       color: 'red',
       route: '/matrix-v1/zion-fleet',
       description: 'Join the military backbone of humanity\'s resistance.',
@@ -24,8 +25,8 @@ export default function FactionChoice() {
     {
       id: 'rebel-hackers',
       name: 'Rebel Hackers',
-      leader: 'Tank',
-      mentor: 'Dozer',
+      leader: 'tank',
+      mentor: 'dozer',
       color: 'green',
       route: '/matrix-v1/rebel-hackers',
       description: 'Master the art of bending Matrix rules to your will.',
@@ -38,8 +39,8 @@ export default function FactionChoice() {
     {
       id: 'oracle-seekers',
       name: 'Oracle Seekers',
-      leader: 'Oracle',
-      mentor: 'Seraph',
+      leader: 'oracle',
+      mentor: 'seraph',
       color: 'blue',
       route: '/matrix-v1/oracle-seekers',
       description: 'Seek wisdom and understand the deeper purpose.',
@@ -106,9 +107,15 @@ export default function FactionChoice() {
     <div className="min-h-screen bg-black text-white p-6 font-mono">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-2xl text-cyan-400 mb-2">[Critical] Faction Choice</h1>
-        <p className="text-gray-400 text-sm mb-8">
-          Morpheus speaks: "Each faction serves the resistance differently. Choose wisely - this will define your path."
-        </p>
+        
+        <div className="mb-8">
+          <CharacterDialogue 
+            characterKey="morpheus"
+            text="Each faction serves the resistance differently. Choose wisely - this will define your path."
+            showTitle={true}
+            className="animate-fade-in"
+          />
+        </div>
 
         {!showDetails ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -134,14 +141,14 @@ export default function FactionChoice() {
                   <div className="space-y-3 text-sm">
                     <p className="text-gray-300">{faction.description}</p>
                     
-                    <div>
-                      <span className="text-gray-500">Leader:</span>
-                      <span className={`ml-2 ${colors.text}`}>{faction.leader}</span>
+                    <div className="flex items-center gap-3">
+                      <span className="text-gray-500 text-xs">Leader:</span>
+                      <CharacterAvatar characterKey={faction.leader} size="xs" showName={true} />
                     </div>
                     
-                    <div>
-                      <span className="text-gray-500">Mentor:</span>
-                      <span className={`ml-2 ${colors.text}`}>{faction.mentor}</span>
+                    <div className="flex items-center gap-3">
+                      <span className="text-gray-500 text-xs">Mentor:</span>
+                      <CharacterAvatar characterKey={faction.mentor} size="xs" showName={true} />
                     </div>
                   </div>
 
@@ -189,6 +196,25 @@ export default function FactionChoice() {
                 </div>
 
                 <div>
+                  <h3 className="text-lg font-bold text-white mb-3">Leadership</h3>
+                  <div className="space-y-4 mb-4">
+                    <div className="flex items-center gap-3">
+                      <CharacterAvatar characterKey={selectedFaction.leader} size="md" />
+                      <div>
+                        <div className="text-sm font-bold text-white">Leader</div>
+                        <CharacterAvatar characterKey={selectedFaction.leader} size="xs" showName={true} />
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-3">
+                      <CharacterAvatar characterKey={selectedFaction.mentor} size="md" />
+                      <div>
+                        <div className="text-sm font-bold text-white">Mentor</div>
+                        <CharacterAvatar characterKey={selectedFaction.mentor} size="xs" showName={true} />
+                      </div>
+                    </div>
+                  </div>
+
                   <h3 className="text-lg font-bold text-white mb-3">Philosophy</h3>
                   <blockquote className={`
                     text-sm italic ${getColorClasses(selectedFaction).text} 
@@ -202,14 +228,6 @@ export default function FactionChoice() {
                     <p className="text-yellow-300 text-xs">
                       {selectedFaction.warning}
                     </p>
-                  </div>
-
-                  <div className="mt-4">
-                    <h4 className="font-bold text-white mb-2">Leadership</h4>
-                    <div className="text-sm text-gray-300">
-                      <div><strong>Leader:</strong> {selectedFaction.leader}</div>
-                      <div><strong>Mentor:</strong> {selectedFaction.mentor}</div>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -258,6 +276,10 @@ export default function FactionChoice() {
                       <div className="text-lg mb-1">{faction.icon}</div>
                       <div className={`font-bold ${isSelected ? colors.text : 'text-gray-400'}`}>
                         {faction.name}
+                      </div>
+                      <div className="flex justify-center gap-1 mt-1">
+                        <CharacterAvatar characterKey={faction.leader} size="xs" />
+                        <CharacterAvatar characterKey={faction.mentor} size="xs" />
                       </div>
                       {isSelected && (
                         <div className="text-xs text-cyan-400 mt-1">✓ Selected</div>

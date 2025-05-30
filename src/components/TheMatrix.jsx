@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { UserContext } from './UserContext';
 import useTypewriterEffect from './useTypewriterEffect';
 import MatrixRain from './MatrixRain';
+import { CharacterSpeaker } from './CharacterSystem';
 
 export default function TheMatrix() {
   const { userName, setUserName } = useContext(UserContext);
@@ -16,14 +17,14 @@ export default function TheMatrix() {
   const displayName = userName || name;
 
   const story = [
-    { speaker: '😎 Morpheus', text: `Hello, ${displayName}. I am Morpheus.` },
-    { speaker: '👓 Trinity', text: 'We have been looking for you.' },
-    { speaker: '😎 Morpheus', text: 'This is your chance to learn the truth.' },
+    { speaker: 'morpheus', text: `Hello, ${displayName}. I am Morpheus.` },
+    { speaker: 'trinity', text: 'We have been looking for you.' },
+    { speaker: 'morpheus', text: 'This is your chance to learn the truth.' },
     {
-      speaker: '😎 Morpheus',
+      speaker: 'morpheus',
       text: 'Follow the white rabbit and see how deep the hole goes.'
     },
-    { speaker: '🐇 ???', text: 'Ready to choose your destiny?' }
+    { speaker: 'system', text: 'Ready to choose your destiny?' }
   ];
 
   const current = story[step];
@@ -39,71 +40,64 @@ export default function TheMatrix() {
     }
   };
 
-  if (!entered) {
-    return (
-      <div className="flex flex-col items-center justify-center py-20 space-y-6 min-h-screen relative overflow-hidden">
-        {/* Matrix Rain background for name prompt (client-only) */}
-        {typeof window !== 'undefined' && (
-          <MatrixRain zIndex={0} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
-        )}
-        {/* Storyboard: User sees welcome and prompt, enters name */}
-        <div className="relative z-10 flex flex-col items-center space-y-6">
-          <h1 className="text-4xl font-bold text-green-500 font-mono">{welcomeText}</h1>
-          <p className="text-xl">{promptText}</p>
-          <form onSubmit={handleSubmit} className="flex space-x-2">
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Player Name"
-              className="px-4 py-2 rounded bg-black border border-green-700 text-green-500 placeholder-green-700 focus:outline-none"
-            />
-            <button
-              type="submit"
-              className="px-4 py-2 rounded bg-green-700 text-black hover:bg-green-600"
-            >
-              Enter
-            </button>
-          </form>
-        </div>
-      </div>
-    );
-  }
-
-  /* ───────────── 2. story steps ───────────── */
+  /* ───────────── 2. story progression ───────────── */
+  const handleNext = () => {
+    if (step < story.length - 1) {
+      setStep(step + 1);
+    } else {
+      navigate('/matrix-v1/terminal');
+    }
+  };
 
   return (
-    <div className="flex flex-col items-center justify-center py-20 text-green-500 font-mono space-y-6 min-h-screen relative overflow-hidden">
-      {/* Matrix Rain background for inside the Matrix (client-only) */}
+    <div className="min-h-screen bg-black text-green-400 font-mono relative overflow-hidden">
       {typeof window !== 'undefined' && (
         <MatrixRain zIndex={0} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
       )}
-      <div className="relative z-10 flex flex-col items-center space-y-6 text-center px-4">
-        <p className="text-xl">
-          <span className="font-bold mr-2">{current.speaker}:</span> {storyText}
-        </p>
-        {step < story.length - 1 && (
-          <button
-            onClick={() => setStep(step + 1)}
-            className="px-4 py-2 rounded bg-green-700 text-black hover:bg-green-600"
-          >
-            Next
-          </button>
-        )}
-        {step === story.length - 1 && storyDone && (
-          <div className="flex space-x-4">
-            <button
-              onClick={() => navigate('/matrix-v1/terminal', { state: { name: displayName } })}
-              className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-500"
-            >
-              Red Pill
-            </button>
-            <button
-              onClick={() => navigate('/')}
-              className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-500"
-            >
-              Blue Pill
-            </button>
+      
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen space-y-6 px-4">
+        <h1 className="text-4xl font-bold text-center">{welcomeText}</h1>
+
+        {!entered ? (
+          /* ─── NAME ENTRY ─── */
+          <div className="w-full max-w-md space-y-4">
+            <p className="text-lg text-center">{promptText}</p>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full p-3 rounded bg-black/50 border border-green-700 text-green-400 placeholder-green-600 focus:border-green-500"
+                placeholder="Your name..."
+                autoFocus
+              />
+              <button
+                type="submit"
+                className="w-full py-3 rounded bg-green-900 text-green-400 hover:bg-green-800 transition-colors"
+              >
+                Enter the Matrix
+              </button>
+            </form>
+          </div>
+        ) : (
+          /* ─── STORY SEQUENCE ─── */
+          <div className="w-full max-w-2xl space-y-6">
+            <CharacterSpeaker
+              characterKey={current.speaker}
+              text={storyText}
+              className="animate-fade-in"
+            />
+            
+            {storyDone && (
+              <div className="text-center">
+                <button
+                  onClick={handleNext}
+                  className="px-6 py-3 rounded bg-green-900 text-green-400 hover:bg-green-800 transition-colors animate-fade-in"
+                >
+                  {step < story.length - 1 ? 'Continue...' : 'Enter Terminal'}
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>

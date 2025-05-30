@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { CharacterDialogue, CharacterAvatar } from '../components/CharacterSystem';
 
 export default function ZionFleet() {
   const navigate = useNavigate();
@@ -88,9 +89,15 @@ export default function ZionFleet() {
     <div className="min-h-screen bg-black text-white p-6 font-mono">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-2xl text-red-400 mb-2">[Active] Zion Fleet Training</h1>
-        <p className="text-gray-400 text-sm mb-6">
-          Commander Locke: "Welcome to the last city of mankind. Time to make you a soldier."
-        </p>
+        
+        <div className="mb-6">
+          <CharacterDialogue 
+            characterKey="locke"
+            text="Welcome to the Zion Defense Corps. The machines are coming, and we need soldiers who can fight both in and out of the Matrix."
+            showTitle={true}
+            className="animate-fade-in"
+          />
+        </div>
 
         {/* Progress Bar */}
         <div className="mb-6">
@@ -110,40 +117,63 @@ export default function ZionFleet() {
         {currentPhase === 'briefing' && (
           <div className="space-y-6">
             <div className="bg-red-900/20 border border-red-400/30 rounded p-6">
-              <h2 className="text-xl text-red-300 font-bold mb-4">🎖️ Military Briefing</h2>
+              <h2 className="text-xl text-red-300 font-bold mb-4">⚔️ Military Briefing</h2>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <h3 className="text-lg text-white font-bold mb-3">Mission Objectives</h3>
-                  <ul className="space-y-2 text-sm text-gray-300">
-                    <li>• Learn ship operations and navigation</li>
-                    <li>• Master combat targeting systems</li>
-                    <li>• Understand military hierarchy</li>
-                    <li>• Develop team coordination skills</li>
-                  </ul>
+                  <h3 className="text-lg text-white font-bold mb-3">Mission Overview</h3>
+                  <p className="text-sm text-gray-300 leading-relaxed mb-4">
+                    The machines have found our location. Every day we delay is another day closer to Zion's destruction. 
+                    You will learn ship operations, combat tactics, and how to coordinate with your crew under pressure.
+                  </p>
                   
-                  <h3 className="text-lg text-white font-bold mb-3 mt-6">Chain of Command</h3>
-                  <div className="space-y-2 text-sm">
-                    <div><span className="text-red-300">Commander:</span> <span className="text-gray-300">Locke</span></div>
-                    <div><span className="text-red-300">Captain:</span> <span className="text-gray-300">Niobe</span></div>
-                    <div><span className="text-red-300">Your Rank:</span> <span className="text-gray-300">Trainee</span></div>
+                  <h3 className="text-lg text-white font-bold mb-3">Core Values</h3>
+                  <blockquote className="text-sm italic text-red-300 border-l-4 border-red-400/30 pl-4 mb-4">
+                    "Victory through strength and unity."
+                  </blockquote>
+
+                  <h3 className="text-lg text-white font-bold mb-3">Your Command Structure</h3>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                      <CharacterAvatar characterKey="locke" size="sm" />
+                      <div>
+                        <div className="text-red-300 font-bold text-sm">Commander</div>
+                        <div className="text-gray-300 text-xs">Locke - Zion Defense</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <CharacterAvatar characterKey="niobe" size="sm" />
+                      <div>
+                        <div className="text-red-300 font-bold text-sm">Captain</div>
+                        <div className="text-gray-300 text-xs">Niobe - Ship Operations</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
                 <div>
-                  <h3 className="text-lg text-white font-bold mb-3">Ship Specifications</h3>
-                  <div className="bg-gray-800/50 rounded p-4 text-sm">
-                    <div className="grid grid-cols-2 gap-2 text-gray-300">
-                      <div>Hull Integrity:</div><div className="text-green-400">100%</div>
-                      <div>Power Core:</div><div className="text-blue-400">Online</div>
-                      <div>Weapons:</div><div className="text-yellow-400">Armed</div>
-                      <div>Crew Status:</div><div className="text-green-400">Ready</div>
+                  <h3 className="text-lg text-white font-bold mb-3">Training Phases</h3>
+                  <div className="space-y-3">
+                    <div className="bg-gray-800/50 rounded p-3">
+                      <div className="text-sm font-bold text-red-400">Phase 1: Strategic Briefing</div>
+                      <div className="text-xs text-gray-400">Understand the war and your role</div>
+                    </div>
+                    <div className="bg-gray-800/50 rounded p-3">
+                      <div className="text-sm font-bold text-yellow-400">Phase 2: Ship Operations</div>
+                      <div className="text-xs text-gray-400">Master navigation and systems</div>
+                    </div>
+                    <div className="bg-gray-800/50 rounded p-3">
+                      <div className="text-sm font-bold text-green-400">Phase 3: Combat Simulation</div>
+                      <div className="text-xs text-gray-400">Prove your readiness for battle</div>
                     </div>
                   </div>
 
-                  <h3 className="text-lg text-white font-bold mb-3 mt-4">Training Protocol</h3>
-                  <div className="text-sm text-gray-300">
-                    <p>You'll start with basic combat simulation. Eliminate hostile targets while conserving ammunition. Minimum 70% accuracy required for graduation.</p>
+                  <div className="mt-6 bg-yellow-900/20 border border-yellow-400/30 rounded p-3">
+                    <h4 className="font-bold text-yellow-400 mb-2">⚠️ Reminder</h4>
+                    <p className="text-yellow-300 text-xs">
+                      This path demands absolute loyalty and sacrifice. 
+                      The survival of humanity depends on your commitment.
+                    </p>
                   </div>
                 </div>
               </div>
@@ -156,7 +186,7 @@ export default function ZionFleet() {
                   }}
                   className="px-6 py-3 rounded border border-red-400/60 bg-red-900/20 text-red-300 hover:bg-red-900/40 transition-all font-bold"
                 >
-                  🚀 Begin Training
+                  🚢 Begin Ship Operations Training
                 </button>
               </div>
             </div>
@@ -276,24 +306,28 @@ export default function ZionFleet() {
         {currentPhase === 'complete' && (
           <div className="space-y-6">
             <div className="bg-green-900/20 border border-green-400/30 rounded p-6 text-center">
-              <h2 className="text-2xl text-green-300 font-bold mb-4">🏆 Training Complete</h2>
+              <h2 className="text-2xl text-green-300 font-bold mb-4">🎖️ Military Training Complete</h2>
               
-              <div className="text-6xl mb-4">🎖️</div>
+              <div className="text-6xl mb-4">👨‍✈️</div>
               
-              <p className="text-lg text-gray-300 mb-4">
-                Congratulations, soldier! You've earned your place in the Zion Fleet.
-              </p>
+              <div className="mb-6">
+                <CharacterDialogue 
+                  characterKey="niobe"
+                  text="Outstanding work, soldier. You've earned your place among Zion's defenders. The fleet is stronger with you in it."
+                  size="md"
+                />
+              </div>
               
               <div className="bg-gray-800/50 rounded p-4 mb-6">
-                <h3 className="text-lg font-bold text-white mb-2">Final Stats</h3>
+                <h3 className="text-lg font-bold text-white mb-2">Training Results</h3>
                 <div className="grid grid-cols-3 gap-4 text-sm">
                   <div>
-                    <div className="text-green-400 font-bold">{hits}/6</div>
-                    <div className="text-gray-400">Targets Hit</div>
+                    <div className="text-red-400 font-bold">{Math.floor(accuracy)}%</div>
+                    <div className="text-gray-400">Combat Accuracy</div>
                   </div>
                   <div>
-                    <div className="text-blue-400 font-bold">{Math.round((hits / 6) * 100)}%</div>
-                    <div className="text-gray-400">Accuracy</div>
+                    <div className="text-blue-400 font-bold">{timeRemaining}s</div>
+                    <div className="text-gray-400">Time Remaining</div>
                   </div>
                   <div>
                     <div className="text-yellow-400 font-bold">{score}</div>
@@ -307,19 +341,19 @@ export default function ZionFleet() {
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <button
-                    onClick={() => proceedToNextPath('/matrix-v1/skill-gate-alpha')}
-                    className="p-4 rounded border border-green-400/60 bg-green-900/20 text-green-300 hover:bg-green-900/40 transition-all"
+                    onClick={() => proceedToNextPath('/matrix-v1/combat-nexus')}
+                    className="p-4 rounded border border-red-400/60 bg-red-900/20 text-red-300 hover:bg-red-900/40 transition-all"
                   >
-                    <div className="text-lg mb-2">⚔️ Advanced Combat</div>
-                    <div className="text-sm text-gray-400">Test your combined skills</div>
+                    <div className="text-lg mb-2">⚔️ Combat Nexus</div>
+                    <div className="text-sm text-gray-400">Advanced tactical missions</div>
                   </button>
                   
                   <button
-                    onClick={() => proceedToNextPath('/matrix-v1/trinity-rescue')}
+                    onClick={() => proceedToNextPath('/matrix-v1/the-source')}
                     className="p-4 rounded border border-purple-400/60 bg-purple-900/20 text-purple-300 hover:bg-purple-900/40 transition-all"
                   >
-                    <div className="text-lg mb-2">🚁 Rescue Mission</div>
-                    <div className="text-sm text-gray-400">Help extract Trinity</div>
+                    <div className="text-lg mb-2">🎯 The Source</div>
+                    <div className="text-sm text-gray-400">Final convergence point</div>
                   </button>
                 </div>
               </div>

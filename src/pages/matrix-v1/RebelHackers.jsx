@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { CharacterDialogue, CharacterAvatar } from '../components/CharacterSystem';
 
 export default function RebelHackers() {
   const navigate = useNavigate();
@@ -134,9 +135,15 @@ export default function RebelHackers() {
     <div className="min-h-screen bg-black text-white p-6 font-mono">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-2xl text-green-400 mb-2">[Active] Rebel Hacker Network</h1>
-        <p className="text-gray-400 text-sm mb-6">
-          Tank: "Welcome to the underground, kid. Time to learn what's really possible."
-        </p>
+        
+        <div className="mb-6">
+          <CharacterDialogue 
+            characterKey="tank"
+            text="Welcome to the underground, kid. Time to learn what's really possible."
+            showTitle={true}
+            className="animate-fade-in"
+          />
+        </div>
 
         {/* Progress Bar */}
         <div className="mb-6">
@@ -172,10 +179,28 @@ export default function RebelHackers() {
                   </blockquote>
 
                   <h3 className="text-lg text-white font-bold mb-3">Your Mentors</h3>
-                  <div className="space-y-2 text-sm">
-                    <div><span className="text-green-300">Leader:</span> <span className="text-gray-300">Tank</span></div>
-                    <div><span className="text-green-300">Tech Specialist:</span> <span className="text-gray-300">Dozer</span></div>
-                    <div><span className="text-green-300">Code Master:</span> <span className="text-gray-300">Mouse</span></div>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                      <CharacterAvatar characterKey="tank" size="sm" />
+                      <div>
+                        <div className="text-green-300 font-bold text-sm">Leader</div>
+                        <div className="text-gray-300 text-xs">Tank - Network Commander</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <CharacterAvatar characterKey="dozer" size="sm" />
+                      <div>
+                        <div className="text-green-300 font-bold text-sm">Tech Specialist</div>
+                        <div className="text-gray-300 text-xs">Dozer - Systems Engineer</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <CharacterAvatar characterKey="mouse" size="sm" />
+                      <div>
+                        <div className="text-green-300 font-bold text-sm">Code Master</div>
+                        <div className="text-gray-300 text-xs">Mouse - Reality Programmer</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -389,10 +414,13 @@ export default function RebelHackers() {
               
               <div className="text-6xl mb-4">👨‍💻</div>
               
-              <p className="text-lg text-gray-300 mb-4">
-                Congratulations! You've mastered the art of reality manipulation. 
-                The Matrix's rules no longer bind you.
-              </p>
+              <div className="mb-6">
+                <CharacterDialogue 
+                  characterKey="tank"
+                  text="Congratulations! You've mastered the art of reality manipulation. The Matrix's rules no longer bind you."
+                  size="md"
+                />
+              </div>
               
               <div className="bg-gray-800/50 rounded p-4 mb-6">
                 <h3 className="text-lg font-bold text-white mb-2">Final Achievement</h3>

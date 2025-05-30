@@ -4,6 +4,7 @@ import { UserContext } from './UserContext';
 import { NAOE_QUOTES } from '../data/naoeQuotes';
 import useTypewriterEffect from './useTypewriterEffect';
 import MatrixRain from './MatrixRain';
+import { CharacterDialogue } from './CharacterSystem';
 
 const QUOTE_OPTIONS = [
   { text: 'There is no...', options: ['Door', 'Spoon', 'Exit', 'Escape'], correct: 'Spoon' },
@@ -64,18 +65,22 @@ export default function MatrixV1Terminal() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-black text-green-500 font-mono space-y-6 relative overflow-hidden">
-      {/* Matrix Rain background */}
-      {typeof window !== 'undefined' && !isTransitioning && (
+    <div className="min-h-screen bg-black text-green-400 font-mono relative overflow-hidden">
+      {typeof window !== 'undefined' && (
         <MatrixRain zIndex={0} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
       )}
       
-      <div className="relative z-10 flex flex-col items-center space-y-6 w-full max-w-md px-4">
-        <h1 className="text-4xl font-bold">Matrix Terminal</h1>
-
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen space-y-6 px-4">
         {!ok && selectedQuote && !isTransitioning && (
-          <div className="w-full space-y-6 animate-fade-in">
-            <p className="text-lg text-center">{morpheusText}</p>
+          <div className="w-full max-w-2xl space-y-6 animate-fade-in">
+            <CharacterDialogue 
+              characterKey="morpheus"
+              text="I'm going to show you how deep the rabbit hole goes. Answer this question to prove you are The One..."
+              size="lg"
+              showTitle={true}
+              className="animate-fade-in-slow"
+            />
+            
             <div className="bg-black/50 p-6 rounded-lg border border-green-700">
               <p className="text-xl mb-4">{selectedQuote.text}</p>
               <div className="grid grid-cols-2 gap-3">
