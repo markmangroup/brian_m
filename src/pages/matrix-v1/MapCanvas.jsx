@@ -87,6 +87,7 @@ function MapCanvasInner({ nodes }) {
   const [cursor, setCursor] = useState('grab');
   const [showRealPath, setShowRealPath] = useState(true);
   const [expandedPaths, setExpandedPaths] = useState([]);
+  const [animatedOverlayNodes, setAnimatedOverlayNodes] = useState([]);
 
   // Helper: get child nodes for a choice node
   function getChoiceChildren(choiceId) {
@@ -99,7 +100,6 @@ function MapCanvasInner({ nodes }) {
 
   // Compute overlay nodes/edges based on expandedPaths
   const overlayNodes = useMemo(() => {
-    // Always show the main path up to the first choice
     let base = realMatrixNodes.filter(n => !n.parentChoice);
     let expanded = [];
     expandedPaths.forEach(choiceId => {
@@ -107,6 +107,44 @@ function MapCanvasInner({ nodes }) {
     });
     return [...base, ...expanded];
   }, [expandedPaths]);
+
+  // Animate new overlay nodes on expansion
+  useEffect(() => {
+    let base = realMatrixNodes.filter(n => !n.parentChoice);
+    let expanded = [];
+    let timeouts = [];
+    expandedPaths.forEach((choiceId, i) => {
+      const children = getChoiceChildren(choiceId);
+      children.forEach((child, j) => {
+        timeouts.push(setTimeout(() => {
+          setAnimatedOverlayNodes(prev => {
+            if (prev.find(n => n.id === child.id)) return prev;
+            return [...prev, { ...child, _animate: true }];
+          });
+        }, 120 * (i + j)));
+      });
+    });
+    // Always show base nodes immediately
+    setAnimatedOverlayNodes(base.map(n => ({ ...n, _animate: false })));
+    return () => timeouts.forEach(clearTimeout);
+  }, [expandedPaths]);
+
+  // Compose animated overlay nodes for ReactFlow
+  const animatedNodesForOverlay = useMemo(() => {
+    // Merge base and animated expanded nodes
+    const ids = new Set();
+    const all = [...animatedOverlayNodes];
+    overlayNodes.forEach(n => {
+      if (!ids.has(n.id)) {
+        all.push(n);
+        ids.add(n.id);
+      }
+    });
+    return all.map(n => ({
+      ...n,
+      className: n._animate ? 'animate-fade-slide' : ''
+    }));
+  }, [animatedOverlayNodes, overlayNodes]);
 
   const overlayEdges = useMemo(() => {
     let base = realMatrixEdges.filter(e => {
@@ -294,7 +332,7 @@ function MapCanvasInner({ nodes }) {
           </ReactFlow>
           {showRealPath && (
             <ReactFlow
-              nodes={overlayNodes}
+              nodes={animatedNodesForOverlay}
               edges={overlayEdges}
               nodeTypes={overlayNodeTypes}
               edgeOptions={{
