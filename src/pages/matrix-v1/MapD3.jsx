@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useCallback } from 'react';
+import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import * as d3 from 'd3';
 import { realMatrixNodes, realMatrixEdges } from './realMatrixFlow';
 import { convertToTree, filterTreeByStatus, findPathToNode } from '../../utils/convertToTree';
@@ -23,6 +23,103 @@ export default function MapD3() {
   const [breadcrumb, setBreadcrumb] = useState([]);
   const [expandedNodes, setExpandedNodes] = useState(new Set(['matrix-v1-entry']));
   
+  // Layer filter states
+  const [showLayerControls, setShowLayerControls] = useState(false);
+  const [activeCharacterFilters, setActiveCharacterFilters] = useState([]);
+  const [activePuzzleFilters, setActivePuzzleFilters] = useState([]);
+  const [activeInteractionFilters, setActiveInteractionFilters] = useState([]);
+  const [activeFeatureFilters, setActiveFeatureFilters] = useState([]);
+  
+  // Extract unique values from all nodes dynamically
+  const filterOptions = useMemo(() => {
+    const characters = new Set();
+    const puzzles = new Set();
+    const interactions = new Set();
+    const features = new Set();
+    
+    realMatrixNodes.forEach(node => {
+      // Characters
+      if (node.data?.characters) {
+        node.data.characters.forEach(char => characters.add(char));
+      }
+      
+      // Puzzles
+      if (node.data?.puzzles) {
+        node.data.puzzles.forEach(puzzle => puzzles.add(puzzle));
+      }
+      
+      // Interactions
+      if (node.data?.interactions) {
+        node.data.interactions.forEach(interaction => interactions.add(interaction));
+      }
+      
+      // Features (only enabled ones)
+      if (node.data?.features) {
+        Object.entries(node.data.features).forEach(([feature, enabled]) => {
+          if (enabled) features.add(feature);
+        });
+      }
+    });
+    
+    return {
+      characters: Array.from(characters).sort(),
+      puzzles: Array.from(puzzles).sort(),
+      interactions: Array.from(interactions).sort(),
+      features: Array.from(features).sort()
+    };
+  }, []);
+
+  // Check if a node matches active filters
+  const nodeMatchesFilters = useCallback((node) => {
+    // If no filters are active, show all nodes
+    if (activeCharacterFilters.length === 0 && 
+        activePuzzleFilters.length === 0 && 
+        activeInteractionFilters.length === 0 && 
+        activeFeatureFilters.length === 0) {
+      return true;
+    }
+    
+    let matches = true;
+    
+    // Check character filters (AND logic)
+    if (activeCharacterFilters.length > 0) {
+      matches = matches && activeCharacterFilters.some(char => 
+        node.data?.characters?.includes(char)
+      );
+    }
+    
+    // Check puzzle filters (AND logic)
+    if (activePuzzleFilters.length > 0) {
+      matches = matches && activePuzzleFilters.some(puzzle => 
+        node.data?.puzzles?.includes(puzzle)
+      );
+    }
+    
+    // Check interaction filters (AND logic)
+    if (activeInteractionFilters.length > 0) {
+      matches = matches && activeInteractionFilters.some(interaction => 
+        node.data?.interactions?.includes(interaction)
+      );
+    }
+    
+    // Check feature filters (AND logic)
+    if (activeFeatureFilters.length > 0) {
+      matches = matches && activeFeatureFilters.some(feature => 
+        node.data?.features?.[feature] === true
+      );
+    }
+    
+    return matches;
+  }, [activeCharacterFilters, activePuzzleFilters, activeInteractionFilters, activeFeatureFilters]);
+
+  // Reset all filters
+  const resetAllFilters = () => {
+    setActiveCharacterFilters([]);
+    setActivePuzzleFilters([]);
+    setActiveInteractionFilters([]);
+    setActiveFeatureFilters([]);
+  };
+
   // Convert data to tree structure
   const originalTree = convertToTree(realMatrixNodes, realMatrixEdges);
   const filteredTree = filterTreeByStatus(originalTree, statusFilter);
@@ -87,7 +184,7 @@ export default function MapD3() {
       g.attr('transform', `translate(${margin.left}, ${margin.top})`);
     }
 
-    // Draw links
+    // Draw links with conditional styling
     const links = g.selectAll('.link')
       .data(treeData.links())
       .enter().append('path')
@@ -96,11 +193,19 @@ export default function MapD3() {
         .x(d => layoutType === LAYOUT_TYPES.radial ? d.x : d.y)
         .y(d => layoutType === LAYOUT_TYPES.radial ? d.y : d.x))
       .style('fill', 'none')
-      .style('stroke', '#06b6d4')
+      .style('stroke', d => {
+        const sourceMatches = nodeMatchesFilters(d.source.data);
+        const targetMatches = nodeMatchesFilters(d.target.data);
+        return (sourceMatches && targetMatches) ? '#06b6d4' : '#374151';
+      })
       .style('stroke-width', 2)
-      .style('stroke-opacity', 0.6);
+      .style('stroke-opacity', d => {
+        const sourceMatches = nodeMatchesFilters(d.source.data);
+        const targetMatches = nodeMatchesFilters(d.target.data);
+        return (sourceMatches && targetMatches) ? 0.8 : 0.3;
+      });
 
-    // Draw nodes
+    // Draw nodes with conditional styling
     const nodes = g.selectAll('.node')
       .data(treeData.descendants())
       .enter().append('g')
@@ -113,22 +218,48 @@ export default function MapD3() {
       .style('cursor', 'pointer')
       .on('click', (event, d) => handleNodeClick(d));
 
-    // Node circles
+    // Node circles with highlighting
     nodes.append('circle')
       .attr('r', d => d.children ? 8 : 6)
       .style('fill', d => getNodeColor(d.data))
-      .style('stroke', '#fff')
-      .style('stroke-width', 2)
-      .style('opacity', d => d.data._isFiltered ? 0.5 : 1);
+      .style('stroke', d => {
+        const matches = nodeMatchesFilters(d.data);
+        return matches && (activeCharacterFilters.length > 0 || activePuzzleFilters.length > 0 || 
+                          activeInteractionFilters.length > 0 || activeFeatureFilters.length > 0) 
+          ? '#10b981' : '#fff';
+      })
+      .style('stroke-width', d => {
+        const matches = nodeMatchesFilters(d.data);
+        return matches && (activeCharacterFilters.length > 0 || activePuzzleFilters.length > 0 || 
+                          activeInteractionFilters.length > 0 || activeFeatureFilters.length > 0) 
+          ? 4 : 2;
+      })
+      .style('opacity', d => {
+        const matches = nodeMatchesFilters(d.data);
+        return matches ? 1 : 0.4;
+      })
+      .style('filter', d => {
+        const matches = nodeMatchesFilters(d.data);
+        return matches && (activeCharacterFilters.length > 0 || activePuzzleFilters.length > 0 || 
+                          activeInteractionFilters.length > 0 || activeFeatureFilters.length > 0)
+          ? 'drop-shadow(0 0 8px rgb(16 185 129 / 0.8))' : 'none';
+      });
 
-    // Node labels
+    // Node labels with conditional styling
     nodes.append('text')
       .attr('dy', '.35em')
       .attr('x', d => d.children ? -12 : 12)
       .style('text-anchor', d => d.children ? 'end' : 'start')
       .style('font-size', '12px')
       .style('font-family', 'monospace')
-      .style('fill', '#fff')
+      .style('fill', d => {
+        const matches = nodeMatchesFilters(d.data);
+        return matches ? '#fff' : '#9ca3af';
+      })
+      .style('opacity', d => {
+        const matches = nodeMatchesFilters(d.data);
+        return matches ? 1 : 0.6;
+      })
       .style('pointer-events', 'none')
       .text(d => d.data.data?.title || d.data.id);
 
@@ -144,7 +275,7 @@ export default function MapD3() {
       .style('pointer-events', 'none')
       .text(d => d.children ? '−' : '+');
 
-  }, [filteredTree, layoutType, expandedNodes]);
+  }, [filteredTree, layoutType, expandedNodes, nodeMatchesFilters, activeCharacterFilters, activePuzzleFilters, activeInteractionFilters, activeFeatureFilters]);
 
   const getNodeColor = (node) => {
     const status = node.data?.status || 'unknown';
@@ -169,6 +300,43 @@ export default function MapD3() {
         : [...prev, status]
     );
   };
+
+  // Toggle functions for layer filters
+  const toggleCharacterFilter = (character) => {
+    setActiveCharacterFilters(prev => 
+      prev.includes(character)
+        ? prev.filter(c => c !== character)
+        : [...prev, character]
+    );
+  };
+
+  const togglePuzzleFilter = (puzzle) => {
+    setActivePuzzleFilters(prev => 
+      prev.includes(puzzle)
+        ? prev.filter(p => p !== puzzle)
+        : [...prev, puzzle]
+    );
+  };
+
+  const toggleInteractionFilter = (interaction) => {
+    setActiveInteractionFilters(prev => 
+      prev.includes(interaction)
+        ? prev.filter(i => i !== interaction)
+        : [...prev, interaction]
+    );
+  };
+
+  const toggleFeatureFilter = (feature) => {
+    setActiveFeatureFilters(prev => 
+      prev.includes(feature)
+        ? prev.filter(f => f !== feature)
+        : [...prev, feature]
+    );
+  };
+
+  // Count active filters
+  const activeFilterCount = activeCharacterFilters.length + activePuzzleFilters.length + 
+                           activeInteractionFilters.length + activeFeatureFilters.length;
 
   useEffect(() => {
     drawTree();
@@ -197,6 +365,29 @@ export default function MapD3() {
                 {type}
               </button>
             ))}
+          </div>
+
+          {/* Layer Controls Toggle */}
+          <div className="flex gap-2 items-center">
+            <button
+              onClick={() => setShowLayerControls(!showLayerControls)}
+              className={`px-3 py-1 rounded text-xs font-mono border transition-colors ${
+                showLayerControls || activeFilterCount > 0
+                  ? 'bg-purple-900 text-purple-300 border-purple-400'
+                  : 'bg-gray-900 text-gray-400 border-gray-600 hover:border-gray-500'
+              }`}
+            >
+              🎛️ Layers {activeFilterCount > 0 && `(${activeFilterCount})`}
+            </button>
+            
+            {activeFilterCount > 0 && (
+              <button
+                onClick={resetAllFilters}
+                className="px-2 py-1 rounded text-xs font-mono border border-red-400/60 bg-red-900/40 text-red-300 hover:bg-red-900/60 transition-colors"
+              >
+                ✕ Reset
+              </button>
+            )}
           </div>
 
           {/* Status Filters */}
@@ -239,6 +430,157 @@ export default function MapD3() {
         )}
       </div>
 
+      {/* Layer Controls Panel */}
+      {showLayerControls && (
+        <div className="fixed top-20 right-4 bg-black/95 border border-green-400/30 rounded-lg p-4 max-w-xs max-h-[70vh] overflow-y-auto shadow-xl backdrop-blur-sm z-30">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-mono text-green-400 font-bold">🎛️ Layer Filters</h3>
+            <button
+              onClick={() => setShowLayerControls(false)}
+              className="text-gray-400 hover:text-white text-sm"
+            >
+              ✕
+            </button>
+          </div>
+
+          {/* Characters Section */}
+          {filterOptions.characters.length > 0 && (
+            <div className="mb-4">
+              <div className="flex items-center gap-1 mb-2">
+                <span className="text-sm">🎭</span>
+                <span className="text-purple-400 font-mono text-xs font-bold">
+                  Characters ({activeCharacterFilters.length})
+                </span>
+              </div>
+              <div className="grid grid-cols-1 gap-1">
+                {filterOptions.characters.map(character => (
+                  <button
+                    key={character}
+                    onClick={() => toggleCharacterFilter(character)}
+                    className={`px-2 py-1 rounded text-xs font-mono border transition-colors text-left ${
+                      activeCharacterFilters.includes(character)
+                        ? 'bg-purple-900/40 text-purple-300 border-purple-400/60'
+                        : 'bg-gray-900/40 text-gray-400 border-gray-600/40 hover:border-gray-500'
+                    }`}
+                  >
+                    {character}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Puzzles Section */}
+          {filterOptions.puzzles.length > 0 && (
+            <div className="mb-4">
+              <div className="flex items-center gap-1 mb-2">
+                <span className="text-sm">🧩</span>
+                <span className="text-yellow-400 font-mono text-xs font-bold">
+                  Puzzles ({activePuzzleFilters.length})
+                </span>
+              </div>
+              <div className="grid grid-cols-1 gap-1">
+                {filterOptions.puzzles.map(puzzle => (
+                  <button
+                    key={puzzle}
+                    onClick={() => togglePuzzleFilter(puzzle)}
+                    className={`px-2 py-1 rounded text-xs font-mono border transition-colors text-left ${
+                      activePuzzleFilters.includes(puzzle)
+                        ? 'bg-yellow-900/40 text-yellow-300 border-yellow-400/60'
+                        : 'bg-gray-900/40 text-gray-400 border-gray-600/40 hover:border-gray-500'
+                    }`}
+                  >
+                    {puzzle}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Interactions Section */}
+          {filterOptions.interactions.length > 0 && (
+            <div className="mb-4">
+              <div className="flex items-center gap-1 mb-2">
+                <span className="text-sm">🎬</span>
+                <span className="text-blue-400 font-mono text-xs font-bold">
+                  Interactions ({activeInteractionFilters.length})
+                </span>
+              </div>
+              <div className="grid grid-cols-1 gap-1">
+                {filterOptions.interactions.map(interaction => (
+                  <button
+                    key={interaction}
+                    onClick={() => toggleInteractionFilter(interaction)}
+                    className={`px-2 py-1 rounded text-xs font-mono border transition-colors text-left ${
+                      activeInteractionFilters.includes(interaction)
+                        ? 'bg-blue-900/40 text-blue-300 border-blue-400/60'
+                        : 'bg-gray-900/40 text-gray-400 border-gray-600/40 hover:border-gray-500'
+                    }`}
+                  >
+                    {interaction}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Features Section */}
+          {filterOptions.features.length > 0 && (
+            <div className="mb-4">
+              <div className="flex items-center gap-1 mb-2">
+                <span className="text-sm">💠</span>
+                <span className="text-emerald-400 font-mono text-xs font-bold">
+                  Features ({activeFeatureFilters.length})
+                </span>
+              </div>
+              <div className="grid grid-cols-1 gap-1">
+                {filterOptions.features.map(feature => {
+                  const getFeatureIcon = (feat) => {
+                    switch (feat) {
+                      case 'hasTransition': return '🌊';
+                      case 'hasCombat': return '⚔️';
+                      case 'hasChoice': return '🤔';
+                      case 'hasNPC': return '👤';
+                      case 'hasAnimation': return '✨';
+                      default: return '💠';
+                    }
+                  };
+
+                  const getFeatureLabel = (feat) => {
+                    return feat.replace('has', '').replace(/([A-Z])/g, ' $1').trim();
+                  };
+
+                  return (
+                    <button
+                      key={feature}
+                      onClick={() => toggleFeatureFilter(feature)}
+                      className={`px-2 py-1 rounded text-xs font-mono border transition-colors text-left flex items-center gap-1 ${
+                        activeFeatureFilters.includes(feature)
+                          ? 'bg-emerald-900/40 text-emerald-300 border-emerald-400/60'
+                          : 'bg-gray-900/40 text-gray-400 border-gray-600/40 hover:border-gray-500'
+                      }`}
+                    >
+                      <span className="text-[10px]">{getFeatureIcon(feature)}</span>
+                      {getFeatureLabel(feature)}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Reset All Button */}
+          {activeFilterCount > 0 && (
+            <button
+              onClick={resetAllFilters}
+              className="w-full px-3 py-2 rounded text-xs font-mono border border-red-400/60 bg-red-900/40 text-red-300 hover:bg-red-900/60 transition-colors"
+            >
+              ✕ Reset All Filters
+            </button>
+          )}
+        </div>
+      )}
+
       {/* Main SVG Canvas */}
       <div className="relative">
         <svg
@@ -252,8 +594,28 @@ export default function MapD3() {
           <div>🖱️ Click nodes to explore</div>
           <div>🔍 Scroll to zoom</div>
           <div>✋ Drag to pan</div>
+          <div>🎛️ Use layer filters to highlight</div>
           <div>⚡ Toggle layouts & filters</div>
         </div>
+
+        {/* Active Filters Display */}
+        {activeFilterCount > 0 && (
+          <div className="absolute top-4 right-4 bg-black/80 text-xs p-3 rounded border border-purple-400/40 font-mono max-w-xs">
+            <div className="text-purple-400 font-bold mb-1">Active Filters:</div>
+            {activeCharacterFilters.length > 0 && (
+              <div className="text-purple-300">🎭 Characters: {activeCharacterFilters.join(', ')}</div>
+            )}
+            {activePuzzleFilters.length > 0 && (
+              <div className="text-yellow-300">🧩 Puzzles: {activePuzzleFilters.join(', ')}</div>
+            )}
+            {activeInteractionFilters.length > 0 && (
+              <div className="text-blue-300">🎬 Interactions: {activeInteractionFilters.join(', ')}</div>
+            )}
+            {activeFeatureFilters.length > 0 && (
+              <div className="text-emerald-300">💠 Features: {activeFeatureFilters.map(f => f.replace('has', '').replace(/([A-Z])/g, ' $1').trim()).join(', ')}</div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Node Details Panel */}
