@@ -66,7 +66,7 @@ export default function App() {
     <UserProvider>
       <ThemeProvider>
         <Router>
-          <div className="min-h-screen bg-theme-primary text-theme-primary pt-16 relative font-theme-ui">
+          <div className="min-h-screen bg-theme-primary text-theme-primary pt-20 pb-4 relative font-theme-ui">
             <Navigation />
             <Breadcrumbs />
             <Routes>
