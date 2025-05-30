@@ -30,42 +30,50 @@ export default function MapD3() {
   const [activeInteractionFilters, setActiveInteractionFilters] = useState([]);
   const [activeFeatureFilters, setActiveFeatureFilters] = useState([]);
   
-  // Extract unique values from all nodes dynamically
+  // Extract unique values from all nodes dynamically with counts
   const filterOptions = useMemo(() => {
-    const characters = new Set();
-    const puzzles = new Set();
-    const interactions = new Set();
-    const features = new Set();
+    const characterCounts = new Map();
+    const puzzleCounts = new Map();
+    const interactionCounts = new Map();
+    const featureCounts = new Map();
     
     realMatrixNodes.forEach(node => {
       // Characters
       if (node.data?.characters) {
-        node.data.characters.forEach(char => characters.add(char));
+        node.data.characters.forEach(char => {
+          characterCounts.set(char, (characterCounts.get(char) || 0) + 1);
+        });
       }
       
       // Puzzles
       if (node.data?.puzzles) {
-        node.data.puzzles.forEach(puzzle => puzzles.add(puzzle));
+        node.data.puzzles.forEach(puzzle => {
+          puzzleCounts.set(puzzle, (puzzleCounts.get(puzzle) || 0) + 1);
+        });
       }
       
       // Interactions
       if (node.data?.interactions) {
-        node.data.interactions.forEach(interaction => interactions.add(interaction));
+        node.data.interactions.forEach(interaction => {
+          interactionCounts.set(interaction, (interactionCounts.get(interaction) || 0) + 1);
+        });
       }
       
       // Features (only enabled ones)
       if (node.data?.features) {
         Object.entries(node.data.features).forEach(([feature, enabled]) => {
-          if (enabled) features.add(feature);
+          if (enabled) {
+            featureCounts.set(feature, (featureCounts.get(feature) || 0) + 1);
+          }
         });
       }
     });
     
     return {
-      characters: Array.from(characters).sort(),
-      puzzles: Array.from(puzzles).sort(),
-      interactions: Array.from(interactions).sort(),
-      features: Array.from(features).sort()
+      characters: Array.from(characterCounts.entries()).map(([name, count]) => ({ name, count })).sort((a, b) => a.name.localeCompare(b.name)),
+      puzzles: Array.from(puzzleCounts.entries()).map(([name, count]) => ({ name, count })).sort((a, b) => a.name.localeCompare(b.name)),
+      interactions: Array.from(interactionCounts.entries()).map(([name, count]) => ({ name, count })).sort((a, b) => a.name.localeCompare(b.name)),
+      features: Array.from(featureCounts.entries()).map(([name, count]) => ({ name, count })).sort((a, b) => a.name.localeCompare(b.name))
     };
   }, []);
 
@@ -394,15 +402,22 @@ export default function MapD3() {
                 <div className="grid grid-cols-1 gap-2">
                   {filterOptions.characters.map(character => (
                     <button
-                      key={character}
-                      onClick={() => toggleCharacterFilter(character)}
-                      className={`px-3 py-2 rounded text-sm font-mono border transition-all text-left hover:scale-[1.02] ${
-                        activeCharacterFilters.includes(character)
-                          ? 'bg-purple-900/40 text-purple-200 border-purple-400/60 shadow-purple-400/20 shadow'
+                      key={character.name}
+                      onClick={() => toggleCharacterFilter(character.name)}
+                      className={`px-3 py-2 rounded text-sm font-mono border transition-all text-left hover:scale-[1.02] flex items-center justify-between ${
+                        activeCharacterFilters.includes(character.name)
+                          ? 'bg-purple-900/40 text-purple-200 border-purple-400/60 shadow-purple-400/20 shadow ring-2 ring-purple-400/30 font-bold'
                           : 'bg-gray-900/40 text-gray-300 border-gray-600/40 hover:border-purple-400/40 hover:text-purple-300'
                       }`}
                     >
-                      {character}
+                      <span>{character.name}</span>
+                      <span className={`px-2 py-1 rounded-full text-xs font-bold ${
+                        activeCharacterFilters.includes(character.name)
+                          ? 'bg-purple-700 text-purple-100'
+                          : 'bg-purple-900/60 text-purple-400'
+                      }`}>
+                        {character.count}
+                      </span>
                     </button>
                   ))}
                 </div>
@@ -424,15 +439,22 @@ export default function MapD3() {
                 <div className="grid grid-cols-1 gap-2">
                   {filterOptions.puzzles.map(puzzle => (
                     <button
-                      key={puzzle}
-                      onClick={() => togglePuzzleFilter(puzzle)}
-                      className={`px-3 py-2 rounded text-sm font-mono border transition-all text-left hover:scale-[1.02] ${
-                        activePuzzleFilters.includes(puzzle)
-                          ? 'bg-yellow-900/40 text-yellow-200 border-yellow-400/60 shadow-yellow-400/20 shadow'
+                      key={puzzle.name}
+                      onClick={() => togglePuzzleFilter(puzzle.name)}
+                      className={`px-3 py-2 rounded text-sm font-mono border transition-all text-left hover:scale-[1.02] flex items-center justify-between ${
+                        activePuzzleFilters.includes(puzzle.name)
+                          ? 'bg-yellow-900/40 text-yellow-200 border-yellow-400/60 shadow-yellow-400/20 shadow ring-2 ring-yellow-400/30 font-bold'
                           : 'bg-gray-900/40 text-gray-300 border-gray-600/40 hover:border-yellow-400/40 hover:text-yellow-300'
                       }`}
                     >
-                      {puzzle}
+                      <span>{puzzle.name}</span>
+                      <span className={`px-2 py-1 rounded-full text-xs font-bold ${
+                        activePuzzleFilters.includes(puzzle.name)
+                          ? 'bg-yellow-700 text-yellow-100'
+                          : 'bg-yellow-900/60 text-yellow-400'
+                      }`}>
+                        {puzzle.count}
+                      </span>
                     </button>
                   ))}
                 </div>
@@ -454,15 +476,22 @@ export default function MapD3() {
                 <div className="grid grid-cols-1 gap-2">
                   {filterOptions.interactions.map(interaction => (
                     <button
-                      key={interaction}
-                      onClick={() => toggleInteractionFilter(interaction)}
-                      className={`px-3 py-2 rounded text-sm font-mono border transition-all text-left hover:scale-[1.02] ${
-                        activeInteractionFilters.includes(interaction)
-                          ? 'bg-blue-900/40 text-blue-200 border-blue-400/60 shadow-blue-400/20 shadow'
+                      key={interaction.name}
+                      onClick={() => toggleInteractionFilter(interaction.name)}
+                      className={`px-3 py-2 rounded text-sm font-mono border transition-all text-left hover:scale-[1.02] flex items-center justify-between ${
+                        activeInteractionFilters.includes(interaction.name)
+                          ? 'bg-blue-900/40 text-blue-200 border-blue-400/60 shadow-blue-400/20 shadow ring-2 ring-blue-400/30 font-bold'
                           : 'bg-gray-900/40 text-gray-300 border-gray-600/40 hover:border-blue-400/40 hover:text-blue-300'
                       }`}
                     >
-                      {interaction}
+                      <span>{interaction.name}</span>
+                      <span className={`px-2 py-1 rounded-full text-xs font-bold ${
+                        activeInteractionFilters.includes(interaction.name)
+                          ? 'bg-blue-700 text-blue-100'
+                          : 'bg-blue-900/60 text-blue-400'
+                      }`}>
+                        {interaction.count}
+                      </span>
                     </button>
                   ))}
                 </div>
@@ -484,7 +513,7 @@ export default function MapD3() {
                 <div className="grid grid-cols-1 gap-2">
                   {filterOptions.features.map(feature => {
                     const getFeatureIcon = (feat) => {
-                      switch (feat) {
+                      switch (feat.name) {
                         case 'hasTransition': return '🌊';
                         case 'hasCombat': return '⚔️';
                         case 'hasChoice': return '🤔';
@@ -495,21 +524,30 @@ export default function MapD3() {
                     };
 
                     const getFeatureLabel = (feat) => {
-                      return feat.replace('has', '').replace(/([A-Z])/g, ' $1').trim();
+                      return feat.name.replace('has', '').replace(/([A-Z])/g, ' $1').trim();
                     };
 
                     return (
                       <button
-                        key={feature}
-                        onClick={() => toggleFeatureFilter(feature)}
-                        className={`px-3 py-2 rounded text-sm font-mono border transition-all text-left flex items-center gap-2 hover:scale-[1.02] ${
-                          activeFeatureFilters.includes(feature)
-                            ? 'bg-emerald-900/40 text-emerald-200 border-emerald-400/60 shadow-emerald-400/20 shadow'
+                        key={feature.name}
+                        onClick={() => toggleFeatureFilter(feature.name)}
+                        className={`px-3 py-2 rounded text-sm font-mono border transition-all text-left hover:scale-[1.02] flex items-center justify-between ${
+                          activeFeatureFilters.includes(feature.name)
+                            ? 'bg-emerald-900/40 text-emerald-200 border-emerald-400/60 shadow-emerald-400/20 shadow ring-2 ring-emerald-400/30 font-bold'
                             : 'bg-gray-900/40 text-gray-300 border-gray-600/40 hover:border-emerald-400/40 hover:text-emerald-300'
                         }`}
                       >
-                        <span className="text-sm">{getFeatureIcon(feature)}</span>
-                        {getFeatureLabel(feature)}
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm">{getFeatureIcon(feature)}</span>
+                          <span>{getFeatureLabel(feature)}</span>
+                        </div>
+                        <span className={`px-2 py-1 rounded-full text-xs font-bold ${
+                          activeFeatureFilters.includes(feature.name)
+                            ? 'bg-emerald-700 text-emerald-100'
+                            : 'bg-emerald-900/60 text-emerald-400'
+                        }`}>
+                          {feature.count}
+                        </span>
                       </button>
                     );
                   })}
