@@ -527,6 +527,119 @@ export const realMatrixNodes = [
       features: { hasTransition: false, hasCombat: false, hasChoice: true, hasPuzzle: true, hasAnimation: true, hasDialogue: true, hasNPC: true },
       dialogue: ['The Matrix was just the beginning.', 'What will you do with the power to reshape reality?']
     }
+  },
+
+  // === NIGHT CITY CLUSTER (CYBERPUNK SIDE PATH) ===
+  {
+    id: 'nc-entry',
+    type: 'scene',
+    depth: 7,
+    group: 'night-city',
+    data: {
+      title: 'Night City Entry',
+      pageUrl: '/matrix-v1/night-city/entry',
+      status: 'live',
+      summary: 'Reality breach stabilizes. Welcome to Night City - where chrome meets flesh and data is currency.',
+      characters: ['Johnny Silverhand', 'V', 'Rogue AI'],
+      puzzles: [],
+      interactions: ['CyberpunkIntro', 'NeonSceneReveal'],
+      features: { hasTransition: true, hasChoice: false, hasCombat: false, hasNPC: true, hasAnimation: true, hasGlitch: true },
+      dialogue: ['Wake the f*ck up, samurai.', 'This ain\'t Kansas anymore, choom.', 'Data flows like blood through these streets.']
+    }
+  },
+
+  {
+    id: 'nc-bouncer',
+    type: 'choice',
+    depth: 8,
+    group: 'night-city',
+    data: {
+      title: 'Club Bouncer',
+      pageUrl: '/matrix-v1/night-city/bouncer',
+      status: 'live',
+      summary: 'Massive cyborg bouncer blocks the Afterlife entrance. Choose your approach to the legendary fixer bar.',
+      characters: ['Cyborg Bouncer', 'Street Kid', 'Corpo Exec'],
+      puzzles: ['Social Engineering', 'Tech Bypass'],
+      interactions: ['ChoicePrompt', 'SocialManipulation'],
+      features: { hasTransition: true, hasChoice: true, hasCombat: true, hasNPC: true, hasAnimation: true },
+      dialogue: ['Entry fee is 500 eddies or a data chip worth my time.', 'You look like trouble, but the right kind.'],
+      options: ['Pay 500 Eddies', 'Offer Data Chip', 'Hack Cyberware', 'Start Fight']
+    }
+  },
+
+  {
+    id: 'nc-netdiver',
+    type: 'training',
+    depth: 9,
+    group: 'night-city',
+    data: {
+      title: 'Netrunner Deep Dive',
+      pageUrl: '/matrix-v1/night-city/netdiver',
+      status: 'live',
+      summary: 'Jack into cyberspace. Navigate ICE, avoid trace programs, and steal corporate secrets.',
+      characters: ['Alt Cunningham', 'Netwatch Agent', 'AI Collective'],
+      puzzles: ['ICE Breaking', 'Trace Evasion', 'Data Extraction'],
+      interactions: ['CyberdeckInterface', 'NetrunningPuzzle'],
+      features: { hasTransition: true, hasChoice: false, hasCombat: true, hasNPC: true, hasAnimation: true, hasPuzzle: true },
+      dialogue: ['The Net remembers everything, choom.', 'Beyond the Blackwall, AI gods are dreaming.', 'Data wants to be free.']
+    }
+  },
+
+  {
+    id: 'nc-escape',
+    type: 'scene',
+    depth: 10,
+    group: 'night-city',
+    unlockConditions: ['nc-bouncer'], // Must get past bouncer first
+    data: {
+      title: 'Corporate Escape',
+      pageUrl: '/matrix-v1/night-city/escape',
+      status: 'live',
+      summary: 'Corpo security converges. High-speed chase through Night City\'s neon-soaked streets.',
+      characters: ['MaxTac Officer', 'Street Medic', 'Trauma Team'],
+      puzzles: ['Vehicle Chase', 'Pursuit Evasion'],
+      interactions: ['HighSpeedChase', 'CombatDriving'],
+      features: { hasTransition: true, hasChoice: false, hasCombat: true, hasNPC: true, hasAnimation: true, hasTimer: true },
+      dialogue: ['This is MaxTac. Surrender or be flatlined.', 'Trauma Team inbound. Clear the area.', 'Another day, another corpo conspiracy.']
+    }
+  },
+
+  {
+    id: 'nc-file',
+    type: 'dialogue',
+    depth: 11,
+    group: 'night-city',
+    unlockConditions: ['nc-netdiver'], // Must complete netrunning first
+    data: {
+      title: 'The Arasaka Files',
+      pageUrl: '/matrix-v1/night-city/files',
+      status: 'live',
+      summary: 'Stolen data reveals the truth: Night City and The Matrix are connected. Same architects, different prisons.',
+      characters: ['Saburo Arasaka', 'The Architect', 'Rogue AI Fragment'],
+      puzzles: ['Data Decryption', 'Lore Analysis'],
+      interactions: ['FileAnalysis', 'LoreReveal'],
+      features: { hasTransition: true, hasChoice: true, hasCombat: false, hasNPC: false, hasAnimation: true, hasLore: true },
+      dialogue: ['Project: Neo-Tokyo was just the beginning.', 'The Matrix. Night City. Two sides of the same control system.', 'Free your mind... jack out of the system.']
+    }
+  },
+
+  {
+    id: 'nc-silverhand',
+    type: 'ending',
+    depth: 12,
+    group: 'night-city',
+    unlockConditions: ['nc-file', 'nc-escape'], // Requires both lore and action paths
+    data: {
+      title: 'Johnny\'s Revolution',
+      pageUrl: '/matrix-v1/night-city/silverhand',
+      status: 'live',
+      summary: 'Johnny Silverhand offers a choice: burn down the corporate prison or find another way to freedom.',
+      characters: ['Johnny Silverhand', 'V', 'Alt Cunningham'],
+      puzzles: ['Final Revolution Choice'],
+      interactions: ['RevolutionChoice', 'CyberpunkEnding'],
+      features: { hasTransition: false, hasChoice: true, hasCombat: true, hasNPC: true, hasAnimation: true, hasEnding: true },
+      dialogue: ['Wake up and smell the ashes, choom.', 'Burn the corpo tower or find another path?', 'Never fade away.']
+    }
   }
 ];
 
@@ -604,5 +717,21 @@ export const realMatrixEdges = [
   { id: 'edge-rescue-to-source', source: 'matrix-trinity-rescue', target: 'matrix-the-source', label: 'Redeemed Agent' },
   
   // Ghost Layer 2 also connects to The Source
-  { id: 'edge-ghost-to-source', source: 'matrix-ghost-layer-2', target: 'matrix-the-source', label: 'Signal Complete' }
+  { id: 'edge-ghost-to-source', source: 'matrix-ghost-layer-2', target: 'matrix-the-source', label: 'Signal Complete' },
+
+  // === NIGHT CITY CLUSTER CONNECTIONS ===
+  // Glitch Portal connects to Night City Entry
+  { id: 'edge-glitch-to-night-city', source: 'matrix-glitch-portal', target: 'nc-entry', label: 'Breach Night City' },
+  
+  // Night City internal flow
+  { id: 'edge-nc-entry-to-bouncer', source: 'nc-entry', target: 'nc-bouncer' },
+  { id: 'edge-nc-bouncer-to-netdiver', source: 'nc-bouncer', target: 'nc-netdiver', label: 'Access Granted' },
+  { id: 'edge-nc-bouncer-to-escape', source: 'nc-bouncer', target: 'nc-escape', label: 'Fight Started' },
+  { id: 'edge-nc-netdiver-to-file', source: 'nc-netdiver', target: 'nc-file', label: 'Data Stolen' },
+  { id: 'edge-nc-file-to-silverhand', source: 'nc-file', target: 'nc-silverhand', label: 'Truth Revealed' },
+  { id: 'edge-nc-escape-to-silverhand', source: 'nc-escape', target: 'nc-silverhand', label: 'Revolution Ready' },
+  
+  // Cross-reality connections
+  { id: 'edge-nc-file-to-source', source: 'nc-file', target: 'matrix-the-source', label: 'Corporate Truth' },
+  { id: 'edge-silverhand-to-source', source: 'nc-silverhand', target: 'matrix-the-source', label: 'Never Fade Away' }
 ];

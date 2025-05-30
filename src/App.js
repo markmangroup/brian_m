@@ -56,6 +56,10 @@ import FactionPortal from './pages/matrix-v1/FactionPortal';
 import GlitchPortal from './pages/matrix-v1/GlitchPortal';
 import OracleSeekers from './pages/matrix-v1/OracleSeekers';
 
+// Night City routes
+import NightCityEntry from './pages/matrix-v1/NightCityEntry';
+import NightCityBouncer from './pages/matrix-v1/NightCityBouncer';
+
 export default function App() {
   return (
     <UserProvider>
@@ -114,6 +118,10 @@ export default function App() {
             <Route path="/matrix-v1/portal/factions" element={<FactionPortal />} />
             <Route path="/matrix-v1/glitch-portal" element={<GlitchPortal />} />
             <Route path="/matrix-v1/oracle-seekers" element={<OracleSeekers />} />
+            
+            {/* Night City routes */}
+            <Route path="/matrix-v1/night-city/entry" element={<NightCityEntry />} />
+            <Route path="/matrix-v1/night-city/bouncer" element={<NightCityBouncer />} />
             
             {/* Legacy Matrix Routes - Redirect to V1 */}
             <Route path="/the-matrix/*" element={<Navigate to="/matrix-v1" replace />} />

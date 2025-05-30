@@ -56,6 +56,18 @@ const VISUAL_GROUPS = {
     textColor: 'text-green-400',
     nodeIds: ['matrix-v1-entry', 'matrix-pill-choice', 'matrix-awakening'],
     bounds: { x: 100, y: 500, width: 500, height: 120 }
+  },
+  nightCity: {
+    label: 'Night City',
+    icon: '🌆',
+    color: 'pink',
+    bgColor: 'bg-gradient-to-r from-purple-900/10 via-pink-900/15 to-cyan-900/10',
+    borderColor: 'border-pink-400/60',
+    textColor: 'text-pink-400',
+    nodeIds: ['nc-entry', 'nc-bouncer', 'nc-netdiver', 'nc-escape', 'nc-file', 'nc-silverhand'],
+    bounds: { x: 300, y: 700, width: 650, height: 220 },
+    isNeon: true, // Special neon effects
+    glowIntensity: 'high' // Stronger glow when cyberpunk theme active
   }
 };
 
@@ -537,9 +549,16 @@ export default function MapD3() {
       .style('filter', d => {
         const matches = nodeMatchesFilters(d.data);
         const isUnlocked = checkUnlockConditions(d.data, realMatrixNodes);
+        const isNightCityNode = d.data.group === 'night-city';
+        const isCyberpunkTheme = currentTheme === 'cyberpunk';
         
         if (!isUnlocked) {
           return 'drop-shadow(0 0 6px rgb(127 29 29 / 0.8))';
+        }
+        
+        // Special Night City neon effects
+        if (isNightCityNode && isCyberpunkTheme) {
+          return `drop-shadow(0 0 15px #ec4899) drop-shadow(0 0 30px #a855f7) drop-shadow(0 0 45px #06b6d4)`;
         }
         
         // Enhanced glow effects based on layout
