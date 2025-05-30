@@ -160,6 +160,101 @@ export const realMatrixNodes = [
       features: { hasTransition: false, hasChoice: false, hasCombat: true, hasNPC: false, hasAnimation: true },
       dialogue: ['Loading training sequence.', 'Let\'s see what you can do.']
     }
+  },
+
+  // === DEPTH 6: GHOST LAYER GROUP ===
+  {
+    id: 'matrix-shard-init',
+    type: 'scene',
+    depth: 6,
+    group: 'ghost-layer',
+    data: {
+      title: 'Shard Initialization',
+      pageUrl: '/matrix-v1/shard-init',
+      status: 'stub',
+      summary: 'The terminal destabilizes. Code fragments demand reassembly.',
+      characters: ['System', 'Fracture Entity'],
+      puzzles: ['Code Reorder'],
+      interactions: ['DragPuzzle'],
+      features: { hasTransition: true, hasCombat: false, hasChoice: false, hasPuzzle: true, hasAnimation: true, hasNPC: true },
+      dialogue: ['These lines are not yours.', 'Restore what you remember.']
+    }
+  },
+
+  // === DEPTH 6: ECHO GROUP ===
+  {
+    id: 'matrix-echo-loop',
+    type: 'dialogue',
+    depth: 6,
+    group: 'echo',
+    data: {
+      title: 'Echo Loop',
+      pageUrl: '/matrix-v1/echo-loop',
+      status: 'stub',
+      summary: 'The user is caught in a recursive conversation. Only by noticing the pattern can they break it.',
+      characters: ['Neo', 'Echo'],
+      puzzles: ['Repeat Detection'],
+      interactions: ['DialogueLoop'],
+      features: { hasTransition: true, hasCombat: false, hasChoice: false, hasPuzzle: true, hasAnimation: true, hasDialogue: true, hasNPC: true },
+      dialogue: ['Did I already say that?', 'You must listen harder.']
+    }
+  },
+
+  // === DEPTH 7: GHOST LAYER GROUP ===
+  {
+    id: 'matrix-shard-insert',
+    type: 'scene',
+    depth: 7,
+    group: 'ghost-layer',
+    data: {
+      title: 'Shard Insert',
+      pageUrl: '/matrix-v1/shard-insert',
+      status: 'stub',
+      summary: 'Cascading syntax errors. User must catch and resolve matching tokens.',
+      characters: ['System'],
+      puzzles: ['Syntax Catch'],
+      interactions: ['TimedClick'],
+      features: { hasTransition: true, hasCombat: false, hasChoice: false, hasPuzzle: true, hasAnimation: true, hasNPC: false },
+      dialogue: ['// ERROR: closing bracket not found', 'Find the symbol before it finds you.']
+    }
+  },
+
+  // === DEPTH 7: ECHO GROUP ===
+  {
+    id: 'matrix-echo-verify',
+    type: 'scene',
+    depth: 7,
+    group: 'echo',
+    data: {
+      title: 'Echo Verify',
+      pageUrl: '/matrix-v1/echo-verify',
+      status: 'stub',
+      summary: 'A symbol rhythm pattern appears. Match the sequence or fall back into the loop.',
+      characters: ['Mirror Self'],
+      puzzles: ['Pattern Memory'],
+      interactions: ['RhythmMatch'],
+      features: { hasTransition: true, hasCombat: false, hasChoice: false, hasPuzzle: true, hasAnimation: true, hasDialogue: false, hasNPC: false },
+      dialogue: ['▢ ▢ ▢ ▢ ✕ ✕ ▢ ✕', 'Listen with your eyes.']
+    }
+  },
+
+  // === DEPTH 8: GHOST LAYER GROUP (SHARED) ===
+  {
+    id: 'matrix-ghost-layer-2',
+    type: 'scene',
+    depth: 8,
+    group: 'ghost-layer',
+    data: {
+      title: 'Ghost Layer 2',
+      pageUrl: '/matrix-v1/ghost-layer-2',
+      status: 'stub',
+      summary: 'Both paths converge into a raw transmission chamber. The next phase awaits.',
+      characters: ['System', 'Neo'],
+      puzzles: [],
+      interactions: ['TransmissionReceiver'],
+      features: { hasTransition: true, hasCombat: false, hasChoice: false, hasPuzzle: false, hasAnimation: true, hasDialogue: true, hasNPC: true },
+      dialogue: ['This is no longer a test.', 'You are becoming signal.']
+    }
   }
 ];
 
@@ -177,5 +272,15 @@ export const realMatrixEdges = [
   { id: 'edge-awakening-to-trainer', source: 'matrix-red-awakening', target: 'matrix-red-trainer' },
   
   // Blue path continuation
-  { id: 'edge-blue-to-loop', source: 'matrix-pill-choice-blue', target: 'matrix-blue-loop' }
+  { id: 'edge-blue-to-loop', source: 'matrix-pill-choice-blue', target: 'matrix-blue-loop' },
+
+  // Ghost Layer path (from trainer)
+  { id: 'edge-trainer-to-shard-init', source: 'matrix-red-trainer', target: 'matrix-shard-init' },
+  { id: 'edge-shard-init-to-insert', source: 'matrix-shard-init', target: 'matrix-shard-insert' },
+  { id: 'edge-shard-insert-to-ghost-2', source: 'matrix-shard-insert', target: 'matrix-ghost-layer-2' },
+
+  // Echo Fork path (from blue loop)
+  { id: 'edge-blue-loop-to-echo', source: 'matrix-blue-loop', target: 'matrix-echo-loop' },
+  { id: 'edge-echo-loop-to-verify', source: 'matrix-echo-loop', target: 'matrix-echo-verify' },
+  { id: 'edge-echo-verify-to-ghost-2', source: 'matrix-echo-verify', target: 'matrix-ghost-layer-2' }
 ];
