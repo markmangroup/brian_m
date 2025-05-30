@@ -366,98 +366,163 @@ export default function MapD3() {
     // Create hierarchy
     const root = d3.hierarchy(filteredTree);
     
-    // Apply layout based on selected type
+    // Apply dramatically different layouts based on selected type
     let treeLayout;
+    let nodeRadius, separation, linkGenerator;
     
     switch (layoutType) {
       case LAYOUT_TYPES.cluster:
+        // HORIZONTAL FLOWING CLUSTER - nodes spread horizontally like a river
         treeLayout = d3.cluster()
-          .size([height - margin.top - margin.bottom, width - margin.left - margin.right]);
+          .size([height - margin.top - margin.bottom, width - margin.left - margin.right - 100])
+          .separation((a, b) => (a.parent === b.parent ? 2 : 3));
+        
+        nodeRadius = d => d.children ? 10 : 7;
+        separation = 1.8;
+        linkGenerator = d3.linkHorizontal()
+          .x(d => d.y)
+          .y(d => d.x);
+          
+        g.attr('transform', `translate(${margin.left + 50},${margin.top})`);
         break;
+        
       case LAYOUT_TYPES.radial:
-        treeLayout = d3.tree()
-          .size([2 * Math.PI, Math.min(width, height) / 2 - 120]) // Increased spacing
-          .separation((a, b) => (a.parent === b.parent ? 1.5 : 2.5) / a.depth); // More separation
+        // IMPROVED RADIAL CLUSTER - uniform distribution around circle
+        const radius = Math.min(width, height) / 2 - 150;
+        treeLayout = d3.cluster() // Using cluster for better leaf distribution!
+          .size([2 * Math.PI, radius])
+          .separation((a, b) => (a.parent === b.parent ? 1.2 : 2.5) / a.depth);
+        
+        nodeRadius = d => d.children ? 12 : 8;
+        separation = 2.0;
+        linkGenerator = d3.linkRadial()
+          .angle(d => d.x)
+          .radius(d => d.y);
+          
+        g.attr('transform', `translate(${width / 2},${height / 2})`);
         break;
-      default: // tree
+        
+      default: // LAYOUT_TYPES.tree
+        // ENHANCED VERTICAL TREE - classic top-down hierarchy
         treeLayout = d3.tree()
-          .size([height - margin.top - margin.bottom, width - margin.left - margin.right]);
+          .size([width - margin.left - margin.right, height - margin.top - margin.bottom - 100])
+          .separation((a, b) => (a.parent === b.parent ? 1.5 : 2.8));
+        
+        nodeRadius = d => d.children ? 9 : 6;
+        separation = 1.6;
+        linkGenerator = d3.linkVertical()
+          .x(d => d.x)
+          .y(d => d.y);
+          
+        g.attr('transform', `translate(${margin.left},${margin.top + 50})`);
     }
 
     const treeData = treeLayout(root);
+    const theme = themeConfigs[currentTheme];
 
-    // Position group for radial layout
-    if (layoutType === LAYOUT_TYPES.radial) {
-      g.attr('transform', `translate(${width / 2},${height / 2})`);
-    } else {
-      g.attr('transform', `translate(${margin.left},${margin.top})`);
-    }
-
-    // Add links
+    // Enhanced link styling with layout-specific animations
     const links = g.selectAll('.link')
       .data(treeData.links())
       .enter().append('path')
       .attr('class', 'link')
-      .attr('d', d => {
-        if (layoutType === LAYOUT_TYPES.radial) {
-          return d3.linkRadial()
-            .angle(d => d.x)
-            .radius(d => d.y)
-            (d);
-        } else {
-          return d3.linkHorizontal()
-            .x(d => d.y)
-            .y(d => d.x)
-            (d);
+      .attr('d', linkGenerator)
+      .style('fill', 'none')
+      .style('stroke', theme.linkColor)
+      .style('stroke-width', d => {
+        // Different stroke widths based on layout
+        switch (layoutType) {
+          case LAYOUT_TYPES.cluster: return 3;
+          case LAYOUT_TYPES.radial: return 2.5;
+          default: return 2;
         }
       })
-      .style('fill', 'none')
-      .style('stroke', '#4ade80')
-      .style('stroke-width', 2)
-      .style('stroke-opacity', 0.6);
+      .style('stroke-opacity', 0.7)
+      .style('stroke-linecap', 'round')
+      .style('filter', `drop-shadow(0 0 3px ${theme.linkColor})`)
+      .style('stroke-dasharray', d => {
+        // Animated dashes for radial layout
+        return layoutType === LAYOUT_TYPES.radial ? '8,4' : 'none';
+      });
 
-    // Add nodes
+    // Animate dash array for radial layout
+    if (layoutType === LAYOUT_TYPES.radial) {
+      links.style('stroke-dashoffset', 0)
+        .transition()
+        .duration(8000)
+        .ease(d3.easeLinear)
+        .style('stroke-dashoffset', -100)
+        .on('end', function repeat() {
+          d3.select(this)
+            .transition()
+            .duration(8000)
+            .ease(d3.easeLinear)
+            .style('stroke-dashoffset', -200)
+            .on('end', repeat);
+        });
+    }
+
+    // Enhanced nodes with layout-specific positioning
     const nodes = g.selectAll('.node')
       .data(treeData.descendants())
       .enter().append('g')
       .attr('class', 'node')
       .attr('transform', d => {
-        if (layoutType === LAYOUT_TYPES.radial) {
-          return `rotate(${d.x * 180 / Math.PI - 90}) translate(${d.y},0)`;
-        } else {
-          return `translate(${d.y},${d.x})`;
+        switch (layoutType) {
+          case LAYOUT_TYPES.cluster:
+            return `translate(${d.y},${d.x})`;
+          case LAYOUT_TYPES.radial:
+            return `rotate(${d.x * 180 / Math.PI - 90}) translate(${d.y},0)`;
+          default: // tree
+            return `translate(${d.x},${d.y})`;
         }
       })
       .style('cursor', 'pointer')
       .on('click', (event, d) => handleNodeClick(d));
 
-    // Node circles with highlighting
+    // Enhanced node circles with layout-specific sizing and effects
     nodes.append('circle')
-      .attr('r', d => d.children ? 8 : 6)
-      .style('fill', d => getNodeColor(d.data))
+      .attr('r', nodeRadius)
+      .style('fill', d => {
+        const baseColor = getNodeColor(d.data);
+        // Add layout-specific color variations
+        switch (layoutType) {
+          case LAYOUT_TYPES.cluster:
+            return d3.color(baseColor).brighter(0.3);
+          case LAYOUT_TYPES.radial:
+            return d3.color(baseColor).darker(0.2);
+          default:
+            return baseColor;
+        }
+      })
       .style('stroke', d => {
         const matches = nodeMatchesFilters(d.data);
         const isUnlocked = checkUnlockConditions(d.data, realMatrixNodes);
         
         if (!isUnlocked) {
-          return '#7f1d1d'; // Dark red for locked nodes
+          return '#7f1d1d';
         }
         
         return matches && (activeCharacterFilters.length > 0 || activePuzzleFilters.length > 0 || 
                           activeInteractionFilters.length > 0 || activeFeatureFilters.length > 0) 
-          ? '#10b981' : '#fff';
+          ? theme.nodeColor : '#fff';
       })
       .style('stroke-width', d => {
         const matches = nodeMatchesFilters(d.data);
         const isUnlocked = checkUnlockConditions(d.data, realMatrixNodes);
         
         if (!isUnlocked) {
-          return 3;
+          return 4;
         }
         
-        return matches && (activeCharacterFilters.length > 0 || activePuzzleFilters.length > 0 || 
-                          activeInteractionFilters.length > 0 || activeFeatureFilters.length > 0) 
-          ? 4 : 2;
+        // Layout-specific stroke widths
+        const baseWidth = matches && (activeCharacterFilters.length > 0 || activePuzzleFilters.length > 0 || 
+                                     activeInteractionFilters.length > 0 || activeFeatureFilters.length > 0) ? 4 : 2;
+        
+        switch (layoutType) {
+          case LAYOUT_TYPES.cluster: return baseWidth + 1;
+          case LAYOUT_TYPES.radial: return baseWidth + 0.5;
+          default: return baseWidth;
+        }
       })
       .style('opacity', d => {
         const matches = nodeMatchesFilters(d.data);
@@ -477,30 +542,51 @@ export default function MapD3() {
           return 'drop-shadow(0 0 6px rgb(127 29 29 / 0.8))';
         }
         
-        return matches && (activeCharacterFilters.length > 0 || activePuzzleFilters.length > 0 || 
-                          activeInteractionFilters.length > 0 || activeFeatureFilters.length > 0)
-          ? 'drop-shadow(0 0 8px rgb(16 185 129 / 0.8))' : 'none';
+        // Enhanced glow effects based on layout
+        if (matches && (activeCharacterFilters.length > 0 || activePuzzleFilters.length > 0 || 
+                       activeInteractionFilters.length > 0 || activeFeatureFilters.length > 0)) {
+          switch (layoutType) {
+            case LAYOUT_TYPES.cluster:
+              return `drop-shadow(0 0 12px ${theme.nodeColor}) drop-shadow(0 0 20px ${theme.nodeColor})`;
+            case LAYOUT_TYPES.radial:
+              return `drop-shadow(0 0 8px ${theme.nodeColor}) drop-shadow(0 0 16px ${theme.nodeColor})`;
+            default:
+              return `drop-shadow(0 0 8px ${theme.nodeColor})`;
+          }
+        }
+        
+        return 'none';
       })
       .style('stroke-dasharray', d => {
         const isUnlocked = checkUnlockConditions(d.data, realMatrixNodes);
-        return !isUnlocked ? '3,3' : 'none'; // Dashed outline for locked nodes
+        return !isUnlocked ? '3,3' : 'none';
       });
 
-    // Node labels with conditional styling
+    // Enhanced node labels with layout-specific positioning
     nodes.append('text')
       .attr('dy', '.35em')
       .attr('x', d => {
-        if (layoutType === LAYOUT_TYPES.radial) {
-          return d.x < Math.PI === !d.children ? 6 : -6;
-        } else {
-          return d.children ? -13 : 13;
+        switch (layoutType) {
+          case LAYOUT_TYPES.cluster:
+            return d.children ? -15 : 15;
+          case LAYOUT_TYPES.radial:
+            return (d.x < Math.PI) === !d.children ? 10 : -10;
+          default: // tree
+            return 0;
         }
       })
+      .attr('y', d => {
+        // For tree layout, position text below nodes
+        return layoutType === LAYOUT_TYPES.tree ? (d.children ? -15 : 18) : 0;
+      })
       .style('text-anchor', d => {
-        if (layoutType === LAYOUT_TYPES.radial) {
-          return d.x < Math.PI === !d.children ? 'start' : 'end';
-        } else {
-          return d.children ? 'end' : 'start';
+        switch (layoutType) {
+          case LAYOUT_TYPES.cluster:
+            return d.children ? 'end' : 'start';
+          case LAYOUT_TYPES.radial:
+            return (d.x < Math.PI) === !d.children ? 'start' : 'end';
+          default: // tree
+            return 'middle';
         }
       })
       .attr('transform', d => {
@@ -520,18 +606,39 @@ export default function MapD3() {
         
         return matches && (activeCharacterFilters.length > 0 || activePuzzleFilters.length > 0 || 
                           activeInteractionFilters.length > 0 || activeFeatureFilters.length > 0)
-          ? '#10b981' : '#e5e7eb';
+          ? theme.primaryColor.replace('text-', '#') : '#e5e7eb';
       })
-      .style('font-size', '11px')
+      .style('font-size', d => {
+        // Layout-specific font sizes
+        switch (layoutType) {
+          case LAYOUT_TYPES.cluster: return '12px';
+          case LAYOUT_TYPES.radial: return '10px';
+          default: return '11px';
+        }
+      })
       .style('font-family', 'monospace')
+      .style('font-weight', d => d.children ? 'bold' : 'normal')
+      .style('text-shadow', `0 0 3px ${theme.linkColor}`)
       .style('pointer-events', 'none');
 
-    // Status indicators
+    // Enhanced status indicators with layout-specific positioning
     nodes.append('text')
-      .attr('dy', '-10')
-      .attr('x', 0)
+      .attr('dy', d => {
+        switch (layoutType) {
+          case LAYOUT_TYPES.cluster: return d.children ? -8 : -12;
+          case LAYOUT_TYPES.radial: return -8;
+          default: return -15;
+        }
+      })
+      .attr('x', d => {
+        switch (layoutType) {
+          case LAYOUT_TYPES.cluster: return d.children ? -8 : 8;
+          case LAYOUT_TYPES.radial: return 0;
+          default: return 0;
+        }
+      })
       .style('text-anchor', 'middle')
-      .style('font-size', '8px')
+      .style('font-size', layoutType === LAYOUT_TYPES.radial ? '7px' : '8px')
       .style('pointer-events', 'none')
       .text(d => {
         const status = d.data.data?.status;
@@ -543,39 +650,50 @@ export default function MapD3() {
         }
       });
 
-    // Lock icon for locked nodes
+    // Lock icons with layout-specific positioning
     nodes.filter(d => !checkUnlockConditions(d.data, realMatrixNodes))
       .append('text')
       .attr('dy', '0.35em')
-      .attr('x', d => d.children ? -25 : 25)
+      .attr('x', d => {
+        switch (layoutType) {
+          case LAYOUT_TYPES.cluster: return d.children ? -30 : 30;
+          case LAYOUT_TYPES.radial: return (d.x < Math.PI) ? 15 : -15;
+          default: return 0;
+        }
+      })
+      .attr('y', d => layoutType === LAYOUT_TYPES.tree ? 25 : 0)
       .style('text-anchor', 'middle')
-      .style('font-size', '10px')
+      .style('font-size', '12px')
       .style('fill', '#dc2626')
       .style('pointer-events', 'none')
       .text('🔒');
 
-    // Conditional node indicator for nodes with unlock conditions
-    nodes.filter(d => d.data.unlockConditions && d.data.unlockConditions.length > 0)
-      .append('text')
-      .attr('dy', '-12')
-      .attr('x', 0)
-      .style('text-anchor', 'middle')
-      .style('font-size', '8px')
-      .style('fill', d => {
-        const isUnlocked = checkUnlockConditions(d.data, realMatrixNodes);
-        return isUnlocked ? '#10b981' : '#dc2626';
+    // Enhanced expand/collapse indicators
+    nodes.filter(d => d.children || d._children)
+      .append('circle')
+      .attr('r', 8)
+      .attr('cy', d => {
+        switch (layoutType) {
+          case LAYOUT_TYPES.cluster: return 0;
+          case LAYOUT_TYPES.radial: return 0;
+          default: return 0;
+        }
       })
-      .style('pointer-events', 'none')
-      .text(d => {
-        const isUnlocked = checkUnlockConditions(d.data, realMatrixNodes);
-        return isUnlocked ? '⚡' : '⚠️';
-      });
+      .style('fill', theme.nodeColor)
+      .style('stroke', '#fff')
+      .style('stroke-width', 2)
+      .style('opacity', 0.8);
 
-    // Expand/collapse indicators
     nodes.filter(d => d.children || d._children)
       .append('text')
       .attr('dy', '.35em')
-      .attr('x', 0)
+      .attr('cy', d => {
+        switch (layoutType) {
+          case LAYOUT_TYPES.cluster: return 0;
+          case LAYOUT_TYPES.radial: return 0;
+          default: return 0;
+        }
+      })
       .style('text-anchor', 'middle')
       .style('font-size', '10px')
       .style('font-weight', 'bold')
@@ -583,7 +701,42 @@ export default function MapD3() {
       .style('pointer-events', 'none')
       .text(d => d.children ? '−' : '+');
 
-  }, [filteredTree, layoutType, expandedNodes, nodeMatchesFilters, activeCharacterFilters, activePuzzleFilters, activeInteractionFilters, activeFeatureFilters]);
+    // Add layout-specific visual enhancements
+    if (layoutType === LAYOUT_TYPES.radial) {
+      // Add concentric circles for depth guides in radial layout
+      const depthCircles = [100, 200, 300, 400];
+      depthCircles.forEach(radius => {
+        g.append('circle')
+          .attr('r', radius)
+          .style('fill', 'none')
+          .style('stroke', theme.linkColor)
+          .style('stroke-width', 0.5)
+          .style('stroke-opacity', 0.2)
+          .style('stroke-dasharray', '2,8');
+      });
+    }
+
+    if (layoutType === LAYOUT_TYPES.cluster) {
+      // Add flowing lines background for cluster layout
+      const flowLines = d3.range(5).map(i => ({
+        y: (height / 6) * (i + 1),
+        opacity: 0.1 - (i * 0.015)
+      }));
+      
+      flowLines.forEach(line => {
+        g.append('line')
+          .attr('x1', 0)
+          .attr('y1', line.y)
+          .attr('x2', width - margin.left - margin.right)
+          .attr('y2', line.y)
+          .style('stroke', theme.linkColor)
+          .style('stroke-width', 1)
+          .style('stroke-opacity', line.opacity)
+          .style('stroke-dasharray', '10,20');
+      });
+    }
+
+  }, [filteredTree, layoutType, expandedNodes, nodeMatchesFilters, activeCharacterFilters, activePuzzleFilters, activeInteractionFilters, activeFeatureFilters, currentTheme, themeConfigs, checkUnlockConditions]);
 
   const getNodeColor = (node) => {
     const status = node.data?.status || 'unknown';
