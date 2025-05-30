@@ -170,3 +170,12 @@ code {
 .animate-pulse-glow {
   animation: pulse-glow 1.2s infinite ease-in-out;
 }
+
+@keyframes pulse-box {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.1); }
+  50% { box-shadow: 0 0 0 6px rgba(255,255,255,0.05); }
+}
+
+.animate-pulse-box {
+  animation: pulse-box 2.5s ease-in-out infinite;
+}

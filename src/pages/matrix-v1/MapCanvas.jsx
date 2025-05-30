@@ -42,6 +42,27 @@ const testNodes = [
   }
 ];
 
+const realOverlayGroups = [
+  {
+    id: 'intro',
+    label: 'Intro',
+    color: 'bg-cyan-900/40 border-cyan-300',
+    bounds: { x: 100, y: 100, width: 480, height: 200 }
+  },
+  {
+    id: 'red-pill',
+    label: 'Red Pill Path',
+    color: 'bg-red-900/30 border-red-400',
+    bounds: { x: 650, y: 100, width: 440, height: 200 }
+  },
+  {
+    id: 'blue-pill',
+    label: 'Blue Pill Path',
+    color: 'bg-blue-900/30 border-blue-400',
+    bounds: { x: 650, y: 320, width: 440, height: 200 }
+  }
+];
+
 function layoutNodesByDepth(nodes) {
   const spacingX = 300;
   const spacingY = 220;
@@ -396,6 +417,24 @@ function MapCanvasInner({ nodes }) {
           </ReactFlow>
           {showRealPath && (
             <div className="pointer-events-none absolute inset-0 z-[99]">
+              {/* Group overlays behind overlay nodes */}
+              {realOverlayGroups.map(group => (
+                <div
+                  key={group.id}
+                  className={`absolute z-[5] rounded-md border text-xs px-2 py-1 font-mono uppercase pointer-events-none backdrop-blur-sm animate-pulse-box ${group.color}`}
+                  style={{
+                    left: group.bounds.x,
+                    top: group.bounds.y,
+                    width: group.bounds.width,
+                    height: group.bounds.height,
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    justifyContent: 'flex-start',
+                  }}
+                >
+                  <span className="mt-1 ml-2 drop-shadow text-white/80">{group.label}</span>
+                </div>
+              ))}
               <ReactFlow
                 ref={overlayFlowRef}
                 nodes={animatedNodesForOverlay}
