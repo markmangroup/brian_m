@@ -22,7 +22,8 @@ export const SceneNode = ({ data = {}, type = 'scene' }) => (
   <div
     onMouseEnter={data?.onMouseEnter}
     onMouseLeave={data?.onMouseLeave}
-    className={`${baseCard} ${hoverCard}`}
+    onClick={data?.onClick}
+    className={`${baseCard} ${hoverCard} ${data?.isOverlay ? 'cursor-pointer' : ''}`}
     style={{
       '--accent': '#60a5fa',
       borderColor: 'var(--accent)',
@@ -43,7 +44,8 @@ export const DialogueNode = ({ data = {}, type = 'dialogue' }) => (
   <div
     onMouseEnter={data?.onMouseEnter}
     onMouseLeave={data?.onMouseLeave}
-    className={`${baseCard} ${hoverCard}`}
+    onClick={data?.onClick}
+    className={`${baseCard} ${hoverCard} ${data?.isOverlay ? 'cursor-pointer' : ''}`}
     style={{
       '--accent': '#4ade80',
       borderColor: 'var(--accent)',
@@ -62,7 +64,8 @@ export const ChoiceNode = ({ data = {}, type = 'choice', isExpandable, isExpande
   <div
     onMouseEnter={data?.onMouseEnter}
     onMouseLeave={data?.onMouseLeave}
-    className={`${baseCard} ${hoverCard}`}
+    onClick={data?.onClick}
+    className={`${baseCard} ${hoverCard} ${data?.isOverlay ? 'cursor-pointer' : ''}`}
     style={{
       '--accent': '#a78bfa',
       borderColor: 'var(--accent)',
@@ -97,7 +100,8 @@ export const EndingNode = ({ data = {}, type = 'ending' }) => (
   <div
     onMouseEnter={data?.onMouseEnter}
     onMouseLeave={data?.onMouseLeave}
-    className={`${baseCard} ${hoverCard}`}
+    onClick={data?.onClick}
+    className={`${baseCard} ${hoverCard} ${data?.isOverlay ? 'cursor-pointer' : ''}`}
     style={{
       '--accent': '#f87171',
       borderColor: 'var(--accent)',

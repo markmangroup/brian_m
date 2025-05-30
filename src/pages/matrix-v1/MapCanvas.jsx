@@ -90,6 +90,7 @@ function MapCanvasInner({ nodes }) {
   const [animatedOverlayNodes, setAnimatedOverlayNodes] = useState([]);
   const overlayFlowRef = React.useRef(null);
   const [hoveredOverlayNodeId, setHoveredOverlayNodeId] = useState(null);
+  const [focusedOverlayNodeId, setFocusedOverlayNodeId] = useState(null);
 
   // Helper: get child nodes for a choice node
   function getChoiceChildren(choiceId) {
@@ -133,6 +134,22 @@ function MapCanvasInner({ nodes }) {
     return () => timeouts.forEach(clearTimeout);
   }, [expandedPaths]);
 
+  // Helper: get all downstream node IDs from a given nodeId
+  function getDownstreamNodes(nodeId, visited = new Set()) {
+    if (!nodeId || visited.has(nodeId)) return visited;
+    visited.add(nodeId);
+    realMatrixEdges.forEach(e => {
+      if (e.source === nodeId) {
+        getDownstreamNodes(e.target, visited);
+      }
+    });
+    return visited;
+  }
+  const focusedNodeSet = useMemo(() => {
+    if (!focusedOverlayNodeId) return null;
+    return getDownstreamNodes(focusedOverlayNodeId);
+  }, [focusedOverlayNodeId, realMatrixEdges]);
+
   // Compose animated overlay nodes for ReactFlow
   const animatedNodesForOverlay = useMemo(() => {
     // Merge base and animated expanded nodes
@@ -144,19 +161,25 @@ function MapCanvasInner({ nodes }) {
         ids.add(n.id);
       }
     });
-    const result = all.map(n => ({
-      ...n,
-      className: n._animate ? 'animate-fade-slide' : '',
-      data: {
-        ...n.data,
-        isOverlay: true,
-        onMouseEnter: () => setHoveredOverlayNodeId(n.id),
-        onMouseLeave: () => setHoveredOverlayNodeId(null),
-      },
-    }));
+    const result = all.map(n => {
+      const isFocused = !focusedNodeSet || focusedNodeSet.has(n.id);
+      return {
+        ...n,
+        className: `${n._animate ? 'animate-fade-slide' : ''} ${isFocused ? '' : 'opacity-30 transition-opacity duration-300'}`.trim(),
+        data: {
+          ...n.data,
+          isOverlay: true,
+          onMouseEnter: () => setHoveredOverlayNodeId(n.id),
+          onMouseLeave: () => setHoveredOverlayNodeId(null),
+          onClick: () => {
+            setFocusedOverlayNodeId(focusedOverlayNodeId === n.id ? null : n.id);
+          },
+        },
+      };
+    });
     console.log('Overlay nodes', result);
     return result;
-  }, [animatedOverlayNodes, overlayNodes]);
+  }, [animatedOverlayNodes, overlayNodes, focusedNodeSet, focusedOverlayNodeId]);
 
   const overlayEdges = useMemo(() => {
     let base = realMatrixEdges.filter(e => {
@@ -167,17 +190,19 @@ function MapCanvasInner({ nodes }) {
     });
     return base.map(edge => {
       const isHovered = hoveredOverlayNodeId && (edge.source === hoveredOverlayNodeId || edge.target === hoveredOverlayNodeId);
+      const isFocused = !focusedNodeSet || (focusedNodeSet.has(edge.source) && focusedNodeSet.has(edge.target));
       return {
         ...edge,
         style: {
           stroke: isHovered ? '#22d3ee' : '#94a3b8',
           strokeWidth: isHovered ? 3 : 2,
-          opacity: isHovered ? 1 : 0.3,
+          opacity: isFocused ? (isHovered ? 1 : 0.7) : 0.2,
+          transition: 'opacity 0.3s',
         },
-        className: isHovered ? 'animate-pulse-glow' : '',
+        className: `${isHovered ? 'animate-pulse-glow' : ''} ${isFocused ? '' : 'opacity-20 transition-opacity duration-300'}`.trim(),
       };
     });
-  }, [expandedPaths, hoveredOverlayNodeId]);
+  }, [expandedPaths, hoveredOverlayNodeId, focusedNodeSet]);
 
   // Overlay nodeTypes: inject branch icon for choice nodes
   const overlayNodeTypes = {
@@ -383,6 +408,15 @@ function MapCanvasInner({ nodes }) {
                 style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,255,255,0.02)' }}
               >
               </ReactFlow>
+              {focusedOverlayNodeId && (
+                <button
+                  onClick={() => setFocusedOverlayNodeId(null)}
+                  className="absolute top-4 right-4 z-[100] px-3 py-1 rounded bg-cyan-900 text-cyan-200 border border-cyan-400 font-mono text-xs shadow hover:bg-cyan-700 transition pointer-events-auto"
+                  title="Clear focus"
+                >
+                  ✕ Clear Focus
+                </button>
+              )}
             </div>
           )}
         </div>
