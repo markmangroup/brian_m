@@ -336,19 +336,8 @@ function MapCanvasInner({ nodes }) {
 
   const handleNodeClick = (event, node) => {
     if (node.type === 'choice') {
-      const updatedNodes = nodes.map(n => {
-        if (n.id === node.id) {
-          return {
-            ...n,
-            data: {
-              ...n.data,
-              isExpanded: !n.data.isExpanded
-            }
-          };
-        }
-        return n;
-      });
-      setNodes(updatedNodes);
+      // Expansion/collapse logic would go here if nodes were in local state
+      // Currently, nodes are static or managed elsewhere, so do nothing
     }
   };
 
