@@ -115,11 +115,17 @@ const getNodeLayout = (node) => {
 // Improved layout function - don't override positions for overlay nodes
 function layoutNodesByDepth(nodes, useOverlayPositions = false) {
   if (useOverlayPositions) {
-    // For overlay nodes, use their predefined positions
-    return nodes.map(node => ({
-      ...node,
-      position: node.position || { x: 0, y: 0 }
-    }));
+    // For overlay nodes, use their predefined positions, but always ensure x and y are defined
+    return nodes.map(node => {
+      let pos = node.position;
+      if (!pos || typeof pos.x !== 'number' || typeof pos.y !== 'number') {
+        pos = { x: 0, y: 0 };
+      }
+      return {
+        ...node,
+        position: pos
+      };
+    });
   }
 
   const spacingX = 300;
@@ -147,16 +153,19 @@ function layoutNodesByDepth(nodes, useOverlayPositions = false) {
       depthBuckets[depth][group] = 0;
     }
 
-    const position = {
-      x: depth * spacingX + groupOffset.x,
-      y: depthBuckets[depth][group] * spacingY + groupOffset.y
-    };
+    let pos = node.position;
+    if (!pos || typeof pos.x !== 'number' || typeof pos.y !== 'number') {
+      pos = {
+        x: depth * spacingX + groupOffset.x,
+        y: depthBuckets[depth][group] * spacingY + groupOffset.y
+      };
+    }
 
     depthBuckets[depth][group]++;
 
     return {
       ...node,
-      position: node.position || position // Always assign a position
+      position: pos
     };
   });
 }
