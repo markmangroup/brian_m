@@ -301,6 +301,12 @@ function MapCanvasInner({ nodes }) {
     [showEdges, visibleEdges]
   );
 
+  // Debug logs for main and overlay nodes/edges
+  console.log('Laid out nodes', laidOutNodes);
+  console.log('Styled edges', styledEdges);
+  console.log('Animated overlay nodes', animatedNodesForOverlay);
+  console.log('Overlay edges', overlayEdges);
+
   const handleResetFilters = () => {
     setActiveTypes(NODE_TYPE_FILTERS.map(f => f.key));
     setTimeout(() => {
