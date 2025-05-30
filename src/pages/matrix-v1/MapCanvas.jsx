@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import ReactFlow, { ReactFlowProvider, useReactFlow, MarkerType } from 'reactflow';
 import 'reactflow/dist/base.css';
 import ZoomHUD from './ZoomHUD';
@@ -23,47 +23,49 @@ const nodeTypes = {
 };
 
 const NODE_TYPE_FILTERS = [
-  { key: 'scene', label: '🟪 Scene' },
-  { key: 'dialogue', label: '🟦 Dialogue' },
-  { key: 'choice', label: '🟩 Choice' },
-  { key: 'ending', label: '🟥 Ending' },
-  { key: 'npc', label: '🟫 NPC' },
-  { key: 'faction', label: '🟨 Faction' },
-  { key: 'training', label: '🧪 Training' },
-  { key: 'end', label: '🛑 End' },
+  { key: 'scene', label: '🎬 Scene', color: 'blue' },
+  { key: 'dialogue', label: '💬 Dialogue', color: 'green' },
+  { key: 'choice', label: '🤔 Choice', color: 'purple' },
+  { key: 'ending', label: '🏁 Ending', color: 'red' },
+  { key: 'npc', label: '👤 NPC', color: 'yellow' },
+  { key: 'faction', label: '⚔️ Faction', color: 'orange' },
+  { key: 'training', label: '🧪 Training', color: 'cyan' },
+  { key: 'end', label: '🛑 End', color: 'red' },
 ];
 
-const testNodes = [
-  {
-    id: 'test1',
-    type: 'scene',
-    position: { x: 0, y: 0 },
-    data: {}
-  }
-];
-
-const realOverlayGroups = [
+// Simplified overlay groups
+const overlayGroups = [
   {
     id: 'intro',
-    label: 'Intro',
-    color: 'bg-cyan-900/40 border-cyan-300',
+    label: 'Introduction',
+    color: 'bg-cyan-900/20 border-cyan-400/40',
     bounds: { x: 60, y: 140, width: 480, height: 180 }
   },
   {
     id: 'red-pill',
     label: 'Red Pill Path',
-    color: 'bg-red-900/30 border-red-400',
-    bounds: { x: 700, y: 60, width: 420, height: 180 }
+    color: 'bg-red-900/20 border-red-400/40',
+    bounds: { x: 700, y: 60, width: 520, height: 180 }
   },
   {
     id: 'blue-pill',
     label: 'Blue Pill Path',
-    color: 'bg-blue-900/30 border-blue-400',
+    color: 'bg-blue-900/20 border-blue-400/40',
     bounds: { x: 720, y: 320, width: 420, height: 180 }
   }
 ];
 
-function layoutNodesByDepth(nodes) {
+// Improved layout function - don't override positions for overlay nodes
+function layoutNodesByDepth(nodes, useOverlayPositions = false) {
+  if (useOverlayPositions) {
+    // For overlay nodes, use their predefined positions
+    return nodes.map(node => ({
+      ...node,
+      position: node.position || { x: 0, y: 0 }
+    }));
+  }
+  
+  // Original layout logic for main flow
   const spacingX = 300;
   const spacingY = 220;
   const manualDepths = {
@@ -81,7 +83,7 @@ function layoutNodesByDepth(nodes) {
   const depthBuckets = {};
 
   return nodes.map((node, index) => {
-    const depth = manualDepths[node.id] ?? 0;
+    const depth = manualDepths[node.id] ?? Math.floor(index / 2);
     if (!depthBuckets[depth]) depthBuckets[depth] = 0;
 
     const position = {
@@ -103,60 +105,36 @@ function MapCanvasInner({ nodes }) {
   const [showEdges, setShowEdges] = useState(true);
   const [hoveredNode, setHoveredNode] = useState(null);
   const [highlightPath, setHighlightPath] = useState(true);
-  const [isDragging, setIsDragging] = useState(false);
-  const reactFlowInstance = useReactFlow();
-  const [cursor, setCursor] = useState('grab');
   const [showRealPath, setShowRealPath] = useState(true);
-  const [expandedPaths, setExpandedPaths] = useState([]);
-  const [animatedOverlayNodes, setAnimatedOverlayNodes] = useState([]);
-  const overlayFlowRef = React.useRef(null);
-  const [hoveredOverlayNodeId, setHoveredOverlayNodeId] = useState(null);
+  const [expandedPaths, setExpandedPaths] = useState(['matrix-pill-choice']); // Start with choice expanded
   const [focusedOverlayNodeId, setFocusedOverlayNodeId] = useState(null);
+  
+  const reactFlowInstance = useReactFlow();
 
-  // Helper: get child nodes for a choice node
-  function getChoiceChildren(choiceId) {
-    const children = realMatrixNodes.filter(n => n.parentChoice === choiceId);
-    console.log('getChoiceChildren', choiceId, children);
-    return children;
-  }
-  // Helper: get child edges for a choice node
-  function getChoiceEdges(choiceId) {
-    return realMatrixEdges.filter(e => e.source === choiceId);
-  }
+  // Helper functions
+  const getChoiceChildren = useCallback((choiceId) => {
+    return realMatrixNodes.filter(n => n.parentChoice === choiceId);
+  }, []);
 
-  // Compute overlay nodes/edges based on expandedPaths
-  const overlayNodes = useMemo(() => {
-    let base = realMatrixNodes.filter(n => !n.parentChoice);
-    let expanded = [];
-    expandedPaths.forEach(choiceId => {
-      expanded.push(...getChoiceChildren(choiceId));
-    });
-    return [...base, ...expanded];
-  }, [expandedPaths]);
+  const getBaseNodes = useCallback(() => {
+    return realMatrixNodes.filter(n => !n.parentChoice);
+  }, []);
 
-  // Animate new overlay nodes on expansion
-  useEffect(() => {
-    let base = realMatrixNodes.filter(n => !n.parentChoice);
-    let expanded = [];
-    let timeouts = [];
-    expandedPaths.forEach((choiceId, i) => {
-      const children = getChoiceChildren(choiceId);
-      children.forEach((child, j) => {
-        timeouts.push(setTimeout(() => {
-          setAnimatedOverlayNodes(prev => {
-            if (prev.find(n => n.id === child.id)) return prev;
-            return [...prev, { ...child, _animate: true }];
-          });
-        }, 120 * (i + j)));
-      });
-    });
-    // Always show base nodes immediately
-    setAnimatedOverlayNodes(base.map(n => ({ ...n, _animate: false })));
-    return () => timeouts.forEach(clearTimeout);
-  }, [expandedPaths]);
+  const getVisibleOverlayNodes = useCallback(() => {
+    const baseNodes = getBaseNodes();
+    const expandedNodes = expandedPaths.flatMap(choiceId => getChoiceChildren(choiceId));
+    return [...baseNodes, ...expandedNodes];
+  }, [expandedPaths, getBaseNodes, getChoiceChildren]);
 
-  // Helper: get all downstream node IDs from a given nodeId
-  function getDownstreamNodes(nodeId, visited = new Set()) {
+  const getVisibleOverlayEdges = useCallback(() => {
+    const visibleNodeIds = new Set(getVisibleOverlayNodes().map(n => n.id));
+    return realMatrixEdges.filter(edge => 
+      visibleNodeIds.has(edge.source) && visibleNodeIds.has(edge.target)
+    );
+  }, [getVisibleOverlayNodes]);
+
+  // Get downstream nodes for focus functionality
+  const getDownstreamNodes = useCallback((nodeId, visited = new Set()) => {
     if (!nodeId || visited.has(nodeId)) return visited;
     visited.add(nodeId);
     realMatrixEdges.forEach(e => {
@@ -165,82 +143,83 @@ function MapCanvasInner({ nodes }) {
       }
     });
     return visited;
-  }
-  const focusedNodeSet = useMemo(() => {
-    if (!focusedOverlayNodeId) return null;
-    return getDownstreamNodes(focusedOverlayNodeId);
-  }, [focusedOverlayNodeId, realMatrixEdges]);
+  }, []);
 
-  // Compose animated overlay nodes for ReactFlow
-  const animatedNodesForOverlay = useMemo(() => {
-    // Merge base and animated expanded nodes
-    const ids = new Set();
-    const all = [...animatedOverlayNodes];
-    overlayNodes.forEach(n => {
-      if (!ids.has(n.id)) {
-        all.push(n);
-        ids.add(n.id);
-      }
-    });
-    const result = all.map(n => {
-      const isFocused = !focusedNodeSet || focusedNodeSet.has(n.id);
-      return {
-        ...n,
-        className: `${n._animate ? 'animate-fade-slide' : ''} ${isFocused ? '' : 'opacity-30 transition-opacity duration-300'}`.trim(),
-        data: {
-          ...n.data,
-          isOverlay: true,
-          onMouseEnter: () => setHoveredOverlayNodeId(n.id),
-          onMouseLeave: () => setHoveredOverlayNodeId(null),
-          onClick: () => {
-            setFocusedOverlayNodeId(focusedOverlayNodeId === n.id ? null : n.id);
-          },
+  // Memoized computations
+  const filteredNodes = useMemo(() => {
+    return nodes.filter(n => activeTypes.includes(n.type));
+  }, [nodes, activeTypes]);
+
+  const laidOutNodes = useMemo(() => 
+    layoutNodesByDepth(filteredNodes, false), 
+    [filteredNodes]
+  );
+
+  const overlayNodes = useMemo(() => {
+    const visibleNodes = getVisibleOverlayNodes();
+    const focusedNodeSet = focusedOverlayNodeId ? getDownstreamNodes(focusedOverlayNodeId) : null;
+    
+    return visibleNodes.map(node => ({
+      ...node,
+      className: focusedNodeSet && !focusedNodeSet.has(node.id) ? 'opacity-30' : '',
+      data: {
+        ...node.data,
+        isOverlay: true,
+        onMouseEnter: () => setHoveredNode({ 
+          id: node.id, 
+          type: node.type, 
+          x: window.event?.clientX || 0, 
+          y: window.event?.clientY || 0 
+        }),
+        onMouseLeave: () => setHoveredNode(null),
+        onClick: () => {
+          setFocusedOverlayNodeId(focusedOverlayNodeId === node.id ? null : node.id);
         },
-      };
-    });
-    console.log('Overlay nodes', result);
-    return result;
-  }, [animatedOverlayNodes, overlayNodes, focusedNodeSet, focusedOverlayNodeId]);
+      }
+    }));
+  }, [getVisibleOverlayNodes, focusedOverlayNodeId, getDownstreamNodes]);
 
   const overlayEdges = useMemo(() => {
-    let base = realMatrixEdges.filter(e => {
-      // Only show edges between base nodes or to expanded children
-      const src = realMatrixNodes.find(n => n.id === e.source);
-      const tgt = realMatrixNodes.find(n => n.id === e.target);
-      return (!src.parentChoice && !tgt?.parentChoice) || (expandedPaths.includes(e.source));
-    });
-    return base.map(edge => {
-      const isHovered = hoveredOverlayNodeId && (edge.source === hoveredOverlayNodeId || edge.target === hoveredOverlayNodeId);
-      const isFocused = !focusedNodeSet || (focusedNodeSet.has(edge.source) && focusedNodeSet.has(edge.target));
-      return {
-        ...edge,
-        style: {
-          stroke: isHovered ? '#22d3ee' : '#94a3b8',
-          strokeWidth: isHovered ? 3 : 2,
-          opacity: isFocused ? (isHovered ? 1 : 0.7) : 0.2,
-          transition: 'opacity 0.3s',
-        },
-        className: `${isHovered ? 'animate-pulse-glow' : ''} ${isFocused ? '' : 'opacity-20 transition-opacity duration-300'}`.trim(),
-      };
-    });
-  }, [expandedPaths, hoveredOverlayNodeId, focusedNodeSet]);
+    const visibleEdges = getVisibleOverlayEdges();
+    const focusedNodeSet = focusedOverlayNodeId ? getDownstreamNodes(focusedOverlayNodeId) : null;
+    
+    return visibleEdges.map(edge => ({
+      ...edge,
+      style: {
+        stroke: '#06b6d4',
+        strokeWidth: 2,
+        opacity: focusedNodeSet && (!focusedNodeSet.has(edge.source) || !focusedNodeSet.has(edge.target)) ? 0.2 : 0.8,
+      },
+      markerEnd: {
+        type: MarkerType.ArrowClosed,
+        color: '#06b6d4',
+        width: 20,
+        height: 20,
+      }
+    }));
+  }, [getVisibleOverlayEdges, focusedOverlayNodeId, getDownstreamNodes]);
 
-  // Overlay nodeTypes: inject branch icon for choice nodes
-  const overlayNodeTypes = {
+  // Enhanced choice node type for overlay
+  const overlayNodeTypes = useMemo(() => ({
     ...nodeTypes,
     choice: (props) => {
       const { id } = props;
-      const isExpandable = getChoiceChildren(id).length > 0;
+      const hasChildren = getChoiceChildren(id).length > 0;
       const isExpanded = expandedPaths.includes(id);
+      
       return (
-        <div style={{ border: '2px solid #00ffff', position: 'relative', background: 'rgba(0,255,255,0.05)' }}>
-          <div style={{ position: 'absolute', top: 2, left: 8, color: '#00ffff', fontWeight: 'bold', fontSize: 10, zIndex: 10000 }}>OVERLAY</div>
+        <div className="relative">
+          {props.data.isOverlay && (
+            <div className="absolute -top-2 -left-2 bg-cyan-500 text-black text-xs px-2 py-1 rounded font-mono font-bold z-10">
+              OVERLAY
+            </div>
+          )}
           <ChoiceNode
             {...props}
-            isExpandable={isExpandable}
+            isExpandable={hasChildren}
             isExpanded={isExpanded}
             onBranchToggle={() => {
-              setExpandedPaths((prev) =>
+              setExpandedPaths(prev =>
                 prev.includes(id)
                   ? prev.filter(x => x !== id)
                   : [...prev, id]
@@ -250,22 +229,33 @@ function MapCanvasInner({ nodes }) {
         </div>
       );
     }
-  };
+  }), [nodeTypes, getChoiceChildren, expandedPaths]);
 
-  // Ensure overlay fitView on toggle
-  useEffect(() => {
-    if (showRealPath && overlayFlowRef.current) {
-      overlayFlowRef.current.fitView?.({ padding: 0.8, duration: 600 });
-    }
-  }, [showRealPath]);
+  // Main flow edges
+  const visibleEdges = useMemo(() => {
+    const visibleNodeIds = new Set(filteredNodes.map(n => n.id));
+    return edges
+      .filter(e => visibleNodeIds.has(e.source) && visibleNodeIds.has(e.target))
+      .map(e => ({
+        ...e,
+        style: {
+          strokeWidth: 2,
+          stroke: highlightPath && e.source === 'start' ? 'cyan' : 'rgba(255,255,255,0.2)',
+          strokeDasharray: e.animated ? '6 3' : undefined,
+        },
+        animated: highlightPath && e.source === 'start',
+        markerEnd: {
+          type: MarkerType.ArrowClosed,
+          color: '#fff',
+          width: 24,
+          height: 24,
+        },
+      }));
+  }, [filteredNodes, highlightPath]);
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      reactFlowInstance.fitView({ padding: 0.8, duration: 800 });
-    }, 200);
-    return () => clearTimeout(timeout);
-  }, [nodes, reactFlowInstance]);
+  const styledEdges = showEdges ? visibleEdges : [];
 
+  // Event handlers
   const toggleType = (type) => {
     setActiveTypes(prev =>
       prev.includes(type)
@@ -274,154 +264,108 @@ function MapCanvasInner({ nodes }) {
     );
   };
 
-  const filteredNodes = useMemo(() => {
-    return nodes.filter(n => activeTypes.includes(n.type));
-  }, [nodes, activeTypes]);
-
-  // 🧠 Layout nodes by depth for readability
-  const laidOutNodes = useMemo(() => layoutNodesByDepth(filteredNodes), [filteredNodes]);
-
-  // Highlight edges from 'start' node if highlightPath is true
-  const visibleEdges = useMemo(() => {
-    const visibleNodeIds = new Set(filteredNodes.map(n => n.id));
-    return edges
-      .filter(e => visibleNodeIds.has(e.source) && visibleNodeIds.has(e.target))
-      .map(e => {
-        if (highlightPath && e.source === 'start') {
-          return {
-            ...e,
-            style: { ...e.style, stroke: 'cyan', strokeWidth: 3 },
-            markerEnd: 'url(#arrowhead)',
-            animated: true,
-            label: e.label || '',
-          };
-        }
-        return e;
-      });
-  }, [filteredNodes, highlightPath]);
-
-  // 🧠 Style edges with smoothstep, arrows, and animation
-  const styledEdges = useMemo(() =>
-    (showEdges ? visibleEdges : []).map((e) => ({
-      ...e,
-      type: 'smoothstep',
-      animated: true,
-      markerEnd: {
-        type: MarkerType.ArrowClosed,
-        color: '#fff',
-        width: 24,
-        height: 24,
-      },
-      style: {
-        strokeWidth: 2,
-        stroke: 'rgba(255,255,255,0.2)',
-        strokeDasharray: e.animated ? '6 3' : undefined,
-        ...(e.style || {}),
-      },
-    })),
-    [showEdges, visibleEdges]
-  );
-
-  // Debug logs for main and overlay nodes/edges
-  console.log('Laid out nodes', laidOutNodes);
-  console.log('Styled edges', styledEdges);
-  console.log('Animated overlay nodes', animatedNodesForOverlay);
-  console.log('Overlay edges', overlayEdges);
-
   const handleResetFilters = () => {
     setActiveTypes(NODE_TYPE_FILTERS.map(f => f.key));
     setTimeout(() => {
       reactFlowInstance.fitView({ padding: 0.8 });
-    }, 0);
+    }, 100);
   };
 
   const handleNodeMouseEnter = (event, node) => {
     setHoveredNode({ id: node.id, type: node.type, x: event.clientX, y: event.clientY });
   };
+
   const handleNodeMouseLeave = () => setHoveredNode(null);
+
+  // Effects
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      reactFlowInstance.fitView({ padding: 0.8, duration: 800 });
+    }, 300);
+    return () => clearTimeout(timeout);
+  }, [nodes, reactFlowInstance]);
 
   return (
     <>
-      <div className="flex gap-2 flex-wrap mb-2 px-4 py-2 bg-black/80 text-sm text-white sticky top-0 z-50 items-center">
-        {NODE_TYPE_FILTERS.map(({ key, label }) => (
+      {/* Enhanced Filter Bar */}
+      <div className="flex gap-2 flex-wrap mb-2 px-4 py-3 bg-black/90 text-sm text-white sticky top-0 z-50 items-center border-b border-green-400/20 backdrop-blur">
+        <div className="flex items-center gap-2 flex-wrap">
+          {NODE_TYPE_FILTERS.map(({ key, label, color }) => (
+            <button
+              key={key}
+              onClick={() => toggleType(key)}
+              className={`px-3 py-1 rounded border transition-all duration-200 font-mono text-xs ${
+                activeTypes.includes(key)
+                  ? `bg-${color}-500/20 text-${color}-300 border-${color}-400/60 shadow-${color}-400/20 shadow`
+                  : 'bg-gray-900 border-gray-600 text-gray-400 hover:border-gray-500'
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+        
+        <div className="flex items-center gap-2 ml-auto">
           <button
-            key={key}
-            onClick={() => toggleType(key)}
-            className={`px-3 py-1 rounded border transition-colors duration-200 ${
-              activeTypes.includes(key)
-                ? 'bg-white text-black border-white shadow'
-                : 'bg-black border-white/30 text-white/50'
+            onClick={handleResetFilters}
+            className="px-3 py-1 rounded border border-purple-400/60 bg-purple-900/40 text-purple-300 font-mono text-xs hover:bg-purple-900/60 transition-colors duration-200"
+          >
+            Reset All
+          </button>
+          
+          <label className="flex items-center gap-2 cursor-pointer select-none font-mono text-xs">
+            <input
+              type="checkbox"
+              checked={highlightPath}
+              onChange={() => setHighlightPath(v => !v)}
+              className="accent-cyan-500"
+            />
+            <span className="text-cyan-300">Highlight Start Path</span>
+          </label>
+
+          <button
+            onClick={() => setShowRealPath(!showRealPath)}
+            className={`px-3 py-1 rounded border font-mono text-xs transition-all duration-200 ${
+              showRealPath 
+                ? 'bg-cyan-900/40 text-cyan-300 border-cyan-400/60' 
+                : 'bg-gray-900 border-gray-600 text-gray-400'
             }`}
           >
-            {label}
+            📍 Real User Path
           </button>
-        ))}
-        <button
-          onClick={handleResetFilters}
-          className="ml-4 px-3 py-1 rounded border border-white bg-purple-700 text-white font-bold shadow hover:bg-purple-600 transition-colors duration-200"
-        >
-          Reset Filters
-        </button>
-        <label className="ml-4 flex items-center gap-1 cursor-pointer select-none">
-          <input
-            type="checkbox"
-            checked={highlightPath}
-            onChange={() => setHighlightPath(v => !v)}
-            className="accent-cyan-500"
-          />
-          <span>Show path from start</span>
-        </label>
-        <button
-          onClick={() => setShowRealPath(!showRealPath)}
-          className={`text-xs px-3 py-1 rounded font-mono border ml-4 ${
-            showRealPath ? 'bg-cyan-900 text-cyan-200 border-cyan-500' : 'bg-black text-white border-neutral-700'
-          } hover:scale-105 transition`}
-        >
-          📍 Real User Path
-        </button>
+        </div>
       </div>
+
+      {/* Main Canvas */}
       <div style={{ height: '100vh' }} className="relative">
-        <div className="relative h-full w-full bg-[#121212] rounded-md shadow-md bg-grid-small">
+        <div className="relative h-full w-full bg-[#121212] rounded-md shadow-md">
+          {/* Background layers */}
           <div className="absolute inset-0 pointer-events-none z-0 bg-gradient-to-br from-[#1e1e1e] to-[#2a2a2a]" />
-          <div className="absolute inset-0 pointer-events-none z-10" style={{backgroundImage:'linear-gradient(to right,rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(to bottom,rgba(255,255,255,0.03) 1px,transparent 1px)',backgroundSize:'40px 40px'}} />
+          <div className="absolute inset-0 pointer-events-none z-10 bg-grid-small" />
+          
+          {/* Main ReactFlow */}
           <ReactFlow
             nodes={laidOutNodes}
             edges={styledEdges}
             nodeTypes={nodeTypes}
-            edgeTypes={{ default: 'smoothstep' }}
             fitView
             fitViewOptions={{ padding: 0.9 }}
-            style={{ height: '100%', width: '100%', background: 'none', cursor }}
+            style={{ height: '100%', width: '100%', background: 'none' }}
             zoomOnScroll={true}
             panOnScroll={true}
             zoomOnScrollMode="ctrl"
-            dragPan={true}
-            onMoveStart={() => setCursor('grabbing')}
-            onMoveEnd={() => setCursor('grab')}
             onNodeMouseEnter={handleNodeMouseEnter}
             onNodeMouseLeave={handleNodeMouseLeave}
-          >
-            <defs>
-              <marker
-                id="arrowhead"
-                markerWidth="8"
-                markerHeight="8"
-                refX="8"
-                refY="4"
-                orient="auto"
-                markerUnits="strokeWidth"
-              >
-                <path d="M0,0 L8,4 L0,8 Z" fill="cyan" />
-              </marker>
-            </defs>
-          </ReactFlow>
+          />
+
+          {/* Overlay Layer */}
           {showRealPath && (
-            <div className="pointer-events-none absolute inset-0 z-[99]">
-              {/* Group overlays behind overlay nodes */}
-              {realOverlayGroups.map(group => (
+            <div className="absolute inset-0 z-20 pointer-events-none">
+              {/* Group Labels */}
+              {overlayGroups.map(group => (
                 <div
                   key={group.id}
-                  className={`absolute z-[5] rounded-md border text-xs px-2 py-1 font-mono uppercase pointer-events-none backdrop-blur-sm animate-pulse-box ${group.color} overlay-group-container`}
+                  className={`absolute rounded-md border text-xs px-3 py-2 font-mono uppercase backdrop-blur-sm ${group.color}`}
                   style={{
                     left: group.bounds.x,
                     top: group.bounds.y,
@@ -432,31 +376,35 @@ function MapCanvasInner({ nodes }) {
                     justifyContent: 'flex-start',
                   }}
                 >
-                  <span className="mt-1 ml-2 drop-shadow text-white/80">{group.label}</span>
+                  <span className="text-white/90 drop-shadow">{group.label}</span>
                 </div>
               ))}
+              
+              {/* Overlay ReactFlow */}
               <ReactFlow
-                ref={overlayFlowRef}
-                nodes={animatedNodesForOverlay}
+                nodes={overlayNodes}
                 edges={overlayEdges}
                 nodeTypes={overlayNodeTypes}
-                edgeOptions={{
-                  style: { stroke: '#06b6d4', strokeWidth: 3, strokeDasharray: '4 2' },
-                  markerEnd: { type: MarkerType.Arrow, color: '#06b6d4' }
-                }}
+                nodesDraggable={false}
                 panOnDrag={false}
                 zoomOnScroll={false}
-                nodesDraggable={false}
                 edgesUpdatable={false}
-                fitView
                 className="pointer-events-auto"
-                style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,255,255,0.02)' }}
-              >
-              </ReactFlow>
+                style={{ 
+                  position: 'absolute', 
+                  top: 0, 
+                  left: 0, 
+                  width: '100%', 
+                  height: '100%', 
+                  background: 'rgba(6, 182, 212, 0.02)' 
+                }}
+              />
+              
+              {/* Focus Clear Button */}
               {focusedOverlayNodeId && (
                 <button
                   onClick={() => setFocusedOverlayNodeId(null)}
-                  className="absolute top-4 right-4 z-[100] px-3 py-1 rounded bg-cyan-900 text-cyan-200 border border-cyan-400 font-mono text-xs shadow hover:bg-cyan-700 transition pointer-events-auto"
+                  className="absolute top-4 right-4 z-30 px-3 py-1 rounded bg-cyan-900 text-cyan-200 border border-cyan-400 font-mono text-xs shadow hover:bg-cyan-700 transition pointer-events-auto"
                   title="Clear focus"
                 >
                   ✕ Clear Focus
@@ -465,17 +413,20 @@ function MapCanvasInner({ nodes }) {
             </div>
           )}
         </div>
+
+        {/* UI Controls */}
         <ZoomHUD />
         <button
           onClick={() => setShowEdges(e => !e)}
           className="fixed bottom-6 right-6 px-3 py-1 rounded border border-white bg-gray-900 text-white shadow hover:bg-gray-700 transition-colors duration-200 z-50"
-          style={{ zIndex: 60 }}
         >
           {showEdges ? 'Hide Edges' : 'Show Edges'}
         </button>
+
+        {/* Hover Tooltip */}
         {hoveredNode && (
           <div
-            className="pointer-events-none fixed px-3 py-2 rounded bg-black/90 text-xs text-white font-mono shadow-lg z-50 transition-opacity duration-300"
+            className="pointer-events-none fixed px-3 py-2 rounded bg-black/90 text-xs text-white font-mono shadow-lg z-50 border border-green-400/20"
             style={{ left: hoveredNode.x + 12, top: hoveredNode.y + 12 }}
           >
             <div><b>ID:</b> {hoveredNode.id}</div>

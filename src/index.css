@@ -22,166 +22,126 @@ code {
     monospace;
 }
 
+/* Performance optimized animations */
 @layer utilities {
-  @keyframes progress {
-    from {
-      transform: translateX(-100%);
+  /* Smooth fade-in for new nodes */
+  @keyframes fade-slide-in {
+    from { 
+      opacity: 0; 
+      transform: translateY(-10px) scale(0.95);
     }
-    to {
-      transform: translateX(0);
+    to { 
+      opacity: 1; 
+      transform: translateY(0) scale(1);
     }
   }
-  .animate-progress {
-    animation: progress 3s linear forwards;
+  
+  .animate-fade-slide {
+    animation: fade-slide-in 400ms cubic-bezier(0.4, 0, 0.2, 1);
   }
-  @keyframes shake {
+
+  /* Optimized pulse glow */
+  @keyframes pulse-glow {
+    0%, 100% {
+      filter: drop-shadow(0 0 4px currentColor);
+      opacity: 1;
+    }
+    50% {
+      filter: drop-shadow(0 0 8px currentColor);
+      opacity: 0.8;
+    }
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+    will-change: filter, opacity;
+  }
+
+  /* Subtle box pulse for groups */
+  @keyframes pulse-box {
+    0%, 100% { 
+      box-shadow: 0 0 0 0 rgba(255,255,255,0.1);
+      border-color: currentColor;
+    }
+    50% { 
+      box-shadow: 0 0 0 4px rgba(255,255,255,0.05);
+      border-color: rgba(255,255,255,0.6);
+    }
+  }
+
+  .animate-pulse-box {
+    animation: pulse-box 3s ease-in-out infinite;
+    will-change: box-shadow, border-color;
+  }
+
+  /* Improved shake with less jarring movement */
+  @keyframes subtle-shake {
     0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    75% { transform: translateX(5px); }
+    25% { transform: translateX(-2px); }
+    75% { transform: translateX(2px); }
   }
-  .animate-shake {
-    animation: shake 0.4s linear;
+
+  .animate-subtle-shake {
+    animation: subtle-shake 0.3s ease-in-out;
   }
-}
 
-/* Mermaid Diagram Styles */
-.mermaid-diagram {
-  @apply text-sm;
-}
+  /* Grid background optimization */
+  .bg-grid-small {
+    background-image: 
+      linear-gradient(rgba(0,255,0,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,0,0.03) 1px, transparent 1px);
+    background-size: 20px 20px;
+    will-change: auto; /* Remove will-change from static backgrounds */
+  }
 
-.mermaid-diagram .node {
-  @apply transition-all duration-300;
-}
+  /* Focus transitions */
+  .transition-focus {
+    transition: opacity 300ms ease-in-out, transform 300ms ease-in-out;
+    will-change: opacity, transform;
+  }
 
-.mermaid-diagram .node:hover {
-  @apply filter brightness-110;
-}
+  .transition-focus.focused {
+    opacity: 1;
+    transform: scale(1);
+  }
 
-.mermaid-diagram .node[data-tooltip] {
-  @apply relative;
-}
-
-.mermaid-diagram .node[data-tooltip]:hover::after {
-  content: attr(data-tooltip);
-  @apply absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 bg-gray-800 text-white text-xs rounded opacity-0 transition-opacity duration-200 whitespace-nowrap;
-  opacity: 1;
-}
-
-.mermaid-diagram .edgeLabel {
-  @apply bg-gray-800 text-white px-2 py-1 rounded text-xs;
-}
-
-.mermaid-diagram .edgePath path {
-  @apply stroke-gray-500;
-}
-
-/* Mobile Responsiveness */
-@media (max-width: 640px) {
-  .mermaid-diagram {
-    @apply transform scale-75 origin-top;
+  .transition-focus.unfocused {
+    opacity: 0.3;
+    transform: scale(0.98);
   }
 }
 
-.matrix-glow-green {
-  @apply shadow-[0_0_12px_#00ff00] border-2 border-green-400 animate-pulse;
-}
-
-.matrix-glow-purple {
-  @apply shadow-[0_0_12px_#8000ff] border-2 border-purple-400 animate-pulse;
-}
-
-.matrix-trap-red {
-  @apply bg-red-800 text-white border border-red-500;
-}
-
-.matrix-gradient-purple {
-  @apply bg-gradient-to-br from-purple-700 to-fuchsia-600 text-white;
-}
-@layer utilities {
-  @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    20%, 60% { transform: translateX(-4px); }
-    40%, 80% { transform: translateX(4px); }
-  }
-  .animate-shake {
-    animation: shake 0.5s;
-  }
-  @keyframes flash-once {
-    0% { opacity: 1; }
-    50% { opacity: 0.3; }
-    100% { opacity: 1; }
-  }
-  .animate-flash-once {
-    animation: flash-once 0.5s ease-in-out;
-  }
-  @keyframes glow-green {
-    0%, 100% { box-shadow: 0 0 4px #22c55e; }
-    50% { box-shadow: 0 0 12px #22c55e; }
-  }
-  .animate-glow-green {
-    animation: glow-green 1s ease-in-out infinite;
-  }
-  @keyframes flash-green {
-    0%, 100% { box-shadow: 0 0 0 0 #22c55e; }
-    50% { box-shadow: 0 0 20px #22c55e; }
-  }
-  .animate-flash-green {
-    animation: flash-green 0.5s ease-in-out;
-  }
-}
-
-/* Subtle shake animation */
-.shake {
-  animation: shake 0.5s ease-in-out;
-}
-
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-4px); }
-  75% { transform: translateX(4px); }
-}
-
-.bg-grid-small {
-  background-image: 
-    linear-gradient(rgba(0,255,0,0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,255,0,0.05) 1px, transparent 1px);
-  background-size: 20px 20px;
-}
-
-.animate-fade-slide {
-  animation: fade-slide-in 300ms ease-out;
-}
-@keyframes fade-slide-in {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes pulse-glow {
-  0%, 100% {
-    stroke: #22d3ee;
-    filter: drop-shadow(0 0 4px #22d3ee);
-  }
-  50% {
-    stroke: #67e8f9;
-    filter: drop-shadow(0 0 6px #67e8f9);
-  }
-}
-
-.animate-pulse-glow {
-  animation: pulse-glow 1.2s infinite ease-in-out;
-}
-
-@keyframes pulse-box {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.1); }
-  50% { box-shadow: 0 0 0 6px rgba(255,255,255,0.05); }
-}
-
-.animate-pulse-box {
-  animation: pulse-box 2.5s ease-in-out infinite;
-}
-
+/* Overlay specific optimizations */
 .overlay-group-container {
-  padding: 8px 0 0 8px;
+  padding: 12px 0 0 12px;
   z-index: 5;
   pointer-events: none;
+  contain: layout style; /* CSS containment for better performance */
+}
+
+/* ReactFlow specific optimizations */
+.react-flow__node {
+  will-change: transform; /* Only for draggable nodes */
+}
+
+.react-flow__edge {
+  will-change: auto; /* Remove will-change from edges unless animating */
+}
+
+.react-flow__edge.animated {
+  will-change: stroke-dashoffset;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-slide,
+  .animate-pulse-glow,
+  .animate-pulse-box,
+  .animate-subtle-shake {
+    animation: none;
+  }
+  
+  .transition-focus {
+    transition: none;
+  }
 }
