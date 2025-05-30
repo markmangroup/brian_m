@@ -38,6 +38,12 @@ import Align from './pages/matrix-v1/Align';
 import Stabilize from './pages/matrix-v1/Stabilize';
 import GuardianCall from './pages/matrix-v1/GuardianCall';
 
+// Faction Choice Components
+import FactionChoice from './pages/matrix-v1/FactionChoice';
+import ZionFleet from './pages/matrix-v1/ZionFleet';
+import RebelHackers from './pages/matrix-v1/RebelHackers';
+import OracleSeeker from './pages/matrix-v1/OracleSeeker';
+
 // Ghost Layer and Echo Fork Components
 import ShardInit from './pages/matrix-v1/ShardInit';
 import ShardInsert from './pages/matrix-v1/ShardInsert';
@@ -85,6 +91,12 @@ export default function App() {
             <Route path="/matrix-v1/path-b-glitch" element={<PathBGlitch />} />
             <Route path="/matrix-v1/factions" element={<Factions />} />
             <Route path="/matrix-v1/align-:slug" element={<Align />} />
+            
+            {/* Faction Choice Routes */}
+            <Route path="/matrix-v1/faction-choice" element={<FactionChoice />} />
+            <Route path="/matrix-v1/zion-fleet" element={<ZionFleet />} />
+            <Route path="/matrix-v1/rebel-hackers" element={<RebelHackers />} />
+            <Route path="/matrix-v1/oracle-seekers" element={<OracleSeeker />} />
             
             {/* Ghost Layer and Echo Fork Routes */}
             <Route path="/matrix-v1/shard-init" element={<ShardInit />} />
