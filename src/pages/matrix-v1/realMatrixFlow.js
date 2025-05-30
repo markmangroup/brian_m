@@ -27,8 +27,8 @@ export const realMatrixNodes = [
     data: {
       prompt: 'Red or Blue?',
       options: [
-        { text: 'Red Pill', value: 'red' },
-        { text: 'Blue Pill', value: 'blue' }
+        'Red Pill',
+        'Blue Pill'
       ]
     }
   },

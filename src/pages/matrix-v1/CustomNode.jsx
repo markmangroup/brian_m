@@ -60,41 +60,47 @@ export const DialogueNode = ({ data = {}, type = 'dialogue' }) => (
   </div>
 );
 
-export const ChoiceNode = ({ data = {}, type = 'choice', isExpandable, isExpanded, onBranchToggle }) => (
-  <div
-    onMouseEnter={data?.onMouseEnter}
-    onMouseLeave={data?.onMouseLeave}
-    onClick={data?.onClick}
-    className={`${baseCard} ${hoverCard} ${data?.isOverlay ? 'cursor-pointer' : ''}`}
-    style={{
-      '--accent': '#a78bfa',
-      borderColor: 'var(--accent)',
-    }}
-  >
-    <div className="flex items-center justify-between">
-      <h3 className={headerClass} style={{ color: 'var(--accent)' }}>{data.prompt || 'Make a choice...'}</h3>
-      {isExpandable && (
-        <button
-          onClick={e => { e.stopPropagation(); onBranchToggle && onBranchToggle(); }}
-          className="ml-2 text-lg font-mono text-cyan-400 hover:text-cyan-200 focus:outline-none"
-          title={isExpanded ? 'Collapse branch' : 'Expand branch'}
-        >
-          {isExpanded ? '➖' : '➕'}
-        </button>
+export const ChoiceNode = ({ data = {}, type = 'choice' }) => {
+  const { isExpandable, isExpanded, onBranchToggle } = data || {};
+  const options = Array.isArray(data.options)
+    ? data.options.map(opt => typeof opt === 'string' ? opt : opt?.text || String(opt))
+    : [];
+  return (
+    <div
+      onMouseEnter={data?.onMouseEnter}
+      onMouseLeave={data?.onMouseLeave}
+      onClick={data?.onClick}
+      className={`${baseCard} ${hoverCard} ${data?.isOverlay ? 'cursor-pointer' : ''}`}
+      style={{
+        '--accent': '#a78bfa',
+        borderColor: 'var(--accent)',
+      }}
+    >
+      <div className="flex items-center justify-between">
+        <h3 className={headerClass} style={{ color: 'var(--accent)' }}>{data.prompt || 'Make a choice...'}</h3>
+        {isExpandable && (
+          <button
+            onClick={e => { e.stopPropagation(); onBranchToggle && onBranchToggle(); }}
+            className="ml-2 text-lg font-mono text-cyan-400 hover:text-cyan-200 focus:outline-none"
+            title={isExpanded ? 'Collapse branch' : 'Expand branch'}
+          >
+            {isExpanded ? '▼ Collapse' : '▶ Expand'}
+          </button>
+        )}
+      </div>
+      <div className="space-y-2">
+        {options.map((option, index) => (
+          <div key={index} className="text-gray-200 text-xs bg-white/10 p-2 rounded border border-purple-300 font-mono">
+            {option}
+          </div>
+        ))}
+      </div>
+      {data.status && (
+        <div className="inline-flex items-center text-xs font-mono px-2 py-1 rounded border mt-2" style={{ borderColor: '#22c55e', backgroundColor: 'rgba(20,83,45,0.3)' }}>✅ Built</div>
       )}
     </div>
-    <div className="space-y-2">
-      {(data.options || []).map((option, index) => (
-        <div key={index} className="text-gray-200 text-xs bg-white/10 p-2 rounded border border-purple-300 font-mono">
-          {option}
-        </div>
-      ))}
-    </div>
-    {data.status && (
-      <div className="inline-flex items-center text-xs font-mono px-2 py-1 rounded border mt-2" style={{ borderColor: '#22c55e', backgroundColor: 'rgba(20,83,45,0.3)' }}>✅ Built</div>
-    )}
-  </div>
-);
+  );
+};
 
 export const EndingNode = ({ data = {}, type = 'ending' }) => (
   <div
