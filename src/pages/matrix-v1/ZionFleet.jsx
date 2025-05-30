@@ -322,7 +322,7 @@ export default function ZionFleet() {
                 <h3 className="text-lg font-bold text-white mb-2">Training Results</h3>
                 <div className="grid grid-cols-3 gap-4 text-sm">
                   <div>
-                    <div className="text-red-400 font-bold">{Math.floor(accuracy)}%</div>
+                    <div className="text-red-400 font-bold">{Math.floor((hits / 6) * 100)}%</div>
                     <div className="text-gray-400">Combat Accuracy</div>
                   </div>
                   <div>
