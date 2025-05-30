@@ -6,7 +6,8 @@ import { convertToTree, filterTreeByStatus, findPathToNode } from '../../utils/c
 const LAYOUT_TYPES = {
   tree: 'tree',
   cluster: 'cluster',
-  radial: 'radial'
+  radial: 'radial',
+  network: 'network'
 };
 
 const STATUS_FILTERS = [
@@ -80,6 +81,13 @@ export default function MapD3() {
   const [breadcrumb, setBreadcrumb] = useState([]);
   const [expandedNodes, setExpandedNodes] = useState(new Set(['matrix-v1-entry']));
   const [currentTheme, setCurrentTheme] = useState('matrix');
+  
+  // Force layout controls
+  const [showForceControls, setShowForceControls] = useState(false);
+  const [forceStrength, setForceStrength] = useState(-300);
+  const [linkDistance, setLinkDistance] = useState(80);
+  const [centerStrength, setCenterStrength] = useState(0.3);
+  const [collideRadius, setCollideRadius] = useState(30);
   
   // Visual group states
   const [visibleGroups, setVisibleGroups] = useState(Object.keys(VISUAL_GROUPS));
@@ -414,6 +422,207 @@ export default function MapD3() {
         g.attr('transform', `translate(${width / 2},${height / 2})`);
         break;
         
+      case LAYOUT_TYPES.network:
+        // FORCE-DIRECTED NETWORK LAYOUT - completely different approach
+        const filteredNodes = realMatrixNodes.filter(node => 
+          statusFilter.includes(node.data?.status || 'unknown') && 
+          nodeMatchesFilters(node)
+        );
+        
+        const filteredEdges = realMatrixEdges.filter(edge => 
+          filteredNodes.some(n => n.id === edge.source) && 
+          filteredNodes.some(n => n.id === edge.target)
+        );
+
+        // Prepare nodes for force simulation
+        const forceNodes = filteredNodes.map(node => ({
+          ...node,
+          x: Math.random() * width,
+          y: Math.random() * height,
+          fx: null, // Fixed position (null = not fixed)
+          fy: null
+        }));
+
+        // Create force simulation
+        const simulation = d3.forceSimulation(forceNodes)
+          .force('link', d3.forceLink(filteredEdges)
+            .id(d => d.id)
+            .distance(linkDistance)
+            .strength(0.3))
+          .force('charge', d3.forceManyBody()
+            .strength(forceStrength))
+          .force('center', d3.forceCenter(width / 2, height / 2)
+            .strength(centerStrength))
+          .force('collide', d3.forceCollide(collideRadius));
+
+        nodeRadius = d => {
+          const status = d.data?.status;
+          const baseRadius = 8;
+          if (status === 'live') return baseRadius + 3;
+          if (status === 'wip') return baseRadius + 1;
+          return baseRadius;
+        };
+
+        // Draw force-directed network
+        const networkLinks = g.selectAll('.network-link')
+          .data(filteredEdges)
+          .enter().append('line')
+          .attr('class', 'network-link')
+          .style('stroke', d => {
+            const isUnlocked = checkUnlockConditions(
+              realMatrixNodes.find(n => n.id === d.target), 
+              realMatrixNodes
+            );
+            return isUnlocked ? themeConfigs[currentTheme].linkColor : '#7f1d1d';
+          })
+          .style('stroke-width', 2)
+          .style('stroke-opacity', 0.7)
+          .style('stroke-dasharray', d => {
+            const isUnlocked = checkUnlockConditions(
+              realMatrixNodes.find(n => n.id === d.target), 
+              realMatrixNodes
+            );
+            return !isUnlocked ? '5,5' : 'none';
+          })
+          .style('filter', `drop-shadow(0 0 2px ${themeConfigs[currentTheme].linkColor})`);
+
+        // Create drag behavior
+        const dragBehavior = d3.drag()
+          .on('start', (event, d) => {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+          })
+          .on('drag', (event, d) => {
+            d.fx = event.x;
+            d.fy = event.y;
+          })
+          .on('end', (event, d) => {
+            if (!event.active) simulation.alphaTarget(0);
+            // Keep node fixed on double-click, unfix on single release
+            if (event.sourceEvent.detail !== 2) {
+              d.fx = null;
+              d.fy = null;
+            }
+          });
+
+        const networkNodes = g.selectAll('.network-node')
+          .data(forceNodes)
+          .enter().append('g')
+          .attr('class', 'network-node')
+          .style('cursor', 'grab')
+          .call(dragBehavior)
+          .on('click', (event, d) => handleNodeClick({ data: d }))
+          .on('dblclick', (event, d) => {
+            // Toggle fixed position
+            if (d.fx !== null) {
+              d.fx = null;
+              d.fy = null;
+            } else {
+              d.fx = d.x;
+              d.fy = d.y;
+            }
+          });
+
+        // Network node circles
+        networkNodes.append('circle')
+          .attr('r', nodeRadius)
+          .style('fill', d => {
+            const baseColor = getNodeColor(d);
+            return d3.color(baseColor).brighter(0.2);
+          })
+          .style('stroke', d => {
+            const matches = nodeMatchesFilters(d);
+            const isUnlocked = checkUnlockConditions(d, realMatrixNodes);
+            
+            if (!isUnlocked) return '#7f1d1d';
+            return matches && (activeCharacterFilters.length > 0 || activePuzzleFilters.length > 0 || 
+                              activeInteractionFilters.length > 0 || activeFeatureFilters.length > 0) 
+              ? themeConfigs[currentTheme].nodeColor : '#fff';
+          })
+          .style('stroke-width', d => {
+            const matches = nodeMatchesFilters(d);
+            const baseWidth = matches ? 3 : 2;
+            return d.fx !== null ? baseWidth + 2 : baseWidth; // Thicker stroke for fixed nodes
+          })
+          .style('filter', d => {
+            const matches = nodeMatchesFilters(d);
+            const isNightCityNode = d.group === 'night-city';
+            const isCyberpunkTheme = currentTheme === 'cyberpunk';
+            
+            if (isNightCityNode && isCyberpunkTheme) {
+              return `drop-shadow(0 0 15px #ec4899) drop-shadow(0 0 30px #a855f7) drop-shadow(0 0 45px #06b6d4)`;
+            }
+            
+            if (matches && (activeCharacterFilters.length > 0 || activePuzzleFilters.length > 0 || 
+                           activeInteractionFilters.length > 0 || activeFeatureFilters.length > 0)) {
+              return `drop-shadow(0 0 12px ${themeConfigs[currentTheme].nodeColor}) drop-shadow(0 0 20px ${themeConfigs[currentTheme].nodeColor})`;
+            }
+            
+            return 'drop-shadow(0 0 6px rgba(255,255,255,0.3))';
+          });
+
+        // Network node labels
+        networkNodes.append('text')
+          .attr('dy', '0.35em')
+          .attr('text-anchor', 'middle')
+          .text(d => d.data?.title || d.id)
+          .style('fill', d => {
+            const matches = nodeMatchesFilters(d);
+            const isUnlocked = checkUnlockConditions(d, realMatrixNodes);
+            
+            if (!isUnlocked) return '#dc2626';
+            return matches ? themeConfigs[currentTheme].primaryColor.replace('text-', '') : '#e5e7eb';
+          })
+          .style('font-size', '10px')
+          .style('font-family', 'monospace')
+          .style('font-weight', 'bold')
+          .style('text-shadow', `0 0 3px ${themeConfigs[currentTheme].linkColor}`)
+          .style('pointer-events', 'none');
+
+        // Status indicators for network nodes
+        networkNodes.append('text')
+          .attr('dy', '-12px')
+          .attr('text-anchor', 'middle')
+          .style('font-size', '8px')
+          .style('pointer-events', 'none')
+          .text(d => {
+            const status = d.data?.status;
+            switch (status) {
+              case 'live': return '🟢';
+              case 'wip': return '🟡';
+              case 'stub': return '🔴';
+              default: return '';
+            }
+          });
+
+        // Lock icons for unlocked nodes
+        networkNodes.filter(d => !checkUnlockConditions(d, realMatrixNodes))
+          .append('text')
+          .attr('dy', '15px')
+          .attr('text-anchor', 'middle')
+          .style('font-size', '12px')
+          .style('fill', '#dc2626')
+          .style('pointer-events', 'none')
+          .text('🔒');
+
+        // Update positions on simulation tick
+        simulation.on('tick', () => {
+          networkLinks
+            .attr('x1', d => d.source.x)
+            .attr('y1', d => d.source.y)
+            .attr('x2', d => d.target.x)
+            .attr('y2', d => d.target.y);
+
+          networkNodes
+            .attr('transform', d => `translate(${d.x},${d.y})`);
+        });
+
+        // Store simulation for controls
+        g.simulation = simulation;
+        
+        return; // Exit early for network layout
+        
       default: // LAYOUT_TYPES.tree
         // ENHANCED VERTICAL TREE - classic top-down hierarchy
         treeLayout = d3.tree()
@@ -445,6 +654,7 @@ export default function MapD3() {
         switch (layoutType) {
           case LAYOUT_TYPES.cluster: return 3;
           case LAYOUT_TYPES.radial: return 2.5;
+          case LAYOUT_TYPES.network: return 2;
           default: return 2;
         }
       })
@@ -484,6 +694,8 @@ export default function MapD3() {
             return `translate(${d.y},${d.x})`;
           case LAYOUT_TYPES.radial:
             return `rotate(${d.x * 180 / Math.PI - 90}) translate(${d.y},0)`;
+          case LAYOUT_TYPES.network:
+            return `translate(${d.x},${d.y})`;
           default: // tree
             return `translate(${d.x},${d.y})`;
         }
@@ -502,6 +714,8 @@ export default function MapD3() {
             return d3.color(baseColor).brighter(0.3);
           case LAYOUT_TYPES.radial:
             return d3.color(baseColor).darker(0.2);
+          case LAYOUT_TYPES.network:
+            return d3.color(baseColor).brighter(0.3);
           default:
             return baseColor;
         }
@@ -516,7 +730,7 @@ export default function MapD3() {
         
         return matches && (activeCharacterFilters.length > 0 || activePuzzleFilters.length > 0 || 
                           activeInteractionFilters.length > 0 || activeFeatureFilters.length > 0) 
-          ? theme.nodeColor : '#fff';
+          ? themeConfigs[currentTheme].nodeColor : '#fff';
       })
       .style('stroke-width', d => {
         const matches = nodeMatchesFilters(d.data);
@@ -533,6 +747,7 @@ export default function MapD3() {
         switch (layoutType) {
           case LAYOUT_TYPES.cluster: return baseWidth + 1;
           case LAYOUT_TYPES.radial: return baseWidth + 0.5;
+          case LAYOUT_TYPES.network: return baseWidth;
           default: return baseWidth;
         }
       })
@@ -566,11 +781,13 @@ export default function MapD3() {
                        activeInteractionFilters.length > 0 || activeFeatureFilters.length > 0)) {
           switch (layoutType) {
             case LAYOUT_TYPES.cluster:
-              return `drop-shadow(0 0 12px ${theme.nodeColor}) drop-shadow(0 0 20px ${theme.nodeColor})`;
+              return `drop-shadow(0 0 12px ${themeConfigs[currentTheme].nodeColor}) drop-shadow(0 0 20px ${themeConfigs[currentTheme].nodeColor})`;
             case LAYOUT_TYPES.radial:
-              return `drop-shadow(0 0 8px ${theme.nodeColor}) drop-shadow(0 0 16px ${theme.nodeColor})`;
+              return `drop-shadow(0 0 8px ${themeConfigs[currentTheme].nodeColor}) drop-shadow(0 0 16px ${themeConfigs[currentTheme].nodeColor})`;
+            case LAYOUT_TYPES.network:
+              return `drop-shadow(0 0 12px ${themeConfigs[currentTheme].nodeColor}) drop-shadow(0 0 20px ${themeConfigs[currentTheme].nodeColor})`;
             default:
-              return `drop-shadow(0 0 8px ${theme.nodeColor})`;
+              return `drop-shadow(0 0 8px ${themeConfigs[currentTheme].nodeColor})`;
           }
         }
         
@@ -590,6 +807,8 @@ export default function MapD3() {
             return d.children ? -15 : 15;
           case LAYOUT_TYPES.radial:
             return (d.x < Math.PI) === !d.children ? 10 : -10;
+          case LAYOUT_TYPES.network:
+            return 0;
           default: // tree
             return 0;
         }
@@ -604,6 +823,8 @@ export default function MapD3() {
             return d.children ? 'end' : 'start';
           case LAYOUT_TYPES.radial:
             return (d.x < Math.PI) === !d.children ? 'start' : 'end';
+          case LAYOUT_TYPES.network:
+            return 'middle';
           default: // tree
             return 'middle';
         }
@@ -625,19 +846,20 @@ export default function MapD3() {
         
         return matches && (activeCharacterFilters.length > 0 || activePuzzleFilters.length > 0 || 
                           activeInteractionFilters.length > 0 || activeFeatureFilters.length > 0)
-          ? theme.primaryColor.replace('text-', '#') : '#e5e7eb';
+          ? themeConfigs[currentTheme].primaryColor.replace('text-', '') : '#e5e7eb';
       })
       .style('font-size', d => {
         // Layout-specific font sizes
         switch (layoutType) {
           case LAYOUT_TYPES.cluster: return '12px';
           case LAYOUT_TYPES.radial: return '10px';
+          case LAYOUT_TYPES.network: return '11px';
           default: return '11px';
         }
       })
       .style('font-family', 'monospace')
       .style('font-weight', d => d.children ? 'bold' : 'normal')
-      .style('text-shadow', `0 0 3px ${theme.linkColor}`)
+      .style('text-shadow', `0 0 3px ${themeConfigs[currentTheme].linkColor}`)
       .style('pointer-events', 'none');
 
     // Enhanced status indicators with layout-specific positioning
@@ -646,6 +868,7 @@ export default function MapD3() {
         switch (layoutType) {
           case LAYOUT_TYPES.cluster: return d.children ? -8 : -12;
           case LAYOUT_TYPES.radial: return -8;
+          case LAYOUT_TYPES.network: return -15;
           default: return -15;
         }
       })
@@ -653,6 +876,7 @@ export default function MapD3() {
         switch (layoutType) {
           case LAYOUT_TYPES.cluster: return d.children ? -8 : 8;
           case LAYOUT_TYPES.radial: return 0;
+          case LAYOUT_TYPES.network: return 0;
           default: return 0;
         }
       })
@@ -677,6 +901,7 @@ export default function MapD3() {
         switch (layoutType) {
           case LAYOUT_TYPES.cluster: return d.children ? -30 : 30;
           case LAYOUT_TYPES.radial: return (d.x < Math.PI) ? 15 : -15;
+          case LAYOUT_TYPES.network: return 0;
           default: return 0;
         }
       })
@@ -695,10 +920,11 @@ export default function MapD3() {
         switch (layoutType) {
           case LAYOUT_TYPES.cluster: return 0;
           case LAYOUT_TYPES.radial: return 0;
+          case LAYOUT_TYPES.network: return 0;
           default: return 0;
         }
       })
-      .style('fill', theme.nodeColor)
+      .style('fill', themeConfigs[currentTheme].nodeColor)
       .style('stroke', '#fff')
       .style('stroke-width', 2)
       .style('opacity', 0.8);
@@ -710,6 +936,7 @@ export default function MapD3() {
         switch (layoutType) {
           case LAYOUT_TYPES.cluster: return 0;
           case LAYOUT_TYPES.radial: return 0;
+          case LAYOUT_TYPES.network: return 0;
           default: return 0;
         }
       })
@@ -728,7 +955,7 @@ export default function MapD3() {
         g.append('circle')
           .attr('r', radius)
           .style('fill', 'none')
-          .style('stroke', theme.linkColor)
+          .style('stroke', themeConfigs[currentTheme].linkColor)
           .style('stroke-width', 0.5)
           .style('stroke-opacity', 0.2)
           .style('stroke-dasharray', '2,8');
@@ -748,14 +975,14 @@ export default function MapD3() {
           .attr('y1', line.y)
           .attr('x2', width - margin.left - margin.right)
           .attr('y2', line.y)
-          .style('stroke', theme.linkColor)
+          .style('stroke', themeConfigs[currentTheme].linkColor)
           .style('stroke-width', 1)
           .style('stroke-opacity', line.opacity)
           .style('stroke-dasharray', '10,20');
       });
     }
 
-  }, [filteredTree, layoutType, expandedNodes, nodeMatchesFilters, activeCharacterFilters, activePuzzleFilters, activeInteractionFilters, activeFeatureFilters, currentTheme, themeConfigs, checkUnlockConditions]);
+  }, [filteredTree, layoutType, expandedNodes, nodeMatchesFilters, activeCharacterFilters, activePuzzleFilters, activeInteractionFilters, activeFeatureFilters, currentTheme, themeConfigs, checkUnlockConditions, forceStrength, linkDistance, centerStrength, collideRadius]);
 
   const getNodeColor = (node) => {
     const status = node.data?.status || 'unknown';
@@ -1140,6 +1367,20 @@ export default function MapD3() {
                   {type}
                 </button>
               ))}
+              
+              {/* Force Controls Toggle (only for network layout) */}
+              {layoutType === LAYOUT_TYPES.network && (
+                <button
+                  onClick={() => setShowForceControls(!showForceControls)}
+                  className={`ml-2 px-3 py-1 rounded text-xs font-mono border transition-colors ${
+                    showForceControls
+                      ? 'bg-orange-900 text-orange-300 border-orange-400'
+                      : 'bg-gray-900 text-gray-400 border-gray-600 hover:border-orange-400'
+                  }`}
+                >
+                  ⚙️ Force Controls
+                </button>
+              )}
             </div>
 
             {/* Status Filters */}
@@ -1182,6 +1423,182 @@ export default function MapD3() {
           )}
         </div>
 
+        {/* Force Controls Panel (only for network layout) */}
+        {layoutType === LAYOUT_TYPES.network && showForceControls && (
+          <div className="bg-orange-900/20 border-b border-orange-400/30 p-4">
+            <div className="max-w-4xl mx-auto">
+              <h3 className="text-orange-400 font-mono font-bold mb-4">⚙️ Force Simulation Controls</h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {/* Force Strength */}
+                <div className="space-y-2">
+                  <label className="text-orange-300 text-sm font-mono">
+                    Charge Force: {forceStrength}
+                  </label>
+                  <input
+                    type="range"
+                    min="-1000"
+                    max="0"
+                    step="10"
+                    value={forceStrength}
+                    onChange={(e) => {
+                      const newValue = parseInt(e.target.value);
+                      setForceStrength(newValue);
+                      // Update simulation if it exists
+                      const svg = d3.select(svgRef.current);
+                      const g = svg.select('.main-group');
+                      if (g.node() && g.node().simulation) {
+                        g.node().simulation.force('charge').strength(newValue);
+                        g.node().simulation.alpha(0.3).restart();
+                      }
+                    }}
+                    className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-orange"
+                  />
+                  <div className="text-xs text-gray-400">Node repulsion strength</div>
+                </div>
+
+                {/* Link Distance */}
+                <div className="space-y-2">
+                  <label className="text-orange-300 text-sm font-mono">
+                    Link Distance: {linkDistance}
+                  </label>
+                  <input
+                    type="range"
+                    min="20"
+                    max="200"
+                    step="5"
+                    value={linkDistance}
+                    onChange={(e) => {
+                      const newValue = parseInt(e.target.value);
+                      setLinkDistance(newValue);
+                      const svg = d3.select(svgRef.current);
+                      const g = svg.select('.main-group');
+                      if (g.node() && g.node().simulation) {
+                        g.node().simulation.force('link').distance(newValue);
+                        g.node().simulation.alpha(0.3).restart();
+                      }
+                    }}
+                    className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-orange"
+                  />
+                  <div className="text-xs text-gray-400">Preferred link length</div>
+                </div>
+
+                {/* Center Strength */}
+                <div className="space-y-2">
+                  <label className="text-orange-300 text-sm font-mono">
+                    Center Force: {centerStrength.toFixed(1)}
+                  </label>
+                  <input
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.1"
+                    value={centerStrength}
+                    onChange={(e) => {
+                      const newValue = parseFloat(e.target.value);
+                      setCenterStrength(newValue);
+                      const svg = d3.select(svgRef.current);
+                      const g = svg.select('.main-group');
+                      if (g.node() && g.node().simulation) {
+                        g.node().simulation.force('center').strength(newValue);
+                        g.node().simulation.alpha(0.3).restart();
+                      }
+                    }}
+                    className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-orange"
+                  />
+                  <div className="text-xs text-gray-400">Pull toward center</div>
+                </div>
+
+                {/* Collision Radius */}
+                <div className="space-y-2">
+                  <label className="text-orange-300 text-sm font-mono">
+                    Collision: {collideRadius}
+                  </label>
+                  <input
+                    type="range"
+                    min="10"
+                    max="80"
+                    step="2"
+                    value={collideRadius}
+                    onChange={(e) => {
+                      const newValue = parseInt(e.target.value);
+                      setCollideRadius(newValue);
+                      const svg = d3.select(svgRef.current);
+                      const g = svg.select('.main-group');
+                      if (g.node() && g.node().simulation) {
+                        g.node().simulation.force('collide').radius(newValue);
+                        g.node().simulation.alpha(0.3).restart();
+                      }
+                    }}
+                    className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-orange"
+                  />
+                  <div className="text-xs text-gray-400">Node collision radius</div>
+                </div>
+              </div>
+
+              {/* Control Buttons */}
+              <div className="flex gap-4 mt-4">
+                <button
+                  onClick={() => {
+                    const svg = d3.select(svgRef.current);
+                    const g = svg.select('.main-group');
+                    if (g.node() && g.node().simulation) {
+                      g.node().simulation.alpha(1).restart();
+                    }
+                  }}
+                  className="px-3 py-1 bg-green-900 text-green-300 rounded text-sm font-mono border border-green-400 hover:bg-green-800 transition-colors"
+                >
+                  🔄 Restart Simulation
+                </button>
+                
+                <button
+                  onClick={() => {
+                    const svg = d3.select(svgRef.current);
+                    const g = svg.select('.main-group');
+                    if (g.node() && g.node().simulation) {
+                      g.node().simulation.stop();
+                    }
+                  }}
+                  className="px-3 py-1 bg-red-900 text-red-300 rounded text-sm font-mono border border-red-400 hover:bg-red-800 transition-colors"
+                >
+                  ⏹️ Stop Simulation
+                </button>
+
+                <button
+                  onClick={() => {
+                    // Reset to defaults
+                    setForceStrength(-300);
+                    setLinkDistance(80);
+                    setCenterStrength(0.3);
+                    setCollideRadius(30);
+                    
+                    const svg = d3.select(svgRef.current);
+                    const g = svg.select('.main-group');
+                    if (g.node() && g.node().simulation) {
+                      g.node().simulation
+                        .force('charge').strength(-300)
+                        .force('link').distance(80)
+                        .force('center').strength(0.3)
+                        .force('collide').radius(30);
+                      g.node().simulation.alpha(0.3).restart();
+                    }
+                  }}
+                  className="px-3 py-1 bg-blue-900 text-blue-300 rounded text-sm font-mono border border-blue-400 hover:bg-blue-800 transition-colors"
+                >
+                  🔧 Reset Defaults
+                </button>
+              </div>
+
+              {/* Network Layout Instructions */}
+              <div className="mt-4 p-3 bg-orange-900/10 border border-orange-400/20 rounded text-xs text-orange-200">
+                <strong>Network Layout Controls:</strong> Drag nodes to reposition • Double-click to pin/unpin • 
+                Adjust forces for different network behaviors • Higher charge = more repulsion • 
+                Lower link distance = tighter connections
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Main SVG Canvas */}
         <div className="flex-1 relative">
           <svg
@@ -1198,6 +1615,15 @@ export default function MapD3() {
             <div>🎛️ Use sidebar filters to highlight</div>
             <div>⚡ Toggle layouts & status</div>
             <div>⌨️ Press <kbd className="bg-gray-700 px-1 rounded">/</kbd> to search</div>
+            {layoutType === LAYOUT_TYPES.network && (
+              <>
+                <div className="border-t border-gray-600 my-2"></div>
+                <div className="text-orange-300">Network Layout:</div>
+                <div>🫱 Drag nodes to reposition</div>
+                <div>🖱️ Double-click to pin/unpin</div>
+                <div>⚙️ Use force controls to adjust</div>
+              </>
+            )}
           </div>
 
           {/* Active Filters Mini-Display */}
