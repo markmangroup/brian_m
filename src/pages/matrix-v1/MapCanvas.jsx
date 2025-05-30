@@ -47,19 +47,19 @@ const realOverlayGroups = [
     id: 'intro',
     label: 'Intro',
     color: 'bg-cyan-900/40 border-cyan-300',
-    bounds: { x: 100, y: 100, width: 480, height: 200 }
+    bounds: { x: 60, y: 140, width: 480, height: 180 }
   },
   {
     id: 'red-pill',
     label: 'Red Pill Path',
     color: 'bg-red-900/30 border-red-400',
-    bounds: { x: 650, y: 100, width: 440, height: 200 }
+    bounds: { x: 700, y: 60, width: 420, height: 180 }
   },
   {
     id: 'blue-pill',
     label: 'Blue Pill Path',
     color: 'bg-blue-900/30 border-blue-400',
-    bounds: { x: 650, y: 320, width: 440, height: 200 }
+    bounds: { x: 720, y: 320, width: 420, height: 180 }
   }
 ];
 
@@ -421,7 +421,7 @@ function MapCanvasInner({ nodes }) {
               {realOverlayGroups.map(group => (
                 <div
                   key={group.id}
-                  className={`absolute z-[5] rounded-md border text-xs px-2 py-1 font-mono uppercase pointer-events-none backdrop-blur-sm animate-pulse-box ${group.color}`}
+                  className={`absolute z-[5] rounded-md border text-xs px-2 py-1 font-mono uppercase pointer-events-none backdrop-blur-sm animate-pulse-box ${group.color} overlay-group-container`}
                   style={{
                     left: group.bounds.x,
                     top: group.bounds.y,

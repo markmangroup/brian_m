@@ -2,7 +2,7 @@ export const realMatrixNodes = [
   {
     id: 'matrix-v1-entry',
     type: 'scene',
-    position: { x: 50, y: 100 },
+    position: { x: 80, y: 180 },
     data: {
       title: 'Matrix Entry',
       description: 'First load of /matrix-v1',
@@ -12,7 +12,7 @@ export const realMatrixNodes = [
   {
     id: 'matrix-name-prompt',
     type: 'dialogue',
-    position: { x: 250, y: 100 },
+    position: { x: 260, y: 220 },
     data: {
       character: 'System',
       dialogue: 'What is your name?',
@@ -22,7 +22,7 @@ export const realMatrixNodes = [
   {
     id: 'matrix-pill-choice',
     type: 'choice',
-    position: { x: 500, y: 100 },
+    position: { x: 440, y: 260 },
     data: {
       prompt: 'Red or Blue?',
       options: [
@@ -34,7 +34,7 @@ export const realMatrixNodes = [
   {
     id: 'matrix-pill-choice-red',
     type: 'scene',
-    position: { x: 700, y: 60 },
+    position: { x: 760, y: 100 },
     parentChoice: 'matrix-pill-choice',
     option: 'Red Pill',
     data: {
@@ -46,7 +46,7 @@ export const realMatrixNodes = [
   {
     id: 'matrix-pill-choice-blue',
     type: 'scene',
-    position: { x: 700, y: 140 },
+    position: { x: 760, y: 340 },
     parentChoice: 'matrix-pill-choice',
     option: 'Blue Pill',
     data: {
@@ -59,7 +59,7 @@ export const realMatrixNodes = [
   {
     id: 'matrix-red-awakening',
     type: 'scene',
-    position: { x: 900, y: 60 },
+    position: { x: 980, y: 100 },
     data: {
       title: 'Red Awakening',
       description: 'You awaken in a strange room filled with old computers and cryptic messages.',
@@ -71,7 +71,7 @@ export const realMatrixNodes = [
   {
     id: 'matrix-red-trainer',
     type: 'training',
-    position: { x: 1100, y: 60 },
+    position: { x: 1200, y: 100 },
     data: {
       title: 'Training Upload',
       description: 'Combat training begins. You feel your muscles download new knowledge.',
@@ -84,7 +84,7 @@ export const realMatrixNodes = [
   {
     id: 'matrix-blue-loop',
     type: 'scene',
-    position: { x: 900, y: 140 },
+    position: { x: 980, y: 340 },
     data: {
       title: 'Dream Within a Dream',
       description: 'You wake up in your bed, unsure if anything happened at all.',
