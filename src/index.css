@@ -155,3 +155,18 @@ code {
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+@keyframes pulse-glow {
+  0%, 100% {
+    stroke: #22d3ee;
+    filter: drop-shadow(0 0 4px #22d3ee);
+  }
+  50% {
+    stroke: #67e8f9;
+    filter: drop-shadow(0 0 6px #67e8f9);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 1.2s infinite ease-in-out;
+}

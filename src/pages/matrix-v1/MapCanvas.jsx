@@ -88,6 +88,8 @@ function MapCanvasInner({ nodes }) {
   const [showRealPath, setShowRealPath] = useState(true);
   const [expandedPaths, setExpandedPaths] = useState([]);
   const [animatedOverlayNodes, setAnimatedOverlayNodes] = useState([]);
+  const overlayFlowRef = React.useRef(null);
+  const [hoveredOverlayNodeId, setHoveredOverlayNodeId] = useState(null);
 
   // Helper: get child nodes for a choice node
   function getChoiceChildren(choiceId) {
@@ -144,7 +146,13 @@ function MapCanvasInner({ nodes }) {
     });
     const result = all.map(n => ({
       ...n,
-      className: n._animate ? 'animate-fade-slide' : ''
+      className: n._animate ? 'animate-fade-slide' : '',
+      data: {
+        ...n.data,
+        isOverlay: true,
+        onMouseEnter: () => setHoveredOverlayNodeId(n.id),
+        onMouseLeave: () => setHoveredOverlayNodeId(null),
+      },
     }));
     console.log('Overlay nodes', result);
     return result;
@@ -167,7 +175,6 @@ function MapCanvasInner({ nodes }) {
       const { id } = props;
       const isExpandable = getChoiceChildren(id).length > 0;
       const isExpanded = expandedPaths.includes(id);
-      // Add a debug label and border for overlay nodes
       return (
         <div style={{ border: '2px solid #00ffff', position: 'relative', background: 'rgba(0,255,255,0.05)' }}>
           <div style={{ position: 'absolute', top: 2, left: 8, color: '#00ffff', fontWeight: 'bold', fontSize: 10, zIndex: 10000 }}>OVERLAY</div>
@@ -187,6 +194,13 @@ function MapCanvasInner({ nodes }) {
       );
     }
   };
+
+  // Ensure overlay fitView on toggle
+  useEffect(() => {
+    if (showRealPath && overlayFlowRef.current) {
+      overlayFlowRef.current.fitView?.({ padding: 0.8, duration: 600 });
+    }
+  }, [showRealPath]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -339,21 +353,46 @@ function MapCanvasInner({ nodes }) {
             </defs>
           </ReactFlow>
           {showRealPath && (
-            <ReactFlow
-              nodes={animatedNodesForOverlay}
-              edges={overlayEdges}
-              nodeTypes={overlayNodeTypes}
-              edgeOptions={{
-                style: { stroke: '#06b6d4', strokeWidth: 3, strokeDasharray: '4 2' },
-                markerEnd: { type: MarkerType.Arrow, color: '#06b6d4' }
-              }}
-              panOnDrag={false}
-              zoomOnScroll={false}
-              nodesDraggable={false}
-              edgesUpdatable={false}
-              fitView
-              style={{ position: 'absolute', top: 0, left: 0, zIndex: 9999, pointerEvents: 'none', background: 'rgba(0,255,255,0.02)' }}
-            />
+            <div className="pointer-events-none absolute inset-0 z-[99]">
+              <ReactFlow
+                ref={overlayFlowRef}
+                nodes={animatedNodesForOverlay}
+                edges={overlayEdges}
+                nodeTypes={overlayNodeTypes}
+                edgeOptions={{
+                  style: { stroke: '#06b6d4', strokeWidth: 3, strokeDasharray: '4 2' },
+                  markerEnd: { type: MarkerType.Arrow, color: '#06b6d4' }
+                }}
+                panOnDrag={false}
+                zoomOnScroll={false}
+                nodesDraggable={false}
+                edgesUpdatable={false}
+                fitView
+                className="pointer-events-auto"
+                style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,255,255,0.02)' }}
+              >
+                {overlayEdges.map((edge) => {
+                  const isHovered = hoveredOverlayNodeId && (edge.source === hoveredOverlayNodeId || edge.target === hoveredOverlayNodeId);
+                  const edgeStyle = {
+                    stroke: isHovered ? '#22d3ee' : '#94a3b8',
+                    strokeWidth: isHovered ? 3 : 2,
+                    opacity: isHovered ? 1 : 0.3,
+                  };
+                  const edgeClassName = isHovered ? 'animate-pulse-glow' : '';
+                  return (
+                    <ReactFlow.Edge
+                      key={edge.id}
+                      id={edge.id}
+                      source={edge.source}
+                      target={edge.target}
+                      animated={true}
+                      style={edgeStyle}
+                      className={edgeClassName}
+                    />
+                  );
+                })}
+              </ReactFlow>
+            </div>
           )}
         </div>
         <ZoomHUD />

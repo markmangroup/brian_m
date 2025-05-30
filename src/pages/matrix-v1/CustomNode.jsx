@@ -20,6 +20,8 @@ const accent = {
 
 export const SceneNode = ({ data = {}, type = 'scene' }) => (
   <div
+    onMouseEnter={data?.onMouseEnter}
+    onMouseLeave={data?.onMouseLeave}
     className={`${baseCard} ${hoverCard}`}
     style={{
       '--accent': '#60a5fa',
@@ -39,6 +41,8 @@ export const SceneNode = ({ data = {}, type = 'scene' }) => (
 
 export const DialogueNode = ({ data = {}, type = 'dialogue' }) => (
   <div
+    onMouseEnter={data?.onMouseEnter}
+    onMouseLeave={data?.onMouseLeave}
     className={`${baseCard} ${hoverCard}`}
     style={{
       '--accent': '#4ade80',
@@ -56,6 +60,8 @@ export const DialogueNode = ({ data = {}, type = 'dialogue' }) => (
 
 export const ChoiceNode = ({ data = {}, type = 'choice', isExpandable, isExpanded, onBranchToggle }) => (
   <div
+    onMouseEnter={data?.onMouseEnter}
+    onMouseLeave={data?.onMouseLeave}
     className={`${baseCard} ${hoverCard}`}
     style={{
       '--accent': '#a78bfa',
@@ -89,6 +95,8 @@ export const ChoiceNode = ({ data = {}, type = 'choice', isExpandable, isExpande
 
 export const EndingNode = ({ data = {}, type = 'ending' }) => (
   <div
+    onMouseEnter={data?.onMouseEnter}
+    onMouseLeave={data?.onMouseLeave}
     className={`${baseCard} ${hoverCard}`}
     style={{
       '--accent': '#f87171',
