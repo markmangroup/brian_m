@@ -258,17 +258,17 @@ export default function MapD3() {
 
       {/* Node Details Panel */}
       {selectedNode && (
-        <div className="fixed bottom-6 right-6 bg-black/90 border border-green-400/20 rounded p-4 max-w-md max-h-[80vh] overflow-y-auto">
-          <h3 className="text-lg font-mono text-green-400 mb-3">
+        <div className="fixed bottom-6 right-6 bg-black/95 border border-green-400/30 rounded-lg p-3 max-w-[360px] max-h-[75vh] overflow-y-auto shadow-xl backdrop-blur-sm">
+          <h3 className="text-base font-mono text-green-400 mb-2 pr-6">
             {selectedNode.data?.title || selectedNode.id}
           </h3>
           
           {/* Basic Info */}
-          <div className="space-y-2 text-sm mb-4">
-            <div><span className="text-gray-400">Type:</span> {selectedNode.type}</div>
-            <div><span className="text-gray-400">Group:</span> {selectedNode.group}</div>
-            <div><span className="text-gray-400">Depth:</span> {selectedNode.depth}</div>
-            <div><span className="text-gray-400">Status:</span> 
+          <div className="space-y-1 text-xs mb-3 text-gray-300">
+            <div><span className="text-gray-500">Type:</span> {selectedNode.type}</div>
+            <div><span className="text-gray-500">Group:</span> {selectedNode.group}</div>
+            <div><span className="text-gray-500">Depth:</span> {selectedNode.depth}</div>
+            <div><span className="text-gray-500">Status:</span> 
               <span className={getStatusColor(selectedNode.data?.status)}>
                 {selectedNode.data?.status}
               </span>
@@ -277,12 +277,12 @@ export default function MapD3() {
 
           {/* Summary */}
           {selectedNode.data?.summary && (
-            <div className="mb-4 p-3 bg-gray-800/50 rounded border border-gray-600">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="text-lg">🧠</span>
-                <span className="text-cyan-400 font-mono text-sm font-bold">Summary</span>
+            <div className="mb-3 p-2 bg-gray-800/60 rounded border border-gray-600/50">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-sm">🧠</span>
+                <span className="text-cyan-400 font-mono text-xs font-bold">Summary</span>
               </div>
-              <p className="text-gray-300 text-sm leading-relaxed">
+              <p className="text-gray-300 text-xs leading-relaxed line-clamp-3 group-hover:line-clamp-none transition-all">
                 {selectedNode.data.summary}
               </p>
             </div>
@@ -290,16 +290,16 @@ export default function MapD3() {
 
           {/* Characters */}
           {selectedNode.data?.characters && selectedNode.data.characters.length > 0 && (
-            <div className="mb-4">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="text-lg">🎭</span>
-                <span className="text-purple-400 font-mono text-sm font-bold">Characters</span>
+            <div className="mb-3">
+              <div className="flex items-center gap-1 mb-1">
+                <span className="text-sm">🎭</span>
+                <span className="text-purple-400 font-mono text-xs font-bold">Characters</span>
               </div>
               <div className="flex flex-wrap gap-1">
                 {selectedNode.data.characters.map((character, index) => (
                   <span
                     key={index}
-                    className="px-2 py-1 bg-purple-900/30 text-purple-300 rounded text-xs font-mono border border-purple-600/30"
+                    className="px-1.5 py-0.5 bg-purple-900/30 text-purple-300 rounded text-[10px] font-mono border border-purple-600/30"
                   >
                     {character}
                   </span>
@@ -310,16 +310,16 @@ export default function MapD3() {
 
           {/* Puzzles */}
           {selectedNode.data?.puzzles && selectedNode.data.puzzles.length > 0 && (
-            <div className="mb-4">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="text-lg">🧩</span>
-                <span className="text-yellow-400 font-mono text-sm font-bold">Puzzles</span>
+            <div className="mb-3">
+              <div className="flex items-center gap-1 mb-1">
+                <span className="text-sm">🧩</span>
+                <span className="text-yellow-400 font-mono text-xs font-bold">Puzzles</span>
               </div>
               <div className="flex flex-wrap gap-1">
                 {selectedNode.data.puzzles.map((puzzle, index) => (
                   <span
                     key={index}
-                    className="px-2 py-1 bg-yellow-900/30 text-yellow-300 rounded text-xs font-mono border border-yellow-600/30"
+                    className="px-1.5 py-0.5 bg-yellow-900/30 text-yellow-300 rounded text-[10px] font-mono border border-yellow-600/30"
                   >
                     {puzzle}
                   </span>
@@ -330,16 +330,16 @@ export default function MapD3() {
 
           {/* Interactions */}
           {selectedNode.data?.interactions && selectedNode.data.interactions.length > 0 && (
-            <div className="mb-4">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="text-lg">🎬</span>
-                <span className="text-blue-400 font-mono text-sm font-bold">Interactions</span>
+            <div className="mb-3">
+              <div className="flex items-center gap-1 mb-1">
+                <span className="text-sm">🎬</span>
+                <span className="text-blue-400 font-mono text-xs font-bold">Interactions</span>
               </div>
               <div className="flex flex-wrap gap-1">
                 {selectedNode.data.interactions.map((interaction, index) => (
                   <span
                     key={index}
-                    className="px-2 py-1 bg-blue-900/30 text-blue-300 rounded text-xs font-mono border border-blue-600/30"
+                    className="px-1.5 py-0.5 bg-blue-900/30 text-blue-300 rounded text-[10px] font-mono border border-blue-600/30"
                   >
                     {interaction}
                   </span>
@@ -350,10 +350,10 @@ export default function MapD3() {
 
           {/* Feature Badges */}
           {selectedNode.data?.features && (
-            <div className="mb-4">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="text-lg">💠</span>
-                <span className="text-emerald-400 font-mono text-sm font-bold">Features</span>
+            <div className="mb-3">
+              <div className="flex items-center gap-1 mb-1">
+                <span className="text-sm">💠</span>
+                <span className="text-emerald-400 font-mono text-xs font-bold">Features</span>
               </div>
               <div className="flex flex-wrap gap-1">
                 {Object.entries(selectedNode.data.features).map(([feature, enabled]) => {
@@ -377,9 +377,9 @@ export default function MapD3() {
                   return (
                     <span
                       key={feature}
-                      className="px-2 py-1 bg-emerald-900/30 text-emerald-300 rounded text-xs font-mono border border-emerald-600/30 flex items-center gap-1"
+                      className="px-1.5 py-0.5 bg-emerald-900/30 text-emerald-300 rounded text-[10px] font-mono border border-emerald-600/30 flex items-center gap-1"
                     >
-                      <span className="text-xs">{getFeatureIcon(feature)}</span>
+                      <span className="text-[8px]">{getFeatureIcon(feature)}</span>
                       {getFeatureLabel(feature)}
                     </span>
                   );
@@ -390,20 +390,20 @@ export default function MapD3() {
 
           {/* Original Description */}
           {selectedNode.data?.description && selectedNode.data.description !== selectedNode.data?.summary && (
-            <div className="mb-4 text-sm text-gray-400 border-t border-gray-700 pt-3">
-              <strong>Original Description:</strong><br />
-              {selectedNode.data.description}
+            <div className="mb-3 text-xs text-gray-400 border-t border-gray-700 pt-2">
+              <strong className="text-[10px] uppercase tracking-wide">Original:</strong><br />
+              <span className="text-[10px] leading-relaxed">{selectedNode.data.description}</span>
             </div>
           )}
 
           {/* Component URL Link */}
           {selectedNode.data?.pageUrl && (
-            <div className="mt-4 pt-3 border-t border-gray-600">
+            <div className="mt-3 pt-2 border-t border-gray-600">
               <a
                 href={selectedNode.data.pageUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors font-mono text-sm border border-cyan-400/50 rounded px-3 py-2 hover:border-cyan-400 hover:bg-cyan-400/10 w-full justify-center"
+                className="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors font-mono text-xs border border-cyan-400/50 rounded px-2 py-1.5 hover:border-cyan-400 hover:bg-cyan-400/10 w-full justify-center"
               >
                 🔗 View Component
               </a>
@@ -412,7 +412,7 @@ export default function MapD3() {
 
           <button
             onClick={() => setSelectedNode(null)}
-            className="absolute top-2 right-2 text-gray-400 hover:text-white text-lg"
+            className="absolute top-2 right-2 text-gray-400 hover:text-white text-sm"
           >
             ✕
           </button>
