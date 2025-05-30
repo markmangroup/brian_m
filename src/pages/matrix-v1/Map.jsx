@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import 'reactflow/dist/base.css';
 import { nodes } from './nodes';
 import { edges } from './edges';
@@ -23,14 +24,22 @@ export default function MapPage() {
     <div className="relative bg-black bg-gradient-to-br from-gray-900 to-black min-h-screen p-8 overflow-hidden">
       <h1 className="sr-only">Matrix Story Map</h1>
       <div style={{ position: 'fixed', bottom: 20, left: 20, zIndex: 50 }}>
-        <button
-          onClick={() => setDevView((v) => !v)}
-          className={
-            'bg-[#111] text-white border border-[#00ff00] rounded px-4 py-1 font-mono font-semibold text-sm hover:bg-[#222] hover:text-[#00ff00] shadow-[0_0_8px_#00ff00]'
-          }
-        >
-          🧪 Dev View
-        </button>
+        <div className="flex gap-2">
+          <Link
+            to="/matrix-v1/map-d3"
+            className="bg-[#111] text-white border border-cyan-400 rounded px-4 py-1 font-mono font-semibold text-sm hover:bg-[#222] hover:text-cyan-400 shadow-[0_0_8px_cyan] transition-all"
+          >
+            🧠 New D3 Story Map
+          </Link>
+          <button
+            onClick={() => setDevView((v) => !v)}
+            className={
+              'bg-[#111] text-white border border-[#00ff00] rounded px-4 py-1 font-mono font-semibold text-sm hover:bg-[#222] hover:text-[#00ff00] shadow-[0_0_8px_#00ff00]'
+            }
+          >
+            🧪 Dev View
+          </button>
+        </div>
       </div>
       {devView && (
         <div
