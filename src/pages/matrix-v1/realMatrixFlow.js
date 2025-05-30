@@ -1,5 +1,5 @@
 export const realMatrixNodes = [
-  // Base story flow (always visible)
+  // === DEPTH 0: INTRO GROUP ===
   {
     id: 'matrix-v1-entry',
     type: 'scene',
@@ -7,76 +7,57 @@ export const realMatrixNodes = [
     group: 'intro',
     data: {
       title: 'Matrix Entry',
-      description: 'First load of /matrix-v1',
-      setting: 'route: matrix-v1',
-      status: 'live',
       pageUrl: '/matrix-v1',
-      summary: 'The gateway into the Matrix experience begins here. Users enter their name and prepare for the journey ahead.',
-      characters: ['System', 'User'],
-      puzzles: ['Name Input', 'Identity Setup'],
-      interactions: ['TextInput', 'FormSubmission'],
-      features: {
-        hasTransition: true,
-        hasCombat: false,
-        hasChoice: false,
-        hasNPC: false,
-        hasAnimation: true
-      }
+      status: 'live',
+      summary: 'User awakens in the simulation. System begins engagement.',
+      characters: ['System'],
+      puzzles: [],
+      interactions: ['SceneIntro', 'NarrativeStart'],
+      features: { hasTransition: true, hasChoice: false, hasCombat: false, hasNPC: false, hasAnimation: true },
+      dialogue: ['Welcome to the simulation.', 'Your identity is not yet confirmed.']
     }
   },
+
+  // === DEPTH 1: INTRO GROUP ===
   {
     id: 'matrix-name-prompt',
     type: 'dialogue',
     depth: 1,
     group: 'intro',
     data: {
-      character: 'System',
-      dialogue: 'What is your name?',
-      emotion: 'neutral',
-      status: 'wip',
+      title: 'Name Prompt',
       pageUrl: '/matrix-v1',
-      summary: 'The system prompts for user identification, establishing the personal connection to the Matrix narrative.',
-      characters: ['System', 'User'],
-      puzzles: ['Identity Verification'],
-      interactions: ['DialoguePrompt', 'NameEntry'],
-      features: {
-        hasTransition: false,
-        hasCombat: false,
-        hasChoice: false,
-        hasNPC: true,
-        hasAnimation: false
-      }
+      status: 'live',
+      summary: 'System asks the user to input a name, establishing identity.',
+      characters: ['System'],
+      puzzles: ['IdentityPrompt'],
+      interactions: ['InputField', 'DialogueResponse'],
+      features: { hasTransition: false, hasChoice: false, hasCombat: false, hasNPC: false, hasAnimation: false },
+      dialogue: ['What is your name?']
     }
   },
+
+  // === DEPTH 2: INTRO GROUP ===
   {
     id: 'matrix-pill-choice',
     type: 'choice',
     depth: 2,
     group: 'intro',
     data: {
-      prompt: 'Red or Blue?',
-      options: [
-        'Red Pill',
-        'Blue Pill'
-      ],
-      status: 'stub',
-      isExpanded: false,
+      title: 'The Choice',
       pageUrl: '/matrix-v1',
-      summary: 'The pivotal moment of choice that determines the path through the Matrix. Red pill leads to truth, blue pill to comfortable illusion.',
-      characters: ['Morpheus', 'User'],
-      puzzles: ['Moral Dilemma', 'Path Selection'],
-      interactions: ['ChoicePrompt', 'BinaryDecision'],
-      features: {
-        hasTransition: true,
-        hasCombat: false,
-        hasChoice: true,
-        hasNPC: true,
-        hasAnimation: true
-      }
+      status: 'live',
+      summary: 'Morpheus presents a decision to the user: red or blue pill.',
+      characters: ['Morpheus'],
+      puzzles: [],
+      interactions: ['ChoicePrompt'],
+      features: { hasTransition: true, hasChoice: true, hasCombat: false, hasNPC: true, hasAnimation: true },
+      dialogue: ['This is your last chance.', 'Take the red pill, or stay in the Matrix.'],
+      options: ['Red Pill', 'Blue Pill']
     }
   },
 
-  // Expandable Red Pill Path
+  // === DEPTH 3: RED PILL GROUP ===
   {
     id: 'matrix-pill-choice-red',
     type: 'scene',
@@ -86,77 +67,18 @@ export const realMatrixNodes = [
     choiceValue: 'red',
     data: {
       title: 'Red Pill Path',
-      description: 'You chose the red pill.',
-      setting: 'route: red-pill',
-      status: 'live',
       pageUrl: '/matrix-v1/terminal',
-      summary: 'The red pill choice leads to awakening. Users face their first taste of the real world and its harsh truths.',
-      characters: ['Morpheus', 'Neo', 'System'],
-      puzzles: ['Terminal Access', 'Reality Acceptance'],
-      interactions: ['SceneTransition', 'RealityShift'],
-      features: {
-        hasTransition: true,
-        hasCombat: false,
-        hasChoice: false,
-        hasNPC: true,
-        hasAnimation: true
-      }
-    }
-  },
-  {
-    id: 'matrix-red-awakening',
-    type: 'scene',
-    depth: 4,
-    group: 'red-pill',
-    parentChoice: 'matrix-pill-choice',
-    choiceValue: 'red',
-    data: {
-      title: 'Red Awakening',
-      description: 'You awaken in a strange room filled with old computers and cryptic messages.',
-      setting: 'The Real World',
       status: 'live',
-      pageUrl: '/matrix-v1/checkpoint',
-      summary: 'First glimpse of the real world outside the Matrix. Ancient technology and mysterious signals hint at a larger conspiracy.',
-      characters: ['Neo', 'Mysterious Signals'],
-      puzzles: ['Environment Exploration', 'Signal Decoding'],
-      interactions: ['EnvironmentScan', 'MessageDecryption'],
-      features: {
-        hasTransition: true,
-        hasCombat: false,
-        hasChoice: false,
-        hasNPC: false,
-        hasAnimation: true
-      }
-    }
-  },
-  {
-    id: 'matrix-red-trainer',
-    type: 'training',
-    depth: 5,
-    group: 'red-pill',
-    parentChoice: 'matrix-pill-choice',
-    choiceValue: 'red',
-    data: {
-      title: 'Training Upload',
-      description: 'Combat training begins. You feel your muscles download new knowledge.',
-      setting: 'Sim Program',
-      status: 'live',
-      pageUrl: '/matrix-v1/guardian-call',
-      summary: 'Advanced combat training simulation. Neural upload technology transfers fighting skills directly to the mind.',
-      characters: ['Morpheus', 'Neo', 'Training AI'],
-      puzzles: ['Combat Mastery', 'Neural Integration'],
-      interactions: ['SkillUpload', 'CombatSimulation', 'GuardianChallenge'],
-      features: {
-        hasTransition: true,
-        hasCombat: true,
-        hasChoice: false,
-        hasNPC: true,
-        hasAnimation: true
-      }
+      summary: 'The world begins to glitch. The user descends into raw data.',
+      characters: ['System'],
+      puzzles: [],
+      interactions: ['SceneTransition', 'GlitchReveal'],
+      features: { hasTransition: true, hasChoice: false, hasCombat: false, hasNPC: false, hasAnimation: true },
+      dialogue: ['Connection destabilized.', 'Prepare for extraction.']
     }
   },
 
-  // Expandable Blue Pill Path
+  // === DEPTH 3: BLUE PILL GROUP ===
   {
     id: 'matrix-pill-choice-blue',
     type: 'scene',
@@ -166,23 +88,39 @@ export const realMatrixNodes = [
     choiceValue: 'blue',
     data: {
       title: 'Blue Pill Path',
-      description: 'You chose the blue pill.',
-      setting: 'route: blue-pill',
-      status: 'live',
       pageUrl: '/matrix-v1/stage-1',
-      summary: 'The blue pill choice maintains the illusion. Users return to comfortable ignorance but subtle glitches persist.',
-      characters: ['Agent Smith', 'Neo', 'System'],
-      puzzles: ['Memory Suppression', 'Glitch Management'],
-      interactions: ['MemoryWipe', 'RealityMaintenance'],
-      features: {
-        hasTransition: true,
-        hasCombat: false,
-        hasChoice: false,
-        hasNPC: true,
-        hasAnimation: true
-      }
+      status: 'live',
+      summary: 'User returns to the simulated world, forgetting the offer.',
+      characters: ['Neo'],
+      puzzles: [],
+      interactions: ['SceneReset'],
+      features: { hasTransition: true, hasChoice: false, hasCombat: false, hasNPC: false, hasAnimation: true },
+      dialogue: ['You wake up and everything feels... normal.']
     }
   },
+
+  // === DEPTH 4: RED PILL GROUP ===
+  {
+    id: 'matrix-red-awakening',
+    type: 'scene',
+    depth: 4,
+    group: 'red-pill',
+    parentChoice: 'matrix-pill-choice',
+    choiceValue: 'red',
+    data: {
+      title: 'Red Awakening',
+      pageUrl: '/matrix-v1/checkpoint',
+      status: 'live',
+      summary: 'Neo awakens in the real world and reaches a checkpoint.',
+      characters: ['Neo', 'Morpheus'],
+      puzzles: [],
+      interactions: ['Cutscene', 'CheckpointMarker'],
+      features: { hasTransition: true, hasChoice: false, hasCombat: false, hasNPC: true, hasAnimation: true },
+      dialogue: ['You\'ve crossed the line.', 'We have to move fast.']
+    }
+  },
+
+  // === DEPTH 4: BLUE PILL GROUP ===
   {
     id: 'matrix-blue-loop',
     type: 'scene',
@@ -192,38 +130,52 @@ export const realMatrixNodes = [
     choiceValue: 'blue',
     data: {
       title: 'Dream Within a Dream',
-      description: 'You wake up in your bed, unsure if anything happened at all.',
-      setting: 'Neo\'s Apartment',
-      status: 'live',
       pageUrl: '/matrix-v1/stage-2',
-      summary: 'Trapped in recursive dreams and false awakenings. Reality becomes increasingly uncertain as the Matrix tightens its grip.',
-      characters: ['Neo', 'Reflection', 'Dream Figures'],
-      puzzles: ['Reality Testing', 'Dream Escape'],
-      interactions: ['DreamSequence', 'RealityCheck', 'LoopDetection'],
-      features: {
-        hasTransition: true,
-        hasCombat: false,
-        hasChoice: false,
-        hasNPC: false,
-        hasAnimation: true
-      }
+      status: 'live',
+      summary: 'User experiences a looped sequence, hinting at suppressed memories.',
+      characters: ['Neo'],
+      puzzles: ['Loop Test'],
+      interactions: ['LoopDetection'],
+      features: { hasTransition: true, hasChoice: false, hasCombat: false, hasNPC: false, hasAnimation: true },
+      dialogue: ['Didn\'t this already happen?', 'You feel a sense of déjà vu.']
+    }
+  },
+
+  // === DEPTH 5: RED PILL GROUP ===
+  {
+    id: 'matrix-red-trainer',
+    type: 'training',
+    depth: 5,
+    group: 'red-pill',
+    parentChoice: 'matrix-pill-choice',
+    choiceValue: 'red',
+    data: {
+      title: 'Training Upload',
+      pageUrl: '/matrix-v1/guardian-call',
+      status: 'live',
+      summary: 'Neo enters training mode and begins combat simulation.',
+      characters: ['Neo'],
+      puzzles: ['Combat Basics'],
+      interactions: ['CombatEngine', 'InstructionOverlay'],
+      features: { hasTransition: false, hasChoice: false, hasCombat: true, hasNPC: false, hasAnimation: true },
+      dialogue: ['Loading training sequence.', 'Let\'s see what you can do.']
     }
   }
 ];
 
 export const realMatrixEdges = [
   // Base flow edges
-  { id: 'edge1', source: 'matrix-v1-entry', target: 'matrix-name-prompt' },
-  { id: 'edge2', source: 'matrix-name-prompt', target: 'matrix-pill-choice' },
+  { id: 'edge-entry-to-name', source: 'matrix-v1-entry', target: 'matrix-name-prompt' },
+  { id: 'edge-name-to-choice', source: 'matrix-name-prompt', target: 'matrix-pill-choice' },
   
   // Choice branch edges (only shown when expanded)
-  { id: 'edge3', source: 'matrix-pill-choice', target: 'matrix-pill-choice-red', label: 'Red Pill' },
-  { id: 'edge4', source: 'matrix-pill-choice', target: 'matrix-pill-choice-blue', label: 'Blue Pill' },
+  { id: 'edge-choice-to-red', source: 'matrix-pill-choice', target: 'matrix-pill-choice-red', label: 'Red Pill' },
+  { id: 'edge-choice-to-blue', source: 'matrix-pill-choice', target: 'matrix-pill-choice-blue', label: 'Blue Pill' },
   
   // Red path continuation
-  { id: 'edge5', source: 'matrix-pill-choice-red', target: 'matrix-red-awakening' },
-  { id: 'edge6', source: 'matrix-red-awakening', target: 'matrix-red-trainer' },
+  { id: 'edge-red-to-awakening', source: 'matrix-pill-choice-red', target: 'matrix-red-awakening' },
+  { id: 'edge-awakening-to-trainer', source: 'matrix-red-awakening', target: 'matrix-red-trainer' },
   
   // Blue path continuation
-  { id: 'edge7', source: 'matrix-pill-choice-blue', target: 'matrix-blue-loop' }
+  { id: 'edge-blue-to-loop', source: 'matrix-pill-choice-blue', target: 'matrix-blue-loop' }
 ];
