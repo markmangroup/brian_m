@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Global Theme System */
+@import './theme/global-theme.css';
+
 :root {
   color-scheme: dark;
 }

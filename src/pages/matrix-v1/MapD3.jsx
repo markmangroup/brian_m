@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react'
 import * as d3 from 'd3';
 import { realMatrixNodes, realMatrixEdges } from './realMatrixFlow';
 import { convertToTree, filterTreeByStatus, findPathToNode } from '../../utils/convertToTree';
+import { useTheme } from '../../theme/ThemeContext';
 
 const LAYOUT_TYPES = {
   tree: 'tree',
@@ -75,12 +76,13 @@ const VISUAL_GROUPS = {
 export default function MapD3() {
   const svgRef = useRef();
   const searchInputRef = useRef();
+  const { currentTheme, theme, getThemeD3 } = useTheme();
+  
   const [layoutType, setLayoutType] = useState(LAYOUT_TYPES.tree);
   const [statusFilter, setStatusFilter] = useState(['live', 'wip', 'stub']);
   const [selectedNode, setSelectedNode] = useState(null);
   const [breadcrumb, setBreadcrumb] = useState([]);
   const [expandedNodes, setExpandedNodes] = useState(new Set(['matrix-v1-entry']));
-  const [currentTheme, setCurrentTheme] = useState('matrix');
   
   // Force layout controls
   const [showForceControls, setShowForceControls] = useState(false);
@@ -109,47 +111,42 @@ export default function MapD3() {
     features: true
   });
 
-  // Theme configurations
-  const themeConfigs = {
+  // Theme configurations using global theme system
+  const themeConfigs = useMemo(() => ({
     matrix: {
       bgColor: 'bg-black',
       primaryColor: 'text-green-400',
       accentColor: 'text-cyan-400',
-      nodeColor: '#22c55e',
-      linkColor: '#10b981',
-      gridOpacity: 0.3
+      nodeColor: getThemeD3('nodeColor') || '#22c55e',
+      linkColor: getThemeD3('linkColor') || '#10b981',
+      gridOpacity: getThemeD3('gridOpacity') || 0.3
     },
     witcher: {
       bgColor: 'bg-amber-950',
       primaryColor: 'text-amber-400',
       accentColor: 'text-orange-400',
-      nodeColor: '#f59e0b',
-      linkColor: '#d97706',
-      gridOpacity: 0.2
+      nodeColor: getThemeD3('nodeColor') || '#f59e0b',
+      linkColor: getThemeD3('linkColor') || '#d97706',
+      gridOpacity: getThemeD3('gridOpacity') || 0.2
     },
     cyberpunk: {
       bgColor: 'bg-purple-950',
       primaryColor: 'text-purple-400',
       accentColor: 'text-pink-400',
-      nodeColor: '#a855f7',
-      linkColor: '#c084fc',
-      gridOpacity: 0.4
+      nodeColor: getThemeD3('nodeColor') || '#a855f7',
+      linkColor: getThemeD3('linkColor') || '#c084fc',
+      gridOpacity: getThemeD3('gridOpacity') || 0.4
+    },
+    // Support the new theme naming
+    nightcity: {
+      bgColor: 'bg-purple-950',
+      primaryColor: 'text-purple-400',
+      accentColor: 'text-pink-400',
+      nodeColor: getThemeD3('nodeColor') || '#a855f7',
+      linkColor: getThemeD3('linkColor') || '#c084fc',
+      gridOpacity: getThemeD3('gridOpacity') || 0.4
     }
-  };
-
-  // Listen for theme changes
-  useEffect(() => {
-    const handleThemeChange = (event) => {
-      setCurrentTheme(event.detail.theme);
-    };
-
-    // Load initial theme
-    const savedTheme = localStorage.getItem('matrixTheme') || 'matrix';
-    setCurrentTheme(savedTheme);
-
-    window.addEventListener('themeChange', handleThemeChange);
-    return () => window.removeEventListener('themeChange', handleThemeChange);
-  }, []);
+  }), [getThemeD3]);
 
   // Keyboard shortcut for search
   useEffect(() => {
