@@ -95,6 +95,44 @@ function applyExpansionState(tree, expandedNodes) {
   return newNode;
 }
 
+// Utility function to get initial expanded nodes (auto-expand top tier)
+function getInitialExpandedNodes(nodes, edges, rootId = 'matrix-v1-entry') {
+  const expandedSet = new Set();
+  
+  // Always expand the root
+  expandedSet.add(rootId);
+  
+  // Find all direct children of root (depth 1)
+  const directChildren = edges
+    .filter(edge => edge.source === rootId)
+    .map(edge => edge.target);
+  
+  console.log('🌳 Root direct children:', directChildren);
+  
+  // Add all direct children to expanded set
+  directChildren.forEach(childId => {
+    expandedSet.add(childId);
+    
+    // For choice nodes, also find their immediate children (depth 2)
+    const choiceNode = nodes.find(node => node.id === childId);
+    if (choiceNode && choiceNode.type === 'choice') {
+      const choiceChildren = edges
+        .filter(edge => edge.source === childId)
+        .map(edge => edge.target);
+      
+      console.log(`🎯 Choice node ${childId} children:`, choiceChildren);
+      
+      choiceChildren.forEach(choiceChildId => {
+        expandedSet.add(choiceChildId);
+      });
+    }
+  });
+  
+  console.log('🔓 Initial expanded nodes:', Array.from(expandedSet));
+  
+  return expandedSet;
+}
+
 export default function MapD3() {
   const svgRef = useRef();
   const searchInputRef = useRef();
@@ -104,7 +142,7 @@ export default function MapD3() {
   const [statusFilter, setStatusFilter] = useState(['live', 'wip', 'stub']);
   const [selectedNode, setSelectedNode] = useState(null);
   const [breadcrumb, setBreadcrumb] = useState([]);
-  const [expandedNodes, setExpandedNodes] = useState(new Set(['matrix-v1-entry']));
+  const [expandedNodes, setExpandedNodes] = useState(getInitialExpandedNodes(realMatrixNodes, realMatrixEdges));
   
   // Force layout controls
   const [showForceControls, setShowForceControls] = useState(false);
