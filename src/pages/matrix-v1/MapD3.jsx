@@ -168,7 +168,10 @@ export default function MapD3() {
   const [statusFilter, setStatusFilter] = useState(['live', 'wip', 'stub']);
   const [selectedNode, setSelectedNode] = useState(null);
   const [breadcrumb, setBreadcrumb] = useState([]);
-  const [expandedNodes, setExpandedNodes] = useState(getInitialExpandedNodes(realMatrixNodes, realMatrixEdges));
+  
+  // 🛠 DEBUGGING: Temporarily expand ALL nodes instead of using getInitialExpandedNodes()
+  // TODO: Revert to: useState(getInitialExpandedNodes(realMatrixNodes, realMatrixEdges))
+  const [expandedNodes, setExpandedNodes] = useState(new Set(realMatrixNodes.map(n => n.id)));
   
   // Force layout controls
   const [showForceControls, setShowForceControls] = useState(false);
