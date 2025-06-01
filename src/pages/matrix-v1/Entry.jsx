@@ -1,48 +1,50 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useTypewriterEffect from '../../components/useTypewriterEffect';
-import Rain from './components/Rain';
+import MatrixLayout, { MatrixInput, MatrixButton } from '../../components/MatrixLayout';
 import NPC from './components/NPC';
+import useTypewriterEffect from '../../components/useTypewriterEffect';
 
 export default function Entry() {
-  const [name, setName] = useState(() => localStorage.getItem('matrixV1Name') || '');
-  const [entered, setEntered] = useState(!!name);
+  const [name, setName] = useState('');
+  const [entered, setEntered] = useState(false);
   const navigate = useNavigate();
-  const [intro] = useTypewriterEffect('Welcome to the Matrix', 50);
-  const [prompt] = useTypewriterEffect('Enter your name to begin:', 50);
+
+  const [intro] = useTypewriterEffect('Welcome to the Matrix', 100);
+  const [prompt] = useTypewriterEffect('Enter your name to begin', 50);
 
   const submit = (e) => {
     e.preventDefault();
-    const trimmed = name.trim();
-    if (trimmed) {
-      localStorage.setItem('matrixV1Name', trimmed);
+    if (name.trim()) {
+      localStorage.setItem('matrixV1Name', name.trim());
       setEntered(true);
     }
   };
 
   const red = () => navigate('/matrix-v1/terminal', { state: { name } });
-  const blue = () => navigate('/');
+  const blue = () => navigate('/snack-trail', { state: { name } });
 
   return (
-    <div className="flex flex-col items-center justify-center py-20 space-y-6 min-h-screen relative overflow-hidden">
-      {typeof window !== 'undefined' && (
-        <Rain zIndex={0} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
-      )}
-      <div className="relative z-10 flex flex-col items-center space-y-6 text-center">
+    <MatrixLayout contentClassName="py-20">
+      <div className="text-center space-y-6">
         {!entered && (
           <>
-            <h1 className="text-4xl font-bold text-green-500 font-mono">{intro}</h1>
-            <p className="text-xl">{prompt}</p>
-            <form onSubmit={submit} className="flex space-x-2">
-              <input
+            <h1 className="text-4xl font-bold heading-theme">{intro}</h1>
+            <p className="text-xl text-theme-secondary">{prompt}</p>
+            <form onSubmit={submit} className="flex flex-col sm:flex-row gap-3 items-center justify-center">
+              <MatrixInput
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Player Name"
-                className="px-4 py-2 rounded bg-black border border-green-700 text-green-500 placeholder-green-700 focus:outline-none"
+                ariaLabel="Enter your player name"
+                className="w-full sm:w-auto"
               />
-              <button type="submit" className="px-4 py-2 rounded bg-green-700 text-black hover:bg-green-600">
+              <MatrixButton 
+                type="submit" 
+                variant="primary"
+                ariaLabel="Enter the Matrix"
+              >
                 Enter
-              </button>
+              </MatrixButton>
             </form>
           </>
         )}
@@ -54,18 +56,28 @@ export default function Entry() {
               style="mentor"
               className="mb-2"
             />
-            <p className="text-lg">Hello, {name}. Choose your destiny.</p>
-            <div className="flex space-x-4">
-              <button onClick={red} className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-500">
+            <p className="text-lg text-theme-secondary">
+              Hello, <span className="text-theme-accent font-bold">{name}</span>. Choose your destiny.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <MatrixButton 
+                onClick={red} 
+                variant="danger"
+                ariaLabel="Take the red pill - see the truth"
+              >
                 Red Pill
-              </button>
-              <button onClick={blue} className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-500">
+              </MatrixButton>
+              <MatrixButton 
+                onClick={blue} 
+                variant="info"
+                ariaLabel="Take the blue pill - return to normal life"
+              >
                 Blue Pill
-              </button>
+              </MatrixButton>
             </div>
           </>
         )}
       </div>
-    </div>
+    </MatrixLayout>
   );
 }

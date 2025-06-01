@@ -1,71 +1,91 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import MatrixRain from '../../components/MatrixRain';
+import MatrixLayout, { MatrixButton } from '../../components/MatrixLayout';
 
 const FACTIONS = [
   {
-    id: 'signal-brokers',
-    name: 'Signal Brokers',
-    quote: 'We study deviations.',
-    symbol: '📡',
-    mission: 'Catalog anomalies and map patterns in the Matrix.',
+    id: 'zion-fleet',
+    name: 'Zion Fleet Command',
+    symbol: '⚡',
+    symbolLabel: 'Lightning bolt representing Zion Fleet Command',
+    quote: 'The last city stands.',
+    mission: 'Military resistance against the machines.'
   },
   {
-    id: 'oblivion-hand',
-    name: 'Oblivion Hand',
-    quote: 'We erase threats.',
-    symbol: '🖐️',
-    mission: 'Silence any entity that endangers system order.',
+    id: 'rebel-hackers',
+    name: 'Digital Resistance Cell',
+    symbol: '🔓',
+    symbolLabel: 'Unlocked padlock representing Digital Resistance',
+    quote: 'Code is our weapon.',
+    mission: 'Hack the Matrix from within.'
   },
   {
-    id: 'architects-silence',
-    name: 'Architects of Silence',
-    quote: 'We predate the system.',
-    symbol: '🏛️',
-    mission: 'Shape reality from the shadows beyond the code.',
-  },
+    id: 'oracle-seekers',
+    name: 'Oracle\'s Path',
+    symbol: '🔮',
+    symbolLabel: 'Crystal ball representing Oracle seekers',
+    quote: 'Know thyself.',
+    mission: 'Seek truth through prophecy and choice.'
+  }
 ];
 
 export default function Factions() {
   const navigate = useNavigate();
 
   const handleSelect = (id) => {
-    navigate(`/matrix-v1/align-${id}`);
+    navigate(`/matrix-v1/${id}`);
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-black text-green-500 font-mono space-y-6 relative overflow-hidden">
-      {typeof window !== 'undefined' && (
-        <MatrixRain zIndex={0} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
-      )}
-      <div className="relative z-10 flex flex-col items-center space-y-6 w-full max-w-md px-4">
-        <h1 className="text-3xl font-bold">Who Watches You</h1>
-        <ul className="space-y-4 w-full">
-          {FACTIONS.map((f) => (
-            <li key={f.id} className="bg-black/60 backdrop-blur-sm border border-green-700 p-4 rounded-lg flex items-start">
-              <div className="text-2xl mr-4" aria-hidden="true">{f.symbol}</div>
-              <div className="flex-1">
-                <div className="font-bold">{f.name}</div>
-                <div className="italic text-sm mb-1">"{f.quote}"</div>
-                <div className="text-sm">{f.mission}</div>
+    <MatrixLayout>
+      <div className="w-full max-w-md space-y-6">
+        <h1 className="text-3xl font-bold text-center heading-theme">
+          Who Watches You
+        </h1>
+        
+        <ul className="space-y-4 w-full" role="list">
+          {FACTIONS.map((faction) => (
+            <li 
+              key={faction.id} 
+              className="card-theme p-4 rounded-lg flex items-start"
+            >
+              <div 
+                className="text-2xl mr-4 flex-shrink-0" 
+                aria-label={faction.symbolLabel}
+                role="img"
+              >
+                {faction.symbol}
               </div>
-              <button
-                aria-label={`select ${f.name}`}
-                onClick={() => handleSelect(f.id)}
-                className="ml-4 px-3 py-1 rounded bg-green-900 text-green-500 hover:bg-green-800"
+              <div className="flex-1 min-w-0">
+                <div className="font-bold text-theme-primary">{faction.name}</div>
+                <div className="italic text-sm mb-1 text-theme-secondary">
+                  "{faction.quote}"
+                </div>
+                <div className="text-sm text-theme-muted">{faction.mission}</div>
+              </div>
+              <MatrixButton
+                onClick={() => handleSelect(faction.id)}
+                variant="primary"
+                size="sm"
+                ariaLabel={`Select ${faction.name} faction`}
+                className="ml-4 flex-shrink-0"
               >
                 Select
-              </button>
+              </MatrixButton>
             </li>
           ))}
         </ul>
-        <button
-          onClick={() => navigate('/matrix-v1')}
-          className="px-4 py-2 rounded bg-red-900 text-red-400 hover:bg-red-800"
-        >
-          Return
-        </button>
+        
+        <div className="text-center">
+          <MatrixButton
+            onClick={() => navigate('/matrix-v1')}
+            variant="danger"
+            ariaLabel="Return to Matrix entry"
+          >
+            Return
+          </MatrixButton>
+        </div>
       </div>
-    </div>
+    </MatrixLayout>
   );
 }

@@ -1,69 +1,84 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import MatrixRain from '../../components/MatrixRain';
 import useTypewriterEffect from '../../components/useTypewriterEffect';
+import MatrixLayout, { MatrixButton } from '../../components/MatrixLayout';
 
 const MESSAGES = [
-  'The First Gate',
-  'Beyond the simulation, reality is stranger than fiction.',
-  'To proceed, you must unlock access. Choose the keyword that breaks the illusion.'
+  'Welcome to The First Gate.',
+  'Here, reality begins to fracture.',
+  'Choose wisely. Each decision echoes across infinite simulations.'
 ];
 
-const OPTIONS = ['Matrix', 'Awake', 'Rabbit', 'Control'];
-const CORRECT = 'Awake';
+const OPTIONS = ['Accept', 'Refuse', 'Question', 'Analyze'];
 
 export default function Stage1() {
-  const navigate = useNavigate();
   const [msgIndex, setMsgIndex] = useState(0);
-  const [typed, done] = useTypewriterEffect(MESSAGES[msgIndex], 50);
   const [error, setError] = useState('');
+  const navigate = useNavigate();
+  
+  const [typed, done] = useTypewriterEffect(
+    msgIndex < MESSAGES.length ? MESSAGES[msgIndex] : '', 
+    80
+  );
 
   useEffect(() => {
-    if (!localStorage.getItem('matrixV1Access')) {
+    if (localStorage.getItem('matrixV1Access') !== 'true') {
       navigate('/matrix-v1');
     }
   }, [navigate]);
 
   useEffect(() => {
     if (done && msgIndex < MESSAGES.length - 1) {
-      const t = setTimeout(() => setMsgIndex(i => i + 1), 1000);
-      return () => clearTimeout(t);
+      const timer = setTimeout(() => setMsgIndex(i => i + 1), 1500);
+      return () => clearTimeout(timer);
     }
   }, [done, msgIndex]);
 
   const handleSelect = (option) => {
-    if (option === CORRECT) {
+    if (option === 'Question') {
       navigate('/matrix-v1/stage-2');
     } else {
-      setError('Access denied. Try again.');
+      setError(`"${option}" leads to system termination. Try again.`);
+      setTimeout(() => setError(''), 2000);
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-black text-green-500 font-mono space-y-6 relative overflow-hidden">
-      {typeof window !== 'undefined' && (
-        <MatrixRain zIndex={0} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
-      )}
-      <div className="relative z-10 flex flex-col items-center space-y-6 w-full max-w-md px-4">
-        <h1 className="text-3xl font-bold">{msgIndex === 0 ? typed : 'The First Gate'}</h1>
-        {msgIndex > 0 && <p className="text-lg text-center whitespace-pre-line">{typed}</p>}
+    <MatrixLayout>
+      <div className="w-full max-w-md text-center space-y-6">
+        <h1 className="text-3xl font-bold heading-theme">
+          {msgIndex === 0 ? typed : 'The First Gate'}
+        </h1>
+        
+        {msgIndex > 0 && (
+          <p className="text-lg whitespace-pre-line" role="status" aria-live="polite">
+            {typed}
+          </p>
+        )}
+        
         {msgIndex === 2 && done && (
-          <div className="flex flex-col items-center space-y-4">
+          <div className="space-y-4">
             <div className="grid grid-cols-2 gap-3">
               {OPTIONS.map(option => (
-                <button
+                <MatrixButton
                   key={option}
                   onClick={() => handleSelect(option)}
-                  className="px-4 py-2 rounded bg-green-900 text-green-500 hover:bg-green-800 transition-colors"
+                  variant="primary"
+                  ariaLabel={`Choose option: ${option}`}
                 >
                   {option}
-                </button>
+                </MatrixButton>
               ))}
             </div>
-            {error && <div className="text-red-500 mt-2">{error}</div>}
+            {error && (
+              <div className="text-red-500 mt-2" role="alert" aria-live="assertive">
+                <span className="sr-only">Error:</span>
+                {error}
+              </div>
+            )}
           </div>
         )}
       </div>
-    </div>
+    </MatrixLayout>
   );
 } 

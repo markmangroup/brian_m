@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { UserContext } from './UserContext';
 import { NAOE_QUOTES } from '../data/naoeQuotes';
 import useTypewriterEffect from './useTypewriterEffect';
-import MatrixRain from './MatrixRain';
+import MatrixLayout, { MatrixCard, MatrixButton } from './MatrixLayout';
 import { CharacterDialogue } from './CharacterSystem';
 
 const QUOTE_OPTIONS = [
@@ -65,47 +65,51 @@ export default function MatrixV1Terminal() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-green-400 font-mono relative overflow-hidden">
-      {typeof window !== 'undefined' && (
-        <MatrixRain zIndex={0} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
-      )}
-      
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen space-y-6 px-4">
-        {!ok && selectedQuote && !isTransitioning && (
-          <div className="w-full max-w-2xl space-y-6 animate-fade-in">
-            <CharacterDialogue 
-              characterKey="morpheus"
-              text="I'm going to show you how deep the rabbit hole goes. Answer this question to prove you are The One..."
-              size="lg"
-              showTitle={true}
-              className="animate-fade-in-slow"
-            />
-            
-            <div className="bg-black/50 p-6 rounded-lg border border-green-700">
-              <p className="text-xl mb-4">{selectedQuote.text}</p>
-              <div className="grid grid-cols-2 gap-3">
-                {selectedQuote.options.map((option) => (
-                  <button
-                    key={option}
-                    onClick={() => handleAnswer(option)}
-                    className="px-4 py-2 rounded bg-green-900 text-green-500 hover:bg-green-800 transition-colors"
-                  >
-                    {option}
-                  </button>
-                ))}
-              </div>
+    <MatrixLayout>
+      {!ok && selectedQuote && !isTransitioning && (
+        <div className="w-full max-w-2xl space-y-6 animate-fade-in">
+          <CharacterDialogue 
+            characterKey="morpheus"
+            text="I'm going to show you how deep the rabbit hole goes. Answer this question to prove you are The One..."
+            size="lg"
+            showTitle={true}
+            className="animate-fade-in-slow"
+          />
+          
+          <MatrixCard>
+            <p className="text-xl mb-4">{selectedQuote.text}</p>
+            <div className="grid grid-cols-2 gap-3">
+              {selectedQuote.options.map((option) => (
+                <MatrixButton
+                  key={option}
+                  onClick={() => handleAnswer(option)}
+                  variant="primary"
+                  ariaLabel={`Answer: ${option}`}
+                >
+                  {option}
+                </MatrixButton>
+              ))}
             </div>
-          </div>
-        )}
+          </MatrixCard>
+        </div>
+      )}
 
-        {msg && <p className="text-lg text-center">{typedMsg}</p>}
+      {msg && (
+        <p className="text-lg text-center" role="status" aria-live="polite">
+          {typedMsg}
+        </p>
+      )}
 
-        {ok && (
-          <button onClick={logout} className="text-sm underline text-green-400">
-            log out
-          </button>
-        )}
-      </div>
-    </div>
+      {ok && (
+        <MatrixButton 
+          onClick={logout} 
+          variant="secondary" 
+          size="sm"
+          ariaLabel="Log out of Matrix terminal"
+        >
+          <span className="underline">log out</span>
+        </MatrixButton>
+      )}
+    </MatrixLayout>
   );
 } 

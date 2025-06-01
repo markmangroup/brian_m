@@ -1,74 +1,80 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { NAOE_QUOTES } from '../../data/naoeQuotes';
-import Rain from './components/Rain';
+import MatrixLayout, { MatrixInput, MatrixButton } from '../../components/MatrixLayout';
 import NPC from './components/NPC';
 
 export default function Puzzle() {
-  const navigate = useNavigate();
   const [answer, setAnswer] = useState('');
   const [response, setResponse] = useState('');
   const [npc, setNpc] = useState(null);
-
-  useEffect(() => {
-    if (localStorage.getItem('matrixV1Access') !== 'true') {
-      navigate('/matrix-v1/terminal');
-    }
-  }, [navigate]);
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const clean = answer.trim().toLowerCase();
-    const wiseWords = ['no', 'choice', 'control'];
-    const sillyWords = ['pizza', 'cat', 'dog', 'burger'];
-
-    if (sillyWords.some((w) => clean.includes(w))) {
-      setResponse('*** SYSTEM GLITCH ***');
+    const lower = answer.toLowerCase();
+    
+    if (lower.includes('no') || lower.includes('choice') || lower.includes('free')) {
+      setResponse('Interesting. You question the nature of destiny itself.');
       setNpc({
         name: 'Oracle',
-        quote: "You're cute. Now get serious.",
-        style: 'oracle',
+        quote: 'Being The One is just like being in love. No one can tell you you\'re in love, you just know it.',
+        style: 'oracle'
       });
-    } else if (wiseWords.some((w) => clean.includes(w))) {
-      const q = NAOE_QUOTES[Math.floor(Math.random() * NAOE_QUOTES.length)];
-      setResponse(`${q.text} — ${q.attribution}`);
+    } else if (lower.includes('yes') || lower.includes('believe')) {
+      setResponse('Fate is a river. You can swim against it, but the current is strong.');
       setNpc({
-        name: 'Oracle',
-        quote: "You've got the gift, but it looks like you're waiting for something...",
-        style: 'oracle',
+        name: 'Morpheus',
+        quote: 'There is a difference between knowing the path and walking the path.',
+        style: 'mentor'
       });
     } else {
-      setResponse('Interesting...');
-      setNpc(null);
+      setResponse('Your answer reveals uncertainty. Perhaps that is wisdom.');
+      setNpc({
+        name: 'Agent Smith',
+        quote: 'Choice is an illusion created between those with power and those without.',
+        style: 'agent'
+      });
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center space-y-6 relative overflow-hidden">
-      {typeof window !== 'undefined' && (
-        <Rain zIndex={0} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
-      )}
-      <div className="relative z-10 flex flex-col items-center space-y-6">
-        <h1 className="text-2xl font-bold">Do you believe in fate?</h1>
-        <form onSubmit={handleSubmit} className="flex space-x-2">
-          <input
+    <MatrixLayout>
+      <div className="text-center space-y-6">
+        <h1 className="text-2xl font-bold heading-theme">Do you believe in fate?</h1>
+        <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 items-center justify-center">
+          <MatrixInput
             value={answer}
             onChange={(e) => setAnswer(e.target.value)}
-            className="px-4 py-2 rounded bg-black border border-green-700 text-green-500 placeholder-green-700 focus:outline-none"
             placeholder="your answer"
+            ariaLabel="Enter your answer about fate"
+            className="w-full sm:w-auto"
           />
-          <button className="px-4 py-2 rounded bg-green-700 text-black hover:bg-green-600">Submit</button>
+          <MatrixButton 
+            type="submit" 
+            variant="primary"
+            ariaLabel="Submit your answer"
+          >
+            Submit
+          </MatrixButton>
         </form>
-        {response && <p className="text-lg text-center max-w-md">{response}</p>}
+        {response && (
+          <p className="text-lg text-center max-w-md mx-auto text-theme-secondary">
+            {response}
+          </p>
+        )}
         {npc && (
           <NPC name={npc.name} quote={npc.quote} style={npc.style} />
         )}
         {response && (
-          <button onClick={() => navigate('/matrix-v1/trace')} className="px-4 py-2 rounded bg-purple-600 text-white hover:bg-purple-500">
+          <MatrixButton 
+            onClick={() => navigate('/matrix-v1/trace')} 
+            variant="info"
+            ariaLabel="Continue to next stage"
+          >
             Continue
-          </button>
+          </MatrixButton>
         )}
       </div>
-    </div>
+    </MatrixLayout>
   );
 }
