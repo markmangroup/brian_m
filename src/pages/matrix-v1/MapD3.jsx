@@ -553,7 +553,38 @@ export default function MapD3() {
         return;
     }
 
-    // ... existing links rendering code ...
+    // Render links/edges between nodes
+    const linkGroups = g.selectAll('.link')
+      .data(links)
+      .enter().append('g')
+      .attr('class', 'link');
+
+    // Draw link paths
+    linkGroups.append('path')
+      .attr('d', d => {
+        if (layoutType === LAYOUT_TYPES.radial) {
+          // Radial layout uses polar coordinates
+          const sourceX = d.source.x_cartesian + width/2;
+          const sourceY = d.source.y_cartesian + height/2;
+          const targetX = d.target.x_cartesian + width/2;
+          const targetY = d.target.y_cartesian + height/2;
+          return `M${sourceX},${sourceY}L${targetX},${targetY}`;
+        } else if (layoutType === LAYOUT_TYPES.tree) {
+          // Tree layout - smooth curves
+          return `M${d.source.y},${d.source.x}C${(d.source.y + d.target.y) / 2},${d.source.x} ${(d.source.y + d.target.y) / 2},${d.target.x} ${d.target.y},${d.target.x}`;
+        } else if (layoutType === LAYOUT_TYPES.network) {
+          // Network layout - straight lines
+          return `M${d.source.x},${d.source.y}L${d.target.x},${d.target.y}`;
+        } else {
+          // Default - straight lines
+          return `M${d.source.x},${d.source.y}L${d.target.x},${d.target.y}`;
+        }
+      })
+      .style('fill', 'none')
+      .style('stroke', themeConfigs[currentTheme].linkColor)
+      .style('stroke-width', '2px')
+      .style('opacity', 0.6)
+      .style('stroke-dasharray', layoutType === LAYOUT_TYPES.network ? '3,3' : 'none');
 
     // Enhanced nodes with proper expand/collapse
     const nodeGroups = g.selectAll('.node')
@@ -582,7 +613,71 @@ export default function MapD3() {
         handleNodeClick(d, false);
       });
 
-    // ... existing text labels code ...
+    // Node text labels with high contrast
+    nodeGroups.append('text')
+      .attr('dy', '.35em')
+      .attr('dx', d => {
+        // Position text to the right of the node
+        const radius = typeof nodeRadius === 'function' ? nodeRadius(d) : nodeRadius;
+        return radius + 15;
+      })
+      .style('text-anchor', 'start')
+      .style('font-size', '12px')
+      .style('font-weight', 'bold')
+      .style('font-family', 'monospace')
+      .style('fill', d => {
+        // High contrast text colors
+        if (!nodeMatchesFilters(d.data)) return '#888';
+        return selectedNode?.id === d.data.id ? '#00ff00' : '#ffffff';
+      })
+      .style('stroke', d => {
+        // Text outline for better readability
+        if (!nodeMatchesFilters(d.data)) return 'none';
+        return selectedNode?.id === d.data.id ? '#000' : '#000';
+      })
+      .style('stroke-width', '0.5px')
+      .style('paint-order', 'stroke fill')
+      .style('opacity', d => nodeMatchesFilters(d.data) ? 1 : 0.6)
+      .style('pointer-events', 'none')
+      .text(d => {
+        // Use title from data, fallback to ID
+        const title = d.data?.data?.title || d.data?.title || d.data?.id || 'Unknown';
+        // Truncate long titles
+        return title.length > 20 ? title.substring(0, 17) + '...' : title;
+      });
+
+    // Status indicator badges
+    nodeGroups.append('text')
+      .attr('dy', '-.5em')
+      .attr('dx', d => {
+        const radius = typeof nodeRadius === 'function' ? nodeRadius(d) : nodeRadius;
+        return radius + 15;
+      })
+      .style('text-anchor', 'start')
+      .style('font-size', '10px')
+      .style('font-weight', 'normal')
+      .style('font-family', 'monospace')
+      .style('fill', d => {
+        const status = d.data?.data?.status || d.data?.status || 'unknown';
+        switch (status) {
+          case 'live': return '#10b981';
+          case 'wip': return '#f59e0b';
+          case 'stub': return '#ef4444';
+          default: return '#6b7280';
+        }
+      })
+      .style('opacity', d => nodeMatchesFilters(d.data) ? 1 : 0.6)
+      .style('pointer-events', 'none')
+      .text(d => {
+        const status = d.data?.data?.status || d.data?.status || 'unknown';
+        const statusIcons = {
+          'live': '🟢',
+          'wip': '🟡', 
+          'stub': '🔴',
+          'unknown': '⚪'
+        };
+        return statusIcons[status] || '⚪';
+      });
 
     // Enhanced expand/collapse indicators with proper click handling
     const expandNodes = nodeGroups.filter(d => d.children || d._children);
@@ -609,8 +704,6 @@ export default function MapD3() {
       .style('fill', '#000')
       .style('pointer-events', 'none')
       .text(d => d.children ? '−' : '+');
-
-    // ... rest of existing visual enhancements ...
 
   }, [filteredTree, layoutType, expandedNodes, nodeMatchesFilters, activeCharacterFilters, activePuzzleFilters, activeInteractionFilters, activeFeatureFilters, currentTheme, themeConfigs, forceStrength, linkDistance, centerStrength, collideRadius, handleNodeClick]);
 
