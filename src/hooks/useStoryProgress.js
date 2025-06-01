@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useAppStore, useStoryActions, useStoryProgress } from '../store/useAppStore';
+import { useAppStore, useStoryActions, useStoryProgress as useStoryProgressState } from '../store/useAppStore';
 
 // Story milestone mapping to D3 network updates
 const MILESTONE_NETWORK_UPDATES = {
@@ -76,7 +76,7 @@ export function useStoryProgress(pageId, milestone = null, choiceData = null) {
     updateNetworkState: state.updateNetworkState,
     addActiveConnection: state.addActiveConnection
   }));
-  const storyProgress = useStoryProgress();
+  const storyProgress = useStoryProgressState();
 
   // Track page visit and process milestone
   useEffect(() => {
