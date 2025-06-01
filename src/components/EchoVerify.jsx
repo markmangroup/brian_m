@@ -1,7 +1,11 @@
 import React from 'react';
 import MatrixLayout from './MatrixLayout';
+import { useStoryProgress } from '../hooks/useStoryProgress';
 
 export default function EchoVerify() {
+  // Track story progression - visiting echo verify unlocks echo loop
+  useStoryProgress('matrix-v1-echo-verify', 'visited-echo-verify');
+
   return (
     <MatrixLayout>
       <div className="w-full max-w-md text-center space-y-6">
@@ -14,6 +18,9 @@ export default function EchoVerify() {
         <p className="text-lg body-theme">
           System integrity verified.
         </p>
+        <div className="text-sm text-theme-muted mt-4">
+          Echo Loop protocols now accessible
+        </div>
       </div>
     </MatrixLayout>
   );

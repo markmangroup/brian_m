@@ -1,89 +1,116 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import MatrixLayout, { MatrixButton } from '../../components/MatrixLayout';
+import { useStoryProgress, useFactionProgress } from '../../hooks/useStoryProgress';
 
-const FACTIONS = [
+const factions = [
   {
     id: 'zion-fleet',
-    name: 'Zion Fleet Command',
-    symbol: '⚡',
-    symbolLabel: 'Lightning bolt representing Zion Fleet Command',
-    quote: 'The last city stands.',
-    mission: 'Military resistance against the machines.'
+    name: 'Zion Fleet',
+    symbol: '⚔️',
+    symbolLabel: 'Military sword symbol',
+    route: '/matrix-v1/zion-fleet',
+    description: 'Join the military backbone of humanity\'s resistance. Train in ship operations, combat tactics, and strategic warfare.',
+    philosophy: 'Victory through strength and unity',
+    stats: '+2 Combat, +1 Exploration'
   },
   {
-    id: 'rebel-hackers',
-    name: 'Digital Resistance Cell',
-    symbol: '🔓',
-    symbolLabel: 'Unlocked padlock representing Digital Resistance',
-    quote: 'Code is our weapon.',
-    mission: 'Hack the Matrix from within.'
+    id: 'rebel-hackers', 
+    name: 'Rebel Hackers',
+    symbol: '💻',
+    symbolLabel: 'Computer terminal symbol',
+    route: '/matrix-v1/rebel-hackers',
+    description: 'Master the art of bending Matrix rules. Learn code injection, system exploitation, and reality manipulation.',
+    philosophy: 'There are no rules, only limitations you accept',
+    stats: '+2 Rebellion, +1 Exploration'
   },
   {
     id: 'oracle-seekers',
-    name: 'Oracle\'s Path',
+    name: 'Oracle Seekers', 
     symbol: '🔮',
-    symbolLabel: 'Crystal ball representing Oracle seekers',
-    quote: 'Know thyself.',
-    mission: 'Seek truth through prophecy and choice.'
+    symbolLabel: 'Crystal ball symbol',
+    route: '/matrix-v1/oracle-seekers',
+    description: 'Seek wisdom and deeper understanding. Explore philosophical insights and the nature of choice itself.',
+    philosophy: 'Knowledge is the path to true freedom',
+    stats: '+2 Wisdom, +1 Exploration'
   }
 ];
 
 export default function Factions() {
   const navigate = useNavigate();
+  const { selectFaction, currentFaction } = useFactionProgress();
+  
+  // Track story progression - visiting factions page unlocks faction paths
+  useStoryProgress('matrix-v1-factions', 'visited-factions');
 
-  const handleSelect = (id) => {
-    navigate(`/matrix-v1/${id}`);
+  const handleFactionSelect = (faction) => {
+    // Update Zustand store with faction selection
+    selectFaction(faction.id);
+    navigate(faction.route);
   };
 
   return (
     <MatrixLayout>
-      <div className="w-full max-w-md space-y-6">
-        <h1 className="text-3xl font-bold text-center heading-theme">
-          Who Watches You
-        </h1>
-        
-        <ul className="space-y-4 w-full" role="list">
-          {FACTIONS.map((faction) => (
-            <li 
-              key={faction.id} 
-              className="card-theme p-4 rounded-lg flex items-start"
+      <div className="w-full max-w-4xl space-y-8">
+        <div className="text-center space-y-4">
+          <h1 className="text-4xl font-bold heading-theme animate-theme-glow">
+            Choose Your Faction
+          </h1>
+          <p className="text-lg subheading-theme">
+            Each path offers unique training and perspectives on the Matrix
+          </p>
+          {currentFaction && (
+            <p className="text-sm text-theme-accent">
+              Current Faction: {factions.find(f => f.id === currentFaction)?.name}
+            </p>
+          )}
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-3">
+          {factions.map((faction) => (
+            <div 
+              key={faction.id}
+              className="card-theme p-6 space-y-4 hover:scale-105 transition-transform"
             >
-              <div 
-                className="text-2xl mr-4 flex-shrink-0" 
-                aria-label={faction.symbolLabel}
-                role="img"
-              >
-                {faction.symbol}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="font-bold text-theme-primary">{faction.name}</div>
-                <div className="italic text-sm mb-1 text-theme-secondary">
-                  "{faction.quote}"
+              <div className="text-center space-y-2">
+                <div className="text-4xl" aria-label={faction.symbolLabel}>
+                  {faction.symbol}
                 </div>
-                <div className="text-sm text-theme-muted">{faction.mission}</div>
+                <h2 className="text-xl font-bold heading-theme">
+                  {faction.name}
+                </h2>
               </div>
+
+              <p className="body-theme text-sm">
+                {faction.description}
+              </p>
+
+              <div className="space-y-2 text-xs">
+                <p className="text-theme-muted italic">
+                  "{faction.philosophy}"
+                </p>
+                <p className="text-theme-accent font-mono">
+                  {faction.stats}
+                </p>
+              </div>
+
               <MatrixButton
-                onClick={() => handleSelect(faction.id)}
+                onClick={() => handleFactionSelect(faction)}
                 variant="primary"
-                size="sm"
-                ariaLabel={`Select ${faction.name} faction`}
-                className="ml-4 flex-shrink-0"
+                size="lg"
+                className="w-full"
+                ariaLabel={`Join ${faction.name} faction`}
               >
-                Select
+                Join {faction.name}
               </MatrixButton>
-            </li>
+            </div>
           ))}
-        </ul>
-        
+        </div>
+
         <div className="text-center">
-          <MatrixButton
-            onClick={() => navigate('/matrix-v1')}
-            variant="danger"
-            ariaLabel="Return to Matrix entry"
-          >
-            Return
-          </MatrixButton>
+          <p className="text-sm text-theme-muted">
+            Your choice will unlock unique training paths and influence your Matrix experience
+          </p>
         </div>
       </div>
     </MatrixLayout>

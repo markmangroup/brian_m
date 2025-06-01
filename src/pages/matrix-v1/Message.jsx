@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useTypewriterEffect from '../../components/useTypewriterEffect';
 import MatrixLayout, { MatrixButton } from '../../components/MatrixLayout';
+import { useStoryProgress } from '../../hooks/useStoryProgress';
 
 const MESSAGES = [
   'The system recognizes your signature.',
@@ -15,6 +16,10 @@ export default function Message() {
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [message, done] = useTypewriterEffect(MESSAGES[currentIndex], 50);
+
+  // Track story progression - mark as milestone when message sequence completes
+  const milestone = currentIndex === MESSAGES.length - 1 && done ? 'visited-message' : null;
+  useStoryProgress('matrix-v1-message', milestone);
 
   useEffect(() => {
     if (localStorage.getItem('matrixV1Access') !== 'true') {

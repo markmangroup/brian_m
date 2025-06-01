@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useTypewriterEffect from '../../components/useTypewriterEffect';
 import MatrixLayout, { MatrixButton } from '../../components/MatrixLayout';
+import { useStoryProgress } from '../../hooks/useStoryProgress';
+import { useStoryActions } from '../../store/useAppStore';
 
 const MESSAGES = [
   'Reality fractures at this juncture.',
@@ -15,6 +17,11 @@ export default function Stage3() {
   const [msgIndex, setMsgIndex] = useState(0);
   const [showChoices, setShowChoices] = useState(false);
   const [typed, done] = useTypewriterEffect(MESSAGES[msgIndex], 50);
+  const { makeStoryChoice } = useStoryActions();
+
+  // Track story progression - mark as milestone when choices are shown
+  const milestone = showChoices ? 'completed-stage-3' : null;
+  useStoryProgress('matrix-v1-stage-3', milestone);
 
   useEffect(() => {
     if (localStorage.getItem('matrixV1Access') !== 'true') {
@@ -32,6 +39,13 @@ export default function Stage3() {
   }, [done, msgIndex]);
 
   const handlePath = (path) => {
+    // Record the path choice in Zustand store
+    makeStoryChoice('stage-3-path', { 
+      path, 
+      timestamp: Date.now(),
+      description: path === 'A' ? 'Compliance Route' : 'Anomaly Route'
+    });
+
     if (path === 'A') {
       navigate('/matrix-v1/compliance-route');
     } else {
