@@ -3,6 +3,10 @@ import * as d3 from 'd3';
 import { realMatrixNodes, realMatrixEdges } from './realMatrixFlow';
 import { convertToTree, filterTreeByStatus, findPathToNode } from '../../utils/convertToTree';
 import { useTheme } from '../../theme/ThemeContext';
+import useTreeLayout from './useTreeLayout';
+import SidebarFilters from './SidebarFilters';
+import DetailPanel from './DetailPanel';
+import ZoomControls from './ZoomControls';
 
 const LAYOUT_TYPES = {
   tree: 'tree',
@@ -458,264 +462,21 @@ export default function MapD3() {
     }
   }, [toggleNodeExpansion, originalTree]);
 
-  const drawTree = useCallback(() => {
-    const svg = d3.select(svgRef.current);
-    svg.selectAll('*').remove();
-
-    if (!filteredTree) return;
-
-    // Apply expansion state to the tree
-    const expandedTree = applyExpansionState(filteredTree, expandedNodes);
-    if (!expandedTree) return;
-
-    const margin = { top: 20, right: 120, bottom: 20, left: 120 };
-    const width = 1400 - margin.left - margin.right;
-    const height = 800 - margin.bottom - margin.top;
-
-    const g = svg
-      .attr('width', width + margin.left + margin.right)
-      .attr('height', height + margin.top + margin.bottom)
-      .append('g')
-      .attr('transform', `translate(${margin.left},${margin.top})`);
-
-    let root, nodes, links, nodeRadius;
-
-    switch (layoutType) {
-      case LAYOUT_TYPES.tree:
-        const treeLayout = d3.tree().size([height, width]);
-        root = d3.hierarchy(expandedTree, d => d.children);
-        treeLayout(root);
-        nodes = root.descendants();
-        links = root.links();
-        nodeRadius = d => d.children || d._children ? 10 : 7;
-        break;
-
-      case LAYOUT_TYPES.cluster:
-        const clusterLayout = d3.cluster().size([height, width]);
-        root = d3.hierarchy(expandedTree, d => d.children);
-        clusterLayout(root);
-        nodes = root.descendants();
-        links = root.links();
-        nodeRadius = d => d.children || d._children ? 12 : 8;
-        break;
-
-      case LAYOUT_TYPES.radial:
-        const radialLayout = d3.tree()
-          .size([2 * Math.PI, Math.min(width, height) / 2 - 100])
-          .separation((a, b) => (a.parent === b.parent ? 1 : 2) / a.depth);
-        
-        root = d3.hierarchy(expandedTree, d => d.children);
-        radialLayout(root);
-        nodes = root.descendants();
-        links = root.links();
-        
-        nodes.forEach(d => {
-          d.x_cartesian = d.y * Math.cos(d.x - Math.PI / 2);
-          d.y_cartesian = d.y * Math.sin(d.x - Math.PI / 2);
-        });
-        nodeRadius = d => d.children || d._children ? 9 : 6;
-        break;
-
-      case LAYOUT_TYPES.network:
-        // Force-directed layout
-        const flatNodes = [];
-        const flatLinks = [];
-        
-        function collectNodes(node, parentId = null) {
-          flatNodes.push({ ...node.data, id: node.data.id, hasChildren: !!(node.children || node._children) });
-          if (node.children) {
-            node.children.forEach(child => {
-              flatLinks.push({ source: node.data.id, target: child.data.id });
-              collectNodes(child, node.data.id);
-            });
-          }
-        }
-        
-        collectNodes(d3.hierarchy(expandedTree, d => d.children));
-        
-        const simulation = d3.forceSimulation(flatNodes)
-          .force('link', d3.forceLink(flatLinks).id(d => d.id).distance(linkDistance))
-          .force('charge', d3.forceManyBody().strength(forceStrength))
-          .force('center', d3.forceCenter(width / 2, height / 2).strength(centerStrength))
-          .force('collide', d3.forceCollide().radius(d => (d.hasChildren ? 20 : 15) + collideRadius));
-
-        for (let i = 0; i < 300; ++i) simulation.tick();
-
-        nodes = flatNodes.map(d => ({ data: d, x: d.x, y: d.y }));
-        links = flatLinks.map(d => ({
-          source: { x: d.source.x, y: d.source.y },
-          target: { x: d.target.x, y: d.target.y }
-        }));
-        nodeRadius = d => d.data.hasChildren ? 12 : 8;
-        break;
-
-      default:
-        return;
-    }
-
-    // Render links/edges between nodes
-    const linkGroups = g.selectAll('.link')
-      .data(links)
-      .enter().append('g')
-      .attr('class', 'link');
-
-    // Draw link paths
-    linkGroups.append('path')
-      .attr('d', d => {
-        if (layoutType === LAYOUT_TYPES.radial) {
-          // Radial layout uses polar coordinates
-          const sourceX = d.source.x_cartesian + width/2;
-          const sourceY = d.source.y_cartesian + height/2;
-          const targetX = d.target.x_cartesian + width/2;
-          const targetY = d.target.y_cartesian + height/2;
-          return `M${sourceX},${sourceY}L${targetX},${targetY}`;
-        } else if (layoutType === LAYOUT_TYPES.tree) {
-          // Tree layout - smooth curves
-          return `M${d.source.y},${d.source.x}C${(d.source.y + d.target.y) / 2},${d.source.x} ${(d.source.y + d.target.y) / 2},${d.target.x} ${d.target.y},${d.target.x}`;
-        } else if (layoutType === LAYOUT_TYPES.network) {
-          // Network layout - straight lines
-          return `M${d.source.x},${d.source.y}L${d.target.x},${d.target.y}`;
-        } else {
-          // Default - straight lines
-          return `M${d.source.x},${d.source.y}L${d.target.x},${d.target.y}`;
-        }
-      })
-      .style('fill', 'none')
-      .style('stroke', themeConfigs[currentTheme].linkColor)
-      .style('stroke-width', '2px')
-      .style('opacity', 0.6)
-      .style('stroke-dasharray', layoutType === LAYOUT_TYPES.network ? '3,3' : 'none');
-
-    // Enhanced nodes with proper expand/collapse
-    const nodeGroups = g.selectAll('.node')
-      .data(nodes)
-      .enter().append('g')
-      .attr('class', 'node')
-      .attr('transform', d => {
-        if (layoutType === LAYOUT_TYPES.radial) {
-          return `translate(${d.x_cartesian + width/2},${d.y_cartesian + height/2})`;
-        }
-        return `translate(${layoutType === LAYOUT_TYPES.tree ? d.y : d.x},${layoutType === LAYOUT_TYPES.tree ? d.x : d.y})`;
-      });
-
-    // Main node circles
-    nodeGroups.append('circle')
-      .attr('r', nodeRadius)
-      .style('fill', d => {
-        if (!nodeMatchesFilters(d.data)) return '#444';
-        return getNodeColor(d.data);
-      })
-      .style('stroke', d => nodeMatchesFilters(d.data) ? '#fff' : '#666')
-      .style('stroke-width', d => selectedNode?.id === d.data.id ? 3 : 1.5)
-      .style('opacity', d => nodeMatchesFilters(d.data) ? 1 : 0.3)
-      .on('click', function(event, d) {
-        event.stopPropagation();
-        handleNodeClick(d, false);
-      });
-
-    // Node text labels with high contrast
-    nodeGroups.append('text')
-      .attr('dy', '.35em')
-      .attr('dx', d => {
-        // Position text to the right of the node
-        const radius = typeof nodeRadius === 'function' ? nodeRadius(d) : nodeRadius;
-        return radius + 15;
-      })
-      .style('text-anchor', 'start')
-      .style('font-size', '12px')
-      .style('font-weight', 'bold')
-      .style('font-family', 'monospace')
-      .style('fill', d => {
-        // High contrast text colors
-        if (!nodeMatchesFilters(d.data)) return '#888';
-        return selectedNode?.id === d.data.id ? '#00ff00' : '#ffffff';
-      })
-      .style('stroke', d => {
-        // Text outline for better readability
-        if (!nodeMatchesFilters(d.data)) return 'none';
-        return selectedNode?.id === d.data.id ? '#000' : '#000';
-      })
-      .style('stroke-width', '0.5px')
-      .style('paint-order', 'stroke fill')
-      .style('opacity', d => nodeMatchesFilters(d.data) ? 1 : 0.6)
-      .style('pointer-events', 'none')
-      .text(d => {
-        // Use title from data, fallback to ID
-        const title = d.data?.data?.title || d.data?.title || d.data?.id || 'Unknown';
-        // Truncate long titles
-        return title.length > 20 ? title.substring(0, 17) + '...' : title;
-      });
-
-    // Status indicator badges
-    nodeGroups.append('text')
-      .attr('dy', '-.5em')
-      .attr('dx', d => {
-        const radius = typeof nodeRadius === 'function' ? nodeRadius(d) : nodeRadius;
-        return radius + 15;
-      })
-      .style('text-anchor', 'start')
-      .style('font-size', '10px')
-      .style('font-weight', 'normal')
-      .style('font-family', 'monospace')
-      .style('fill', d => {
-        const status = d.data?.data?.status || d.data?.status || 'unknown';
-        switch (status) {
-          case 'live': return '#10b981';
-          case 'wip': return '#f59e0b';
-          case 'stub': return '#ef4444';
-          default: return '#6b7280';
-        }
-      })
-      .style('opacity', d => nodeMatchesFilters(d.data) ? 1 : 0.6)
-      .style('pointer-events', 'none')
-      .text(d => {
-        const status = d.data?.data?.status || d.data?.status || 'unknown';
-        const statusIcons = {
-          'live': '🟢',
-          'wip': '🟡', 
-          'stub': '🔴',
-          'unknown': '⚪'
-        };
-        return statusIcons[status] || '⚪';
-      });
-
-    // Enhanced expand/collapse indicators with proper click handling
-    const expandNodes = nodeGroups.filter(d => d.children || d._children);
-    
-    expandNodes.append('circle')
-      .attr('r', 8)
-      .attr('cy', 0)
-      .style('fill', themeConfigs[currentTheme].nodeColor)
-      .style('stroke', '#fff')
-      .style('stroke-width', 2)
-      .style('opacity', 0.9)
-      .style('cursor', 'pointer')
-      .on('click', function(event, d) {
-        event.stopPropagation();
-        handleNodeClick(d, true);
-      });
-
-    expandNodes.append('text')
-      .attr('dy', '.35em')
-      .attr('cy', 0)
-      .style('text-anchor', 'middle')
-      .style('font-size', '10px')
-      .style('font-weight', 'bold')
-      .style('fill', '#000')
-      .style('pointer-events', 'none')
-      .text(d => d.children ? '−' : '+');
-
-  }, [filteredTree, layoutType, expandedNodes, nodeMatchesFilters, activeCharacterFilters, activePuzzleFilters, activeInteractionFilters, activeFeatureFilters, currentTheme, themeConfigs, forceStrength, linkDistance, centerStrength, collideRadius, handleNodeClick]);
-
-  const getNodeColor = (node) => {
-    const status = node.data?.status || 'unknown';
-    switch (status) {
-      case 'live': return '#10b981'; // green
-      case 'wip': return '#f59e0b';  // yellow
-      case 'stub': return '#ef4444'; // red
-      default: return '#6b7280';     // gray
-    }
-  };
+  const { drawTree } = useTreeLayout({
+    svgRef,
+    filteredTree,
+    layoutType,
+    expandedNodes,
+    nodeMatchesFilters,
+    themeConfigs,
+    currentTheme,
+    forceStrength,
+    linkDistance,
+    centerStrength,
+    collideRadius,
+    selectedNode,
+    handleNodeClick,
+  });
 
   const toggleStatusFilter = (status) => {
     setStatusFilter(prev => 
@@ -769,277 +530,29 @@ export default function MapD3() {
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white flex">
       {/* Enhanced Layer Controls Sidebar */}
-      <div className={`bg-black/95 border-r border-green-400/30 transition-all duration-300 ease-in-out flex-shrink-0 ${
-        showLayerControls ? 'w-80' : 'w-0'
-      } overflow-hidden`}>
-        <div className="w-80 max-h-[90vh] flex flex-col">
-          {/* Compact Sidebar Header */}
-          <div className="px-3 py-2 border-b border-green-400/20">
-            <div className="flex items-center justify-between">
-              <h3 className="text-lg font-mono text-green-400 font-bold">🎛️ Filters</h3>
-              <button
-                onClick={() => setShowLayerControls(false)}
-                className="text-gray-400 hover:text-white transition-colors"
-              >
-                ✕
-              </button>
-            </div>
-          </div>
-
-          {/* Global Search Box */}
-          <div className="px-3 py-2 border-b border-gray-600/20">
-            <div className="relative">
-              <input
-                ref={searchInputRef}
-                type="text"
-                placeholder="Filter nodes... (Press / to focus)"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-3 py-1 text-sm bg-[#111827] border border-cyan-500 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500 placeholder-gray-400"
-              />
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery('')}
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white text-xs"
-                >
-                  ✕
-                </button>
-              )}
-            </div>
-            {searchQuery && (
-              <div className="text-xs text-cyan-400 mt-1">
-                {searchMatchCount} matches found
-              </div>
-            )}
-          </div>
-          
-          {/* Filter Summary */}
-          {activeFilterCount > 0 && (
-            <div className="px-3 py-1.5 bg-purple-900/20 border-b border-purple-400/30">
-              <div className="text-purple-400 font-mono text-[10px] font-bold mb-1">
-                Active: {activeFilterCount} filter{activeFilterCount > 1 ? 's' : ''}
-              </div>
-              <button
-                onClick={resetAllFilters}
-                className="text-[10px] text-red-300 hover:text-red-100 transition-colors"
-              >
-                ✕ Clear All
-              </button>
-            </div>
-          )}
-
-          {/* Scrollable Filter Content */}
-          <div className="flex-1 overflow-auto px-3 py-2 space-y-3">
-            {/* Characters Section */}
-            {filterOptions.characters.length > 0 && (
-              <div>
-                <button
-                  onClick={() => toggleSection('characters')}
-                  className="flex items-center gap-2 mb-2 w-full text-left hover:bg-gray-800/30 px-2 py-1 rounded transition-colors"
-                >
-                  <span className="text-sm">🎭</span>
-                  <span className="text-purple-400 font-mono text-xs font-bold flex-1">
-                    Characters {searchQuery && `(${filteredOptions.characters.length})`}
-                  </span>
-                  <span className="bg-purple-900/40 text-purple-300 px-1.5 py-0.5 rounded text-[10px] font-mono">
-                    {activeCharacterFilters.length}
-                  </span>
-                  <span className={`text-xs transition-transform ${collapsedSections.characters ? 'rotate-0' : 'rotate-90'}`}>
-                    ▶
-                  </span>
-                </button>
-                {!collapsedSections.characters && (
-                  <div className="grid grid-cols-1 gap-1.5 ml-4">
-                    {filteredOptions.characters.map(character => (
-                      <button
-                        key={character.name}
-                        onClick={() => toggleCharacterFilter(character.name)}
-                        className={`px-2 py-1.5 rounded text-[10px] font-mono border transition-all text-left hover:scale-[1.02] hover:ring-1 hover:ring-cyan-300 flex items-center justify-between ${
-                          activeCharacterFilters.includes(character.name)
-                            ? 'bg-cyan-900/30 text-cyan-200 border-cyan-400/60 ring-2 ring-cyan-400/30 ring-opacity-50 scale-[1.02]'
-                            : `bg-gray-900/40 border-gray-600/40 hover:border-cyan-400/40 ${
-                                itemMatchesSearch(character.name) ? 'text-gray-300 hover:text-cyan-300' : 'text-gray-500 opacity-50'
-                              }`
-                        }`}
-                      >
-                        <span className="truncate">{character.name}</span>
-                        <span className={`px-1.5 py-0.5 rounded-full text-[9px] font-bold ml-2 ${
-                          activeCharacterFilters.includes(character.name)
-                            ? 'bg-cyan-700 text-cyan-100'
-                            : 'bg-cyan-900/60 text-cyan-400'
-                        }`}>
-                          {character.count}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Puzzles Section */}
-            {filterOptions.puzzles.length > 0 && (
-              <div>
-                <button
-                  onClick={() => toggleSection('puzzles')}
-                  className="flex items-center gap-2 mb-2 w-full text-left hover:bg-gray-800/30 px-2 py-1 rounded transition-colors"
-                >
-                  <span className="text-sm">🧩</span>
-                  <span className="text-yellow-400 font-mono text-xs font-bold flex-1">
-                    Puzzles {searchQuery && `(${filteredOptions.puzzles.length})`}
-                  </span>
-                  <span className="bg-yellow-900/40 text-yellow-300 px-1.5 py-0.5 rounded text-[10px] font-mono">
-                    {activePuzzleFilters.length}
-                  </span>
-                  <span className={`text-xs transition-transform ${collapsedSections.puzzles ? 'rotate-0' : 'rotate-90'}`}>
-                    ▶
-                  </span>
-                </button>
-                {!collapsedSections.puzzles && (
-                  <div className="grid grid-cols-1 gap-1.5 ml-4">
-                    {filteredOptions.puzzles.map(puzzle => (
-                      <button
-                        key={puzzle.name}
-                        onClick={() => togglePuzzleFilter(puzzle.name)}
-                        className={`px-2 py-1.5 rounded text-[10px] font-mono border transition-all text-left hover:scale-[1.02] hover:ring-1 hover:ring-cyan-300 flex items-center justify-between ${
-                          activePuzzleFilters.includes(puzzle.name)
-                            ? 'bg-cyan-900/30 text-cyan-200 border-cyan-400/60 ring-2 ring-cyan-400/30 ring-opacity-50 scale-[1.02]'
-                            : `bg-gray-900/40 border-gray-600/40 hover:border-cyan-400/40 ${
-                                itemMatchesSearch(puzzle.name) ? 'text-gray-300 hover:text-cyan-300' : 'text-gray-500 opacity-50'
-                              }`
-                        }`}
-                      >
-                        <span className="truncate">{puzzle.name}</span>
-                        <span className={`px-1.5 py-0.5 rounded-full text-[9px] font-bold ml-2 ${
-                          activePuzzleFilters.includes(puzzle.name)
-                            ? 'bg-cyan-700 text-cyan-100'
-                            : 'bg-cyan-900/60 text-cyan-400'
-                        }`}>
-                          {puzzle.count}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Interactions Section */}
-            {filterOptions.interactions.length > 0 && (
-              <div>
-                <button
-                  onClick={() => toggleSection('interactions')}
-                  className="flex items-center gap-2 mb-2 w-full text-left hover:bg-gray-800/30 px-2 py-1 rounded transition-colors"
-                >
-                  <span className="text-sm">🎬</span>
-                  <span className="text-blue-400 font-mono text-xs font-bold flex-1">
-                    Interactions {searchQuery && `(${filteredOptions.interactions.length})`}
-                  </span>
-                  <span className="bg-blue-900/40 text-blue-300 px-1.5 py-0.5 rounded text-[10px] font-mono">
-                    {activeInteractionFilters.length}
-                  </span>
-                  <span className={`text-xs transition-transform ${collapsedSections.interactions ? 'rotate-0' : 'rotate-90'}`}>
-                    ▶
-                  </span>
-                </button>
-                {!collapsedSections.interactions && (
-                  <div className="grid grid-cols-1 gap-1.5 ml-4">
-                    {filteredOptions.interactions.map(interaction => (
-                      <button
-                        key={interaction.name}
-                        onClick={() => toggleInteractionFilter(interaction.name)}
-                        className={`px-2 py-1.5 rounded text-[10px] font-mono border transition-all text-left hover:scale-[1.02] hover:ring-1 hover:ring-cyan-300 flex items-center justify-between ${
-                          activeInteractionFilters.includes(interaction.name)
-                            ? 'bg-cyan-900/30 text-cyan-200 border-cyan-400/60 ring-2 ring-cyan-400/30 ring-opacity-50 scale-[1.02]'
-                            : `bg-gray-900/40 border-gray-600/40 hover:border-cyan-400/40 ${
-                                itemMatchesSearch(interaction.name) ? 'text-gray-300 hover:text-cyan-300' : 'text-gray-500 opacity-50'
-                              }`
-                        }`}
-                      >
-                        <span className="truncate">{interaction.name}</span>
-                        <span className={`px-1.5 py-0.5 rounded-full text-[9px] font-bold ml-2 ${
-                          activeInteractionFilters.includes(interaction.name)
-                            ? 'bg-cyan-700 text-cyan-100'
-                            : 'bg-cyan-900/60 text-cyan-400'
-                        }`}>
-                          {interaction.count}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Features Section */}
-            {filterOptions.features.length > 0 && (
-              <div>
-                <button
-                  onClick={() => toggleSection('features')}
-                  className="flex items-center gap-2 mb-2 w-full text-left hover:bg-gray-800/30 px-2 py-1 rounded transition-colors"
-                >
-                  <span className="text-sm">💠</span>
-                  <span className="text-emerald-400 font-mono text-xs font-bold flex-1">
-                    Features {searchQuery && `(${filteredOptions.features.length})`}
-                  </span>
-                  <span className="bg-emerald-900/40 text-emerald-300 px-1.5 py-0.5 rounded text-[10px] font-mono">
-                    {activeFeatureFilters.length}
-                  </span>
-                  <span className={`text-xs transition-transform ${collapsedSections.features ? 'rotate-0' : 'rotate-90'}`}>
-                    ▶
-                  </span>
-                </button>
-                {!collapsedSections.features && (
-                  <div className="grid grid-cols-1 gap-1.5 ml-4">
-                    {filteredOptions.features.map(feature => {
-                      const getFeatureIcon = (feat) => {
-                        switch (feat.name) {
-                          case 'hasTransition': return '🌊';
-                          case 'hasCombat': return '⚔️';
-                          case 'hasChoice': return '🤔';
-                          case 'hasNPC': return '👤';
-                          case 'hasAnimation': return '✨';
-                          default: return '💠';
-                        }
-                      };
-
-                      const getFeatureLabel = (feat) => {
-                        return feat.name.replace('has', '').replace(/([A-Z])/g, ' $1').trim();
-                      };
-
-                      return (
-                        <button
-                          key={feature.name}
-                          onClick={() => toggleFeatureFilter(feature.name)}
-                          className={`px-2 py-1.5 rounded text-[10px] font-mono border transition-all text-left hover:scale-[1.02] hover:ring-1 hover:ring-cyan-300 flex items-center justify-between ${
-                            activeFeatureFilters.includes(feature.name)
-                              ? 'bg-cyan-900/30 text-cyan-200 border-cyan-400/60 ring-2 ring-cyan-400/30 ring-opacity-50 scale-[1.02]'
-                              : `bg-gray-900/40 border-gray-600/40 hover:border-cyan-400/40 ${
-                                  itemMatchesSearch(feature.name) ? 'text-gray-300 hover:text-cyan-300' : 'text-gray-500 opacity-50'
-                                }`
-                          }`}
-                        >
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-[10px]">{getFeatureIcon(feature)}</span>
-                            <span className="truncate">{getFeatureLabel(feature)}</span>
-                          </div>
-                          <span className={`px-1.5 py-0.5 rounded-full text-[9px] font-bold ml-2 ${
-                            activeFeatureFilters.includes(feature.name)
-                              ? 'bg-cyan-700 text-cyan-100'
-                              : 'bg-cyan-900/60 text-cyan-400'
-                          }`}>
-                            {feature.count}
-                          </span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
+      <SidebarFilters
+        show={showLayerControls}
+        onClose={() => setShowLayerControls(false)}
+        searchInputRef={searchInputRef}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        searchMatchCount={searchMatchCount}
+        activeFilterCount={activeFilterCount}
+        resetAllFilters={resetAllFilters}
+        filterOptions={filterOptions}
+        filteredOptions={filteredOptions}
+        collapsedSections={collapsedSections}
+        toggleSection={toggleSection}
+        activeCharacterFilters={activeCharacterFilters}
+        activePuzzleFilters={activePuzzleFilters}
+        activeInteractionFilters={activeInteractionFilters}
+        activeFeatureFilters={activeFeatureFilters}
+        toggleCharacterFilter={toggleCharacterFilter}
+        togglePuzzleFilter={togglePuzzleFilter}
+        toggleInteractionFilter={toggleInteractionFilter}
+        toggleFeatureFilter={toggleFeatureFilter}
+        itemMatchesSearch={itemMatchesSearch}
+      />
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-h-screen">
@@ -1323,6 +836,7 @@ export default function MapD3() {
             className="w-full h-full bg-gradient-to-br from-gray-900 to-black border-l border-green-400/20"
             style={{ minHeight: '600px' }}
           />
+          <ZoomControls svgRef={svgRef} />
           
           {/* Help Text */}
           <div className="absolute top-4 left-4 bg-black/80 text-xs text-gray-400 p-3 rounded border border-gray-600 font-mono">
@@ -1358,33 +872,7 @@ export default function MapD3() {
         </div>
       </div>
 
-      {/* Node Detail Panel */}
-      {selectedNode && (
-        <div className="absolute top-20 right-4 w-80 bg-black/95 border border-green-400/30 rounded p-4 text-sm">
-          <div className="flex justify-between items-start mb-3">
-            <h3 className="text-green-400 font-bold">{selectedNode.data?.title || selectedNode.id}</h3>
-            <button
-              onClick={() => setSelectedNode(null)}
-              className="text-gray-400 hover:text-white"
-            >
-              ✕
-            </button>
-          </div>
-          
-          <div className="space-y-2 text-xs">
-            <div><span className="text-gray-400">Status:</span> {selectedNode.data?.status || 'unknown'}</div>
-            {selectedNode.data?.characters && (
-              <div><span className="text-gray-400">Characters:</span> {selectedNode.data.characters.join(', ')}</div>
-            )}
-            {selectedNode.data?.puzzles && (
-              <div><span className="text-gray-400">Puzzles:</span> {selectedNode.data.puzzles.join(', ')}</div>
-            )}
-            {selectedNode.data?.summary && (
-              <div><span className="text-gray-400">Summary:</span> {selectedNode.data.summary}</div>
-            )}
-          </div>
-        </div>
-      )}
+      <DetailPanel node={selectedNode} onClose={() => setSelectedNode(null)} />
     </div>
   );
-} 
+}
