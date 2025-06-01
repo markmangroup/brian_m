@@ -95,40 +95,66 @@ function applyExpansionState(tree, expandedNodes) {
   return newNode;
 }
 
-// Utility function to get initial expanded nodes (auto-expand top tier)
+// Utility function to get initial expanded nodes (auto-expand linear chains)
 function getInitialExpandedNodes(nodes, edges, rootId = 'matrix-v1-entry') {
   const expandedSet = new Set();
   
   // Always expand the root
   expandedSet.add(rootId);
   
-  // Find all direct children of root (depth 1)
-  const directChildren = edges
-    .filter(edge => edge.source === rootId)
-    .map(edge => edge.target);
-  
-  console.log('🌳 Root direct children:', directChildren);
-  
-  // Add all direct children to expanded set
-  directChildren.forEach(childId => {
-    expandedSet.add(childId);
-    
-    // For choice nodes, also find their immediate children (depth 2)
-    const choiceNode = nodes.find(node => node.id === childId);
-    if (choiceNode && choiceNode.type === 'choice') {
-      const choiceChildren = edges
-        .filter(edge => edge.source === childId)
-        .map(edge => edge.target);
-      
-      console.log(`🎯 Choice node ${childId} children:`, choiceChildren);
-      
-      choiceChildren.forEach(choiceChildId => {
-        expandedSet.add(choiceChildId);
-      });
+  // Create a map of node ID to its children for efficient lookup
+  const nodeChildren = {};
+  edges.forEach(edge => {
+    if (!nodeChildren[edge.source]) {
+      nodeChildren[edge.source] = [];
     }
+    nodeChildren[edge.source].push(edge.target);
   });
-  
-  console.log('🔓 Initial expanded nodes:', Array.from(expandedSet));
+
+  // Create a map of node ID to node data for terminal checking
+  const nodeMap = {};
+  nodes.forEach(node => {
+    nodeMap[node.id] = node;
+  });
+
+  // Helper function to check if a node is terminal
+  const isTerminalNode = (nodeId) => {
+    const node = nodeMap[nodeId];
+    return node && (
+      node.type === 'ending' || 
+      node.data?.features?.hasEnding === true ||
+      node.data?.terminal === true
+    );
+  };
+
+  // Recursively expand linear chains from a given node
+  const expandLinearChain = (nodeId, visited = new Set()) => {
+    // Prevent infinite loops
+    if (visited.has(nodeId)) return;
+    visited.add(nodeId);
+    
+    const children = nodeChildren[nodeId] || [];
+    
+    // If node is terminal, stop expansion
+    if (isTerminalNode(nodeId)) {
+      return;
+    }
+    
+    // If node has exactly one child, it's part of a linear chain
+    if (children.length === 1) {
+      const childId = children[0];
+      expandedSet.add(childId);
+      expandLinearChain(childId, visited);
+    }
+    // If node has multiple children, it's a branch point - expand it but stop the chain
+    else if (children.length > 1) {
+      expandedSet.add(nodeId);
+      // Don't continue expanding the children as they are branch options
+    }
+  };
+
+  // Start expanding from the root
+  expandLinearChain(rootId);
   
   return expandedSet;
 }
@@ -394,16 +420,6 @@ export default function MapD3() {
     return matches;
   }, [activeCharacterFilters, activePuzzleFilters, activeInteractionFilters, activeFeatureFilters]);
 
-  // Check if a node's unlock conditions are met
-  const checkUnlockConditions = useCallback((node, availableNodes) => {
-    if (!node || !node.unlockConditions || node.unlockConditions.length === 0) {
-      return true; // No conditions means always unlocked
-    }
-    
-    const availableNodeIds = new Set(availableNodes.map(n => n.id));
-    return node.unlockConditions.every(conditionId => availableNodeIds.has(conditionId));
-  }, []);
-
   // Reset all filters
   const resetAllFilters = () => {
     setActiveCharacterFilters([]);
@@ -596,7 +612,7 @@ export default function MapD3() {
 
     // ... rest of existing visual enhancements ...
 
-  }, [filteredTree, layoutType, expandedNodes, nodeMatchesFilters, activeCharacterFilters, activePuzzleFilters, activeInteractionFilters, activeFeatureFilters, currentTheme, themeConfigs, checkUnlockConditions, forceStrength, linkDistance, centerStrength, collideRadius, handleNodeClick]);
+  }, [filteredTree, layoutType, expandedNodes, nodeMatchesFilters, activeCharacterFilters, activePuzzleFilters, activeInteractionFilters, activeFeatureFilters, currentTheme, themeConfigs, forceStrength, linkDistance, centerStrength, collideRadius, handleNodeClick]);
 
   const getNodeColor = (node) => {
     const status = node.data?.status || 'unknown';
