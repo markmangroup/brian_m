@@ -65,6 +65,14 @@ export default function GlitchPortal() {
     setTimeout(() => {
       setWorld(worldKey); // Use unified context method
       setIsGlitching(false);
+      
+      // Navigate to the appropriate world entry point
+      if (worldKey === 'witcher') {
+        navigate('/witcher/entry');
+      } else if (worldKey === 'nightcity') {
+        navigate('/matrix-v1/night-city/entry');
+      }
+      // For 'matrix', stay on current page to allow further navigation
     }, 800);
   };
 

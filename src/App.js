@@ -63,6 +63,11 @@ import OracleSeekers from './pages/matrix-v1/OracleSeekers';
 import NightCityEntry from './pages/matrix-v1/NightCityEntry';
 import NightCityBouncer from './pages/matrix-v1/NightCityBouncer';
 
+// Witcher routes
+import WitcherEntry from './pages/witcher/WitcherEntry';
+import MutationChoice from './pages/witcher/MutationChoice';
+import SignTraining from './pages/witcher/SignTraining';
+
 export default function App() {
   return (
     <UserProvider>
@@ -128,6 +133,11 @@ export default function App() {
               {/* Night City routes */}
               <Route path="/matrix-v1/night-city/entry" element={<NightCityEntry />} />
               <Route path="/matrix-v1/night-city/bouncer" element={<NightCityBouncer />} />
+              
+              {/* Witcher routes */}
+              <Route path="/witcher/entry" element={<WitcherEntry />} />
+              <Route path="/witcher/mutation-choice" element={<MutationChoice />} />
+              <Route path="/witcher/sign-training" element={<SignTraining />} />
               
               {/* Legacy Matrix Routes - Redirect to V1 */}
               <Route path="/the-matrix/*" element={<Navigate to="/matrix-v1" replace />} />

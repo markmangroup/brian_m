@@ -746,6 +746,171 @@ export const realMatrixNodes = [
       features: { hasTransition: false, hasChoice: true, hasCombat: true, hasNPC: true, hasAnimation: true, hasEnding: true },
       dialogue: ['Wake up and smell the ashes, choom.', 'Burn the corpo tower or find another path?', 'Never fade away.']
     }
+  },
+
+  // === NEW WITCHER WORLD NODES ===
+  {
+    id: 'witcher-entry',
+    type: 'scene',
+    depth: 1,
+    group: 'witcher',
+    data: {
+      title: 'The Path Begins',
+      pageUrl: '/witcher/entry',
+      status: 'stub',
+      summary: 'A strange realm brews in frost and magic. Ancient keeps rise from misty valleys where monsters prowl.',
+      characters: ['Vesemir', 'Local Villager', 'Mysterious Bard'],
+      puzzles: ['PathChoice', 'VillageEncounter'],
+      interactions: ['WitcherIntro', 'EnvironmentInspection'],
+      features: { 
+        hasTransition: true, 
+        hasChoice: false, 
+        hasCombat: false, 
+        hasNPC: true, 
+        hasAnimation: true,
+        hasLore: true,
+        hasAtmosphere: true
+      },
+      dialogue: [
+        'The path of a witcher is fraught with danger and solitude.',
+        'These lands hold secrets older than kings and kingdoms.',
+        'Choose your trials carefully - not all who walk this path survive.'
+      ],
+      
+      // 🎯 WITCHER ENHANCEMENT SYSTEM
+      qualityRating: 5, // Starting baseline
+      enhancement: {
+        targetRating: 10,
+        improvements: [
+          'Add immersive Witcher world atmosphere with medieval fantasy elements',
+          'Enhanced environmental storytelling with monster lore',
+          'Interactive medallion vibration system for danger detection',
+          'Dynamic weather and day/night cycle affecting encounters'
+        ],
+        criteria: {
+          narrative: 6, // Rich fantasy atmosphere
+          interactivity: 4, // Basic scene interaction needed
+          visual: 5, // Medieval fantasy styling required
+          technical: 5, // Standard implementation
+          character: 7, // Strong Witcher NPCs
+          consequences: 5 // Path choice impacts
+        },
+        narrative: {
+          atmosphere: 'Misty mountain valleys with ancient stone keeps and twisted trees',
+          soundscape: 'Wind through pines, distant wolf howls, crackling fires',
+          visualElements: 'Witcher medallion interface, rune inscriptions, monster tracks',
+          emotionalTone: 'Mysterious anticipation with underlying medieval danger'
+        },
+        interactivity: {
+          medallionEffects: 'Witcher medallion vibrates to detect magical presence',
+          environmentClues: 'Interactive monster tracks and magical signs',
+          characterDialogue: 'Deep Witcher lore conversations with NPCs',
+          accessibility: 'Full fantasy-themed keyboard navigation and screen reader support'
+        }
+      }
+    }
+  },
+
+  {
+    id: 'witcher-mutation-choice',
+    type: 'choice',
+    depth: 2,
+    group: 'witcher',
+    data: {
+      title: 'Trial of Grasses',
+      pageUrl: '/witcher/mutation-choice',
+      status: 'stub',
+      summary: 'Do you endure mutation, or choose another path? The Trial of Grasses transforms few and kills many.',
+      characters: ['Vesemir', 'Lambert', 'Eskel'],
+      puzzles: ['TrialEndurance', 'MutationChoice'],
+      interactions: ['ChoicePrompt', 'PainEndurance', 'AlchemyRitual'],
+      features: { 
+        hasTransition: true, 
+        hasChoice: true, 
+        hasCombat: false, 
+        hasNPC: true, 
+        hasAnimation: true,
+        hasPuzzle: true,
+        hasConsequences: true
+      },
+      dialogue: [
+        'The Trial of Grasses changes you forever - if it doesn\'t kill you first.',
+        'Many boys enter these chambers. Few emerge as witchers.',
+        'Your path splits here: embrace the mutation or find another way.'
+      ],
+      options: ['Undergo Trial of Grasses', 'Seek Alternative Path', 'Study Ancient Texts', 'Train as Bard'],
+      
+      // 🎯 CHOICE ENHANCEMENT SYSTEM
+      qualityRating: 5,
+      enhancement: {
+        targetRating: 10,
+        improvements: [
+          'Add visceral Trial of Grasses experience with visual effects',
+          'Multiple branching paths based on player choice',
+          'Enhanced character reactions and long-term consequences',
+          'Alchemical preparation mini-game before the trial'
+        ],
+        criteria: {
+          narrative: 8, // High-stakes witcher lore moment
+          interactivity: 6, // Multiple meaningful choices
+          visual: 5, // Mutation visual effects needed
+          technical: 5, // Choice branching logic
+          character: 7, // Key witcher trainer NPCs
+          consequences: 9 // Life-changing decision point
+        }
+      }
+    }
+  },
+
+  {
+    id: 'witcher-sign-training',
+    type: 'training',
+    depth: 3,
+    group: 'witcher',
+    data: {
+      title: 'Master the Signs',
+      pageUrl: '/witcher/sign-training',
+      status: 'stub',
+      summary: 'You begin to wield the basic forces of magic. Learn Igni, Quen, Aard, Yrden, and Axii.',
+      characters: ['Triss Merigold', 'Keira Metz', 'Master Witcher'],
+      puzzles: ['SignCasting', 'MagicControl', 'CombatPractice'],
+      interactions: ['SpellCasting', 'MagicTraining', 'CombatDrills'],
+      features: { 
+        hasTransition: true, 
+        hasChoice: false, 
+        hasCombat: true, 
+        hasNPC: true, 
+        hasAnimation: true,
+        hasPuzzle: true,
+        hasTraining: true,
+        hasMagic: true
+      },
+      dialogue: [
+        'Magic flows through focused will and precise gestures.',
+        'Each Sign serves a different purpose in a witcher\'s arsenal.',
+        'Practice until the Signs become as natural as breathing.'
+      ],
+      
+      // 🎯 TRAINING ENHANCEMENT SYSTEM
+      qualityRating: 5,
+      enhancement: {
+        targetRating: 10,
+        improvements: [
+          'Interactive Sign casting with gesture recognition',
+          'Progressive difficulty training challenges',
+          'Visual feedback for successful spell casting',
+          'Combat scenarios testing different Sign combinations'
+        ],
+        criteria: {
+          narrative: 6, // Witcher magic training lore
+          interactivity: 8, // High interactivity for training
+          visual: 7, // Magical effects and animations
+          technical: 6, // Training progression system
+          character: 6, // Magic teacher NPCs
+          consequences: 6 // Skill development impacts
+        }
+      }
+    }
   }
 ];
 
@@ -839,5 +1004,16 @@ export const realMatrixEdges = [
   
   // Cross-reality connections
   { id: 'edge-nc-file-to-source', source: 'nc-file', target: 'matrix-the-source', label: 'Corporate Truth' },
-  { id: 'edge-silverhand-to-source', source: 'nc-silverhand', target: 'matrix-the-source', label: 'Never Fade Away' }
+  { id: 'edge-silverhand-to-source', source: 'nc-silverhand', target: 'matrix-the-source', label: 'Never Fade Away' },
+
+  // === WITCHER WORLD CONNECTIONS ===
+  // Glitch Portal connects to Witcher Entry
+  { id: 'edge-glitch-to-witcher', source: 'matrix-glitch-portal', target: 'witcher-entry', label: 'Breach Witcher Realm' },
+  
+  // Witcher internal flow
+  { id: 'edge-witcher-entry-to-mutation', source: 'witcher-entry', target: 'witcher-mutation-choice' },
+  { id: 'edge-witcher-mutation-to-signs', source: 'witcher-mutation-choice', target: 'witcher-sign-training', label: 'Trial Survived' },
+  
+  // Cross-reality connections (Witcher magic connects to Matrix systems)
+  { id: 'edge-witcher-signs-to-source', source: 'witcher-sign-training', target: 'matrix-the-source', label: 'Ancient Magic' }
 ];
