@@ -110,17 +110,33 @@ const ExecutiveNodeCard = ({ node, onView, onEdit }) => {
     return '🔵';
   };
 
-  const lastUpdated = node.data?.enhancement?.lastUpdated || 
+  const lastUpdated = node.data?.enhancement?.updatedAt || 
                      node.data?.lastModified || 
-                     'Never';
+                     null;
 
   const formatDate = (date) => {
-    if (date === 'Never') return date;
+    if (!date) return 'Unknown';
+    if (date === 'Never') return 'Never';
     try {
-      return new Date(date).toLocaleDateString();
+      const dateObj = new Date(date);
+      return dateObj.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
     } catch {
       return 'Unknown';
     }
+  };
+
+  const getNodeStatus = () => {
+    return node.data?.enhancement?.status || node.data?.status || 'stub';
+  };
+
+  const getNodePriority = () => {
+    return node.data?.enhancement?.priority?.toUpperCase() || quality.priority;
   };
 
   const handleView = () => {
@@ -131,11 +147,19 @@ const ExecutiveNodeCard = ({ node, onView, onEdit }) => {
     }
   };
 
+  const getEnhancementTooltip = () => {
+    if (!node.data?.enhancement) return 'No enhancement data';
+    return JSON.stringify(node.data.enhancement, null, 2);
+  };
+
+  const nodeStatus = getNodeStatus();
+  const nodePriority = getNodePriority();
+
   return (
     <div className={`
       relative bg-gray-900 border-2 border-gray-700 rounded-xl p-4 
       hover:border-cyan-400 transition-all duration-300 group
-      border-l-4 ${PRIORITY_COLORS[quality.priority]}
+      border-l-4 ${PRIORITY_COLORS[nodePriority]}
     `}>
       {/* Header */}
       <div className="flex items-start justify-between mb-3">
@@ -147,12 +171,22 @@ const ExecutiveNodeCard = ({ node, onView, onEdit }) => {
             </h3>
           </div>
           <div className="flex items-center gap-2 text-xs text-gray-400">
-            <span>{STATUS_ICONS[node.data?.status]} {STATUS_LABELS[node.data?.status]}</span>
+            <span 
+              title={`Status: ${STATUS_LABELS[nodeStatus]} (from enhancement.status)`}
+              className="cursor-help"
+            >
+              {STATUS_ICONS[nodeStatus]} {STATUS_LABELS[nodeStatus]}
+            </span>
             <span>•</span>
             <span className="capitalize">{node.type}</span>
           </div>
         </div>
-        <QualityBadge score={quality.overall} />
+        <div 
+          title={`Quality Score: ${quality.overall.toFixed(1)}/10`}
+          className="cursor-help"
+        >
+          <QualityBadge score={quality.overall} />
+        </div>
       </div>
 
       {/* Quality Progress */}
@@ -162,14 +196,17 @@ const ExecutiveNodeCard = ({ node, onView, onEdit }) => {
 
       {/* Priority & Stats */}
       <div className="flex items-center justify-between mb-3">
-        <span className={`
-          px-2 py-1 rounded text-xs font-bold
-          ${quality.priority === 'CRITICAL' ? 'bg-red-500/20 text-red-400' :
-            quality.priority === 'HIGH' ? 'bg-orange-500/20 text-orange-400' :
-            quality.priority === 'MEDIUM' ? 'bg-yellow-500/20 text-yellow-400' :
-            'bg-green-500/20 text-green-400'}
-        `}>
-          {quality.priority}
+        <span 
+          className={`
+            px-2 py-1 rounded text-xs font-bold cursor-help
+            ${nodePriority === 'CRITICAL' ? 'bg-red-500/20 text-red-400' :
+              nodePriority === 'HIGH' ? 'bg-orange-500/20 text-orange-400' :
+              nodePriority === 'MEDIUM' ? 'bg-yellow-500/20 text-yellow-400' :
+              'bg-green-500/20 text-green-400'}
+          `}
+          title={`Priority: ${nodePriority} (from enhancement.priority)`}
+        >
+          {nodePriority}
         </span>
         <span className="text-xs text-gray-500">
           {improvements.length} improvements
@@ -177,8 +214,20 @@ const ExecutiveNodeCard = ({ node, onView, onEdit }) => {
       </div>
 
       {/* Last Updated */}
-      <div className="text-xs text-gray-500 mb-3">
-        Updated: {formatDate(lastUpdated)}
+      <div className="text-xs mb-3">
+        <span className={lastUpdated ? 'text-gray-500' : 'text-gray-600'}>
+          Updated: {formatDate(lastUpdated)}
+        </span>
+      </div>
+
+      {/* Enhancement JSON Tooltip */}
+      <div className="flex items-center gap-2 mb-3">
+        <span 
+          className="text-xs text-cyan-400 cursor-help hover:text-cyan-300 transition-colors"
+          title={getEnhancementTooltip()}
+        >
+          📋 Hover for enhancement JSON
+        </span>
       </div>
 
       {/* Action Buttons */}
@@ -204,7 +253,7 @@ const ExecutiveNodeCard = ({ node, onView, onEdit }) => {
 const EditNodeModal = ({ node, onSave, onClose }) => {
   const [editData, setEditData] = useState({
     qualityRating: node.data?.enhancement?.qualityRating || 5,
-    status: node.data?.status || 'stub',
+    status: node.data?.enhancement?.status || node.data?.status || 'stub',
     notes: node.data?.enhancement?.notes || '',
     priority: calculateNodeQuality(node).priority
   });
@@ -249,7 +298,7 @@ const EditNodeModal = ({ node, onSave, onClose }) => {
           {/* Status */}
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
-              Status
+              Status (will update enhancement.status)
             </label>
             <select
               value={editData.status}
