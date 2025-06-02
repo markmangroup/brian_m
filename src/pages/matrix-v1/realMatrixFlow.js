@@ -14,7 +14,31 @@ export const realMatrixNodes = [
       puzzles: [],
       interactions: ['SceneIntro', 'NarrativeStart'],
       features: { hasTransition: true, hasChoice: false, hasCombat: false, hasNPC: false, hasAnimation: true },
-      dialogue: ['Welcome to the simulation.', 'Your identity is not yet confirmed.']
+      dialogue: ['Welcome to the simulation.', 'Your identity is not yet confirmed.'],
+      
+      // 🎯 NEW 10/10 ENHANCEMENT SYSTEM
+      qualityRating: 7, // Current rating out of 10
+      enhancement: {
+        targetRating: 10,
+        improvements: [
+          'Add immersive awakening sequence with glitch effects',
+          'Enhanced environmental storytelling with detailed scene descriptions',
+          'Interactive UI elements for user engagement',
+          'Personalized dialogue based on user data'
+        ],
+        narrative: {
+          atmosphere: 'Dark digital void with scattered data fragments floating like stars',
+          soundscape: 'Low electronic hum with distant keyboard clicks echoing through space',
+          visualElements: 'Cascading green code rain, flickering holographic displays',
+          emotionalTone: 'Mysterious anticipation with underlying digital unease'
+        },
+        interactivity: {
+          hoverEffects: 'Code fragments highlight on cursor movement',
+          clickableElements: 'Hidden data shards reveal backstory fragments',
+          progressIndicators: 'Consciousness stability meter',
+          accessibility: 'Full keyboard navigation and screen reader support'
+        }
+      }
     }
   },
 
@@ -33,7 +57,31 @@ export const realMatrixNodes = [
       puzzles: ['IdentityPrompt'],
       interactions: ['InputField', 'DialogueResponse'],
       features: { hasTransition: false, hasChoice: false, hasCombat: false, hasNPC: false, hasAnimation: false },
-      dialogue: ['What is your name?']
+      dialogue: ['What is your name?'],
+      
+      // 🎯 10/10 ENHANCEMENT SYSTEM
+      qualityRating: 6,
+      enhancement: {
+        targetRating: 10,
+        improvements: [
+          'Dynamic name validation with Matrix-style error messages',
+          'Character creation depth with background selection',
+          'System personality adaptation based on name input',
+          'Enhanced visual feedback for identity establishment'
+        ],
+        narrative: {
+          atmosphere: 'Identity scanning chamber with biometric displays',
+          soundscape: 'Soft scanning beeps transitioning to recognition chimes',
+          visualElements: 'Holographic name assembly with character projection',
+          emotionalTone: 'Identity discovery with growing self-awareness'
+        },
+        interactivity: {
+          nameEffects: 'Letters materialize one by one with digital effects',
+          validationFeedback: 'Real-time identity strength analysis',
+          characterPreview: 'Avatar formation based on name choice',
+          accessibility: 'Voice input option with speech synthesis feedback'
+        }
+      }
     }
   },
 
@@ -53,7 +101,31 @@ export const realMatrixNodes = [
       interactions: ['ChoicePrompt'],
       features: { hasTransition: true, hasChoice: true, hasCombat: false, hasNPC: true, hasAnimation: true },
       dialogue: ['This is your last chance.', 'Take the red pill, or stay in the Matrix.'],
-      options: ['Red Pill', 'Blue Pill']
+      options: ['Red Pill', 'Blue Pill'],
+      
+      // 🎯 10/10 ENHANCEMENT SYSTEM
+      qualityRating: 9, // Already quite good due to iconic nature
+      enhancement: {
+        targetRating: 10,
+        improvements: [
+          'Extended Morpheus dialogue with philosophical depth',
+          'Pill physics simulation with realistic hand interactions',
+          'Consequence preview system without spoiling mystery',
+          'Enhanced character animation and facial expressions'
+        ],
+        narrative: {
+          atmosphere: 'Stark white construct room with infinite depth and floating chairs',
+          soundscape: 'Morpheus\' measured breathing with subtle reality distortions',
+          visualElements: 'Ultra-realistic pill rendering with light refraction effects',
+          emotionalTone: 'Profound gravity of choice with time suspension feeling'
+        },
+        interactivity: {
+          pillHover: 'Pills glow and pulse with respective path energy',
+          choiceWeight: 'Decision timer with increasing tension',
+          morpheusReaction: 'Real-time facial expression based on hover duration',
+          accessibility: 'Detailed audio descriptions of visual metaphors'
+        }
+      }
     }
   },
 

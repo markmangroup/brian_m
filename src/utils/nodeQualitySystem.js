@@ -1,0 +1,335 @@
+/**
+ * Node Quality Enhancement System
+ * Systematic approach to making each Matrix node a 10/10 experience
+ */
+
+// 🎯 Quality Rating Criteria (each scored 0-10)
+export const QUALITY_CRITERIA = {
+  narrative: {
+    name: 'Narrative Depth',
+    description: 'Rich storytelling, dialogue quality, and atmospheric details',
+    weight: 20,
+    indicators: [
+      'Compelling dialogue with character voice',
+      'Immersive atmosphere and environmental storytelling',
+      'Emotional depth and user connection',
+      'Lore consistency and world-building'
+    ]
+  },
+  interactivity: {
+    name: 'Interactive Features',
+    description: 'User engagement, meaningful choices, and interactive elements',
+    weight: 20,
+    indicators: [
+      'Meaningful user actions and choices',
+      'Responsive UI elements and feedback',
+      'Puzzles and challenges that feel rewarding',
+      'Progress tracking and achievement systems'
+    ]
+  },
+  visual: {
+    name: 'Visual Polish',
+    description: 'Animation quality, effects, theming, and visual appeal',
+    weight: 15,
+    indicators: [
+      'Smooth animations and transitions',
+      'Consistent theme integration',
+      'Visual effects that enhance narrative',
+      'Responsive design across devices'
+    ]
+  },
+  technical: {
+    name: 'Technical Excellence',
+    description: 'Performance, accessibility, and code quality',
+    weight: 15,
+    indicators: [
+      'Fast loading and smooth performance',
+      'Full accessibility compliance',
+      'Error handling and edge cases',
+      'Clean, maintainable code structure'
+    ]
+  },
+  character: {
+    name: 'Character Development',
+    description: 'NPC personality, dialogue systems, and character growth',
+    weight: 15,
+    indicators: [
+      'Memorable NPC personalities',
+      'Dynamic dialogue based on context',
+      'Character relationship tracking',
+      'Believable character motivations'
+    ]
+  },
+  consequences: {
+    name: 'Choice Consequences',
+    description: 'Impact of decisions and branching narrative paths',
+    weight: 15,
+    indicators: [
+      'Meaningful choice consequences',
+      'Visible impact on story progression',
+      'Replayability value',
+      'Multiple valid solution paths'
+    ]
+  }
+};
+
+// 🎯 Node Enhancement Priority Levels
+export const ENHANCEMENT_PRIORITY = {
+  CRITICAL: {
+    level: 'critical',
+    color: '#ef4444',
+    description: 'Breaks user experience or blocks progression',
+    timeframe: 'Immediate (1-2 days)'
+  },
+  HIGH: {
+    level: 'high', 
+    color: '#f59e0b',
+    description: 'Significantly impacts user engagement',
+    timeframe: 'Short term (3-7 days)'
+  },
+  MEDIUM: {
+    level: 'medium',
+    color: '#eab308', 
+    description: 'Noticeable improvement to user experience',
+    timeframe: 'Medium term (1-2 weeks)'
+  },
+  LOW: {
+    level: 'low',
+    color: '#22c55e',
+    description: 'Polish and refinement improvements',
+    timeframe: 'Long term (2+ weeks)'
+  }
+};
+
+// 🎯 Enhancement Implementation Templates
+export const ENHANCEMENT_TEMPLATES = {
+  scene: {
+    checklist: [
+      '✅ Rich atmospheric description',
+      '✅ Interactive environmental elements', 
+      '✅ Character presence and dialogue',
+      '✅ Visual effects and animations',
+      '✅ Sound design integration',
+      '✅ Accessibility features',
+      '✅ Mobile responsiveness',
+      '✅ Performance optimization'
+    ],
+    requiredFeatures: ['atmosphere', 'visualElements', 'interactivity', 'accessibility']
+  },
+  dialogue: {
+    checklist: [
+      '✅ Character voice consistency',
+      '✅ Emotional depth and subtext',
+      '✅ Player dialogue choices',
+      '✅ Dynamic response system',
+      '✅ Typography and formatting',
+      '✅ Audio/voice integration',
+      '✅ Context-aware dialogue',
+      '✅ Conversation memory'
+    ],
+    requiredFeatures: ['characterVoice', 'emotionalDepth', 'choices', 'context']
+  },
+  choice: {
+    checklist: [
+      '✅ Meaningful decision options',
+      '✅ Clear consequence preview',
+      '✅ Time pressure (if appropriate)',
+      '✅ Visual choice presentation',
+      '✅ Hover/focus feedback',
+      '✅ Confirmation systems',
+      '✅ Undo mechanisms (if appropriate)',
+      '✅ Analytics tracking'
+    ],
+    requiredFeatures: ['meaningfulChoices', 'consequences', 'feedback', 'analytics']
+  },
+  training: {
+    checklist: [
+      '✅ Progressive skill building',
+      '✅ Interactive tutorials',
+      '✅ Performance feedback',
+      '✅ Mastery indicators',
+      '✅ Retry mechanisms',
+      '✅ Adaptive difficulty',
+      '✅ Achievement rewards',
+      '✅ Knowledge retention tests'
+    ],
+    requiredFeatures: ['progression', 'feedback', 'mastery', 'adaptive']
+  },
+  ending: {
+    checklist: [
+      '✅ Satisfying narrative conclusion',
+      '✅ Consequence resolution',
+      '✅ Character arc completion',
+      '✅ Replay value indicators',
+      '✅ Achievement unlocks',
+      '✅ Next step guidance',
+      '✅ Emotional impact',
+      '✅ Memorable finale moments'
+    ],
+    requiredFeatures: ['conclusion', 'resolution', 'impact', 'guidance']
+  }
+};
+
+// 🎯 Quality Assessment Functions
+export function calculateNodeQuality(node) {
+  if (!node.data?.enhancement?.qualityRating) {
+    return {
+      overall: 5, // Default neutral rating
+      criteria: Object.keys(QUALITY_CRITERIA).reduce((acc, key) => {
+        acc[key] = 5;
+        return acc;
+      }, {}),
+      suggestions: ['Add enhancement data to enable quality tracking']
+    };
+  }
+  
+  const enhancement = node.data.enhancement;
+  const overall = enhancement.qualityRating || 5;
+  
+  return {
+    overall,
+    criteria: enhancement.criteria || {},
+    suggestions: enhancement.improvements || [],
+    priority: overall < 7 ? 'HIGH' : overall < 9 ? 'MEDIUM' : 'LOW'
+  };
+}
+
+export function getNextImprovements(node, limit = 3) {
+  const quality = calculateNodeQuality(node);
+  const improvements = node.data?.enhancement?.improvements || [];
+  
+  return improvements
+    .slice(0, limit)
+    .map((improvement, index) => ({
+      id: `${node.id}-improvement-${index}`,
+      description: improvement,
+      priority: quality.priority,
+      estimatedEffort: estimateEffort(improvement),
+      category: categorizeImprovement(improvement)
+    }));
+}
+
+export function estimateEffort(improvement) {
+  const effort = {
+    small: 'Small (1-3 hours)',
+    medium: 'Medium (0.5-1 day)', 
+    large: 'Large (1-3 days)',
+    xlarge: 'X-Large (3+ days)'
+  };
+  
+  const text = improvement.toLowerCase();
+  
+  if (text.includes('add') && (text.includes('system') || text.includes('engine'))) {
+    return effort.xlarge;
+  }
+  if (text.includes('enhance') || text.includes('improve')) {
+    return effort.medium;
+  }
+  if (text.includes('fix') || text.includes('update')) {
+    return effort.small;
+  }
+  
+  return effort.medium; // Default
+}
+
+export function categorizeImprovement(improvement) {
+  const text = improvement.toLowerCase();
+  
+  if (text.includes('dialogue') || text.includes('character') || text.includes('story')) {
+    return 'narrative';
+  }
+  if (text.includes('interactive') || text.includes('choice') || text.includes('puzzle')) {
+    return 'interactivity';
+  }
+  if (text.includes('visual') || text.includes('animation') || text.includes('effect')) {
+    return 'visual';
+  }
+  if (text.includes('accessibility') || text.includes('performance') || text.includes('optimization')) {
+    return 'technical';
+  }
+  
+  return 'general';
+}
+
+// 🎯 Enhancement Progress Tracking
+export function trackEnhancementProgress(nodeId, improvementId, status = 'in-progress') {
+  const key = `enhancement-${nodeId}-${improvementId}`;
+  const progress = {
+    id: improvementId,
+    nodeId,
+    status, // 'planned', 'in-progress', 'testing', 'completed'
+    startedAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    completedAt: status === 'completed' ? new Date().toISOString() : null
+  };
+  
+  localStorage.setItem(key, JSON.stringify(progress));
+  return progress;
+}
+
+export function getEnhancementProgress(nodeId) {
+  const keys = Object.keys(localStorage).filter(key => 
+    key.startsWith(`enhancement-${nodeId}-`)
+  );
+  
+  return keys.map(key => {
+    try {
+      return JSON.parse(localStorage.getItem(key));
+    } catch {
+      return null;
+    }
+  }).filter(Boolean);
+}
+
+// 🎯 Quality Dashboard Data
+export function generateQualityReport(nodes) {
+  const report = {
+    totalNodes: nodes.length,
+    averageQuality: 0,
+    qualityDistribution: { low: 0, medium: 0, high: 0 },
+    topPriorityNodes: [],
+    completedImprovements: 0,
+    pendingImprovements: 0
+  };
+  
+  let totalQuality = 0;
+  
+  nodes.forEach(node => {
+    const quality = calculateNodeQuality(node);
+    totalQuality += quality.overall;
+    
+    if (quality.overall < 6) {
+      report.qualityDistribution.low++;
+    } else if (quality.overall < 8) {
+      report.qualityDistribution.medium++;
+    } else {
+      report.qualityDistribution.high++;
+    }
+    
+    if (quality.overall < 8) {
+      report.topPriorityNodes.push({
+        id: node.id,
+        title: node.data?.title || node.id,
+        quality: quality.overall,
+        priority: quality.priority,
+        improvements: getNextImprovements(node, 1)
+      });
+    }
+  });
+  
+  report.averageQuality = totalQuality / nodes.length;
+  report.topPriorityNodes.sort((a, b) => a.quality - b.quality);
+  
+  return report;
+}
+
+export default {
+  QUALITY_CRITERIA,
+  ENHANCEMENT_PRIORITY,
+  ENHANCEMENT_TEMPLATES,
+  calculateNodeQuality,
+  getNextImprovements,
+  trackEnhancementProgress,
+  getEnhancementProgress,
+  generateQualityReport
+}; 
