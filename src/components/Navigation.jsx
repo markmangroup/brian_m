@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import UserIcon from './UserIcon';
+import ThemeToggle from './ThemeToggle';
 import {
   FaRoad,
   FaPaintBrush,
@@ -29,9 +30,9 @@ export default function Navigation() {
   const { pathname } = useLocation();
 
   return (
-    <div className="fixed top-2 left-0 right-0 z-50">
-      <div className="overflow-x-auto px-4">
-        <nav className="flex w-max gap-2 bg-white/80 backdrop-blur-md shadow-xl rounded-full px-4 py-2 mx-auto">
+    <div className="fixed top-2 left-0 right-0 z-[100] navigation-container">
+      <div className="px-4">
+        <nav className="flex w-max gap-2 bg-white/80 backdrop-blur-md shadow-xl rounded-full px-4 py-3 mx-auto items-center relative">
           {navItems.map(({ name, path, color, icon: Icon }) => (
             <Link
               key={path}
@@ -44,6 +45,11 @@ export default function Navigation() {
               {name}
             </Link>
           ))}
+          
+          {/* Theme Toggle - Positioned to allow dropdown overflow */}
+          <div className="ml-2 pl-2 border-l border-gray-300 relative">
+            <ThemeToggle />
+          </div>
         </nav>
       </div>
       <UserIcon />

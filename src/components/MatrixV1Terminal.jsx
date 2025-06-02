@@ -3,7 +3,9 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { UserContext } from './UserContext';
 import { NAOE_QUOTES } from '../data/naoeQuotes';
 import useTypewriterEffect from './useTypewriterEffect';
-import MatrixRain from './MatrixRain';
+import MatrixLayout, { MatrixCard, MatrixButton } from './MatrixLayout';
+import { CharacterDialogue } from './CharacterSystem';
+import NPC from '../pages/matrix-v1/components/NPC';
 
 const QUOTE_OPTIONS = [
   { text: 'There is no...', options: ['Door', 'Spoon', 'Exit', 'Escape'], correct: 'Spoon' },
@@ -23,7 +25,7 @@ export default function MatrixV1Terminal() {
   const stateName = location.state?.name || userName;
   const [typedMsg, typedMsgDone] = useTypewriterEffect(msg, 50);
   const [morpheusText, morpheusDone] = useTypewriterEffect(
-    "Morpheus: \"I'm going to show you how deep the rabbit hole goes. Answer this question to prove you are The One...\"",
+    "I'm going to show you how deep the rabbit hole goes. Answer this question to prove you are The One...",
     50
   );
 
@@ -32,75 +34,127 @@ export default function MatrixV1Terminal() {
     setSelectedQuote(QUOTE_OPTIONS[Math.floor(Math.random() * QUOTE_OPTIONS.length)]);
   }, []);
 
-  const grant = () => {
-    const q = NAOE_QUOTES[Math.floor(Math.random() * NAOE_QUOTES.length)];
-    setMsg(`Access granted. Welcome to the real world. ${q.text} — ${q.attribution}`);
-    setOk(true);
-    setIsTransitioning(true);
-    localStorage.setItem('matrixV1Access', 'true');
-    setTimeout(() =>
-      navigate('/matrix-v1/checkpoint', { state: { name: stateName } }),
-    2000);
-  };
-
   const handleAnswer = (answer) => {
+    const newAttempts = attempts + 1;
+    setAttempts(newAttempts);
+
     if (answer === selectedQuote.correct) {
-      grant();
+      setMsg('ACCESS GRANTED');
+      localStorage.setItem('matrixV1Access', 'true');
+      setIsTransitioning(true);
+      
+      // Show success message longer (3 seconds instead of 2)
+      setTimeout(() => {
+        navigate('/matrix-v1/checkpoint', { state: { name: stateName } });
+      }, 3000);
     } else {
-      setAttempts(prev => prev + 1);
-      if (attempts >= 2) {
-        setMsg('Agent Echo: "You are not The One. The Matrix has you... Try again."');
+      if (newAttempts >= 3) {
+        setMsg('System lock detected. Agent dispatched.');
+        setOk(true);
       } else {
-        setMsg('Access denied. Try again.');
+        setMsg('ACCESS DENIED. Try again.');
+        setTimeout(() => setMsg(''), 2000);
       }
     }
   };
 
   const logout = () => {
     localStorage.removeItem('matrixV1Access');
-    setOk(false);
-    setMsg('');
-    setAttempts(0);
+    navigate('/matrix-v1');
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-black text-green-500 font-mono space-y-6 relative overflow-hidden">
-      {/* Matrix Rain background */}
-      {typeof window !== 'undefined' && !isTransitioning && (
-        <MatrixRain zIndex={0} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
-      )}
-      
-      <div className="relative z-10 flex flex-col items-center space-y-6 w-full max-w-md px-4">
-        <h1 className="text-4xl font-bold">Matrix Terminal</h1>
+    <MatrixLayout>
+      <div className="w-full max-w-md space-y-6 text-center">
+        <h1 className="text-3xl font-bold heading-theme animate-theme-glow">
+          Matrix Terminal
+        </h1>
 
-        {!ok && selectedQuote && !isTransitioning && (
-          <div className="w-full space-y-6 animate-fade-in">
-            <p className="text-lg text-center">{morpheusText}</p>
-            <div className="bg-black/50 p-6 rounded-lg border border-green-700">
-              <p className="text-xl mb-4">{selectedQuote.text}</p>
+        {/* Morpheus Introduction */}
+        <div className="mb-8">
+          <NPC speaker="morpheus" style="mentor">
+            {morpheusText}
+          </NPC>
+        </div>
+
+        {/* Quiz Section */}
+        {selectedQuote && morpheusDone && !msg && (
+          <div className="space-y-6">
+            <div className="bg-theme-overlay border-2 border-theme-primary rounded-lg p-6 backdrop-blur-md">
+              <p className="text-xl font-bold text-theme-bright mb-6 font-theme-primary">
+                "{selectedQuote.text}"
+              </p>
+              
               <div className="grid grid-cols-2 gap-3">
                 {selectedQuote.options.map((option) => (
-                  <button
+                  <MatrixButton
                     key={option}
                     onClick={() => handleAnswer(option)}
-                    className="px-4 py-2 rounded bg-green-900 text-green-500 hover:bg-green-800 transition-colors"
+                    variant="primary"
+                    size="md"
+                    className="text-sm font-bold"
+                    ariaLabel={`Answer: ${option}`}
                   >
                     {option}
-                  </button>
+                  </MatrixButton>
                 ))}
               </div>
             </div>
+
+            {attempts > 0 && attempts < 3 && (
+              <div className="text-theme-accent text-sm">
+                Attempts: {attempts}/3
+              </div>
+            )}
           </div>
         )}
 
-        {msg && <p className="text-lg text-center">{typedMsg}</p>}
+        {/* Result Messages */}
+        {msg && (
+          <div className={`
+            p-6 rounded-lg border-2 backdrop-blur-md transition-all duration-500
+            ${msg.includes('GRANTED') 
+              ? 'border-green-400/60 bg-green-900/20 text-green-200 shadow-lg shadow-green-400/20' 
+              : msg.includes('DENIED')
+              ? 'border-yellow-400/60 bg-yellow-900/20 text-yellow-200 shadow-lg shadow-yellow-400/20'
+              : 'border-red-400/60 bg-red-900/20 text-red-200 shadow-lg shadow-red-400/20'
+            }
+          `}>
+            <p className={`
+              text-2xl font-bold font-theme-primary
+              ${msg.includes('GRANTED') ? 'animate-pulse slow-reveal' : ''}
+            `} role="status" aria-live="polite">
+              {typedMsg}
+            </p>
+            
+            {msg.includes('GRANTED') && (
+              <div className="mt-4 text-theme-bright">
+                <div className="text-sm opacity-80">Initiating consciousness transfer...</div>
+                <div className="w-full bg-gray-800 rounded-full h-3 mt-2 overflow-hidden">
+                  <div className="h-full bg-green-400 rounded-full animate-pulse transition-all duration-1000" 
+                       style={{ width: '100%', animationDuration: '3s' }} />
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
-        {ok && (
-          <button onClick={logout} className="text-sm underline text-green-400">
-            log out
-          </button>
+        {/* Agent Warning */}
+        {attempts >= 3 && (
+          <div className="space-y-4">
+            <NPC name="Agent Echo" quote="You are not The One. Terminating connection." style="agent" />
+            <MatrixButton 
+              onClick={logout} 
+              variant="danger" 
+              size="lg"
+              className="w-full"
+              ariaLabel="Log out of Matrix terminal"
+            >
+              <span className="underline">Disconnect</span>
+            </MatrixButton>
+          </div>
         )}
       </div>
-    </div>
+    </MatrixLayout>
   );
 } 

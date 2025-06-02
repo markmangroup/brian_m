@@ -1,46 +1,51 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import MatrixRain from '../../components/MatrixRain';
 import useTypewriterEffect from '../../components/useTypewriterEffect';
+import MatrixLayout, { MatrixButton } from '../../components/MatrixLayout';
+import { useStoryProgress } from '../../hooks/useStoryProgress';
+import { useStoryActions } from '../../store/useAppStore';
 
-const MSG_YES = [
-  'Forking Reality',
-  'You chose to believe in choice. The path ahead is uncertain, but yours to shape.'
-];
-const MSG_NO = [
-  'Forking Reality',
-  'You denied choice. The system will attempt to guide you, but resistance is possible.'
+const MESSAGES = [
+  'Reality fractures at this juncture.',
+  'Two paths diverge in the digital forest.',
+  'Your choice will determine the nature of your experience.',
+  'Choose your path through the labyrinth of possibility.'
 ];
 
 export default function Stage3() {
   const navigate = useNavigate();
   const [msgIndex, setMsgIndex] = useState(0);
-  const [answer, setAnswer] = useState(null);
-  const [typed, done] = useTypewriterEffect(
-    answer === 'yes' ? MSG_YES[msgIndex] : MSG_NO[msgIndex],
-    50
-  );
   const [showChoices, setShowChoices] = useState(false);
+  const [typed, done] = useTypewriterEffect(MESSAGES[msgIndex], 50);
+  const { makeStoryChoice } = useStoryActions();
+
+  // Track story progression - mark as milestone when choices are shown
+  const milestone = showChoices ? 'completed-stage-3' : null;
+  useStoryProgress('matrix-v1-stage-3', milestone);
 
   useEffect(() => {
-    if (!localStorage.getItem('matrixV1Access')) {
+    if (localStorage.getItem('matrixV1Access') !== 'true') {
       navigate('/matrix-v1');
     }
-    setAnswer(localStorage.getItem('matrixV1Answer_stage2'));
   }, [navigate]);
 
   useEffect(() => {
-    if (done && msgIndex < 1) {
-      const t = setTimeout(() => setMsgIndex(i => i + 1), 1000);
+    if (done && msgIndex < MESSAGES.length - 1) {
+      const t = setTimeout(() => setMsgIndex(i => i + 1), 1500);
       return () => clearTimeout(t);
-    }
-    if (done && msgIndex === 1) {
+    } else if (done && msgIndex === MESSAGES.length - 1) {
       setShowChoices(true);
     }
   }, [done, msgIndex]);
 
   const handlePath = (path) => {
-    localStorage.setItem('matrixV1Fork', path);
+    // Record the path choice in Zustand store
+    makeStoryChoice('stage-3-path', { 
+      path, 
+      timestamp: Date.now(),
+      description: path === 'A' ? 'Compliance Route' : 'Anomaly Route'
+    });
+
     if (path === 'A') {
       navigate('/matrix-v1/compliance-route');
     } else {
@@ -49,33 +54,48 @@ export default function Stage3() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-black text-green-500 font-mono space-y-6 relative overflow-hidden">
-      {typeof window !== 'undefined' && (
-        <MatrixRain zIndex={0} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
-      )}
-      <div className="relative z-10 flex flex-col items-center space-y-6 w-full max-w-md px-4">
-        <h1 className="text-3xl font-bold">Forking Reality</h1>
-        <p className="text-lg text-center whitespace-pre-line">{typed}</p>
+    <MatrixLayout>
+      <div className="w-full max-w-md text-center space-y-6">
+        <h1 className="text-3xl font-bold heading-theme">
+          Forking Reality
+        </h1>
+        
+        <p className="text-lg whitespace-pre-line" role="status" aria-live="polite">
+          {typed}
+        </p>
+        
         {showChoices && (
-          <div className="flex flex-col items-center space-y-4">
-            <div className="text-xl font-mono">Choose your path:</div>
-            <div className="flex space-x-4">
-              <button
+          <div className="space-y-4">
+            <div className="text-xl font-mono text-theme-accent">
+              Choose your path:
+            </div>
+            <div className="flex gap-4 justify-center">
+              <MatrixButton
                 onClick={() => handlePath('A')}
-                className="px-6 py-2 rounded bg-green-900 text-green-500 hover:bg-green-800 transition-colors"
+                variant="success"
+                size="lg"
+                ariaLabel="Choose Compliance Route - Follow the established path"
               >
                 Compliance Route
-              </button>
-              <button
+              </MatrixButton>
+              <MatrixButton
                 onClick={() => handlePath('B')}
-                className="px-6 py-2 rounded bg-green-900 text-green-500 hover:bg-green-800 transition-colors"
+                variant="danger"
+                size="lg"
+                ariaLabel="Choose Anomaly Route - Forge your own path"
               >
                 Anomaly Route
-              </button>
+              </MatrixButton>
+            </div>
+            <div className="text-sm text-theme-muted mt-4">
+              <p>
+                <strong>Compliance:</strong> Follow established protocols<br/>
+                <strong>Anomaly:</strong> Question the system itself
+              </p>
             </div>
           </div>
         )}
       </div>
-    </div>
+    </MatrixLayout>
   );
 } 

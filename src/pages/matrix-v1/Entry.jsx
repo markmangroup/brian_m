@@ -1,71 +1,106 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import useTypewriterEffect from '../../components/useTypewriterEffect';
-import Rain from './components/Rain';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import MatrixLayout, { MatrixButton } from '../../components/MatrixLayout';
 import NPC from './components/NPC';
+import useTypewriterEffect from '../../components/useTypewriterEffect';
+import { useStoryProgress } from '../../hooks/useStoryProgress';
+import { useAppStore } from '../../store/useAppStore';
 
 export default function Entry() {
-  const [name, setName] = useState(() => localStorage.getItem('matrixV1Name') || '');
-  const [entered, setEntered] = useState(!!name);
+  const [showChoice, setShowChoice] = useState(false);
   const navigate = useNavigate();
-  const [intro] = useTypewriterEffect('Welcome to the Matrix', 50);
-  const [prompt] = useTypewriterEffect('Enter your name to begin:', 50);
+  const location = useLocation();
+  const userName = useAppStore((state) => state.user.name);
+  
+  // Check if user came from name prompt with a name
+  const hasName = userName || localStorage.getItem('matrixV1Name') || location.state?.name;
+  const fromNamePrompt = location.state?.fromNamePrompt;
 
-  const submit = (e) => {
-    e.preventDefault();
-    const trimmed = name.trim();
-    if (trimmed) {
-      localStorage.setItem('matrixV1Name', trimmed);
-      setEntered(true);
+  // Track story progression
+  useStoryProgress('matrix-v1-entry', 'entered-entry');
+
+  const [intro] = useTypewriterEffect('Welcome to the Matrix', 100);
+  const [prompt] = useTypewriterEffect(
+    hasName ? `Welcome back, ${hasName}` : 'Identity verification required', 
+    50
+  );
+
+  // If no name and didn't come from name prompt, redirect to name prompt
+  useEffect(() => {
+    if (!hasName && !fromNamePrompt) {
+      navigate('/matrix-v1/name-prompt');
+    } else if (hasName) {
+      // Show choice after typewriter effects
+      const timer = setTimeout(() => setShowChoice(true), 3000);
+      return () => clearTimeout(timer);
     }
-  };
+  }, [hasName, fromNamePrompt, navigate]);
 
-  const red = () => navigate('/matrix-v1/terminal', { state: { name } });
-  const blue = () => navigate('/');
+  const red = () => navigate('/matrix-v1/terminal', { state: { name: hasName } });
+  const blue = () => navigate('/snack-trail', { state: { name: hasName } });
+
+  // If no name, show loading while redirecting
+  if (!hasName) {
+    return (
+      <MatrixLayout>
+        <div className="w-full max-w-md space-y-6 text-center">
+          <h1 className="text-4xl font-bold heading-theme animate-theme-glow">
+            {intro}
+          </h1>
+          <p className="text-lg subheading-theme">
+            {prompt}
+          </p>
+          <div className="animate-spin w-8 h-8 border-2 border-theme-accent border-t-transparent rounded-full mx-auto" />
+          <p className="text-sm text-theme-muted">Redirecting to identity verification...</p>
+        </div>
+      </MatrixLayout>
+    );
+  }
 
   return (
-    <div className="flex flex-col items-center justify-center py-20 space-y-6 min-h-screen relative overflow-hidden">
-      {typeof window !== 'undefined' && (
-        <Rain zIndex={0} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
-      )}
-      <div className="relative z-10 flex flex-col items-center space-y-6 text-center">
-        {!entered && (
+    <MatrixLayout>
+      <div className="w-full max-w-md space-y-8 text-center">
+        <h1 className="text-4xl font-bold heading-theme animate-theme-glow">
+          {intro}
+        </h1>
+        
+        <p className="text-lg subheading-theme">
+          {prompt}
+        </p>
+
+        {showChoice && (
           <>
-            <h1 className="text-4xl font-bold text-green-500 font-mono">{intro}</h1>
-            <p className="text-xl">{prompt}</p>
-            <form onSubmit={submit} className="flex space-x-2">
-              <input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Player Name"
-                className="px-4 py-2 rounded bg-black border border-green-700 text-green-500 placeholder-green-700 focus:outline-none"
-              />
-              <button type="submit" className="px-4 py-2 rounded bg-green-700 text-black hover:bg-green-600">
-                Enter
-              </button>
-            </form>
-          </>
-        )}
-        {entered && (
-          <>
-            <NPC
-              name="Morpheus"
-              quote={`I've been waiting for you, ${name}. You've felt it, haven't you?`}
-              style="mentor"
-              className="mb-2"
-            />
-            <p className="text-lg">Hello, {name}. Choose your destiny.</p>
-            <div className="flex space-x-4">
-              <button onClick={red} className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-500">
-                Red Pill
-              </button>
-              <button onClick={blue} className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-500">
-                Blue Pill
-              </button>
+            <h2 className="text-2xl font-bold heading-theme">
+              This is your last chance, {hasName}.
+            </h2>
+            
+            <NPC type="mentor" speaker="morpheus">
+              "After this, there is no going back. You take the blue pill - the story ends, you wake up in your bed and believe whatever you want to believe. You take the red pill - you stay in Wonderland, and I show you how deep the rabbit hole goes."
+            </NPC>
+
+            <div className="space-y-4">
+              <MatrixButton 
+                onClick={red} 
+                variant="danger" 
+                size="lg"
+                className="w-full"
+                ariaLabel="Take the red pill - Enter the Matrix"
+              >
+                🔴 Red Pill
+              </MatrixButton>
+              <MatrixButton 
+                onClick={blue} 
+                variant="info" 
+                size="lg"
+                className="w-full"
+                ariaLabel="Take the blue pill - Return to normal world"
+              >
+                🔵 Blue Pill
+              </MatrixButton>
             </div>
           </>
         )}
       </div>
-    </div>
+    </MatrixLayout>
   );
 }

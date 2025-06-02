@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Global Theme System */
+@import './theme/global-theme.css';
+
 :root {
   color-scheme: dark;
 }
@@ -22,121 +25,396 @@ code {
     monospace;
 }
 
+/* Performance optimized animations */
 @layer utilities {
-  @keyframes progress {
-    from {
-      transform: translateX(-100%);
+  /* Smooth fade-in for new nodes */
+  @keyframes fade-slide-in {
+    from { 
+      opacity: 0; 
+      transform: translateY(-10px) scale(0.95);
     }
-    to {
-      transform: translateX(0);
+    to { 
+      opacity: 1; 
+      transform: translateY(0) scale(1);
     }
   }
-  .animate-progress {
-    animation: progress 3s linear forwards;
+  
+  .animate-fade-slide {
+    animation: fade-slide-in 400ms cubic-bezier(0.4, 0, 0.2, 1);
   }
-  @keyframes shake {
+
+  /* Optimized pulse glow */
+  @keyframes pulse-glow {
+    0%, 100% {
+      filter: drop-shadow(0 0 4px currentColor);
+      opacity: 1;
+    }
+    50% {
+      filter: drop-shadow(0 0 8px currentColor);
+      opacity: 0.8;
+    }
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+    will-change: filter, opacity;
+  }
+
+  /* Subtle box pulse for groups */
+  @keyframes pulse-box {
+    0%, 100% { 
+      box-shadow: 0 0 0 0 rgba(255,255,255,0.1);
+      border-color: currentColor;
+    }
+    50% { 
+      box-shadow: 0 0 0 4px rgba(255,255,255,0.05);
+      border-color: rgba(255,255,255,0.6);
+    }
+  }
+
+  .animate-pulse-box {
+    animation: pulse-box 3s ease-in-out infinite;
+    will-change: box-shadow, border-color;
+  }
+
+  /* Enhanced hover effects for nodes */
+  .matrix-node-hover {
+    transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .matrix-node-hover:hover {
+    filter: drop-shadow(0 0 8px currentColor);
+  }
+
+  /* Better button transitions */
+  .expand-button {
+    transition: all 200ms ease-in-out;
+  }
+
+  .expand-button:hover {
+    background-color: rgba(6, 182, 212, 0.2);
+    border-color: rgba(6, 182, 212, 0.6);
+  }
+
+  /* Overlay group enhancements */
+  .overlay-group-enhanced {
+    backdrop-filter: blur(8px);
+    border-style: dashed;
+    border-width: 2px;
+  }
+
+  /* Improved shake with less jarring movement */
+  @keyframes subtle-shake {
     0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    75% { transform: translateX(5px); }
+    25% { transform: translateX(-2px); }
+    75% { transform: translateX(2px); }
   }
-  .animate-shake {
-    animation: shake 0.4s linear;
+
+  .animate-subtle-shake {
+    animation: subtle-shake 0.5s ease-in-out;
+  }
+
+  /* Matrix-style glitch effect */
+  @keyframes matrix-glitch {
+    0%, 100% { transform: translate(0); }
+    10% { transform: translate(-2px, 1px); }
+    20% { transform: translate(1px, -1px); }
+    30% { transform: translate(-1px, 2px); }
+    40% { transform: translate(2px, -2px); }
+    50% { transform: translate(-2px, -1px); }
+    60% { transform: translate(1px, 1px); }
+    70% { transform: translate(-1px, -2px); }
+    80% { transform: translate(2px, 1px); }
+    90% { transform: translate(-2px, 2px); }
+  }
+
+  .animate-matrix-glitch {
+    animation: matrix-glitch 0.3s infinite;
+  }
+
+  /* Smooth expand/collapse transition */
+  .transition-expand {
+    transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Enhanced focus styles */
+  .focus-matrix {
+    @apply focus:outline-none focus:ring-2 focus:ring-cyan-400/50 focus:ring-offset-2 focus:ring-offset-gray-900;
+  }
+
+  /* Matrix-style text glow */
+  .text-glow {
+    text-shadow: 0 0 8px currentColor;
+  }
+
+  /* Enhanced node hover effects */
+  .hover-matrix {
+    @apply hover:shadow-lg hover:shadow-cyan-500/20 hover:ring-2 hover:ring-cyan-400/40;
+  }
+
+  /* Grid background optimization */
+  .bg-grid-small {
+    background-image: 
+      linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+    will-change: auto; /* Remove will-change from static backgrounds */
+  }
+
+  /* Focus transitions */
+  .transition-focus {
+    transition: opacity 300ms ease-in-out, transform 300ms ease-in-out;
+    will-change: opacity, transform;
+  }
+
+  .transition-focus.focused {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .transition-focus.unfocused {
+    opacity: 0.3;
+    transform: scale(0.98);
   }
 }
 
-/* Mermaid Diagram Styles */
-.mermaid-diagram {
-  @apply text-sm;
-}
-
-.mermaid-diagram .node {
+/* React Flow customizations */
+.react-flow__node {
   @apply transition-all duration-300;
+  will-change: transform; /* Only for draggable nodes */
 }
 
-.mermaid-diagram .node:hover {
-  @apply filter brightness-110;
+.react-flow__edge {
+  @apply transition-all duration-300;
+  will-change: auto; /* Remove will-change from edges unless animating */
 }
 
-.mermaid-diagram .node[data-tooltip] {
-  @apply relative;
+.react-flow__edge-path {
+  @apply stroke-cyan-400/60;
+  stroke-width: 2;
 }
 
-.mermaid-diagram .node[data-tooltip]:hover::after {
-  content: attr(data-tooltip);
-  @apply absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 bg-gray-800 text-white text-xs rounded opacity-0 transition-opacity duration-200 whitespace-nowrap;
-  opacity: 1;
+.react-flow__edge.selected .react-flow__edge-path {
+  @apply stroke-cyan-400;
+  stroke-width: 3;
 }
 
-.mermaid-diagram .edgeLabel {
-  @apply bg-gray-800 text-white px-2 py-1 rounded text-xs;
+.react-flow__edge.animated .react-flow__edge-path {
+  stroke-dasharray: 5;
+  animation: flow-dash 1s linear infinite;
 }
 
-.mermaid-diagram .edgePath path {
-  @apply stroke-gray-500;
-}
-
-/* Mobile Responsiveness */
-@media (max-width: 640px) {
-  .mermaid-diagram {
-    @apply transform scale-75 origin-top;
+@keyframes flow-dash {
+  to {
+    stroke-dashoffset: -10;
   }
 }
 
-.matrix-glow-green {
-  @apply shadow-[0_0_12px_#00ff00] border-2 border-green-400 animate-pulse;
+/* Overlay group styling */
+.overlay-group {
+  @apply rounded-lg border-2 border-cyan-400/20 bg-cyan-900/10 backdrop-blur-sm;
+  animation: pulse-box 3s ease-in-out infinite;
 }
 
-.matrix-glow-purple {
-  @apply shadow-[0_0_12px_#8000ff] border-2 border-purple-400 animate-pulse;
+.overlay-group-label {
+  @apply text-sm font-mono text-cyan-400/80 tracking-wider;
+  text-shadow: 0 0 8px rgba(34, 211, 238, 0.3);
 }
 
-.matrix-trap-red {
-  @apply bg-red-800 text-white border border-red-500;
+/* Overlay specific optimizations */
+.overlay-group-container {
+  padding: 12px 0 0 12px;
+  z-index: 5;
+  pointer-events: none;
+  contain: layout style; /* CSS containment for better performance */
 }
 
-.matrix-gradient-purple {
-  @apply bg-gradient-to-br from-purple-700 to-fuchsia-600 text-white;
-}
-@layer utilities {
-  @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    20%, 60% { transform: translateX(-4px); }
-    40%, 80% { transform: translateX(4px); }
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-slide,
+  .animate-pulse-glow,
+  .animate-pulse-box,
+  .animate-subtle-shake {
+    animation: none;
   }
-  .animate-shake {
-    animation: shake 0.5s;
-  }
-  @keyframes flash-once {
-    0% { opacity: 1; }
-    50% { opacity: 0.3; }
-    100% { opacity: 1; }
-  }
-  .animate-flash-once {
-    animation: flash-once 0.5s ease-in-out;
-  }
-  @keyframes glow-green {
-    0%, 100% { box-shadow: 0 0 4px #22c55e; }
-    50% { box-shadow: 0 0 12px #22c55e; }
-  }
-  .animate-glow-green {
-    animation: glow-green 1s ease-in-out infinite;
-  }
-  @keyframes flash-green {
-    0%, 100% { box-shadow: 0 0 0 0 #22c55e; }
-    50% { box-shadow: 0 0 20px #22c55e; }
-  }
-  .animate-flash-green {
-    animation: flash-green 0.5s ease-in-out;
+  
+  .transition-focus {
+    transition: none;
   }
 }
 
-/* Subtle shake animation */
-.shake {
-  animation: shake 0.5s ease-in-out;
+/* New Multiverse Theme Animations */
+@keyframes matrix-glitch {
+  0%, 100% { transform: translate(0); }
+  10% { transform: translate(-2px, 1px); }
+  20% { transform: translate(1px, -1px); }
+  30% { transform: translate(-1px, 2px); }
+  40% { transform: translate(2px, -2px); }
+  50% { transform: translate(-2px, -1px); }
+  60% { transform: translate(1px, 1px); }
+  70% { transform: translate(-1px, -2px); }
+  80% { transform: translate(2px, 1px); }
+  90% { transform: translate(-2px, 2px); }
 }
 
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-4px); }
-  75% { transform: translateX(4px); }
+@keyframes pulse-box {
+  0%, 100% { 
+    box-shadow: 0 0 10px rgba(6, 182, 212, 0.3); 
+    border-color: rgba(6, 182, 212, 0.4);
+  }
+  50% { 
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.6); 
+    border-color: rgba(6, 182, 212, 0.8);
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes reality-shift {
+  0% { filter: hue-rotate(0deg); }
+  25% { filter: hue-rotate(90deg); }
+  50% { filter: hue-rotate(180deg); }
+  75% { filter: hue-rotate(270deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+@keyframes digital-rain {
+  0% { transform: translateY(-100vh); opacity: 1; }
+  100% { transform: translateY(100vh); opacity: 0; }
+}
+
+@keyframes portal-ripple {
+  0% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.1); opacity: 0.4; }
+  100% { transform: scale(1.2); opacity: 0; }
+}
+
+/* Apply animations as utility classes */
+.animate-matrix-glitch {
+  animation: matrix-glitch 0.3s infinite;
+}
+
+.animate-pulse-box {
+  animation: pulse-box 2s ease-in-out infinite;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out forwards;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 8s linear infinite;
+}
+
+.animate-reality-shift {
+  animation: reality-shift 3s ease-in-out infinite;
+}
+
+.animate-digital-rain {
+  animation: digital-rain 2s linear infinite;
+}
+
+.animate-portal-ripple {
+  animation: portal-ripple 1.5s ease-out infinite;
+}
+
+/* Theme-specific grid backgrounds */
+.bg-grid-matrix {
+  background-image: 
+    linear-gradient(rgba(34, 197, 94, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34, 197, 94, 0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.bg-grid-witcher {
+  background-image: 
+    linear-gradient(rgba(245, 158, 11, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(245, 158, 11, 0.1) 1px, transparent 1px);
+  background-size: 25px 25px;
+}
+
+.bg-grid-cyberpunk {
+  background-image: 
+    linear-gradient(rgba(168, 85, 247, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(168, 85, 247, 0.1) 1px, transparent 1px);
+  background-size: 15px 15px;
+}
+
+/* Responsive hover effects for faction cards */
+.faction-card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.faction-card-hover:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Glitch text effect */
+.glitch-text {
+  position: relative;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.glitch-text::before {
+  animation: glitch-1 0.5s infinite;
+  color: rgba(255, 0, 0, 0.8);
+  z-index: -1;
+}
+
+.glitch-text::after {
+  animation: glitch-2 0.5s infinite;
+  color: rgba(0, 255, 255, 0.8);
+  z-index: -2;
+}
+
+@keyframes glitch-1 {
+  0%, 100% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+}
+
+@keyframes glitch-2 {
+  0%, 100% { transform: translate(0); }
+  20% { transform: translate(2px, 2px); }
+  40% { transform: translate(2px, -2px); }
+  60% { transform: translate(-2px, 2px); }
+  80% { transform: translate(-2px, -2px); }
+}
+
+/* Custom scrollbar for dark theme */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(6, 182, 212, 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(6, 182, 212, 0.5);
 }

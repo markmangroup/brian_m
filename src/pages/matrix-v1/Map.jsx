@@ -1,140 +1,62 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import 'reactflow/dist/base.css';
 import { nodes } from './nodes';
 import { edges } from './edges';
-import CustomNode from './CustomNode';
+import { SceneNode, DialogueNode, ChoiceNode, EndingNode } from './CustomNode';
 import MapCanvas from './MapCanvas';
-import Navigation from '../../components/Navigation';
-import Breadcrumbs from '../../components/Breadcrumbs';
-import { getVisited, getCurrentNode } from './MatrixRouteMemory';
 
-function createNodeTypes(currentId, visited) {
-  return {
-    npc: (props) => (
-      <CustomNode
-        {...props}
-        type="npc"
-        selected={props.id === currentId}
-        visited={Array.isArray(visited) && visited.includes(props.id)}
-      />
-    ),
-    choice: (props) => (
-      <CustomNode
-        {...props}
-        type="choice"
-        selected={props.id === currentId}
-        visited={Array.isArray(visited) && visited.includes(props.id)}
-      />
-    ),
-    end: (props) => (
-      <CustomNode
-        {...props}
-        type="end"
-        selected={props.id === currentId}
-        visited={Array.isArray(visited) && visited.includes(props.id)}
-      />
-    ),
-    faction: (props) => (
-      <CustomNode
-        {...props}
-        type="faction"
-        selected={props.id === currentId}
-        visited={Array.isArray(visited) && visited.includes(props.id)}
-      />
-    ),
-    training: (props) => (
-      <CustomNode
-        {...props}
-        type="training"
-        selected={props.id === currentId}
-        visited={Array.isArray(visited) && visited.includes(props.id)}
-      />
-    ),
-  };
-}
+const nodeTypes = {
+  scene: SceneNode,
+  dialogue: DialogueNode,
+  choice: ChoiceNode,
+  ending: EndingNode
+};
+
+const commit = process.env.REACT_APP_GIT_SHA;
 
 export default function MapPage() {
   const [devView, setDevView] = useState(false);
-  const [currentId, setCurrentId] = useState('start');
-  const [visited, setVisited] = useState([]);
-  const [trailEdges, setTrailEdges] = useState(edges);
 
-  useEffect(() => {
-    function updateStatus() {
-      const current = getCurrentNode() || 'start';
-      const visitedNodes = getVisited();
-      const safeVisited = Array.isArray(visitedNodes) ? visitedNodes : [];
-      console.log('visited', safeVisited, 'currentId', current);
-      setCurrentId(current);
-      setVisited(safeVisited);
-    }
-    updateStatus();
-    const interval = setInterval(updateStatus, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    const updated = edges.map((e) => {
-      if (
-        Array.isArray(visited) &&
-        visited.includes(e.source) &&
-        visited.includes(e.target)
-      ) {
-        return {
-          ...e,
-          style: { ...(e.style || {}), stroke: '#22c55e88' },
-        };
-      }
-      return e;
-    });
-    setTrailEdges(updated);
-  }, [visited]);
-
-  const nodeTypes = createNodeTypes(currentId, visited);
-
+  console.log('Rendering nodes:', nodes);
 
   return (
     <div className="relative bg-black bg-gradient-to-br from-gray-900 to-black min-h-screen p-8 overflow-hidden">
-      <Navigation />
-      <Breadcrumbs />
       <h1 className="sr-only">Matrix Story Map</h1>
-      <div style={{ position: 'absolute', top: 10, right: 20, zIndex: 10 }}>
-        <button
-          onClick={() => setDevView((v) => !v)}
-          style={{
-            background: devView ? '#222' : '#111',
-            color: devView ? '#00ff00' : '#fff',
-            border: '1px solid #00ff00',
-            borderRadius: 8,
-            padding: '6px 16px',
-            fontWeight: 600,
-            fontSize: 16,
-            cursor: 'pointer',
-            boxShadow: devView ? '0 0 8px #00ff00' : 'none',
-          }}
-        >
-          🧪 Dev View
-        </button>
+      <div style={{ position: 'fixed', bottom: 20, left: 20, zIndex: 50 }}>
+        <div className="flex gap-2">
+          <Link
+            to="/matrix-v1/map-d3"
+            className="bg-[#111] text-white border border-cyan-400 rounded px-4 py-1 font-mono font-semibold text-sm hover:bg-[#222] hover:text-cyan-400 shadow-[0_0_8px_cyan] transition-all"
+          >
+            🧠 New D3 Story Map
+          </Link>
+          <button
+            onClick={() => setDevView((v) => !v)}
+            className={
+              'bg-[#111] text-white border border-[#00ff00] rounded px-4 py-1 font-mono font-semibold text-sm hover:bg-[#222] hover:text-[#00ff00] shadow-[0_0_8px_#00ff00]'
+            }
+          >
+            🧪 Dev View
+          </button>
+        </div>
       </div>
       {devView && (
         <div
-          style={{
-            position: 'absolute',
-            top: 60,
-            right: 20,
-            background: '#111',
-            color: '#fff',
-            padding: '8px 12px',
-            borderRadius: 8,
-            fontSize: 14,
-            zIndex: 10,
-          }}
+          className="fixed bottom-16 left-5 bg-[#111] text-[#00ff00] px-4 py-2 rounded font-mono text-xs border border-[#00ff00] shadow-[0_0_8px_#00ff00] z-50"
         >
           <div className="font-bold mb-1">Legend</div>
           <div>✅ built, 🛠 in progress, ❌ planned</div>
         </div>
       )}
-      <MapCanvas nodes={nodes} edges={trailEdges} nodeTypes={nodeTypes} />
+      <div className="fixed bottom-2 right-4 font-mono text-xs text-gray-500 bg-black/60 px-2 py-1 rounded shadow z-50">
+        Build: {commit || 'dev'}
+      </div>
+      <MapCanvas
+        nodes={nodes}
+        edges={edges}
+        nodeTypes={nodeTypes}
+      />
     </div>
   );
 }

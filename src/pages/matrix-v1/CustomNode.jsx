@@ -1,200 +1,149 @@
 import React from 'react';
 
-const nodeStyles = {
-  character: {
-    background: '#1a1a1a',
-    border: '2px solid #00ff00',
-    color: '#00ff00',
-    fontWeight: 700,
-    borderRadius: 10,
-    padding: 14,
-    minWidth: 140,
-    textAlign: 'center',
-    fontSize: 18,
-    boxShadow: '0 0 12px #00ff0055',
+// Enhanced base styles with Matrix theme
+const baseCard =
+  'w-72 rounded-md shadow-lg ring-1 ring-white/10 bg-gradient-to-br from-[#111827] to-[#1f2937] transition-all duration-300 font-mono text-white overflow-hidden';
+const hoverCard =
+  'hover:scale-[1.05] hover:shadow-2xl hover:ring-cyan-500/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 cursor-pointer';
+const headerClass = 'text-xs font-semibold uppercase tracking-wider text-white/90 font-mono';
+const bodyClass = 'text-xs leading-relaxed text-gray-300 font-mono';
+
+// Enhanced status system with better visual feedback
+const statusConfig = {
+  live: { 
+    label: 'Built', 
+    icon: '✅', 
+    className: 'text-emerald-400 border-emerald-400/60 bg-emerald-900/40' 
   },
-  choice: {
-    background: 'linear-gradient(135deg, #222 70%, #a259ff 100%)',
-    border: '2px solid #a259ff',
-    color: '#fff',
-    fontWeight: 600,
-    borderRadius: 16,
-    padding: 12,
-    minWidth: 110,
-    textAlign: 'center',
-    fontSize: 16,
-    boxShadow: '0 0 8px #a259ff55',
+  wip: { 
+    label: 'In Progress', 
+    icon: '🛠', 
+    className: 'text-yellow-400 border-yellow-400/60 bg-yellow-900/40' 
   },
-  trap: {
-    background: '#3a0000',
-    border: '2px solid #ff4444',
-    color: '#fff',
-    fontWeight: 600,
-    borderRadius: 4,
-    padding: 12,
-    minWidth: 120,
-    textAlign: 'center',
-    fontSize: 15,
-    boxShadow: '0 0 8px #ff444455',
-  },
-  faction: {
-    background: '#0f172a',
-    border: '2px solid #14b8a6', // teal default
-    color: '#14b8a6',
-    fontWeight: 700,
-    borderRadius: 14,
-    padding: 14,
-    minWidth: 140,
-    textAlign: 'center',
-    fontSize: 17,
-    boxShadow: '0 0 12px #14b8a655',
-  },
-  training: {
-    background: 'linear-gradient(135deg, #222 70%, #a259ff 100%)',
-    border: '2px solid #a259ff',
-    color: '#fff',
-    fontWeight: 700,
-    borderRadius: 16,
-    padding: 14,
-    minWidth: 130,
-    textAlign: 'center',
-    fontSize: 16,
-    boxShadow: '0 0 12px #a259ff55',
-  },
-  unknown: {
-    background: '#444',
-    border: '2px dashed #bbb',
-    color: '#eee',
-    fontWeight: 600,
-    borderRadius: 8,
-    padding: 10,
-    minWidth: 100,
-    textAlign: 'center',
-    fontSize: 15,
+  stub: { 
+    label: 'Planned', 
+    icon: '❌', 
+    className: 'text-red-400 border-red-400/60 bg-red-900/40' 
   },
 };
 
-const statusBadge = {
-  live: '✅',
-  wip: '🛠',
-  stub: '❌',
-};
-
-const factionColors = {
-  teal: {
-    border: '2px solid #14b8a6',
-    color: '#14b8a6',
-    boxShadow: '0 0 12px #14b8a655',
-  },
-  gray: {
-    border: '2px solid #64748b',
-    color: '#64748b',
-    boxShadow: '0 0 12px #64748b55',
-  },
-  gold: {
-    border: '2px solid #fbbf24',
-    color: '#fbbf24',
-    boxShadow: '0 0 12px #fbbf2455',
-  },
-};
-
-export default function CustomNode(props) {
-  const {
-    data = {},
-    type,
-    selected = false,
-    visited = false,
-  } = props || {};
-
-  // Compose className for spacing, font, hover, etc.
-  let className = '';
-  if (data.type === 'trap') {
-    className += ' matrix-trap-red';
-  } else if (data.type === 'choice' || data.type === 'training') {
-    className += ' matrix-gradient-purple';
-  } else if (data.type === 'character') {
-    className += ' matrix-glow-green';
-  }
-
-  if (visited) {
-    className += ' opacity-50 hover:opacity-100 transition';
-  }
-
-  if (selected) {
-    className += ' animate-glow-green ring-2 ring-lime-400';
-  }
-
-  let style = nodeStyles[data.type] || nodeStyles.unknown;
-  if (data.type === 'faction') {
-    if (data.color && factionColors[data.color]) {
-      style = {
-        ...nodeStyles.faction,
-        ...factionColors[data.color],
-      };
-    } else {
-      style = nodeStyles.faction;
-    }
-  }
-  if (data.type === 'training') {
-    style = nodeStyles.training;
-  }
-  if (selected) {
-    style = { ...style, border: '2px solid #22c55e' };
-  }
-  const badge = statusBadge[data.status] || '';
-
+// New StatusBadge component with better styling
+const StatusBadge = ({ status }) => {
+  const cfg = statusConfig[status];
+  if (!cfg) return null;
+  
   return (
-    <div
-      className={
-        className +
-        ' relative cursor-pointer font-extrabold rounded-lg px-4 py-3 min-w-[110px] text-center m-2 ' +
-        'transition-transform hover:scale-105 hover:ring hover:ring-green-300'
-      }
-      title={data.tooltip || data.label}
-      style={{ position: 'relative', ...style }}
-    >
-      <span className="text-base px-2 py-1 rounded bg-white bg-opacity-80 text-black shadow-md">
-        {data.label}
-      </span>
-      {data.guardian && (
-        <span className="block text-sm mt-1 opacity-80">{data.guardian}</span>
-      )}
-      {badge && (
-        <span
-          style={{
-            position: 'absolute',
-            top: 2,
-            right: 6,
-            fontSize: 22,
-            filter: 'drop-shadow(0 0 2px #000)',
-          }}
-          aria-label={data.status}
-        >
-          {badge}
-        </span>
-      )}
-      {/* Tooltip overlay (on hover) */}
-      {data.tooltip && (
-        <span
-          style={{
-            display: 'none',
-            position: 'absolute',
-            left: '50%',
-            bottom: '110%',
-            transform: 'translateX(-50%)',
-            background: '#222',
-            color: '#fff',
-            padding: '4px 10px',
-            borderRadius: 6,
-            fontSize: 15,
-            whiteSpace: 'nowrap',
-            zIndex: 10,
-          }}
-          className="custom-node-tooltip"
-        >
-          {data.tooltip}
-        </span>
-      )}
+    <div className={`inline-flex items-center gap-1 text-xs font-mono px-2 py-1 rounded border mt-2 ${cfg.className}`}>
+      <span>{cfg.icon}</span>
+      <span>{cfg.label}</span>
     </div>
   );
-} 
+};
+
+// Enhanced accent colors for different node types
+const accent = {
+  scene: 'border-2 border-purple-500 bg-purple-100',
+  dialogue: 'border-2 border-blue-500 bg-blue-100',
+  choice: 'border-2 border-green-500 bg-green-100',
+  ending: 'border-2 border-red-500 bg-red-100',
+  npc: 'border-2 border-yellow-900 bg-yellow-100',
+  faction: 'border-2 border-yellow-500 bg-yellow-50',
+  training: 'border-2 border-pink-500 bg-pink-100',
+  end: 'border-2 border-gray-500 bg-gray-100',
+};
+
+export const SceneNode = ({ data = {}, type = 'scene' }) => (
+  <div
+    onMouseEnter={data?.onMouseEnter}
+    onMouseLeave={data?.onMouseLeave}
+    onClick={data?.onClick}
+    className={`${baseCard} ${hoverCard} ${data?.isOverlay ? 'cursor-pointer' : ''} animate-fade-slide`}
+    style={{
+      '--accent': '#60a5fa',
+      borderColor: 'var(--accent)',
+    }}
+  >
+    <h3 className={headerClass} style={{ color: 'var(--accent)' }}>🎬 {data.title || 'Untitled Scene'}</h3>
+    <p className={bodyClass}>{data.description || 'No description.'}</p>
+    {data.setting && (
+      <div className="text-xs text-gray-400 italic font-mono">📍 Setting: {data.setting}</div>
+    )}
+    <StatusBadge status={data.status} />
+  </div>
+);
+
+export const DialogueNode = ({ data = {}, type = 'dialogue' }) => (
+  <div
+    onMouseEnter={data?.onMouseEnter}
+    onMouseLeave={data?.onMouseLeave}
+    onClick={data?.onClick}
+    className={`${baseCard} ${hoverCard} ${data?.isOverlay ? 'cursor-pointer' : ''} animate-fade-slide`}
+    style={{
+      '--accent': '#4ade80',
+      borderColor: 'var(--accent)',
+    }}
+  >
+    <div className={headerClass} style={{ color: 'var(--accent)' }}>{data.character || 'Unknown'}</div>
+    <p className={bodyClass}>{data.dialogue || '...'}</p>
+    <div className="text-gray-400 text-xs font-mono">{data.emotion || 'neutral'}</div>
+    <StatusBadge status={data.status} />
+  </div>
+);
+
+export const ChoiceNode = ({ data = {}, type = 'choice' }) => {
+  const { isExpandable, isExpanded, onBranchToggle } = data || {};
+  const options = Array.isArray(data.options)
+    ? data.options.map(opt => typeof opt === 'string' ? opt : opt?.text || String(opt))
+    : [];
+  return (
+    <div
+      onMouseEnter={data?.onMouseEnter}
+      onMouseLeave={data?.onMouseLeave}
+      onClick={data?.onClick}
+      className={`${baseCard} ${hoverCard} ${data?.isOverlay ? 'cursor-pointer' : ''} animate-fade-slide`}
+      style={{
+        '--accent': '#a78bfa',
+        borderColor: 'var(--accent)',
+      }}
+    >
+      <div className="flex items-center justify-between">
+        <h3 className={headerClass} style={{ color: 'var(--accent)' }}>{data.prompt || 'Make a choice...'}</h3>
+        {isExpandable && (
+          <button
+            onClick={e => { e.stopPropagation(); onBranchToggle && onBranchToggle(); }}
+            className={`ml-2 p-1 rounded-full border border-cyan-400/50 text-cyan-400 hover:bg-cyan-900/40 transition-transform ${isExpanded ? 'rotate-90' : ''}`}
+            title={isExpanded ? 'Collapse branch' : 'Expand branch'}
+          >
+            {isExpanded ? '▲' : '▼'}
+          </button>
+        )}
+      </div>
+      <div className="space-y-2">
+        {options.map((option, index) => (
+          <div key={index} className="text-gray-200 text-xs bg-white/10 p-2 rounded border border-purple-300 font-mono">
+            {option}
+          </div>
+        ))}
+      </div>
+      <StatusBadge status={data.status} />
+    </div>
+  );
+};
+
+export const EndingNode = ({ data = {}, type = 'ending' }) => (
+  <div
+    onMouseEnter={data?.onMouseEnter}
+    onMouseLeave={data?.onMouseLeave}
+    onClick={data?.onClick}
+    className={`${baseCard} ${hoverCard} ${data?.isOverlay ? 'cursor-pointer' : ''} animate-fade-slide`}
+    style={{
+      '--accent': '#f87171',
+      borderColor: 'var(--accent)',
+    }}
+  >
+    <div className={headerClass} style={{ color: 'var(--accent)' }}>{data.outcome || 'Unknown'}</div>
+    <h3 className={headerClass}>{data.title || 'Untitled Ending'}</h3>
+    <p className={bodyClass}>{data.description || 'No description.'}</p>
+    <StatusBadge status={data.status} />
+  </div>
+);

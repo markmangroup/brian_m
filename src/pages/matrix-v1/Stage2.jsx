@@ -1,73 +1,96 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import MatrixRain from '../../components/MatrixRain';
 import useTypewriterEffect from '../../components/useTypewriterEffect';
+import MatrixLayout, { MatrixButton } from '../../components/MatrixLayout';
 
 const MESSAGES = [
   'Interference Detected',
-  '...g1i7ch... S3nt1n3l pr0t0c0l engaged...',
-  'Sentinel: "Do you believe reality is a choice?"'
+  'The signal is fragmenting...',
+  'Reality parameters are shifting.',
+  'Do you believe reality is a choice?'
 ];
 
 export default function Stage2() {
   const navigate = useNavigate();
   const [msgIndex, setMsgIndex] = useState(0);
-  const [typed, done] = useTypewriterEffect(MESSAGES[msgIndex], 50);
   const [showQuestion, setShowQuestion] = useState(false);
+  const [typed, done] = useTypewriterEffect(MESSAGES[msgIndex], 50);
 
   useEffect(() => {
-    if (!localStorage.getItem('matrixV1Access')) {
+    if (localStorage.getItem('matrixV1Access') !== 'true') {
       navigate('/matrix-v1');
     }
   }, [navigate]);
 
   useEffect(() => {
     if (done && msgIndex < MESSAGES.length - 1) {
-      const t = setTimeout(() => setMsgIndex(i => i + 1), 1000);
+      const t = setTimeout(() => setMsgIndex(i => i + 1), 1500);
       return () => clearTimeout(t);
-    }
-    if (done && msgIndex === MESSAGES.length - 1) {
+    } else if (done && msgIndex === MESSAGES.length - 1) {
       setShowQuestion(true);
     }
   }, [done, msgIndex]);
 
   const handleAnswer = (answer) => {
-    localStorage.setItem('matrixV1Answer_stage2', answer);
-    navigate('/matrix-v1/stage-3');
+    if (answer === 'yes') {
+      navigate('/matrix-v1/stage-3');
+    } else {
+      navigate('/matrix-v1/interference');
+    }
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-black text-green-500 font-mono space-y-6 relative overflow-hidden">
-      {typeof window !== 'undefined' && (
-        <MatrixRain zIndex={0} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
+    <MatrixLayout glitch={msgIndex > 1}>
+      {/* Glitch overlay for dramatic effect */}
+      {msgIndex > 1 && (
+        <div className="absolute inset-0 pointer-events-none z-20 animate-pulse" 
+             style={{ mixBlendMode: 'screen', opacity: 0.2 }}>
+          <div className="w-full h-full bg-gradient-to-br from-theme-accent/20 to-theme-primary/80" />
+        </div>
       )}
-      {/* Glitch overlay */}
-      <div className="absolute inset-0 pointer-events-none z-20 animate-pulse" style={{ mixBlendMode: 'screen', opacity: 0.2 }}>
-        <div className="w-full h-full bg-gradient-to-br from-green-400/20 to-black/80" />
-      </div>
-      <div className="relative z-30 flex flex-col items-center space-y-6 w-full max-w-md px-4">
-        <h1 className="text-3xl font-bold">{msgIndex === 0 ? typed : 'Interference Detected'}</h1>
-        {msgIndex > 0 && <p className="text-lg text-center whitespace-pre-line">{typed}</p>}
+      
+      <div className="relative z-30 w-full max-w-md text-center space-y-6">
+        <h1 className="text-3xl font-bold heading-theme">
+          {MESSAGES[0]}
+        </h1>
+        
+        {/* Only show current message, not duplicate */}
+        {msgIndex > 0 && (
+          <div className="bg-theme-overlay border-2 border-theme-accent rounded-lg p-6 backdrop-blur-md">
+            <p className="text-lg text-theme-bright font-theme-secondary" role="status" aria-live="polite">
+              {typed}
+            </p>
+          </div>
+        )}
+        
         {showQuestion && (
-          <div className="flex flex-col items-center space-y-4">
-            <div className="text-xl font-mono">Do you believe reality is a choice?</div>
-            <div className="flex space-x-4">
-              <button
+          <div className="space-y-6">
+            <div className="text-xl font-mono text-theme-primary critical-text">
+              Do you believe reality is a choice?
+            </div>
+            <div className="flex gap-4 justify-center">
+              <MatrixButton
                 onClick={() => handleAnswer('yes')}
-                className="px-6 py-2 rounded bg-green-900 text-green-500 hover:bg-green-800 transition-colors"
+                variant="success"
+                size="lg"
+                className="min-w-[100px]"
+                ariaLabel="Answer: Yes, reality is a choice"
               >
                 Yes
-              </button>
-              <button
+              </MatrixButton>
+              <MatrixButton
                 onClick={() => handleAnswer('no')}
-                className="px-6 py-2 rounded bg-green-900 text-green-500 hover:bg-green-800 transition-colors"
+                variant="danger"
+                size="lg"
+                className="min-w-[100px]"
+                ariaLabel="Answer: No, reality is not a choice"
               >
                 No
-              </button>
+              </MatrixButton>
             </div>
           </div>
         )}
       </div>
-    </div>
+    </MatrixLayout>
   );
 } 

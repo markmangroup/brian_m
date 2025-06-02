@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Rain from './components/Rain';
+import MatrixLayout, { MatrixButton } from '../../components/MatrixLayout';
 import NPC from './components/NPC';
 
 export default function Trace() {
@@ -22,29 +22,35 @@ export default function Trace() {
   }, [count]);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-black text-green-400 relative overflow-hidden space-y-6">
-      {typeof window !== 'undefined' && (
-        <Rain zIndex={0} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
-      )}
-      <div className="relative z-10 flex flex-col items-center space-y-6 text-center">
+    <MatrixLayout>
+      <div className="text-center space-y-6">
         {count > 0 ? (
           <>
-            <p className="text-red-600 text-2xl font-mono animate-pulse">TRACE INITIATED</p>
+            <p className="text-red-600 text-2xl font-mono animate-pulse" role="status" aria-live="polite">
+              TRACE INITIATED
+            </p>
             <p className="text-xl animate-pulse">{count}</p>
-            {showAgent && <NPC name="Agent Echo" quote="I see you." style="agent" />}
+            {showAgent && (
+              <NPC 
+                name="Agent Echo" 
+                quote="I see you." 
+                style="agent" 
+              />
+            )}
           </>
         ) : (
           <>
             <p className="text-xl">Connection re-established.</p>
-            <button
+            <MatrixButton
               onClick={() => navigate('/matrix-v1/observer')}
-              className="px-4 py-2 rounded bg-purple-600 text-white hover:bg-purple-500"
+              variant="info"
+              ariaLabel="Enter the Portal"
             >
               Enter the Portal
-            </button>
+            </MatrixButton>
           </>
         )}
       </div>
-    </div>
+    </MatrixLayout>
   );
 }
