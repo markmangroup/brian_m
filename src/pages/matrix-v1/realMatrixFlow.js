@@ -180,7 +180,13 @@ export const realMatrixNodes = [
       puzzles: [],
       interactions: ['SceneTransition', 'GlitchReveal'],
       features: { hasTransition: true, hasChoice: false, hasCombat: false, hasNPC: false, hasAnimation: true },
-      dialogue: ['Connection destabilized.', 'Prepare for extraction.']
+      dialogue: ['Connection destabilized.', 'Prepare for extraction.'],
+      enhancement: {
+        qualityRating: 6,
+        status: "stub",
+        priority: "low",
+        updatedAt: "2025-06-03T00:00:00Z"
+      }
     }
   },
 
@@ -201,7 +207,13 @@ export const realMatrixNodes = [
       puzzles: [],
       interactions: ['SceneReset'],
       features: { hasTransition: true, hasChoice: false, hasCombat: false, hasNPC: false, hasAnimation: true },
-      dialogue: ['You wake up and everything feels... normal.']
+      dialogue: ['You wake up and everything feels... normal.'],
+      enhancement: {
+        qualityRating: 6,
+        status: "stub",
+        priority: "low",
+        updatedAt: "2025-06-03T00:00:00Z"
+      }
     }
   },
 
@@ -222,7 +234,13 @@ export const realMatrixNodes = [
       puzzles: [],
       interactions: ['Cutscene', 'CheckpointMarker'],
       features: { hasTransition: true, hasChoice: false, hasCombat: false, hasNPC: true, hasAnimation: true },
-      dialogue: ['You\'ve crossed the line.', 'We have to move fast.']
+      dialogue: ['You\'ve crossed the line.', 'We have to move fast.'],
+      enhancement: {
+        qualityRating: 6,
+        status: "stub",
+        priority: "low",
+        updatedAt: "2025-06-03T00:00:00Z"
+      }
     }
   },
 
@@ -243,7 +261,13 @@ export const realMatrixNodes = [
       puzzles: ['Loop Test'],
       interactions: ['LoopDetection'],
       features: { hasTransition: true, hasChoice: false, hasCombat: false, hasNPC: false, hasAnimation: true },
-      dialogue: ['Didn\'t this already happen?', 'You feel a sense of déjà vu.']
+      dialogue: ['Didn\'t this already happen?', 'You feel a sense of déjà vu.'],
+      enhancement: {
+        qualityRating: 6,
+        status: "stub",
+        priority: "low",
+        updatedAt: "2025-06-03T00:00:00Z"
+      }
     }
   },
 
@@ -264,7 +288,13 @@ export const realMatrixNodes = [
       puzzles: ['Combat Basics'],
       interactions: ['CombatEngine', 'InstructionOverlay'],
       features: { hasTransition: false, hasChoice: false, hasCombat: true, hasNPC: false, hasAnimation: true },
-      dialogue: ['Loading training sequence.', 'Let\'s see what you can do.']
+      dialogue: ['Loading training sequence.', 'Let\'s see what you can do.'],
+      enhancement: {
+        qualityRating: 6,
+        status: "stub",
+        priority: "low",
+        updatedAt: "2025-06-03T00:00:00Z"
+      }
     }
   },
 
@@ -285,7 +315,13 @@ export const realMatrixNodes = [
       puzzles: ['Code Reorder'],
       interactions: ['DragPuzzle'],
       features: { hasTransition: true, hasCombat: false, hasChoice: false, hasPuzzle: true, hasAnimation: true, hasNPC: true },
-      dialogue: ['These lines are not yours.', 'Restore what you remember.']
+      dialogue: ['These lines are not yours.', 'Restore what you remember.'],
+      enhancement: {
+        qualityRating: 6,
+        status: "stub",
+        priority: "low",
+        updatedAt: "2025-06-03T00:00:00Z"
+      }
     }
   },
 
@@ -304,7 +340,13 @@ export const realMatrixNodes = [
       puzzles: [],
       interactions: ['FactionSelection', 'ProgressTracking'],
       features: { hasTransition: true, hasChoice: true, hasCombat: false, hasNPC: false, hasAnimation: true },
-      dialogue: ['Choose your path through the resistance networks.', 'Each faction offers unique training and wisdom.']
+      dialogue: ['Choose your path through the resistance networks.', 'Each faction offers unique training and wisdom.'],
+      enhancement: {
+        qualityRating: 6,
+        status: "stub",
+        priority: "low",
+        updatedAt: "2025-06-03T00:00:00Z"
+      }
     }
   },
 
@@ -324,7 +366,13 @@ export const realMatrixNodes = [
       interactions: ['ThemeToggle', 'DimensionalShift'],
       features: { hasTransition: true, hasChoice: true, hasCombat: false, hasNPC: false, hasAnimation: true, hasGlitch: true },
       dialogue: ['WARNING: Reality breach detected.', 'Multiverse signals bleeding through quantum barriers.', 'Choose your dimensional reality.'],
-      options: ['Matrix Reality', 'Witcher Realm', 'Night City']
+      options: ['Matrix Reality', 'Witcher Realm', 'Night City'],
+      enhancement: {
+        qualityRating: 6,
+        status: "stub",
+        priority: "low",
+        updatedAt: "2025-06-03T00:00:00Z"
+      }
     }
   },
 
@@ -345,7 +393,13 @@ export const realMatrixNodes = [
       puzzles: ['Repeat Detection'],
       interactions: ['DialogueLoop'],
       features: { hasTransition: true, hasCombat: false, hasChoice: false, hasPuzzle: true, hasAnimation: true, hasDialogue: true, hasNPC: true },
-      dialogue: ['Did I already say that?', 'You must listen harder.']
+      dialogue: ['Did I already say that?', 'You must listen harder.'],
+      enhancement: {
+        qualityRating: 6,
+        status: "stub",
+        priority: "low",
+        updatedAt: "2025-06-03T00:00:00Z"
+      }
     }
   },
 
@@ -366,7 +420,13 @@ export const realMatrixNodes = [
       puzzles: ['Syntax Catch'],
       interactions: ['TimedClick'],
       features: { hasTransition: true, hasCombat: false, hasChoice: false, hasPuzzle: true, hasAnimation: true, hasNPC: false },
-      dialogue: ['// ERROR: closing bracket not found', 'Find the symbol before it finds you.']
+      dialogue: ['// ERROR: closing bracket not found', 'Find the symbol before it finds you.'],
+      enhancement: {
+        qualityRating: 6,
+        status: "stub",
+        priority: "low",
+        updatedAt: "2025-06-03T00:00:00Z"
+      }
     }
   },
 
@@ -387,7 +447,13 @@ export const realMatrixNodes = [
       puzzles: ['Pattern Memory'],
       interactions: ['RhythmMatch'],
       features: { hasTransition: true, hasCombat: false, hasChoice: false, hasPuzzle: true, hasAnimation: true, hasDialogue: false, hasNPC: false },
-      dialogue: ['▢ ▢ ▢ ▢ ✕ ✕ ▢ ✕', 'Listen with your eyes.']
+      dialogue: ['▢ ▢ ▢ ▢ ✕ ✕ ▢ ✕', 'Listen with your eyes.'],
+      enhancement: {
+        qualityRating: 6,
+        status: "stub",
+        priority: "low",
+        updatedAt: "2025-06-03T00:00:00Z"
+      }
     }
   },
 
@@ -406,7 +472,13 @@ export const realMatrixNodes = [
       puzzles: [],
       interactions: ['TransmissionReceiver'],
       features: { hasTransition: true, hasCombat: false, hasChoice: false, hasPuzzle: false, hasAnimation: true, hasDialogue: true, hasNPC: true },
-      dialogue: ['This is no longer a test.', 'You are becoming signal.']
+      dialogue: ['This is no longer a test.', 'You are becoming signal.'],
+      enhancement: {
+        qualityRating: 6,
+        status: "stub",
+        priority: "low",
+        updatedAt: "2025-06-03T00:00:00Z"
+      }
     }
   },
 
@@ -428,7 +500,13 @@ export const realMatrixNodes = [
       interactions: ['ChoicePrompt', 'FactionAnalysis'],
       features: { hasTransition: true, hasChoice: true, hasCombat: false, hasNPC: true, hasAnimation: true },
       dialogue: ['Each faction serves the resistance differently.', 'Choose wisely - this will define your path.'],
-      options: ['Zion Fleet', 'Rebel Hackers', 'Oracle Seekers']
+      options: ['Zion Fleet', 'Rebel Hackers', 'Oracle Seekers'],
+      enhancement: {
+        qualityRating: 6,
+        status: "stub",
+        priority: "low",
+        updatedAt: "2025-06-03T00:00:00Z"
+      }
     }
   },
 
@@ -449,7 +527,13 @@ export const realMatrixNodes = [
       puzzles: ['Combat Simulation', 'Ship Operations'],
       interactions: ['CombatTraining', 'FleetCommand'],
       features: { hasTransition: true, hasChoice: false, hasCombat: true, hasNPC: true, hasAnimation: true },
-      dialogue: ['Welcome to the Zion Fleet.', 'We are the backbone of humanity\'s resistance.']
+      dialogue: ['Welcome to the Zion Fleet.', 'We are the backbone of humanity\'s resistance.'],
+      enhancement: {
+        qualityRating: 6,
+        status: "stub",
+        priority: "low",
+        updatedAt: "2025-06-03T00:00:00Z"
+      }
     }
   },
 
@@ -469,7 +553,13 @@ export const realMatrixNodes = [
       puzzles: ['Code Injection', 'Rule Manipulation'],
       interactions: ['CodeLab', 'SystemHacking'],
       features: { hasTransition: true, hasChoice: false, hasCombat: false, hasNPC: true, hasAnimation: true, hasPuzzle: true },
-      dialogue: ['This path risks madness from seeing too deeply.', 'But the rewards... you can rewrite reality itself.']
+      dialogue: ['This path risks madness from seeing too deeply.', 'But the rewards... you can rewrite reality itself.'],
+      enhancement: {
+        qualityRating: 6,
+        status: "stub",
+        priority: "low",
+        updatedAt: "2025-06-03T00:00:00Z"
+      }
     }
   },
 
@@ -489,7 +579,13 @@ export const realMatrixNodes = [
       puzzles: ['Philosophical Insight', 'Prophecy Reading'],
       interactions: ['WisdomQuest', 'FutureSight'],
       features: { hasTransition: true, hasChoice: false, hasCombat: false, hasNPC: true, hasAnimation: true, hasWisdom: true },
-      dialogue: ['Know thyself.', 'The path of wisdom is not for those who seek easy answers.']
+      dialogue: ['Know thyself.', 'The path of wisdom is not for those who seek easy answers.'],
+      enhancement: {
+        qualityRating: 6,
+        status: "stub",
+        priority: "low",
+        updatedAt: "2025-06-03T00:00:00Z"
+      }
     }
   },
 
@@ -511,7 +607,13 @@ export const realMatrixNodes = [
       interactions: ['ChoicePrompt', 'GlitchDetection'],
       features: { hasTransition: true, hasChoice: true, hasCombat: false, hasNPC: true, hasAnimation: true },
       dialogue: ['Something isn\'t right.', 'Will you dig deeper or let it slide?'],
-      options: ['Investigate Glitches', 'Ignore and Continue', 'Report to Authorities']
+      options: ['Investigate Glitches', 'Ignore and Continue', 'Report to Authorities'],
+      enhancement: {
+        qualityRating: 6,
+        status: "stub",
+        priority: "low",
+        updatedAt: "2025-06-03T00:00:00Z"
+      }
     }
   },
 
@@ -532,7 +634,13 @@ export const realMatrixNodes = [
       puzzles: ['Pattern Recognition', 'Anomaly Detection'],
       interactions: ['GlitchHunting', 'AnomalyTracker'],
       features: { hasTransition: true, hasCombat: false, hasChoice: false, hasPuzzle: true, hasAnimation: true, hasNPC: true },
-      dialogue: ['The glitches are everywhere once you start looking.', 'Someone is trying to contact you.']
+      dialogue: ['The glitches are everywhere once you start looking.', 'Someone is trying to contact you.'],
+      enhancement: {
+        qualityRating: 6,
+        status: "stub",
+        priority: "low",
+        updatedAt: "2025-06-03T00:00:00Z"
+      }
     }
   },
 
@@ -552,7 +660,13 @@ export const realMatrixNodes = [
       puzzles: ['Loyalty Test', 'Hunt Resistance'],
       interactions: ['AgentBriefing', 'ResistanceHunt'],
       features: { hasTransition: true, hasCombat: true, hasChoice: false, hasPuzzle: true, hasAnimation: true, hasNPC: true },
-      dialogue: ['Mr. Anderson. We\'ve been looking for you.', 'Help us find the others.']
+      dialogue: ['Mr. Anderson. We\'ve been looking for you.', 'Help us find the others.'],
+      enhancement: {
+        qualityRating: 6,
+        status: "stub",
+        priority: "low",
+        updatedAt: "2025-06-03T00:00:00Z"
+      }
     }
   },
 
@@ -572,7 +686,13 @@ export const realMatrixNodes = [
       puzzles: ['Combined Skills Test'],
       interactions: ['SkillValidation', 'CombinedChallenge'],
       features: { hasTransition: true, hasCombat: true, hasChoice: false, hasPuzzle: true, hasAnimation: true, hasNPC: false },
-      dialogue: ['Prove you have learned from both worlds.', 'Integration test initiated.']
+      dialogue: ['Prove you have learned from both worlds.', 'Integration test initiated.'],
+      enhancement: {
+        qualityRating: 6,
+        status: "stub",
+        priority: "low",
+        updatedAt: "2025-06-03T00:00:00Z"
+      }
     }
   },
 
@@ -591,7 +711,13 @@ export const realMatrixNodes = [
       puzzles: ['Philosophical Hacking', 'Reality Manipulation'],
       interactions: ['WisdomHacking', 'RealityBending'],
       features: { hasTransition: true, hasCombat: false, hasChoice: true, hasPuzzle: true, hasAnimation: true, hasDialogue: true, hasNPC: true },
-      dialogue: ['When prophecy meets code, reality becomes fluid.', 'What will you choose to believe?']
+      dialogue: ['When prophecy meets code, reality becomes fluid.', 'What will you choose to believe?'],
+      enhancement: {
+        qualityRating: 6,
+        status: "stub",
+        priority: "low",
+        updatedAt: "2025-06-03T00:00:00Z"
+      }
     }
   },
 
@@ -611,7 +737,13 @@ export const realMatrixNodes = [
       puzzles: ['Stealth Infiltration', 'Double Agent'],
       interactions: ['StealthMission', 'MoralChoice'],
       features: { hasTransition: true, hasCombat: true, hasChoice: true, hasPuzzle: true, hasAnimation: true, hasNPC: true },
-      dialogue: ['I know you\'re not really one of them.', 'Will you help me escape?']
+      dialogue: ['I know you\'re not really one of them.', 'Will you help me escape?'],
+      enhancement: {
+        qualityRating: 6,
+        status: "stub",
+        priority: "low",
+        updatedAt: "2025-06-03T00:00:00Z"
+      }
     }
   },
 
@@ -631,7 +763,13 @@ export const realMatrixNodes = [
       puzzles: ['Ultimate Choice', 'Reality Decision'],
       interactions: ['FinalChoice', 'RealityRewrite'],
       features: { hasTransition: false, hasCombat: false, hasChoice: true, hasPuzzle: true, hasAnimation: true, hasDialogue: true, hasNPC: true },
-      dialogue: ['The Matrix was just the beginning.', 'What will you do with the power to reshape reality?']
+      dialogue: ['The Matrix was just the beginning.', 'What will you do with the power to reshape reality?'],
+      enhancement: {
+        qualityRating: 6,
+        status: "stub",
+        priority: "low",
+        updatedAt: "2025-06-03T00:00:00Z"
+      }
     }
   },
 
@@ -650,7 +788,13 @@ export const realMatrixNodes = [
       puzzles: [],
       interactions: ['CyberpunkIntro', 'NeonSceneReveal'],
       features: { hasTransition: true, hasChoice: false, hasCombat: false, hasNPC: true, hasAnimation: true, hasGlitch: true },
-      dialogue: ['Wake the f*ck up, samurai.', 'This ain\'t Kansas anymore, choom.', 'Data flows like blood through these streets.']
+      dialogue: ['Wake the f*ck up, samurai.', 'This ain\'t Kansas anymore, choom.', 'Data flows like blood through these streets.'],
+      enhancement: {
+        qualityRating: 6,
+        status: "stub",
+        priority: "low",
+        updatedAt: "2025-06-03T00:00:00Z"
+      }
     }
   },
 
@@ -669,7 +813,13 @@ export const realMatrixNodes = [
       interactions: ['ChoicePrompt', 'SocialManipulation'],
       features: { hasTransition: true, hasChoice: true, hasCombat: true, hasNPC: true, hasAnimation: true },
       dialogue: ['Entry fee is 500 eddies or a data chip worth my time.', 'You look like trouble, but the right kind.'],
-      options: ['Pay 500 Eddies', 'Offer Data Chip', 'Hack Cyberware', 'Start Fight']
+      options: ['Pay 500 Eddies', 'Offer Data Chip', 'Hack Cyberware', 'Start Fight'],
+      enhancement: {
+        qualityRating: 6,
+        status: "stub",
+        priority: "low",
+        updatedAt: "2025-06-03T00:00:00Z"
+      }
     }
   },
 
@@ -687,7 +837,13 @@ export const realMatrixNodes = [
       puzzles: ['ICE Breaking', 'Trace Evasion', 'Data Extraction'],
       interactions: ['CyberdeckInterface', 'NetrunningPuzzle'],
       features: { hasTransition: true, hasChoice: false, hasCombat: true, hasNPC: true, hasAnimation: true, hasPuzzle: true },
-      dialogue: ['The Net remembers everything, choom.', 'Beyond the Blackwall, AI gods are dreaming.', 'Data wants to be free.']
+      dialogue: ['The Net remembers everything, choom.', 'Beyond the Blackwall, AI gods are dreaming.', 'Data wants to be free.'],
+      enhancement: {
+        qualityRating: 6,
+        status: "stub",
+        priority: "low",
+        updatedAt: "2025-06-03T00:00:00Z"
+      }
     }
   },
 
@@ -706,7 +862,13 @@ export const realMatrixNodes = [
       puzzles: ['Vehicle Chase', 'Pursuit Evasion'],
       interactions: ['HighSpeedChase', 'CombatDriving'],
       features: { hasTransition: true, hasChoice: false, hasCombat: true, hasNPC: true, hasAnimation: true, hasTimer: true },
-      dialogue: ['This is MaxTac. Surrender or be flatlined.', 'Trauma Team inbound. Clear the area.', 'Another day, another corpo conspiracy.']
+      dialogue: ['This is MaxTac. Surrender or be flatlined.', 'Trauma Team inbound. Clear the area.', 'Another day, another corpo conspiracy.'],
+      enhancement: {
+        qualityRating: 6,
+        status: "stub",
+        priority: "low",
+        updatedAt: "2025-06-03T00:00:00Z"
+      }
     }
   },
 
@@ -725,7 +887,13 @@ export const realMatrixNodes = [
       puzzles: ['Data Decryption', 'Lore Analysis'],
       interactions: ['FileAnalysis', 'LoreReveal'],
       features: { hasTransition: true, hasChoice: true, hasCombat: false, hasNPC: false, hasAnimation: true, hasLore: true },
-      dialogue: ['Project: Neo-Tokyo was just the beginning.', 'The Matrix. Night City. Two sides of the same control system.', 'Free your mind... jack out of the system.']
+      dialogue: ['Project: Neo-Tokyo was just the beginning.', 'The Matrix. Night City. Two sides of the same control system.', 'Free your mind... jack out of the system.'],
+      enhancement: {
+        qualityRating: 6,
+        status: "stub",
+        priority: "low",
+        updatedAt: "2025-06-03T00:00:00Z"
+      }
     }
   },
 
@@ -744,7 +912,13 @@ export const realMatrixNodes = [
       puzzles: ['Final Revolution Choice'],
       interactions: ['RevolutionChoice', 'CyberpunkEnding'],
       features: { hasTransition: false, hasChoice: true, hasCombat: true, hasNPC: true, hasAnimation: true, hasEnding: true },
-      dialogue: ['Wake up and smell the ashes, choom.', 'Burn the corpo tower or find another path?', 'Never fade away.']
+      dialogue: ['Wake up and smell the ashes, choom.', 'Burn the corpo tower or find another path?', 'Never fade away.'],
+      enhancement: {
+        qualityRating: 6,
+        status: "stub",
+        priority: "low",
+        updatedAt: "2025-06-03T00:00:00Z"
+      }
     }
   },
 
