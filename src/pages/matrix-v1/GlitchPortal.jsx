@@ -4,7 +4,7 @@ import { useTheme } from '../../theme/ThemeContext';
 
 export default function GlitchPortal() {
   const navigate = useNavigate();
-  const { currentWorld, setWorld, availableWorlds, currentTheme } = useTheme();
+  const { currentWorld, setWorld } = useTheme();
   const [isGlitching, setIsGlitching] = useState(false);
   const [detected, setDetected] = useState([]);
 
