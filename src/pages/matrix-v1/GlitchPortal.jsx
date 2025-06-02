@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '../../theme/ThemeContext';
 
 export default function GlitchPortal() {
   const navigate = useNavigate();
-  const [currentTheme, setCurrentTheme] = useState('matrix');
+  const { currentWorld, setWorld, availableWorlds, currentTheme } = useTheme();
   const [isGlitching, setIsGlitching] = useState(false);
   const [detected, setDetected] = useState([]);
 
-  const themes = {
+  const worlds = {
     matrix: {
       name: 'Matrix Reality',
       color: 'green',
@@ -26,7 +27,7 @@ export default function GlitchPortal() {
       textColor: 'text-amber-400',
       borderColor: 'border-amber-400'
     },
-    cyberpunk: {
+    nightcity: {
       name: 'Night City',
       color: 'purple',
       description: 'Neon-soaked dystopian future',
@@ -38,10 +39,6 @@ export default function GlitchPortal() {
   };
 
   useEffect(() => {
-    // Load current theme from localStorage
-    const savedTheme = localStorage.getItem('matrixTheme') || 'matrix';
-    setCurrentTheme(savedTheme);
-    
     // Simulate detecting reality bleeding signals
     const signals = [
       'Unknown energy signature detected...',
@@ -61,29 +58,22 @@ export default function GlitchPortal() {
     return () => clearInterval(timer);
   }, []);
 
-  const switchTheme = (themeKey) => {
+  const switchWorld = (worldKey) => {
     setIsGlitching(true);
     
     // Glitch effect duration
     setTimeout(() => {
-      setCurrentTheme(themeKey);
-      localStorage.setItem('matrixTheme', themeKey);
-      
-      // Dispatch theme change event for other components
-      window.dispatchEvent(new CustomEvent('themeChange', { 
-        detail: { theme: themeKey } 
-      }));
-      
+      setWorld(worldKey); // Use unified context method
       setIsGlitching(false);
     }, 800);
   };
 
-  const theme = themes[currentTheme];
+  const world = worlds[currentWorld] || worlds.matrix;
 
   return (
     <div className={`
       min-h-screen text-white p-6 font-mono relative overflow-hidden transition-all duration-1000
-      bg-gradient-to-br ${theme.gradient}
+      bg-gradient-to-br ${world.gradient}
       ${isGlitching ? 'animate-matrix-glitch' : ''}
     `}>
       {/* Reality distortion overlay */}
@@ -101,7 +91,7 @@ export default function GlitchPortal() {
         <div className="text-center mb-8">
           <h1 className={`
             text-4xl font-bold mb-4 animate-pulse
-            ${theme.textColor}
+            ${world.textColor}
             ${isGlitching ? 'animate-matrix-glitch' : ''}
           `}>
             ⚠️ REALITY BREACH DETECTED
@@ -109,8 +99,8 @@ export default function GlitchPortal() {
           <p className="text-gray-300 text-lg mb-2">
             Multiverse signals bleeding through quantum barriers
           </p>
-          <div className={`text-sm ${theme.textColor}`}>
-            Current Reality: {theme.name}
+          <div className={`text-sm ${world.textColor}`}>
+            Current Reality: {world.name}
           </div>
         </div>
 
@@ -130,19 +120,19 @@ export default function GlitchPortal() {
           </div>
         </div>
 
-        {/* Theme Selection Portal */}
+        {/* World Selection Portal */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          {Object.entries(themes).map(([key, themeData]) => (
+          {Object.entries(worlds).map(([key, worldData]) => (
             <button
               key={key}
-              onClick={() => switchTheme(key)}
+              onClick={() => switchWorld(key)}
               disabled={isGlitching}
               className={`
                 relative group transition-all duration-500 transform hover:scale-105
-                bg-gradient-to-br ${themeData.gradient}
-                border-2 ${themeData.borderColor}
-                rounded-xl p-6 hover:shadow-2xl hover:shadow-${themeData.color}-500/30
-                ${currentTheme === key ? 'ring-4 ring-white/30' : ''}
+                bg-gradient-to-br ${worldData.gradient}
+                border-2 ${worldData.borderColor}
+                rounded-xl p-6 hover:shadow-2xl hover:shadow-${worldData.color}-500/30
+                ${currentWorld === key ? 'ring-4 ring-white/30' : ''}
                 ${isGlitching ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
               `}
             >
@@ -151,23 +141,23 @@ export default function GlitchPortal() {
               
               <div className="text-center">
                 <div className="text-4xl mb-3 group-hover:animate-pulse">
-                  {themeData.icon}
+                  {worldData.icon}
                 </div>
-                <h3 className={`text-xl font-bold mb-2 ${themeData.textColor}`}>
-                  {themeData.name}
+                <h3 className={`text-xl font-bold mb-2 ${worldData.textColor}`}>
+                  {worldData.name}
                 </h3>
                 <p className="text-gray-300 text-sm mb-4">
-                  {themeData.description}
+                  {worldData.description}
                 </p>
                 
-                {currentTheme === key && (
+                {currentWorld === key && (
                   <div className="text-white font-bold text-xs bg-white/20 rounded-full px-3 py-1">
                     ✓ ACTIVE REALITY
                   </div>
                 )}
                 
-                {currentTheme !== key && (
-                  <div className={`text-xs ${themeData.textColor} opacity-70`}>
+                {currentWorld !== key && (
+                  <div className={`text-xs ${worldData.textColor} opacity-70`}>
                     Click to breach into this reality
                   </div>
                 )}
@@ -191,8 +181,8 @@ export default function GlitchPortal() {
             </div>
             <div className="text-center">
               <div className="text-purple-400 font-bold mb-2">Active Theme Engine</div>
-              <div className={theme.textColor}>
-                {theme.name} Protocol
+              <div className={world.textColor}>
+                {world.name} Protocol
               </div>
             </div>
             <div className="text-center">

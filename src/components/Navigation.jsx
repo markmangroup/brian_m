@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import UserIcon from './UserIcon';
 import ThemeToggle from './ThemeToggle';
+import { useTheme } from '../theme/ThemeContext';
 import {
   FaRoad,
   FaPaintBrush,
@@ -28,6 +29,17 @@ export const navItems = [
 
 export default function Navigation() {
   const { pathname } = useLocation();
+  const { currentWorld } = useTheme();
+
+  // World display mappings
+  const worldDisplays = {
+    'matrix': { icon: '💊', label: 'MATRIX', color: 'text-green-400 border-green-400' },
+    'witcher': { icon: '⚔️', label: 'WITCHER', color: 'text-amber-400 border-amber-400' },
+    'nightcity': { icon: '🌆', label: 'NIGHT_CITY', color: 'text-purple-400 border-purple-400' },
+    'cyberpunk': { icon: '🌆', label: 'NIGHT_CITY', color: 'text-purple-400 border-purple-400' } // Legacy support
+  };
+
+  const worldDisplay = worldDisplays[currentWorld] || worldDisplays.matrix;
 
   return (
     <div className="fixed top-2 left-0 right-0 z-[100] navigation-container">
@@ -46,8 +58,19 @@ export default function Navigation() {
             </Link>
           ))}
           
-          {/* Theme Toggle - Positioned to allow dropdown overflow */}
+          {/* World Debug Indicator */}
           <div className="ml-2 pl-2 border-l border-gray-300 relative">
+            <div 
+              className={`px-2 py-1 rounded-md text-xs font-mono border backdrop-blur-sm bg-black/10 ${worldDisplay.color}`}
+              title={`Current World: ${currentWorld}`}
+            >
+              <span className="mr-1">{worldDisplay.icon}</span>
+              <span>{worldDisplay.label}</span>
+            </div>
+          </div>
+          
+          {/* Theme Toggle - Positioned to allow dropdown overflow */}
+          <div className="relative">
             <ThemeToggle />
           </div>
         </nav>

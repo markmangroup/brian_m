@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CharacterDialogue } from '../../components/CharacterSystem';
+import { useTheme } from '../../theme/ThemeContext';
 
 export default function NightCityEntry() {
   const navigate = useNavigate();
+  const { setWorld } = useTheme();
   const [currentPhase, setCurrentPhase] = useState(0);
   const [glitchActive, setGlitchActive] = useState(true);
 
@@ -18,12 +20,9 @@ export default function NightCityEntry() {
   }, []);
 
   useEffect(() => {
-    // Set cyberpunk theme
-    localStorage.setItem('matrixTheme', 'cyberpunk');
-    window.dispatchEvent(new CustomEvent('themeChange', { 
-      detail: { theme: 'cyberpunk' } 
-    }));
-  }, []);
+    // Set Night City world/theme using unified context
+    setWorld('nightcity');
+  }, [setWorld]);
 
   const proceedToBouncer = () => {
     // Save progress
