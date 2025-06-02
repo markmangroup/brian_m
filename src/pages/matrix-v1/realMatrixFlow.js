@@ -758,17 +758,23 @@ export const realMatrixNodes = [
       title: 'The Source',
       pageUrl: '/matrix-v1/the-source',
       status: 'stub',
-      summary: 'All paths lead here. Face the Architect with the combined knowledge of every choice you\'ve made.',
-      characters: ['The Architect', 'Neo', 'Trinity', 'Morpheus'],
+      summary: 'You stand before the origin of the system — answers await, but at a cost.',
+      characters: ['The Architect', 'Neo'],
       puzzles: ['Ultimate Choice', 'Reality Decision'],
       interactions: ['FinalChoice', 'RealityRewrite'],
-      features: { hasTransition: false, hasCombat: false, hasChoice: true, hasPuzzle: true, hasAnimation: true, hasDialogue: true, hasNPC: true },
-      dialogue: ['The Matrix was just the beginning.', 'What will you do with the power to reshape reality?'],
+      features: { hasChoice: true, hasDialogue: true, hasTransition: true },
+      dialogue: [
+        'Architect: You approach the origin of all paths.',
+        'Neo: Every choice leads back here, yet the cost remains.',
+        'Architect: Knowledge demands sacrifice; ignorance grants safety.',
+        'Neo: Decide—embrace the truth or retreat into illusion.'
+      ],
+      options: ['Reveal the truth', 'Refuse and walk away'],
       enhancement: {
-        qualityRating: 6,
-        status: "stub",
-        priority: "low",
-        updatedAt: "2025-06-03T00:00:00Z"
+        qualityRating: 7.5,
+        status: "wip",
+        priority: "high",
+        updatedAt: "2025-06-03T19:00:00Z"
       }
     }
   },
@@ -1175,6 +1181,10 @@ export const realMatrixEdges = [
   
   // Ghost Layer 2 also connects to The Source
   { id: 'edge-ghost-to-source', source: 'matrix-ghost-layer-2', target: 'matrix-the-source', label: 'Signal Complete' },
+
+  // Choices from The Source
+  { id: 'edge-source-to-glitch-hunter', source: 'matrix-the-source', target: 'matrix-glitch-hunter', label: 'Reveal the truth' },
+  { id: 'edge-source-to-trinity-rescue', source: 'matrix-the-source', target: 'matrix-trinity-rescue', label: 'Refuse and walk away' },
 
   // === NIGHT CITY CLUSTER CONNECTIONS ===
   // Glitch Portal connects to Night City Entry
