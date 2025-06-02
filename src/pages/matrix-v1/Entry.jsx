@@ -5,12 +5,16 @@ import NPC from './components/NPC';
 import useTypewriterEffect from '../../components/useTypewriterEffect';
 import { useStoryProgress } from '../../hooks/useStoryProgress';
 import { useAppStore } from '../../store/useAppStore';
+import { useTheme } from '../../theme/ThemeContext';
+import { useWorldContent } from '../../hooks/useWorldContent';
 
 export default function Entry() {
   const [showChoice, setShowChoice] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const userName = useAppStore((state) => state.user.name);
+  const { currentWorld } = useTheme();
+  const { title, dialogue, options } = useWorldContent(currentWorld, 'matrix-pill-choice');
   
   // Check if user came from name prompt with a name
   const hasName = userName || localStorage.getItem('matrixV1Name') || location.state?.name;
@@ -71,11 +75,11 @@ export default function Entry() {
         {showChoice && (
           <>
             <h2 className="text-2xl font-bold heading-theme">
-              This is your last chance, {hasName}.
+              {title?.replace('{name}', hasName)}
             </h2>
-            
+
             <NPC type="mentor" speaker="morpheus">
-              "After this, there is no going back. You take the blue pill - the story ends, you wake up in your bed and believe whatever you want to believe. You take the red pill - you stay in Wonderland, and I show you how deep the rabbit hole goes."
+              {dialogue}
             </NPC>
 
             <div className="space-y-4">
@@ -86,16 +90,16 @@ export default function Entry() {
                 className="w-full"
                 ariaLabel="Take the red pill - Enter the Matrix"
               >
-                🔴 Red Pill
+                {options?.[0] || 'Red Pill'}
               </MatrixButton>
-              <MatrixButton 
-                onClick={blue} 
-                variant="info" 
+              <MatrixButton
+                onClick={blue}
+                variant="info"
                 size="lg"
                 className="w-full"
                 ariaLabel="Take the blue pill - Return to normal world"
               >
-                🔵 Blue Pill
+                {options?.[1] || 'Blue Pill'}
               </MatrixButton>
             </div>
           </>
