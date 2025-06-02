@@ -24,3 +24,6 @@ echo ✅ DONE! Text copied to clipboard.
 echo Now you can paste (Ctrl+V) in Cursor!
 echo ================================================
 pause 
+
+
+

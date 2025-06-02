@@ -780,6 +780,10 @@ export const realMatrixNodes = [
       // 🎯 WITCHER ENHANCEMENT SYSTEM
       qualityRating: 5, // Starting baseline
       enhancement: {
+        qualityRating: 8,
+        status: "live",
+        priority: "medium",
+        updatedAt: "2025-06-02T18:00:00Z",
         targetRating: 10,
         improvements: [
           'Add immersive Witcher world atmosphere with medieval fantasy elements',
@@ -843,6 +847,10 @@ export const realMatrixNodes = [
       // 🎯 CHOICE ENHANCEMENT SYSTEM
       qualityRating: 5,
       enhancement: {
+        qualityRating: 8,
+        status: "live",
+        priority: "medium",
+        updatedAt: "2025-06-02T18:00:00Z",
         targetRating: 10,
         improvements: [
           'Add visceral Trial of Grasses experience with visual effects',
@@ -894,6 +902,10 @@ export const realMatrixNodes = [
       // 🎯 TRAINING ENHANCEMENT SYSTEM
       qualityRating: 5,
       enhancement: {
+        qualityRating: 8,
+        status: "live",
+        priority: "medium",
+        updatedAt: "2025-06-02T18:00:00Z",
         targetRating: 10,
         improvements: [
           'Interactive Sign casting with gesture recognition',

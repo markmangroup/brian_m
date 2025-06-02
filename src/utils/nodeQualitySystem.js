@@ -170,6 +170,108 @@ export const ENHANCEMENT_TEMPLATES = {
   }
 };
 
+// 🎯 Default Enhancement Structure Creator
+export function createEnhancementTemplate(nodeType = 'scene', world = 'matrix', customOptions = {}) {
+  const now = new Date().toISOString();
+  
+  return {
+    qualityRating: customOptions.qualityRating || 5,
+    status: customOptions.status || "stub",
+    priority: customOptions.priority || "medium", 
+    updatedAt: customOptions.updatedAt || now,
+    targetRating: 10,
+    improvements: customOptions.improvements || [
+      'Add immersive world atmosphere and environmental storytelling',
+      'Enhanced interactive elements and user engagement',
+      'Visual effects and animation polish',
+      'Accessibility and performance optimization'
+    ],
+    criteria: {
+      narrative: 5,
+      interactivity: 5,
+      visual: 5,
+      technical: 5,
+      character: 5,
+      consequences: 5,
+      ...customOptions.criteria
+    },
+    narrative: {
+      atmosphere: customOptions.atmosphere || 'Rich environmental storytelling with immersive details',
+      soundscape: customOptions.soundscape || 'Ambient audio design matching the world theme',
+      visualElements: customOptions.visualElements || 'Thematic UI elements and visual effects',
+      emotionalTone: customOptions.emotionalTone || 'Engaging emotional experience for the user',
+      ...customOptions.narrative
+    },
+    interactivity: {
+      userActions: 'Meaningful user interactions and choices',
+      feedback: 'Clear visual and audio feedback for user actions',
+      accessibility: 'Full keyboard navigation and screen reader support',
+      ...customOptions.interactivity
+    },
+    ...customOptions.customFields
+  };
+}
+
+// 🎯 World-Specific Enhancement Templates
+export const WORLD_ENHANCEMENT_DEFAULTS = {
+  matrix: {
+    narrative: {
+      atmosphere: 'Digital void with code rain and glitch effects',
+      soundscape: 'Electronic hums, keyboard clicks, system alerts',
+      visualElements: 'Green terminal text, holographic interfaces, data streams',
+      emotionalTone: 'Mysterious digital reality with underlying tension'
+    },
+    interactivity: {
+      matrixEffects: 'Code rain animations and digital glitch effects',
+      terminalInterface: 'Command-line style interactions',
+      accessibility: 'Matrix-themed screen reader descriptions'
+    }
+  },
+  witcher: {
+    narrative: {
+      atmosphere: 'Medieval fantasy with magical elements and monster encounters',
+      soundscape: 'Wind through forests, distant monster growls, medieval ambience',
+      visualElements: 'Witcher medallion interfaces, rune inscriptions, magical auras',
+      emotionalTone: 'Dark fantasy atmosphere with heroic undertones'
+    },
+    interactivity: {
+      medallionEffects: 'Witcher medallion vibrates to detect magical presence',
+      signCasting: 'Interactive magical sign casting with visual effects',
+      accessibility: 'Fantasy-themed navigation with lore-appropriate descriptions'
+    }
+  },
+  nightcity: {
+    narrative: {
+      atmosphere: 'Cyberpunk cityscape with neon lights and urban decay',
+      soundscape: 'City traffic, electronic music, corporate announcements',
+      visualElements: 'Neon UI elements, holographic displays, cybernetic interfaces',
+      emotionalTone: 'High-tech dystopian future with rebellious energy'
+    },
+    interactivity: {
+      cyberwareEffects: 'Cybernetic enhancement interfaces and visual overlays',
+      hackingInterface: 'Interactive hacking mini-games and data streams',
+      accessibility: 'Cyberpunk-themed navigation with tech-appropriate descriptions'
+    }
+  }
+};
+
+// 🎯 Enhanced Node Creator Function
+export function createNodeWithEnhancement(baseNode, world = 'matrix', customEnhancement = {}) {
+  const worldDefaults = WORLD_ENHANCEMENT_DEFAULTS[world] || WORLD_ENHANCEMENT_DEFAULTS.matrix;
+  const enhancementTemplate = createEnhancementTemplate(baseNode.type, world, {
+    ...worldDefaults,
+    ...customEnhancement
+  });
+  
+  return {
+    ...baseNode,
+    data: {
+      ...baseNode.data,
+      enhancement: enhancementTemplate
+    }
+  };
+}
+
 // 🎯 Quality Assessment Functions
 export function calculateNodeQuality(node) {
   if (!node.data?.enhancement?.qualityRating) {
