@@ -1,63 +1,57 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import MatrixLayout, { MatrixInput, MatrixButton } from '../../components/MatrixLayout';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import MatrixLayout, { MatrixButton } from '../../components/MatrixLayout';
 import NPC from './components/NPC';
 import useTypewriterEffect from '../../components/useTypewriterEffect';
 import { useStoryProgress } from '../../hooks/useStoryProgress';
-import { useUserActions } from '../../store/useAppStore';
+import { useAppStore } from '../../store/useAppStore';
 
 export default function Entry() {
-  const [name, setName] = useState('');
-  const [entered, setEntered] = useState(false);
+  const [showChoice, setShowChoice] = useState(false);
   const navigate = useNavigate();
-  const { setUserName } = useUserActions();
+  const location = useLocation();
+  const userName = useAppStore((state) => state.user.name);
+  
+  // Check if user came from name prompt with a name
+  const hasName = userName || localStorage.getItem('matrixV1Name') || location.state?.name;
+  const fromNamePrompt = location.state?.fromNamePrompt;
 
   // Track story progression
   useStoryProgress('matrix-v1-entry', 'entered-entry');
 
   const [intro] = useTypewriterEffect('Welcome to the Matrix', 100);
-  const [prompt] = useTypewriterEffect('Enter your name to begin', 50);
+  const [prompt] = useTypewriterEffect(
+    hasName ? `Welcome back, ${hasName}` : 'Identity verification required', 
+    50
+  );
 
-  const submit = (e) => {
-    e.preventDefault();
-    if (name.trim()) {
-      // Set user name in Zustand store
-      setUserName(name.trim());
-      localStorage.setItem('matrixV1Name', name.trim());
-      setEntered(true);
+  // If no name and didn't come from name prompt, redirect to name prompt
+  useEffect(() => {
+    if (!hasName && !fromNamePrompt) {
+      navigate('/matrix-v1/name-prompt');
+    } else if (hasName) {
+      // Show choice after typewriter effects
+      const timer = setTimeout(() => setShowChoice(true), 3000);
+      return () => clearTimeout(timer);
     }
-  };
+  }, [hasName, fromNamePrompt, navigate]);
 
-  const red = () => navigate('/matrix-v1/terminal', { state: { name } });
-  const blue = () => navigate('/snack-trail', { state: { name } });
+  const red = () => navigate('/matrix-v1/terminal', { state: { name: hasName } });
+  const blue = () => navigate('/snack-trail', { state: { name: hasName } });
 
-  if (!entered) {
+  // If no name, show loading while redirecting
+  if (!hasName) {
     return (
       <MatrixLayout>
-        <div className="w-full max-w-md space-y-6">
-          <h1 className="text-4xl font-bold text-center heading-theme animate-theme-glow">
+        <div className="w-full max-w-md space-y-6 text-center">
+          <h1 className="text-4xl font-bold heading-theme animate-theme-glow">
             {intro}
           </h1>
-          <p className="text-center text-lg subheading-theme">
+          <p className="text-lg subheading-theme">
             {prompt}
           </p>
-          <form onSubmit={submit} className="space-y-4">
-            <MatrixInput
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Your name"
-              ariaLabel="Enter your name"
-            />
-            <MatrixButton 
-              type="submit" 
-              variant="primary" 
-              size="lg"
-              className="w-full"
-              ariaLabel="Begin Matrix experience"
-            >
-              Begin
-            </MatrixButton>
-          </form>
+          <div className="animate-spin w-8 h-8 border-2 border-theme-accent border-t-transparent rounded-full mx-auto" />
+          <p className="text-sm text-theme-muted">Redirecting to identity verification...</p>
         </div>
       </MatrixLayout>
     );
@@ -66,34 +60,46 @@ export default function Entry() {
   return (
     <MatrixLayout>
       <div className="w-full max-w-md space-y-8 text-center">
-        <h2 className="text-2xl font-bold heading-theme">
-          This is your last chance, {name}.
-        </h2>
+        <h1 className="text-4xl font-bold heading-theme animate-theme-glow">
+          {intro}
+        </h1>
         
-        <NPC type="mentor" speaker="morpheus">
-          "After this, there is no going back. You take the blue pill - the story ends, you wake up in your bed and believe whatever you want to believe. You take the red pill - you stay in Wonderland, and I show you how deep the rabbit hole goes."
-        </NPC>
+        <p className="text-lg subheading-theme">
+          {prompt}
+        </p>
 
-        <div className="space-y-4">
-          <MatrixButton 
-            onClick={red} 
-            variant="danger" 
-            size="lg"
-            className="w-full"
-            ariaLabel="Take the red pill - Enter the Matrix"
-          >
-            🔴 Red Pill
-          </MatrixButton>
-          <MatrixButton 
-            onClick={blue} 
-            variant="info" 
-            size="lg"
-            className="w-full"
-            ariaLabel="Take the blue pill - Return to normal world"
-          >
-            🔵 Blue Pill
-          </MatrixButton>
-        </div>
+        {showChoice && (
+          <>
+            <h2 className="text-2xl font-bold heading-theme">
+              This is your last chance, {hasName}.
+            </h2>
+            
+            <NPC type="mentor" speaker="morpheus">
+              "After this, there is no going back. You take the blue pill - the story ends, you wake up in your bed and believe whatever you want to believe. You take the red pill - you stay in Wonderland, and I show you how deep the rabbit hole goes."
+            </NPC>
+
+            <div className="space-y-4">
+              <MatrixButton 
+                onClick={red} 
+                variant="danger" 
+                size="lg"
+                className="w-full"
+                ariaLabel="Take the red pill - Enter the Matrix"
+              >
+                🔴 Red Pill
+              </MatrixButton>
+              <MatrixButton 
+                onClick={blue} 
+                variant="info" 
+                size="lg"
+                className="w-full"
+                ariaLabel="Take the blue pill - Return to normal world"
+              >
+                🔵 Blue Pill
+              </MatrixButton>
+            </div>
+          </>
+        )}
       </div>
     </MatrixLayout>
   );

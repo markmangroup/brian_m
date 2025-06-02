@@ -18,6 +18,7 @@ import Updates from './components/Updates';
 import Home from './components/Home';
 // Matrix V1 Pages
 import Entry from './pages/matrix-v1/Entry';
+import MatrixNamePrompt from './pages/matrix-v1/MatrixNamePrompt';
 import Terminal from './pages/matrix-v1/Terminal';
 import Checkpoint from './pages/matrix-v1/Checkpoint';
 import Message from './pages/matrix-v1/Message';
@@ -83,6 +84,7 @@ export default function App() {
               
               {/* Matrix V1 Routes */}
               <Route path="/matrix-v1" element={<Entry />} />
+              <Route path="/matrix-v1/name-prompt" element={<MatrixNamePrompt />} />
               <Route path="/matrix-v1/terminal" element={<Terminal />} />
               <Route path="/matrix-v1/checkpoint" element={<Checkpoint />} />
               <Route path="/matrix-v1/message" element={<Message />} />
