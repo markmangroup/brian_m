@@ -1,0 +1,18 @@
+{
+  "matrix": {
+    "matrix-pill-choice": {
+      "title": "This is your last chance, {name}.",
+      "dialogue": "After this, there is no going back. You take the blue pill - the story ends, you wake up in your bed and believe whatever you want to believe. You take the red pill - you stay in Wonderland, and I show you how deep the rabbit hole goes.",
+      "summary": "Morpheus presents the iconic red vs blue pill decision.",
+      "options": ["Red Pill", "Blue Pill"]
+    }
+  },
+  "witcher": {
+    "matrix-pill-choice": {
+      "title": "A Witcher's Choice",
+      "dialogue": "Will you accept the contract that ties you to destiny, or walk away to follow your own path?",
+      "summary": "Geralt must decide whether to follow destiny.",
+      "options": ["Accept", "Decline"]
+    }
+  }
+}
