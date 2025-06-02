@@ -51,33 +51,38 @@ export default function Stage2() {
       
       <div className="relative z-30 w-full max-w-md text-center space-y-6">
         <h1 className="text-3xl font-bold heading-theme">
-          {msgIndex === 0 ? typed : 'Interference Detected'}
+          {MESSAGES[0]}
         </h1>
         
+        {/* Only show current message, not duplicate */}
         {msgIndex > 0 && (
-          <p className="text-lg whitespace-pre-line" role="status" aria-live="polite">
-            {typed}
-          </p>
+          <div className="bg-theme-overlay border-2 border-theme-accent rounded-lg p-6 backdrop-blur-md">
+            <p className="text-lg text-theme-bright font-theme-secondary" role="status" aria-live="polite">
+              {typed}
+            </p>
+          </div>
         )}
         
         {showQuestion && (
-          <div className="space-y-4">
-            <div className="text-xl font-mono text-theme-accent">
+          <div className="space-y-6">
+            <div className="text-xl font-mono text-theme-primary critical-text">
               Do you believe reality is a choice?
             </div>
             <div className="flex gap-4 justify-center">
               <MatrixButton
                 onClick={() => handleAnswer('yes')}
-                variant="primary"
+                variant="success"
                 size="lg"
+                className="min-w-[100px]"
                 ariaLabel="Answer: Yes, reality is a choice"
               >
                 Yes
               </MatrixButton>
               <MatrixButton
                 onClick={() => handleAnswer('no')}
-                variant="secondary"
+                variant="danger"
                 size="lg"
+                className="min-w-[100px]"
                 ariaLabel="Answer: No, reality is not a choice"
               >
                 No

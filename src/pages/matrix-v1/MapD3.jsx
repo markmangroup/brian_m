@@ -878,4 +878,4 @@ export default function MapD3() {
       <DetailPanel node={selectedNode} onClose={() => setSelectedNode(null)} />
     </div>
   );
-}
+} 

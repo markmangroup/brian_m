@@ -76,37 +76,31 @@ export function MatrixButton({
   className = '',
   disabled = false,
   ariaLabel,
+  type = 'button',
   ...props 
 }) {
-  const variants = {
-    primary: 'bg-theme-secondary hover:bg-theme-primary text-theme-inverse',
-    secondary: 'bg-gray-900 hover:bg-gray-800 text-theme-primary border border-theme-secondary',
-    danger: 'bg-red-900 hover:bg-red-800 text-red-400',
-    warning: 'bg-yellow-900 hover:bg-yellow-800 text-yellow-400',
-    success: 'bg-green-900 hover:bg-green-800 text-theme-primary',
-    info: 'bg-blue-900 hover:bg-blue-800 text-blue-400'
+  const baseClasses = 'inline-flex items-center justify-center rounded focus-matrix transition-all duration-200 font-semibold active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none';
+  
+  const sizeClasses = {
+    sm: 'px-3 py-1.5 text-sm',
+    md: 'px-4 py-2 text-base',
+    lg: 'px-6 py-3 text-lg',
+    xl: 'px-8 py-4 text-xl'
   };
-
-  const sizes = {
-    sm: 'px-3 py-1 text-sm',
-    md: 'px-4 py-2',
-    lg: 'px-6 py-3 text-lg'
+  
+  const variantClasses = {
+    primary: 'btn-theme-primary',
+    secondary: 'btn-theme-secondary',
+    danger: 'btn-theme-danger',
+    info: 'btn-theme-info',
+    success: 'btn-theme-success'
   };
-
-  const buttonClasses = [
-    'rounded',
-    'transition-all duration-200',
-    'focus-matrix',
-    variants[variant],
-    sizes[size],
-    disabled ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105',
-    className
-  ].filter(Boolean).join(' ');
 
   return (
     <button
+      type={type}
+      className={`${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${className}`}
       onClick={onClick}
-      className={buttonClasses}
       disabled={disabled}
       aria-label={ariaLabel}
       {...props}
