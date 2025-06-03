@@ -2,9 +2,11 @@ import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { realMatrixNodes } from './realMatrixFlow';
 import { edges } from './edges';
-import {
+import { 
   generateQualityReport,
   calculateNodeQuality,
+  calculateNodeScore,
+  getScoreColor,
   getNextImprovements,
   QUALITY_CRITERIA,
   ENHANCEMENT_PRIORITY
@@ -77,6 +79,18 @@ const QualityProgress = ({ score }) => {
   );
 };
 
+const NodeScoreProgress = ({ score }) => {
+  const percentage = score;
+  return (
+    <div className="w-full bg-gray-700 rounded-full h-2 overflow-hidden">
+      <div
+        className="h-full bg-cyan-400 transition-all duration-500"
+        style={{ width: `${percentage}%` }}
+      />
+    </div>
+  );
+};
+
 // Quality Score Badge Component
 const QualityBadge = ({ score }) => {
   const getColor = (score) => {
@@ -96,9 +110,23 @@ const QualityBadge = ({ score }) => {
   );
 };
 
+// Real-time Node Score badge
+const NodeScoreBadge = ({ score }) => {
+  const color = getScoreColor(score);
+  return (
+    <span
+      className="px-2 py-1 rounded-full text-xs font-bold font-mono"
+      style={{ backgroundColor: color }}
+    >
+      {score}
+    </span>
+  );
+};
+
 // Executive Node Card Component
 const ExecutiveNodeCard = ({ node, onView, onEdit }) => {
   const quality = calculateNodeQuality(node);
+  const { score: nodeScore, contributions } = calculateNodeScore(node, edges);
   const improvements = getNextImprovements(node, 2);
   const navigate = useNavigate();
   const [showJson, setShowJson] = useState(false);
@@ -201,17 +229,23 @@ const ExecutiveNodeCard = ({ node, onView, onEdit }) => {
             </span>
           </div>
         </div>
-        <div 
-          title={`Quality Score: ${quality.overall.toFixed(1)}/10`}
-          className="cursor-help"
-        >
-          <QualityBadge score={quality.overall} />
+        <div className="flex flex-col items-end gap-1">
+          <div title={`Quality Score: ${quality.overall.toFixed(1)}/10`} className="cursor-help">
+            <QualityBadge score={quality.overall} />
+          </div>
+          <div
+            title={Object.entries(contributions).map(([k,v]) => `${k}: ${v}%`).join('\n')}
+            className="cursor-help"
+          >
+            <NodeScoreBadge score={nodeScore} />
+          </div>
         </div>
       </div>
 
       {/* Quality Progress */}
       <div className="mb-3">
         <QualityProgress score={quality.overall} />
+        <NodeScoreProgress score={nodeScore} />
       </div>
 
       {/* Priority & Stats */}
