@@ -255,6 +255,30 @@ export const WORLD_ENHANCEMENT_DEFAULTS = {
   }
 };
 
+// 🎯 Node Score Weights (0-1)
+export const NODE_SCORE_WEIGHTS = {
+  completeness: 0.3,
+  depth: 0.25,
+  agency: 0.25,
+  hooks: 0.1,
+  connectivity: 0.1
+};
+
+// Suggested color mapping for score tiers
+export const NODE_SCORE_COLORS = {
+  excellent: '#22c55e', // 80-100
+  good: '#eab308',      // 60-79
+  fair: '#f97316',      // 40-59
+  poor: '#ef4444'       // below 40
+};
+
+export function getScoreColor(score) {
+  if (score >= 80) return NODE_SCORE_COLORS.excellent;
+  if (score >= 60) return NODE_SCORE_COLORS.good;
+  if (score >= 40) return NODE_SCORE_COLORS.fair;
+  return NODE_SCORE_COLORS.poor;
+}
+
 // 🎯 Enhanced Node Creator Function
 export function createNodeWithEnhancement(baseNode, world = 'matrix', customEnhancement = {}) {
   const worldDefaults = WORLD_ENHANCEMENT_DEFAULTS[world] || WORLD_ENHANCEMENT_DEFAULTS.matrix;
@@ -353,6 +377,74 @@ export function categorizeImprovement(improvement) {
   return 'general';
 }
 
+// 🎯 Node Scoring System V2
+export function calculateNodeScore(node, edges = []) {
+  const weights = NODE_SCORE_WEIGHTS;
+
+  const breakdown = {
+    completeness: 0,
+    depth: 0,
+    agency: 0,
+    hooks: 0,
+    connectivity: 0
+  };
+
+  // Completeness: summary, dialogue, choices, features
+  let present = 0;
+  if (node?.data?.summary) present++;
+  if (Array.isArray(node?.data?.dialogue) && node.data.dialogue.length > 0) present++;
+  if ((Array.isArray(node?.data?.options) && node.data.options.length > 0) ||
+      (Array.isArray(node?.data?.choices) && node.data.choices.length > 0)) {
+    present++;
+  }
+  if (node?.data?.features) present++;
+  breakdown.completeness = present / 4;
+
+  // Narrative depth: dialogue lines + NPC count
+  const dialogueLines = Array.isArray(node?.data?.dialogue) ? node.data.dialogue.length : 0;
+  const dialogueScore = Math.min(dialogueLines / 5, 1); // 5+ lines => full score
+  const npcCount = Array.isArray(node?.data?.characters) ? node.data.characters.length : 0;
+  const npcScore = npcCount >= 2 ? 1 : npcCount / 2;
+  breakdown.depth = (dialogueScore + npcScore) / 2;
+
+  // Player agency / branching: number of choices
+  const choiceCount = (node?.data?.options?.length || node?.data?.choices?.length || 0);
+  breakdown.agency = choiceCount >= 2 ? 1 : choiceCount > 0 ? 0.5 : 0;
+
+  // Visual/audio hooks: animations, typewriter, glitches, etc.
+  const featureKeys = ['hasAnimation', 'hasTypewriter', 'hasGlitch', 'hasAudio', 'hasSound', 'hasMusic'];
+  const hookCount = featureKeys.reduce((acc, key) => acc + (node?.data?.features?.[key] ? 1 : 0), 0);
+  breakdown.hooks = hookCount > 0 ? Math.min(hookCount / 2, 1) : 0; // 2 hooks => full score
+
+  // Connectivity: inbound + outbound edges
+  let inCount = 0;
+  let outCount = 0;
+  edges.forEach(edge => {
+    if (edge.source === node.id) outCount++;
+    if (edge.target === node.id) inCount++;
+  });
+  const edgeTotal = inCount + outCount;
+  breakdown.connectivity = edgeTotal >= 2 ? 1 : edgeTotal / 2;
+
+  // Final weighted score (0-100)
+  let total = 0;
+  Object.entries(weights).forEach(([key, weight]) => {
+    total += breakdown[key] * weight;
+  });
+
+  // Percentage contribution per factor
+  const contributions = {};
+  Object.entries(weights).forEach(([key, weight]) => {
+    contributions[key] = Math.round(breakdown[key] * weight * 100);
+  });
+
+  return {
+    score: Math.round(total * 100),
+    breakdown,
+    contributions
+  };
+}
+
 // 🎯 Enhancement Progress Tracking
 export function trackEnhancementProgress(nodeId, improvementId, status = 'in-progress') {
   const key = `enhancement-${nodeId}-${improvementId}`;
@@ -429,9 +521,13 @@ export default {
   QUALITY_CRITERIA,
   ENHANCEMENT_PRIORITY,
   ENHANCEMENT_TEMPLATES,
+  NODE_SCORE_WEIGHTS,
+  NODE_SCORE_COLORS,
+  getScoreColor,
   calculateNodeQuality,
+  calculateNodeScore,
   getNextImprovements,
   trackEnhancementProgress,
   getEnhancementProgress,
   generateQualityReport
-}; 
+};
