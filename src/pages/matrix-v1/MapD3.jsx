@@ -195,6 +195,9 @@ export default function MapD3() {
   const [activePuzzleFilters, setActivePuzzleFilters] = useState([]);
   const [activeInteractionFilters, setActiveInteractionFilters] = useState([]);
   const [activeFeatureFilters, setActiveFeatureFilters] = useState([]);
+
+  // Metrics overlay toggle
+  const [showMetrics, setShowMetrics] = useState(false);
   
   // Search and UI states
   const [searchQuery, setSearchQuery] = useState('');
@@ -494,6 +497,7 @@ export default function MapD3() {
     collideRadius,
     selectedNode,
     handleNodeClick,
+    showMetrics,
   });
 
   const toggleStatusFilter = (status) => {
@@ -645,6 +649,18 @@ export default function MapD3() {
                   ⚙️ Force Controls
                 </button>
               )}
+
+              {/* Metrics Overlay Toggle */}
+              <button
+                onClick={() => setShowMetrics(!showMetrics)}
+                className={`ml-2 px-3 py-1 rounded text-xs font-mono border transition-colors ${
+                  showMetrics
+                    ? 'bg-cyan-900 text-cyan-300 border-cyan-400'
+                    : 'bg-gray-900 text-gray-400 border-gray-600 hover:border-cyan-400'
+                }`}
+              >
+                📊 Metrics
+              </button>
             </div>
 
             {/* Status Filters */}
