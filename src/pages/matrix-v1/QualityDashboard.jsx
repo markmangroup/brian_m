@@ -335,7 +335,9 @@ const ExecutiveNodeCard = ({ node, onView, onEdit }) => {
             {improvements.slice(0, 2).map((improvement, idx) => (
               <li key={idx} className="flex items-start">
                 <span className="text-theme-accent mr-1">•</span>
-                <span className="leading-tight">{improvement}</span>
+                <span className="leading-tight">
+                  {typeof improvement === 'string' ? improvement : improvement.description || improvement}
+                </span>
               </li>
             ))}
           </ul>
