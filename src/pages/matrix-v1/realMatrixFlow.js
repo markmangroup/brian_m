@@ -225,26 +225,33 @@ export const realMatrixNodes = [
   // === DEPTH 4: RED PILL GROUP ===
   {
     id: 'matrix-red-awakening',
-    type: 'scene',
+    type: 'choice',
     depth: 4,
     group: 'red-pill',
     parentChoice: 'matrix-pill-choice',
     choiceValue: 'red',
     data: {
-      title: 'Red Awakening',
+      title: 'Brutal Awakening',
       pageUrl: '/matrix-v1/checkpoint',
-      status: 'live',
-      summary: 'Neo awakens in the real world and reaches a checkpoint.',
-      characters: ['Neo', 'Morpheus'],
-      puzzles: [],
-      interactions: ['Cutscene', 'CheckpointMarker'],
-      features: { hasTransition: true, hasChoice: false, hasCombat: false, hasNPC: true, hasAnimation: true },
-      dialogue: ['You\'ve crossed the line.', 'We have to move fast.'],
+      status: 'wip',
+      summary: 'The shock of reality tears through you — muscles atrophied, eyes burning, lungs screaming for air. Welcome to the real world.',
+      characters: ['Neo', 'Morpheus', 'Trinity', 'Dozer'],
+      puzzles: ['Reality Adjustment', 'Physical Rehabilitation'],
+      interactions: ['Cutscene', 'CheckpointMarker', 'ChoicePrompt', 'PhysicalAdaptation'],
+      features: { hasTransition: true, hasChoice: true, hasCombat: false, hasNPC: true, hasAnimation: true, hasTrauma: true, hasHealing: true },
+      dialogue: [
+        'Morpheus: Welcome to the real world.',
+        'Trinity: It\'s going to be okay. The hardest part is over.',
+        'Neo: Why... why do my eyes hurt?',
+        'Morpheus: You\'ve never used them before.',
+        'Dozer: Time to choose — rehabilitation or immediate action?'
+      ],
+      options: ['Gradual rehabilitation (Safe path)', 'Immediate action (Dangerous but faster)'],
       enhancement: {
-        qualityRating: 6,
-        status: "stub",
-        priority: "low",
-        updatedAt: "2025-06-03T00:00:00Z"
+        qualityRating: 8.8,
+        status: "wip",
+        priority: "critical",
+        updatedAt: "2025-06-03T23:40:00Z"
       }
     }
   },
@@ -569,78 +576,99 @@ export const realMatrixNodes = [
   // === DEPTH 6: FACTION PATHS ===
   {
     id: 'matrix-zion-fleet',
-    type: 'training',
+    type: 'choice',
     depth: 6,
     group: 'factions',
     parentChoice: 'matrix-red-faction-choice',
     choiceValue: 'fleet',
     data: {
-      title: 'Zion Fleet Training',
+      title: 'Zion Fleet Command Training',
       pageUrl: '/matrix-v1/zion-fleet',
-      status: 'live',
-      summary: 'Military training with Commander Locke and Niobe. Learn ship operations and combat tactics.',
-      characters: ['Locke', 'Niobe'],
-      puzzles: ['Combat Simulation', 'Ship Operations'],
-      interactions: ['CombatTraining', 'FleetCommand'],
-      features: { hasTransition: true, hasChoice: false, hasCombat: true, hasNPC: true, hasAnimation: true },
-      dialogue: ['Welcome to the Zion Fleet.', 'We are the backbone of humanity\'s resistance.'],
+      status: 'wip',
+      summary: 'Enter the Nebuchadnezzar simulator — military command training with legendary captains. Steel yourself for humanity\'s war.',
+      characters: ['Commander Locke', 'Captain Niobe', 'Link'],
+      puzzles: ['Combat Simulation', 'Ship Operations', 'Tactical Command'],
+      interactions: ['CombatTraining', 'FleetCommand', 'ChoicePrompt', 'TacticalDecision'],
+      features: { hasTransition: true, hasChoice: true, hasCombat: true, hasNPC: true, hasAnimation: true, hasPuzzle: true, hasTraining: true },
+      dialogue: [
+        'Commander Locke: Welcome to Zion Defense Corps. You\'ll learn real warfare here.',
+        'Captain Niobe: The machines don\'t take prisoners. Neither do we.',
+        'Link: Every simulation matters. One mistake costs lives.',
+        'Commander Locke: Choose your specialization. Leadership or assault tactics?',
+        'Captain Niobe: Both paths lead to the same place — victory or death.'
+      ],
+      options: ['Command track (Leadership)', 'Assault track (Combat specialist)'],
       enhancement: {
-        qualityRating: 6,
-        status: "stub",
-        priority: "low",
-        updatedAt: "2025-06-03T00:00:00Z"
+        qualityRating: 8.6,
+        status: "wip",
+        priority: "high",
+        updatedAt: "2025-06-03T23:15:00Z"
       }
     }
   },
 
   {
     id: 'matrix-rebel-hackers',
-    type: 'training',
+    type: 'choice',
     depth: 6,
     group: 'factions',
     parentChoice: 'matrix-red-faction-choice',
     choiceValue: 'hackers',
     data: {
-      title: 'Rebel Hackers Training',
+      title: 'Rebel Hackers Code Lab',
       pageUrl: '/matrix-v1/rebel-hackers',
-      status: 'live',
-      summary: 'Hacker training with Tank and Dozer. Learn to bend Matrix rules and manipulate code.',
-      characters: ['Tank', 'Dozer'],
-      puzzles: ['Code Injection', 'Rule Manipulation'],
-      interactions: ['CodeLab', 'SystemHacking'],
-      features: { hasTransition: true, hasChoice: false, hasCombat: false, hasNPC: true, hasAnimation: true, hasPuzzle: true },
-      dialogue: ['This path risks madness from seeing too deeply.', 'But the rewards... you can rewrite reality itself.'],
+      status: 'wip',
+      summary: 'Enter the underground code lab — where reality bends to those who can rewrite the Matrix\'s fundamental rules.',
+      characters: ['Tank', 'Dozer', 'Mouse'],
+      puzzles: ['Code Injection', 'Rule Manipulation', 'Reality Hacking'],
+      interactions: ['CodeLab', 'SystemHacking', 'ChoicePrompt', 'RealityBending'],
+      features: { hasTransition: true, hasChoice: true, hasCombat: false, hasNPC: true, hasAnimation: true, hasPuzzle: true, hasHacking: true },
+      dialogue: [
+        'Tank: Welcome to the real Matrix — the one you can control.',
+        'Dozer: Every line of code is a weapon. Every function, a key.',
+        'Mouse: This path risks madness from seeing too deeply into the code.',
+        'Tank: But the rewards... you can rewrite reality itself.',
+        'Dozer: Choose your focus: system infiltration or reality manipulation?'
+      ],
+      options: ['System infiltration (Stealth hacking)', 'Reality manipulation (Code bending)'],
       enhancement: {
-        qualityRating: 6,
-        status: "stub",
-        priority: "low",
-        updatedAt: "2025-06-03T00:00:00Z"
+        qualityRating: 8.4,
+        status: "wip",
+        priority: "high",
+        updatedAt: "2025-06-03T23:20:00Z"
       }
     }
   },
 
   {
     id: 'matrix-oracle-seekers',
-    type: 'training',
+    type: 'choice',
     depth: 6,
     group: 'factions',
     parentChoice: 'matrix-red-faction-choice',
     choiceValue: 'seekers',
     data: {
-      title: 'Oracle Seekers Training',
+      title: 'Oracle Seekers Sanctuary',
       pageUrl: '/matrix-v1/oracle-seekers',
-      status: 'live',
-      summary: 'Wisdom training with the Oracle and Seraph. Seek philosophical insights and future sight.',
-      characters: ['Oracle', 'Seraph'],
-      puzzles: ['Philosophical Insight', 'Prophecy Reading'],
-      interactions: ['WisdomQuest', 'FutureSight'],
-      features: { hasTransition: true, hasChoice: false, hasCombat: false, hasNPC: true, hasAnimation: true, hasWisdom: true },
-      dialogue: ['Know thyself.', 'The path of wisdom is not for those who seek easy answers.'],
+      status: 'wip',
+      summary: 'Enter the Oracle\'s domain — where wisdom flows like tea, and the future whispers its secrets to those who listen.',
+      characters: ['The Oracle', 'Seraph', 'Sati'],
+      puzzles: ['Philosophical Insight', 'Prophecy Reading', 'Future Sight'],
+      interactions: ['WisdomQuest', 'FutureSight', 'ChoicePrompt', 'PhilosophicalDialogue'],
+      features: { hasTransition: true, hasChoice: true, hasCombat: false, hasNPC: true, hasAnimation: true, hasWisdom: true, hasProphecy: true },
+      dialogue: [
+        'Oracle: Welcome, child. I\'ve been expecting you.',
+        'Seraph: The path of wisdom requires sacrifice of certainty.',
+        'Sati: The future is like a river — it can be seen, but never fully controlled.',
+        'Oracle: Know thyself — but which aspect will you embrace?',
+        'Seraph: Choose your enlightenment: the path of sight or the path of understanding.'
+      ],
+      options: ['Path of Sight (Prophecy focus)', 'Path of Understanding (Wisdom focus)'],
       enhancement: {
-        qualityRating: 6,
-        status: "stub",
-        priority: "low",
-        updatedAt: "2025-06-03T00:00:00Z"
+        qualityRating: 8.7,
+        status: "wip",
+        priority: "high",
+        updatedAt: "2025-06-03T23:25:00Z"
       }
     }
   },
@@ -654,21 +682,27 @@ export const realMatrixNodes = [
     parentChoice: 'matrix-pill-choice',
     choiceValue: 'blue',
     data: {
-      title: 'Investigation Path',
+      title: 'Anomaly Investigation Protocol',
       pageUrl: '/matrix-v1/observer',
-      status: 'stub',
-      summary: 'Despite taking the blue pill, you notice glitches. Investigate or ignore?',
-      characters: ['Agent Smith', 'Trinity (disguised)'],
-      puzzles: [],
-      interactions: ['ChoicePrompt', 'GlitchDetection'],
-      features: { hasTransition: true, hasChoice: true, hasCombat: false, hasNPC: true, hasAnimation: true },
-      dialogue: ['Something isn\'t right.', 'Will you dig deeper or let it slide?'],
-      options: ['Investigate Glitches', 'Ignore and Continue', 'Report to Authorities'],
+      status: 'wip',
+      summary: 'Despite taking the blue pill, reality glitches persist. The simulation is breaking down — and you\'re the only one who notices.',
+      characters: ['Agent Smith', 'Trinity (disguised)', 'System Anomaly'],
+      puzzles: ['Glitch Pattern Analysis', 'Reality Testing'],
+      interactions: ['ChoicePrompt', 'GlitchDetection', 'RealityProbing', 'ParanoiaBuilding'],
+      features: { hasTransition: true, hasChoice: true, hasCombat: false, hasNPC: true, hasAnimation: true, hasGlitch: true, hasSuspense: true },
+      dialogue: [
+        'System: ERROR 404 - REALITY NOT FOUND',
+        'Trinity (disguised): Something isn\'t right. Do you see it too?',
+        'Agent Smith: Mr. Anderson... why do you persist in noticing what shouldn\'t be seen?',
+        'System Anomaly: The blue pill should have ended this. But you... you\'re different.',
+        'Trinity (disguised): Choose carefully. Some doors can\'t be closed once opened.'
+      ],
+      options: ['Investigate Glitches', 'Report to Authorities', 'Ignore and Continue'],
       enhancement: {
-        qualityRating: 6,
-        status: "stub",
-        priority: "low",
-        updatedAt: "2025-06-03T00:00:00Z"
+        qualityRating: 8.1,
+        status: "wip",
+        priority: "high",
+        updatedAt: "2025-06-03T23:35:00Z"
       }
     }
   },
@@ -709,26 +743,33 @@ export const realMatrixNodes = [
 
   {
     id: 'matrix-authority-agent',
-    type: 'scene',
+    type: 'choice',
     depth: 6,
     group: 'authority',
     parentChoice: 'matrix-blue-investigation',
     choiceValue: 'report',
     data: {
-      title: 'Authority Agent',
+      title: 'Agent Smith Integration',
       pageUrl: '/matrix-v1/trace',
-      status: 'stub',
-      summary: 'You\'ve reported the glitches. Now you\'re working with Agent Smith.',
-      characters: ['Agent Smith', 'Agent Brown'],
-      puzzles: ['Loyalty Test', 'Hunt Resistance'],
-      interactions: ['AgentBriefing', 'ResistanceHunt'],
-      features: { hasTransition: true, hasCombat: true, hasChoice: false, hasPuzzle: true, hasAnimation: true, hasNPC: true },
-      dialogue: ['Mr. Anderson. We\'ve been looking for you.', 'Help us find the others.'],
+      status: 'wip',
+      summary: 'You\'ve crossed the line — now you work for the system. Agent Smith has plans, and you\'re the perfect infiltrator.',
+      characters: ['Agent Smith', 'Agent Brown', 'Agent Jones'],
+      puzzles: ['Loyalty Test', 'Hunt Resistance', 'Double Agent Protocol'],
+      interactions: ['AgentBriefing', 'ResistanceHunt', 'ChoicePrompt', 'SystemIntegration'],
+      features: { hasTransition: true, hasCombat: true, hasChoice: true, hasPuzzle: true, hasAnimation: true, hasNPC: true, hasCorruption: true },
+      dialogue: [
+        'Agent Smith: Mr. Anderson. You\'ve made the correct choice.',
+        'Agent Brown: Your cooperation will be... rewarded.',
+        'Agent Smith: Help us eliminate the anomalies. Root out the resistance.',
+        'Agent Jones: Your human perspective provides unique advantages.',
+        'Agent Smith: The question is — how deep does your loyalty run?'
+      ],
+      options: ['Full integration (Become an Agent)', 'Double agent (Infiltrate while loyal to resistance)'],
       enhancement: {
-        qualityRating: 6,
-        status: "stub",
-        priority: "low",
-        updatedAt: "2025-06-03T00:00:00Z"
+        qualityRating: 8.3,
+        status: "wip",
+        priority: "high",
+        updatedAt: "2025-06-03T23:30:00Z"
       }
     }
   },
@@ -1357,5 +1398,31 @@ export const realMatrixEdges = [
 
   // === TRINITY RESCUE OPERATION CHOICES ===
   // Trinity Rescue choice branches
-  { id: 'edge-rescue-to-nexus', source: 'matrix-trinity-rescue', target: 'matrix-knowledge-nexus', label: 'Force override with noise' }
+  { id: 'edge-rescue-to-nexus', source: 'matrix-trinity-rescue', target: 'matrix-knowledge-nexus', label: 'Force override with noise' },
+
+  // === UPGRADED FACTION TRAINING CHOICES ===
+  // Zion Fleet Command choice branches
+  { id: 'edge-zion-command', source: 'matrix-zion-fleet', target: 'matrix-skill-gate-alpha', label: 'Command track (Leadership)' },
+  { id: 'edge-zion-assault', source: 'matrix-zion-fleet', target: 'matrix-trinity-rescue', label: 'Assault track (Combat specialist)' },
+
+  // Rebel Hackers Code Lab choice branches  
+  { id: 'edge-hackers-stealth', source: 'matrix-rebel-hackers', target: 'matrix-knowledge-nexus', label: 'System infiltration (Stealth hacking)' },
+  { id: 'edge-hackers-reality', source: 'matrix-rebel-hackers', target: 'matrix-ghost-layer-2', label: 'Reality manipulation (Code bending)' },
+
+  // Oracle Seekers Sanctuary choice branches
+  { id: 'edge-oracle-sight', source: 'matrix-oracle-seekers', target: 'matrix-the-source', label: 'Path of Sight (Prophecy focus)' },
+  { id: 'edge-oracle-wisdom', source: 'matrix-oracle-seekers', target: 'matrix-knowledge-nexus', label: 'Path of Understanding (Wisdom focus)' },
+
+  // Agent Smith Integration choice branches
+  { id: 'edge-agent-full', source: 'matrix-authority-agent', target: 'matrix-compliance-path', label: 'Full integration (Become an Agent)' },
+  { id: 'edge-agent-double', source: 'matrix-authority-agent', target: 'matrix-trinity-rescue', label: 'Double agent (Infiltrate while loyal to resistance)' },
+
+  // Blue Investigation Protocol choice branches
+  { id: 'edge-blue-investigate', source: 'matrix-blue-investigation', target: 'matrix-glitch-hunter', label: 'Investigate Glitches' },
+  { id: 'edge-blue-report', source: 'matrix-blue-investigation', target: 'matrix-authority-agent', label: 'Report to Authorities' },
+  { id: 'edge-blue-ignore', source: 'matrix-blue-investigation', target: 'matrix-blue-loop', label: 'Ignore and Continue' },
+
+  // Red Awakening choice branches
+  { id: 'edge-awakening-safe', source: 'matrix-red-awakening', target: 'matrix-red-trainer', label: 'Gradual rehabilitation (Safe path)' },
+  { id: 'edge-awakening-dangerous', source: 'matrix-red-awakening', target: 'matrix-red-faction-choice', label: 'Immediate action (Dangerous but faster)' }
 ];
