@@ -166,7 +166,7 @@ export const realMatrixNodes = [
   // === DEPTH 3: RED PILL GROUP ===
   {
     id: 'matrix-pill-choice-red',
-    type: 'scene',
+    type: 'choice',
     depth: 3,
     group: 'red-pill',
     parentChoice: 'matrix-pill-choice',
@@ -174,18 +174,23 @@ export const realMatrixNodes = [
     data: {
       title: 'Red Pill Path',
       pageUrl: '/matrix-v1/terminal',
-      status: 'live',
-      summary: 'The world begins to glitch. The user descends into raw data.',
-      characters: ['System'],
+      status: 'wip',
+      summary: 'You\'ve taken the red pill. Reality bends — and the system begins to fracture.',
+      characters: ['Morpheus'],
       puzzles: [],
-      interactions: ['SceneTransition', 'GlitchReveal'],
-      features: { hasTransition: true, hasChoice: false, hasCombat: false, hasNPC: false, hasAnimation: true },
-      dialogue: ['Connection destabilized.', 'Prepare for extraction.'],
+      interactions: ['ChoicePrompt', 'RealityBend'],
+      features: { hasDialogue: true, hasTransition: true, hasChoice: true, hasNPC: true, hasAnimation: true },
+      dialogue: [
+        'Morpheus: You\'ve made your choice.',
+        'The world you knew will disappear.',
+        'Follow me. No time to explain.'
+      ],
+      options: ['Proceed to training upload', 'Explore system anomalies'],
       enhancement: {
-        qualityRating: 6,
-        status: "stub",
-        priority: "low",
-        updatedAt: "2025-06-03T00:00:00Z"
+        qualityRating: 7.8,
+        status: "wip",
+        priority: "high",
+        updatedAt: "2025-06-03T21:15:00Z"
       }
     }
   },
@@ -1203,7 +1208,9 @@ export const realMatrixEdges = [
   { id: 'edge-choice-to-red', source: 'matrix-pill-choice', target: 'matrix-pill-choice-red', label: 'Red Pill' },
   { id: 'edge-choice-to-blue', source: 'matrix-pill-choice', target: 'matrix-pill-choice-blue', label: 'Blue Pill' },
   
-  // Red path continuation
+  // Red path continuation - NEW CHOICE BRANCHES
+  { id: 'edge-red-to-trainer', source: 'matrix-pill-choice-red', target: 'matrix-red-trainer', label: 'Proceed to training upload' },
+  { id: 'edge-red-to-glitch', source: 'matrix-pill-choice-red', target: 'matrix-glitch-hunter', label: 'Explore system anomalies' },
   { id: 'edge-red-to-awakening', source: 'matrix-pill-choice-red', target: 'matrix-red-awakening' },
   { id: 'edge-awakening-to-trainer', source: 'matrix-red-awakening', target: 'matrix-red-trainer' },
   
