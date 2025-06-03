@@ -10,19 +10,20 @@ export default function MatrixLayout({
   centered = true,
   fullHeight = true,
   glitch = false,
-  background = 'bg-black'
+  background
 }) {
-  const { currentTheme } = useTheme();
-  
+  const { theme } = useTheme();
+
   const baseClasses = [
     fullHeight ? 'min-h-screen' : '',
-    background,
     'font-mono',
     'relative',
     'overflow-hidden',
     'text-theme-primary',
     className
   ].filter(Boolean).join(' ');
+
+  const style = { background: background || theme.background };
 
   const contentClasses = [
     'relative',
@@ -36,7 +37,7 @@ export default function MatrixLayout({
   ].filter(Boolean).join(' ');
 
   return (
-    <div className={baseClasses}>
+    <div className={baseClasses} style={style}>
       {/* Matrix Rain Background */}
       {withRain && typeof window !== 'undefined' && (
         <MatrixRain 

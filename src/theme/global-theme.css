@@ -9,13 +9,19 @@
   color-scheme: dark;
 }
 
+body[data-color-mode='light'],
+body[data-color-mode='dark'] {
+  background: var(--world-background);
+}
 body[data-color-mode='light'] {
-  background: #f9fafb;
   color: #111827;
 }
 body[data-color-mode='dark'] {
-  background: #111827;
   color: white;
+}
+
+body {
+  background: var(--world-background);
 }
 /* Base theme variables are injected by ThemeContext */
 :root {
@@ -252,16 +258,10 @@ body[data-color-mode='dark'] {
 }
 
 /* Theme-specific body classes for global styling */
-body.theme-matrix {
-  background: linear-gradient(135deg, #000000 0%, #001100 50%, #000000 100%);
-}
-
-body.theme-witcher {
-  background: linear-gradient(135deg, #2c1810 0%, #4f2f1f 50%, #2c1810 100%);
-}
-
+body.theme-matrix,
+body.theme-witcher,
 body.theme-nightcity {
-  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 25%, #16213e 75%, #0f0f23 100%);
+  background: var(--world-background);
 }
 
 /* Theme-aware animations */
