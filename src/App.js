@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 
 import { UserProvider } from './components/UserContext';
 import { ThemeProvider } from './theme/ThemeContext';
+import { ColorModeProvider } from './theme/ColorModeContext';
 
 import Navigation from './components/Navigation';
 import Breadcrumbs from './components/Breadcrumbs';
@@ -73,7 +74,8 @@ export default function App() {
   return (
     <UserProvider>
       <ThemeProvider>
-        <Router>
+        <ColorModeProvider>
+          <Router>
           <div className="min-h-screen bg-theme-primary text-theme-primary pt-20 pb-4 relative font-theme-ui">
             <Navigation />
             <Breadcrumbs />
@@ -146,7 +148,8 @@ export default function App() {
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>
           </div>
-        </Router>
+          </Router>
+        </ColorModeProvider>
       </ThemeProvider>
     </UserProvider>
   );

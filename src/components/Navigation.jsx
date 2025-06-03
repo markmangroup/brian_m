@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import UserIcon from './UserIcon';
 import ThemeToggle from './ThemeToggle';
+import ColorModeToggle from './ColorModeToggle';
 import { useTheme } from '../theme/ThemeContext';
 import {
   FaRoad,
@@ -69,8 +70,9 @@ export default function Navigation() {
             </div>
           </div>
           
-          {/* Theme Toggle - Positioned to allow dropdown overflow */}
-          <div className="relative">
+          {/* Mode and Theme Toggles */}
+          <div className="flex items-center gap-2 relative">
+            <ColorModeToggle />
             <ThemeToggle />
           </div>
         </nav>
