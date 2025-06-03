@@ -86,6 +86,14 @@ code {
     filter: drop-shadow(0 0 8px currentColor);
   }
 
+  /* Improved label readability for SVG text */
+  .node-label {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+    paint-order: stroke fill;
+    stroke: #000;
+    stroke-width: 0.5px;
+  }
+
   /* Better button transitions */
   .expand-button {
     transition: all 200ms ease-in-out;
