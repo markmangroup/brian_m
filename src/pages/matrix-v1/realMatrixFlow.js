@@ -629,17 +629,31 @@ export const realMatrixNodes = [
       title: 'Glitch Hunter',
       pageUrl: '/matrix-v1/glitch-hunter',
       status: 'stub',
-      summary: 'Hunt down anomalies in the simulated world. Each discovery leads deeper.',
-      characters: ['Neo', 'Mysterious Contact'],
+      summary: 'You pursue the anomaly deeper \u2014 traces of unauthorized code echo across the grid.',
+      characters: ['Ghost Agent', 'System AI'],
       puzzles: ['Pattern Recognition', 'Anomaly Detection'],
       interactions: ['GlitchHunting', 'AnomalyTracker'],
-      features: { hasTransition: true, hasCombat: false, hasChoice: false, hasPuzzle: true, hasAnimation: true, hasNPC: true },
-      dialogue: ['The glitches are everywhere once you start looking.', 'Someone is trying to contact you.'],
+      features: {
+        hasTransition: true,
+        hasCombat: true,
+        hasChoice: true,
+        hasPuzzle: true,
+        hasAnimation: true,
+        hasDialogue: true,
+        hasNPC: true
+      },
+      dialogue: [
+        'Ghost Agent: This line isn\'t logged anywhere.',
+        'System AI: Unauthorized signal replication detected.',
+        'Ghost Agent: Something\'s breaching our control layers.',
+        'System AI: Hidden subroutines whisper through the static.'
+      ],
+      options: ['Trace the signal', 'Terminate investigation'],
       enhancement: {
-        qualityRating: 6,
-        status: "stub",
-        priority: "low",
-        updatedAt: "2025-06-03T00:00:00Z"
+        qualityRating: 7.8,
+        status: "wip",
+        priority: "high",
+        updatedAt: "2025-06-03T19:15:00Z"
       }
     }
   },
