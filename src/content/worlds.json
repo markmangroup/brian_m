@@ -14,5 +14,17 @@
       "summary": "Geralt must decide whether to follow destiny.",
       "options": ["Accept", "Decline"]
     }
+  },
+  "oracle": {
+    "matrix-oracle-seekers": {
+      "dialogue": [
+        { "text": "You\u2019ve felt it your whole life...", "tone": "cryptic" },
+        { "text": "Not everyone is ready to hear what you already know.", "tone": "soft" }
+      ],
+      "options": [
+        { "prompt": "Ask about the future", "outcome": "prophecy", "condition": "karma >= 2" },
+        { "prompt": "Reject her words", "outcome": "glitch-path" }
+      ]
+    }
   }
 }
