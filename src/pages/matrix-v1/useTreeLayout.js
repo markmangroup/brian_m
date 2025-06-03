@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useRef } from 'react';
 import * as d3 from 'd3';
 
 function applyExpansionState(tree, expandedNodes) {
@@ -36,6 +36,8 @@ export default function useTreeLayout(params) {
     handleNodeClick,
   } = params;
 
+  const rootPosRef = useRef({ x: 0, y: 0 });
+
   const getNodeColor = (node) => {
     const status = node.data?.status || 'unknown';
     switch (status) {
@@ -61,6 +63,8 @@ export default function useTreeLayout(params) {
     const margin = { top: 20, right: 120, bottom: 20, left: 120 };
     const width = 1400 - margin.left - margin.right;
     const height = 800 - margin.bottom - margin.top;
+    let rootPosition = { x: width / 2, y: height / 2 };
+
 
     const g = svg
       .attr('width', width + margin.left + margin.right)
@@ -71,20 +75,28 @@ export default function useTreeLayout(params) {
     let root, nodes, links, nodeRadius;
     switch (layoutType) {
       case 'tree': {
-        const layout = d3.tree().size([height, width]);
+        const layout = d3
+          .tree()
+          .nodeSize([40, 160])
+          .separation((a, b) => (a.parent === b.parent ? 1.5 : 2.5));
         root = d3.hierarchy(expandedTree, (d) => d.children);
         layout(root);
         nodes = root.descendants();
         links = root.links();
+        rootPosition = { x: root.y + margin.left, y: root.x + margin.top };
         nodeRadius = (d) => (d.children || d._children ? 10 : 7);
         break;
       }
       case 'cluster': {
-        const layout = d3.cluster().size([height, width]);
+        const layout = d3
+          .cluster()
+          .nodeSize([40, 160])
+          .separation((a, b) => (a.parent === b.parent ? 1.2 : 2));
         root = d3.hierarchy(expandedTree, (d) => d.children);
         layout(root);
         nodes = root.descendants();
         links = root.links();
+        rootPosition = { x: root.y + margin.left, y: root.x + margin.top };
         nodeRadius = (d) => (d.children || d._children ? 12 : 8);
         break;
       }
@@ -92,7 +104,7 @@ export default function useTreeLayout(params) {
         const layout = d3
           .tree()
           .size([2 * Math.PI, Math.min(width, height) / 2 - 100])
-          .separation((a, b) => (a.parent === b.parent ? 1 : 2) / a.depth);
+          .separation((a, b) => (a.parent === b.parent ? 1.2 : 2.2));
         root = d3.hierarchy(expandedTree, (d) => d.children);
         layout(root);
         nodes = root.descendants();
@@ -101,6 +113,7 @@ export default function useTreeLayout(params) {
           d.x_cartesian = d.y * Math.cos(d.x - Math.PI / 2);
           d.y_cartesian = d.y * Math.sin(d.x - Math.PI / 2);
         });
+        rootPosition = { x: width / 2 + (root.x_cartesian || 0), y: height / 2 + (root.y_cartesian || 0) };
         nodeRadius = (d) => (d.children || d._children ? 9 : 6);
         break;
       }
@@ -123,10 +136,14 @@ export default function useTreeLayout(params) {
           .force('charge', d3.forceManyBody().strength(forceStrength))
           .force('center', d3.forceCenter(width / 2, height / 2).strength(centerStrength))
           .force('collide', d3.forceCollide().radius((d) => (d.hasChildren ? 20 : 15) + collideRadius));
-        for (let i = 0; i < 300; i++) sim.tick();
-        nodes = flatNodes.map((d) => ({ data: d, x: d.x, y: d.y }));
-        links = flatLinks.map((d) => ({ source: { x: d.source.x, y: d.source.y }, target: { x: d.target.x, y: d.target.y } }));
-        nodeRadius = (d) => (d.data.hasChildren ? 12 : 8);
+        nodes = flatNodes;
+        links = flatLinks;
+        nodeRadius = (d) => (d.hasChildren ? 12 : 8);
+        const rootNode = flatNodes.find((n) => n.id === expandedTree.id);
+        if (rootNode) {
+          rootPosition = { x: rootNode.x + margin.left, y: rootNode.y + margin.top };
+        }
+        g.node().simulation = sim;
         break;
       }
       default:
@@ -134,7 +151,7 @@ export default function useTreeLayout(params) {
     }
 
     const linkGroups = g.selectAll('.link').data(links).enter().append('g').attr('class', 'link');
-    linkGroups
+    const linkPaths = linkGroups
       .append('path')
       .attr('d', (d) => {
         if (layoutType === 'radial') {
@@ -155,14 +172,21 @@ export default function useTreeLayout(params) {
       .style('opacity', 0.6)
       .style('stroke-dasharray', layoutType === 'network' ? '3,3' : 'none');
 
-    const nodeGroups = g.selectAll('.node').data(nodes).enter().append('g').attr('class', 'node').attr('transform', (d) => {
-      if (layoutType === 'radial') return `translate(${d.x_cartesian + width / 2},${d.y_cartesian + height / 2})`;
-      return `translate(${layoutType === 'tree' ? d.y : d.x},${layoutType === 'tree' ? d.x : d.y})`;
-    });
+    const nodeGroups = g
+      .selectAll('.node')
+      .data(nodes)
+      .enter()
+      .append('g')
+      .attr('class', 'node')
+      .attr('transform', (d) => {
+        if (layoutType === 'radial') return `translate(${d.x_cartesian + width / 2},${d.y_cartesian + height / 2})`;
+        return `translate(${layoutType === 'tree' ? d.y : d.x},${layoutType === 'tree' ? d.x : d.y})`;
+      });
 
     nodeGroups
       .append('circle')
       .attr('r', nodeRadius)
+      .attr('class', 'matrix-node-hover')
       .style('fill', (d) => (nodeMatchesFilters(d.data) ? getNodeColor(d.data) : '#444'))
       .style('stroke', (d) => (nodeMatchesFilters(d.data) ? '#fff' : '#666'))
       .style('stroke-width', (d) => (selectedNode?.id === d.data.id ? 3 : 1.5))
@@ -170,11 +194,14 @@ export default function useTreeLayout(params) {
       .on('click', (event, d) => {
         event.stopPropagation();
         handleNodeClick(d, false);
-      });
+      })
+      .append('title')
+      .text((d) => d.data?.data?.title || d.data?.title || d.data?.id);
 
     nodeGroups
       .append('text')
       .attr('dy', '.35em')
+      .attr('class', 'node-label')
       .attr('dx', (d) => {
         const radius = typeof nodeRadius === 'function' ? nodeRadius(d) : nodeRadius;
         return radius + 15;
@@ -218,8 +245,45 @@ export default function useTreeLayout(params) {
       .style('fill', '#000')
       .style('pointer-events', 'none')
       .text((d) => (d.children ? '−' : '+'));
+
+    rootPosRef.current = rootPosition;
+
+    if (layoutType === 'network' && g.node().simulation) {
+      const sim = g.node().simulation;
+      nodeGroups.call(
+        d3.drag()
+          .on('start', (event, d) => {
+            if (!event.active) sim.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+          })
+          .on('drag', (event, d) => {
+            d.fx = event.x;
+            d.fy = event.y;
+          })
+          .on('end', (event, d) => {
+            if (!event.active) sim.alphaTarget(0);
+          })
+      );
+
+      nodeGroups.on('dblclick', (event, d) => {
+        if (d.fx == null) {
+          d.fx = d.x;
+          d.fy = d.y;
+        } else {
+          d.fx = null;
+          d.fy = null;
+        }
+        sim.alpha(0.3).restart();
+      });
+
+      sim.on('tick', () => {
+        linkPaths.attr('d', (l) => `M${l.source.x},${l.source.y}L${l.target.x},${l.target.y}`);
+        nodeGroups.attr('transform', (d) => `translate(${d.x},${d.y})`);
+      });
+    }
   }, [svgRef, filteredTree, layoutType, expandedNodes, nodeMatchesFilters, themeConfigs, currentTheme, forceStrength, linkDistance, centerStrength, collideRadius, selectedNode, handleNodeClick]);
 
-  return { drawTree };
+  return { drawTree, rootPosRef };
 }
 

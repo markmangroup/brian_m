@@ -172,6 +172,7 @@ export default function MapD3() {
   const [statusFilter, setStatusFilter] = useState(['live', 'wip', 'stub']);
   const [selectedNode, setSelectedNode] = useState(null);
   const [breadcrumb, setBreadcrumb] = useState([]);
+  const [initialCentered, setInitialCentered] = useState(false);
   
   // 🛠 DEBUGGING: Temporarily expand ALL nodes instead of using getInitialExpandedNodes()
   // TODO: Revert to: useState(getInitialExpandedNodes(realMatrixNodes, realMatrixEdges))
@@ -479,7 +480,7 @@ export default function MapD3() {
     }
   }, [toggleNodeExpansion, originalTree]);
 
-  const { drawTree } = useTreeLayout({
+  const { drawTree, rootPosRef } = useTreeLayout({
     svgRef,
     filteredTree,
     layoutType,
@@ -543,6 +544,22 @@ export default function MapD3() {
   useEffect(() => {
     drawTree();
   }, [drawTree]);
+
+  useEffect(() => {
+    if (!initialCentered && rootPosRef?.current && svgRef.current) {
+      const { x, y } = rootPosRef.current;
+      const svgRect = svgRef.current.getBoundingClientRect();
+      const centerX = svgRect.width / 2;
+      const centerY = svgRect.height / 2;
+      d3.select(svgRef.current)
+        .transition()
+        .call(
+          d3.zoom().transform,
+          d3.zoomIdentity.translate(centerX - x, centerY - y).scale(1)
+        );
+      setInitialCentered(true);
+    }
+  }, [rootPosRef, initialCentered]);
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white flex">
