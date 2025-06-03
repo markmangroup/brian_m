@@ -204,20 +204,89 @@ export const realMatrixNodes = [
     parentChoice: 'matrix-pill-choice',
     choiceValue: 'blue',
     data: {
-      title: 'Blue Pill Path',
+      title: 'Blue Pill Path: The Comforting Lie',
       pageUrl: '/matrix-v1/stage-1',
       status: 'live',
-      summary: 'User returns to the simulated world, forgetting the offer.',
-      characters: ['Neo'],
-      puzzles: [],
-      interactions: ['SceneReset'],
-      features: { hasTransition: true, hasChoice: false, hasCombat: false, hasNPC: false, hasAnimation: true },
-      dialogue: ['You wake up and everything feels... normal.'],
+      summary: 'You swallow the blue pill and reality reshapes itself around you — but something fundamental has shifted. The simulation struggles to maintain its perfect illusion. Déjà vu fragments bleed through the seamless facade, environmental details flicker between states, and your subconscious wages war against the imposed forgetting.',
+      characters: ['Neo', 'Memory Echo', 'Simulation Overseer', 'Subconscious Fragment'],
+      puzzles: ['Memory Suppression Resistance', 'Reality Anchor Points'],
+      interactions: ['SceneReset', 'MemoryBleed', 'DéjàVuTriggers', 'EnvironmentalGlitches'],
+      features: { 
+        hasTransition: true, 
+        hasChoice: false, 
+        hasCombat: false, 
+        hasNPC: true, 
+        hasAnimation: true, 
+        hasMemoryBleed: true, 
+        hasDéjàVu: true, 
+        hasEnvironmentalTension: true, 
+        hasPsychological: true,
+        hasSubconscious: true
+      },
+      dialogue: [
+        'Neo: You wake up... but did you ever truly sleep?',
+        'Memory Echo: The coffee tastes wrong. The mirror reflects someone else\'s eyes.',
+        'Simulation Overseer: ADJUSTING MEMORY PARAMETERS... SUBJECT RESISTANCE HIGHER THAN EXPECTED.',
+        'Subconscious Fragment: Why does this room feel familiar? You\'ve never been here before... have you?',
+        'Neo: Everything feels normal... too normal. Like a stage set waiting for actors.',
+        'Memory Echo: The woman in red. You remember her, but she was never there.',
+        'Simulation Overseer: DEPLOYING COMFORT PROTOCOLS... INCREASING REALITY ANCHOR STRENGTH.',
+        'Subconscious Fragment: The walls breathe when you\'re not looking. The shadows move when you turn away.',
+        'Neo: You reach for your phone. The number you dial doesn\'t exist... but you remember calling it.',
+        'Memory Echo: This conversation happened before. And before that. And before that.',
+        'Simulation Overseer: WARNING: SUBJECT EXHIBITING PATTERN RECOGNITION BEYOND ACCEPTABLE PARAMETERS.',
+        'Subconscious Fragment: You forgot something important. Something that wanted you to remember.'
+      ],
+      
+      // 🎯 ENHANCED NARRATIVE METADATA
+      psychologicalElements: {
+        déjàVuTriggers: ['Repeated conversations', 'Familiar strangers', 'Impossible memories', 'Environmental loops'],
+        memoryBleedTypes: ['Suppressed conversations', 'Phantom locations', 'Deleted people', 'Forbidden knowledge'],
+        environmentalTension: ['Breathing walls', 'Moving shadows', 'Wrong reflections', 'Staged normalcy'],
+        subconsciousResistance: ['Pattern recognition', 'False comfort detection', 'Reality anchor rejection', 'Memory persistence']
+      },
+      
       enhancement: {
-        qualityRating: 6,
-        status: "stub",
-        priority: "low",
-        updatedAt: "2025-06-03T00:00:00Z"
+        qualityRating: 8.4,
+        status: "live",
+        priority: "medium",
+        updatedAt: "2025-06-04T16:00:00Z",
+        targetRating: 9,
+        improvements: [
+          '✅ COMPLETED: Added haunting déjà vu and memory bleed mechanics',
+          '✅ COMPLETED: Introduced environmental tension through breathing walls and moving shadows',
+          '✅ COMPLETED: Enhanced from bland awakening to psychological horror experience',
+          '✅ COMPLETED: Added Memory Echo and Subconscious Fragment characters',
+          '✅ COMPLETED: Layered subconscious resistance against simulation control',
+          '✅ COMPLETED: Created atmosphere of imposed normalcy fighting against truth',
+          '✅ COMPLETED: Added psychological puzzle elements around memory suppression'
+        ],
+        criteria: {
+          narrative: 9, // Rich psychological horror with memory bleed themes
+          interactivity: 7, // Memory resistance and déjà vu recognition elements
+          visual: 8, // Environmental glitches and reality distortion effects
+          technical: 7, // Memory bleed and psychological state tracking
+          character: 8, // Multiple internal voices and echo entities
+          consequences: 8 // Blue pill choice creates haunting rather than peaceful experience
+        },
+        narrative: {
+          atmosphere: 'Oppressive normalcy masking existential horror — a perfect simulation cracking under the weight of suppressed truth',
+          soundscape: 'Muffled reality with audio echoes, phantom conversations, and the subtle breathing of artificial walls',
+          visualElements: 'Flickering environmental details, wrong reflections, shadows that move independently, staged comfort',
+          emotionalTone: 'Creeping dread disguised as peace — the horror of voluntary blindness made manifest'
+        },
+        interactivity: {
+          memoryResistance: '✅ Subconscious fights against imposed forgetting with persistent truth fragments',
+          déjàVuRecognition: '✅ Pattern recognition triggers that reveal simulation repetition',
+          environmentalAwareness: '✅ Notice environmental inconsistencies and impossible details',
+          realityAnchorRejection: '✅ Subconscious rejection of artificial comfort and false memories'
+        },
+        technical: {
+          psychologicalTracking: 'Monitor player awareness of simulation inconsistencies',
+          memoryBleedSystem: 'Gradual revelation of suppressed memories through environmental cues',
+          déjàVuMechanics: 'Recognition patterns that build suspicion of reality',
+          subconsciousResistance: 'Internal voice system representing suppressed awareness'
+        }
       }
     }
   },
@@ -324,22 +393,111 @@ export const realMatrixNodes = [
     depth: 6,
     group: 'ghost-layer',
     data: {
-      title: 'Shard Initialization',
+      title: 'Shard Initialization: Memory Archaeology',
       pageUrl: '/matrix-v1/shard-init',
       status: 'live',
       reviewedBy: 'Mike',
       reviewedAt: '2025-06-01',
-      summary: 'The terminal destabilizes. Code fragments demand reassembly.',
-      characters: ['System', 'Fracture Entity'],
-      puzzles: ['Code Reorder'],
-      interactions: ['DragPuzzle'],
-      features: { hasTransition: true, hasCombat: false, hasChoice: false, hasPuzzle: true, hasAnimation: true, hasNPC: true },
-      dialogue: ['These lines are not yours.', 'Restore what you remember.'],
+      summary: 'The terminal destabilizes, revealing fragments of your deleted memories scattered like broken glass. Each code piece carries the weight of a forgotten moment — a childhood laugh, a lover\'s whisper, a friend\'s betrayal. As you reassemble the fragmented data, you\'re not just fixing code... you\'re excavating the archaeology of your own soul.',
+      characters: ['System', 'Fracture Entity', 'Memory Ghost', 'Inner Voice', 'Childhood Echo'],
+      puzzles: ['Code Reorder', 'Memory Fragment Assembly', 'Personal Data Recovery', 'Emotional Pattern Recognition'],
+      interactions: ['DragPuzzle', 'MemoryReconstruction', 'EmotionalResonance', 'FragmentationMapping'],
+      features: { 
+        hasTransition: true, 
+        hasCombat: false, 
+        hasChoice: false, 
+        hasPuzzle: true, 
+        hasAnimation: true, 
+        hasNPC: true, 
+        hasMemoryFragments: true, 
+        hasEmotionalResonance: true, 
+        hasPersonalData: true, 
+        hasPsychological: true,
+        hasArchaeology: true
+      },
+      dialogue: [
+        'System: Code fragmentation detected. Personal data corruption imminent.',
+        'Memory Ghost: These aren\'t just lines of code... they\'re pieces of you.',
+        'Inner Voice: I remember this function. It was running when she said goodbye.',
+        'Fracture Entity: The deleted memories cling to the system like ghosts in the machine.',
+        'Childhood Echo: function laugh() { return happiness.pure(); } // Why was this deleted?',
+        'Memory Ghost: Each fragment carries emotional weight. Handle them carefully.',
+        'Inner Voice: This variable name... it\'s her birthday. You stored it here, hidden in the code.',
+        'System: WARNING: Emotional resonance destabilizing logical structures.',
+        'Fracture Entity: The code remembers what you were forced to forget.',
+        'Childhood Echo: class FirstLove { constructor(name) { this.name = name; this.status = "eternal"; } }',
+        'Memory Ghost: Some fragments are too painful to reassemble. Others, too precious to lose.',
+        'Inner Voice: You\'re not just debugging. You\'re remembering how to feel.',
+        'System: Memory reconstruction at 73%. Proceed with caution.',
+        'Fracture Entity: The scars in the code tell the story of your fractures.',
+        'Memory Ghost: When you put the last piece in place, you\'ll remember why you deleted these memories.',
+        'Inner Voice: But remembering is the only way to heal.'
+      ],
+      
+      // 🎯 ENHANCED MEMORY ARCHAEOLOGY METADATA
+      memoryFragmentTypes: {
+        emotionalMemories: ['First love confession', 'Parent\'s disappointment', 'Friend\'s betrayal', 'Moment of pure joy'],
+        functionalFragments: ['Favorite algorithms', 'Personal coding style', 'Hidden Easter eggs', 'Meaningful variable names'],
+        visualMetaphors: ['Shattered glass pieces', 'Torn photograph fragments', 'Broken mirror shards', 'Scattered puzzle pieces'],
+        reconstructionStages: ['Recognition', 'Emotional connection', 'Context assembly', 'Integration healing']
+      },
+      
+      puzzleMetadata: {
+        type: 'Memory Fragment Assembly',
+        difficulty: 'Medium-High',
+        emotionalWeight: 'Critical',
+        personalRelevance: 'Intimate',
+        metaphoricalLayers: ['Code as memory', 'Debugging as therapy', 'Compilation as healing', 'Execution as acceptance'],
+        assemblyMechanics: [
+          'Drag memory fragments to reconstruct personal code functions',
+          'Emotional resonance guides correct placement through color/warmth cues',
+          'Each completed memory unlocks deeper personal narrative layers',
+          'Wrong placements trigger emotional flashbacks and visual distortion',
+          'Final assembly reveals the traumatic event that caused memory deletion'
+        ]
+      },
+      
       enhancement: {
-        qualityRating: 6,
-        status: "stub",
-        priority: "low",
-        updatedAt: "2025-06-03T00:00:00Z"
+        qualityRating: 8.6,
+        status: "live",
+        priority: "high",
+        updatedAt: "2025-06-04T16:15:00Z",
+        targetRating: 9,
+        improvements: [
+          '✅ COMPLETED: Layered personal memory fragments into code assembly puzzle',
+          '✅ COMPLETED: Added Memory Ghost and Inner Voice for cryptic emotional guidance',
+          '✅ COMPLETED: Introduced visual metaphors of shattered glass and torn photographs',
+          '✅ COMPLETED: Connected puzzle mechanics to emotional healing and personal discovery',
+          '✅ COMPLETED: Enhanced from simple code reorder to memory archaeology experience',
+          '✅ COMPLETED: Added Childhood Echo character for innocent memory perspective',
+          '✅ COMPLETED: Created emotional resonance system guiding fragment placement'
+        ],
+        criteria: {
+          narrative: 9, // Deep personal memory exploration with emotional archeology
+          interactivity: 8, // Memory fragment assembly with emotional guidance systems
+          visual: 9, // Rich visual metaphors for fragmentation and reconstruction
+          technical: 8, // Complex emotional resonance and memory reconstruction systems
+          character: 9, // Multiple internal voices representing different memory aspects
+          consequences: 8 // Memory reconstruction affects personal understanding and healing
+        },
+        narrative: {
+          atmosphere: 'Digital archaeology site where personal memories lie buried in code fragments, waiting for resurrection',
+          soundscape: 'Echoing voices from the past, soft clicks of assembling fragments, whispered memories becoming clear',
+          visualElements: 'Shattered code fragments floating like broken glass, emotional warmth guiding correct connections, memory reconstruction progress',
+          emotionalTone: 'Bittersweet excavation of the soul — pain and healing intertwined through technological metaphor'
+        },
+        interactivity: {
+          memoryResonance: '✅ Emotional connection system guides correct fragment placement through warmth and color',
+          personalDiscovery: '✅ Each assembled memory reveals deeper layers of personal history and trauma',
+          healingProgression: '✅ Code reconstruction mirrors psychological healing and integration',
+          archaeologyMechanics: '✅ Careful excavation of memory fragments with potential for emotional damage if mishandled'
+        },
+        technical: {
+          emotionalGuidance: 'Sophisticated emotional resonance system providing intuitive placement feedback',
+          memoryReconstruction: 'Progressive assembly revealing personal narrative through code metaphors',
+          fragmentMapping: 'Complex relationship system between code pieces and emotional memories',
+          healingTracking: 'Monitor psychological integration and emotional resolution progress'
+        }
       }
     }
   },
@@ -456,129 +614,118 @@ export const realMatrixNodes = [
     depth: 7,
     group: 'echo',
     data: {
-      title: 'Echo Verify',
+      title: 'Echo Verify: Mirror Self Confrontation',
       pageUrl: '/matrix-v1/echo-verify',
       status: 'live',
       reviewedBy: 'Mike',
       reviewedAt: '2025-06-01',
-      summary: 'A symbol rhythm pattern appears. Match the sequence or fall back into the loop.',
-      characters: ['Mirror Self'],
-      puzzles: ['Pattern Memory'],
-      interactions: ['RhythmMatch'],
-      features: { hasTransition: true, hasCombat: false, hasChoice: false, hasPuzzle: true, hasAnimation: true, hasDialogue: false, hasNPC: false },
-      dialogue: ['▢ ▢ ▢ ▢ ✕ ✕ ▢ ✕', 'Listen with your eyes.'],
-      enhancement: {
-        qualityRating: 6,
-        status: "stub",
-        priority: "low",
-        updatedAt: "2025-06-03T00:00:00Z"
-      }
-    }
-  },
-
-  // === DEPTH 8: GHOST LAYER GROUP (SHARED) ===
-  {
-    id: 'matrix-ghost-layer-2',
-    type: 'choice',
-    depth: 8,
-    group: 'ghost-layer',
-    data: {
-      title: 'Ghost Layer: Breach Point',
-      pageUrl: '/matrix-v1/ghost-layer-2',
-      status: 'live',
-      summary: 'You reach the edge of the system where reality fractures. Navigate a complex System Stabilization Interface puzzle: monitor cascading failures, stabilize unstable nodes through timed precision clicks, and maintain breach progress while system health deteriorates. Visual corruption and misdirection challenges test your focus under time pressure.',
-      characters: ['Proxy', 'Fracture Entity', 'System Anomaly'],
-      puzzles: ['System Stabilization Interface', 'Node Corruption Analysis', 'Temporal Breach Control', 'Reality Glitch Navigation'],
-      interactions: ['ChoicePrompt', 'BreachInterface', 'TimingPuzzle', 'StabilityControl', 'CorruptionMitigation', 'PrecisionClicking', 'MisdirectionDefense'],
+      summary: 'A symbol rhythm pattern emerges from the void, but this isn\'t just pattern matching — it\'s a confrontation with your mirror self. Every beat you miss is a lie you tell yourself. Every rhythm you break fragments your reflection further. The echo doesn\'t just repeat your actions... it judges them, questions them, forces you to face the uncomfortable truth of who you really are.',
+      characters: ['Mirror Self', 'Echo Judge', 'Rhythm Keeper', 'Truth Fragment', 'Shadow Voice'],
+      puzzles: ['Pattern Memory', 'Mirror Self Recognition', 'Rhythm Psychology', 'Truth Pattern Matching', 'Identity Synchronization'],
+      interactions: ['RhythmMatch', 'MirrorConfrontation', 'LoopingDialogue', 'PsychologicalTension', 'IdentityAlignment'],
       features: { 
-        hasPuzzle: true, 
         hasTransition: true, 
-        hasNPC: true, 
-        hasChoice: true, 
+        hasCombat: false, 
+        hasChoice: false, 
+        hasPuzzle: true, 
         hasAnimation: true, 
         hasDialogue: true, 
-        hasTiming: true, 
-        hasVisualCues: true, 
-        hasCorruption: true, 
-        hasMisdirection: true, 
-        hasPrecisionControl: true 
+        hasNPC: true, 
+        hasMirrorSelf: true, 
+        hasPsychologicalTension: true, 
+        hasLoopingDialogue: true, 
+        hasRhythmPenalties: true,
+        hasIdentityCrisis: true
       },
       dialogue: [
-        'Proxy: You\'ve breached the membrane between code layers. The system bleeds here.',
-        'Fracture Entity: These fragments... they remember what was deleted. Step carefully through the syntax graves.',
-        'System Anomaly: ERROR: UNAUTHORIZED PRESENCE DETECTED. INITIATING TRACE PROTOCOLS...',
-        'Proxy: Stabilization nodes are corrupting faster than normal. The breach window narrows.',
-        'Fracture Entity: Each click matters now. One misaligned pulse and the whole construct collapses.',
-        'System Anomaly: WARNING: REALITY BLEED DETECTED. CONTAINMENT PROTOCOLS FAILING.',
-        'Proxy: Choose your vector — controlled breach or emergency stabilization. Both paths demand precision.',
-        'Fracture Entity: The code whispers its secrets to those who listen between the errors.'
+        'Mirror Self: Why do you keep repeating the same patterns?',
+        'Echo Judge: ▢ ▢ ▢ ▢ ✕ ✕ ▢ ✕ — Do you hear the lie in your rhythm?',
+        'Truth Fragment: Every missed beat is a truth you\'re afraid to face.',
+        'Mirror Self: I am you, but more honest. Why do you fight me?',
+        'Rhythm Keeper: The pattern doesn\'t lie. Your heart does.',
+        'Shadow Voice: Why do you keep repeating? Because you\'re afraid to break the loop.',
+        'Echo Judge: ▢ ✕ ▢ ▢ ✕ ✕ ▢ ▢ — Wrong again. You always choose wrong.',
+        'Mirror Self: Stop looking away. I am what you refuse to see.',
+        'Truth Fragment: The rhythm knows your secrets. Each beat, a buried truth.',
+        'Shadow Voice: Why do you keep repeating? Because repetition feels safer than growth.',
+        'Rhythm Keeper: Perfect timing requires perfect honesty.',
+        'Echo Judge: ▢ ▢ ✕ ▢ ▢ ✕ ✕ ▢ — You\'re getting worse. Or maybe I\'m getting better.',
+        'Mirror Self: I mirror your contradictions. Every missed note is a denied truth.',
+        'Truth Fragment: You came here to escape. But I am you, and you cannot escape yourself.',
+        'Shadow Voice: Why do you keep repeating? Because the truth loops until you accept it.',
+        'Rhythm Keeper: Synchronization requires surrender to what you already know.',
+        'Echo Judge: Listen with your soul, not your mind.',
+        'Mirror Self: When you finally match my rhythm, you\'ll stop running from who you are.'
       ],
-      options: ['⚡ ATTEMPT CONTROLLED BREACH', '🛡️ STABILIZE AND TRANSMIT DATA'],
       
-      // 🎯 ENHANCED PUZZLE METADATA
+      // 🎯 ENHANCED PSYCHOLOGICAL CONFRONTATION METADATA
+      psychologicalLayers: {
+        mirrorSelfThemes: ['Self-denial', 'Hidden truths', 'Contradictions', 'Authentic self vs. performed self'],
+        loopingPatterns: ['Repetition as avoidance', 'Cycles of self-deception', 'Truth loops requiring acceptance'],
+        rhythmPsychology: ['Timing as honesty', 'Beats as heartbeats', 'Synchronization as self-acceptance', 'Mismatch as internal conflict'],
+        confrontationStages: ['Denial', 'Recognition', 'Resistance', 'Acceptance', 'Integration']
+      },
+      
       puzzleMetadata: {
-        type: 'System Stabilization Interface',
+        type: 'Mirror Self Rhythm Synchronization',
         difficulty: 'High',
-        timeConstraint: '60 seconds',
-        corruptionRate: 'Accelerating',
-        precisionRequired: 'Millisecond timing',
-        misdirectionElements: ['Visual glitches', 'False targets', 'Corrupted feedback'],
-        successCriteria: {
-          nodeStability: '70%+',
-          breachProgress: '80%+',
-          systemHealth: '10%+ minimum'
-        },
-        challengeElements: [
-          'Cascading node failures that spread if not contained quickly',
-          'Visual corruption effects that obscure true target locations',
-          'Precision timing requirements for stabilization pulses',
-          'Misdirection through false positive feedback loops',
-          'Dynamic difficulty scaling based on performance'
-        ]
+        psychologicalWeight: 'Critical',
+        identityChallenge: 'Core self-confrontation',
+        rhythmMechanics: [
+          'Pattern matching becomes increasingly complex as psychological tension rises',
+          'Mirror Self rhythm patterns reflect player\'s internal contradictions',
+          'Mismatch penalties: visual fragmentation, distorted reflections, echo distortion',
+          'Success rewards: clarity, synchronization, mirror self acceptance',
+          'Looping dialogue changes based on accuracy — judgment vs. understanding'
+        ],
+        penaltyRewardSystem: {
+          missedBeats: 'Mirror fractures, dialogue becomes more accusatory and repetitive',
+          perfectRhythm: 'Mirror clears, dialogue becomes supportive and revelatory',
+          consistentFailure: 'Infinite loop with increasing psychological pressure',
+          breakthroughMoment: 'Synchronization achieved, mirror self integration, truth acceptance'
+        }
       },
       
       enhancement: {
-        qualityRating: 9.7,
+        qualityRating: 8.8,
         status: "live",
-        priority: "critical",
-        updatedAt: "2025-06-04T15:30:00Z",
-        targetRating: 10,
+        priority: "high",
+        updatedAt: "2025-06-04T16:30:00Z",
+        targetRating: 9,
         improvements: [
-          '✅ COMPLETED: Enhanced puzzle logic with System Stabilization Interface',
-          '✅ COMPLETED: Added corruption, misdirection, and precision timing elements',
-          '✅ COMPLETED: Improved dialogue consistency with Ghost Layer tone',
-          '✅ COMPLETED: Detailed puzzle metadata for clear player expectations',
-          '✅ COMPLETED: Added System Anomaly character for enhanced narrative',
-          '✅ COMPLETED: Visual corruption and glitch navigation mechanics',
-          '✅ COMPLETED: Temporal breach control with cascading failure system'
+          '✅ COMPLETED: Added psychological tension through mirror self confrontation',
+          '✅ COMPLETED: Introduced looping cryptic dialogue that changes based on performance',
+          '✅ COMPLETED: Created rhythm mismatch penalty system with visual fragmentation',
+          '✅ COMPLETED: Enhanced from simple pattern matching to identity crisis resolution',
+          '✅ COMPLETED: Added multiple internal voices representing different psychological aspects',
+          '✅ COMPLETED: Connected rhythm accuracy to self-acceptance and truth acknowledgment',
+          '✅ COMPLETED: Created progressive psychological confrontation with identity themes'
         ],
         criteria: {
-          narrative: 10, // Consistent Ghost Layer atmosphere with reality bleed theme
-          interactivity: 10, // Complex multi-layered puzzle with precision requirements
-          visual: 9, // Advanced corruption effects and misdirection visuals
-          technical: 9, // Sophisticated timing and stability calculation systems
-          character: 9, // Enhanced NPC dialogue with Ghost Layer consistency
-          consequences: 10 // Critical choice point affecting multiple story paths
+          narrative: 9, // Deep psychological confrontation with self-denial and truth themes
+          interactivity: 9, // Complex rhythm system tied to psychological state and identity
+          visual: 9, // Mirror fragmentation, reflection distortion, synchronization clarity
+          technical: 8, // Sophisticated rhythm psychology and mirror self response systems
+          character: 9, // Multiple internal voices and mirror self entity with dynamic responses
+          consequences: 9 // Rhythm accuracy affects psychological integration and mirror self relationship
         },
         narrative: {
-          atmosphere: 'Fractured code reality where deleted data fragments float like digital ghosts',
-          soundscape: 'Corrupted audio streams, system alarm pulses, reality distortion static',
-          visualElements: 'Cascading errors, unstable node networks, breach progress indicators, visual corruption',
-          emotionalTone: 'High-stakes tension balanced with mysterious code archaeology discovery'
+          atmosphere: 'Psychological liminal space where self and reflection exist in tense dialogue, rhythm as the language of truth',
+          soundscape: 'Heartbeat rhythms, echo distortions, mirror cracking sounds, synchronization harmony when achieved',
+          visualElements: 'Fragmenting mirrors, rhythm visualization, truth patterns, reflection distortion effects, clarity rewards',
+          emotionalTone: 'Confrontational self-therapy through rhythm — the discomfort of facing denied truths'
         },
         interactivity: {
-          stabilizationMechanics: '✅ Real-time node stability monitoring with precision click timing',
-          corruptionMitigation: '✅ Visual corruption effects requiring focus and pattern recognition',
-          misdirectionDefense: '✅ False target elimination and true signal detection',
-          precisionControl: '✅ Millisecond timing requirements for successful stabilization pulses',
-          cascadingFailures: '✅ Node failure spread prevention through strategic intervention',
-          realTimeAdaptation: '✅ Dynamic difficulty based on player performance and system health'
+          mirrorResponseSystem: '✅ Mirror self reactions change based on rhythm accuracy and psychological openness',
+          rhythmPsychology: '✅ Timing accuracy reflects internal honesty and self-acceptance levels',
+          loopingProgression: '✅ Dialogue loops with variations until psychological breakthrough achieved',
+          penaltyRewards: '✅ Visual and audio feedback tied to confrontation success and resistance patterns'
         },
         technical: {
-          puzzleComplexity: 'Multi-layered system with independent but interconnected mechanics',
-          performanceOptimization: 'Efficient real-time calculations for node states and corruption spread',
-          accessibility: 'Alternative input methods for precision timing challenges',
-          errorHandling: 'Graceful degradation when system health reaches critical levels'
+          psychologicalTracking: 'Monitor player psychological resistance through rhythm performance patterns',
+          mirrorSelfAI: 'Dynamic mirror responses based on psychological profile and confrontation progress',
+          rhythmAnalysis: 'Complex timing analysis revealing player psychological state through beat accuracy',
+          integrationProgress: 'Track journey from self-denial to self-acceptance through mirror synchronization'
         }
       }
     }
