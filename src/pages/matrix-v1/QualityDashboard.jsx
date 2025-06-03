@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { realMatrixNodes } from './realMatrixFlow';
+import { edges } from './edges';
 import {
   generateQualityReport,
   calculateNodeQuality,
@@ -101,6 +102,13 @@ const ExecutiveNodeCard = ({ node, onView, onEdit }) => {
   const improvements = getNextImprovements(node, 2);
   const navigate = useNavigate();
   const [showJson, setShowJson] = useState(false);
+  const edgeInfo = useMemo(() => {
+    return edges.reduce((acc, e) => {
+      if (e.source === node.id) acc.out++;
+      if (e.target === node.id) acc.in++;
+      return acc;
+    }, { in: 0, out: 0 });
+  }, [node.id]);
   
   const getWorldIcon = (group) => {
     for (const [worldKey, world] of Object.entries(WORLD_GROUPS)) {
@@ -169,12 +177,15 @@ const ExecutiveNodeCard = ({ node, onView, onEdit }) => {
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-1">
             <span className="text-lg">{getWorldIcon(node.group)}</span>
+            {node.data?.hasWorldVariant && (
+              <span title="Has world variant">🌍</span>
+            )}
             <h3 className="text-white font-semibold text-base truncate">
               {node.data?.title || node.id}
             </h3>
           </div>
           <div className="flex items-center gap-2 text-xs text-gray-400">
-            <span 
+            <span
               title={`Status: ${STATUS_LABELS[nodeStatus]} (from enhancement.status)`}
               className="cursor-help"
             >
@@ -182,6 +193,12 @@ const ExecutiveNodeCard = ({ node, onView, onEdit }) => {
             </span>
             <span>•</span>
             <span className="capitalize">{node.type}</span>
+            <span
+              className="ml-1 bg-gray-700 text-gray-300 px-1 rounded text-[10px]"
+              title="Inbound/Outbound edges"
+            >
+              {edgeInfo.in}/{edgeInfo.out}
+            </span>
           </div>
         </div>
         <div 
@@ -419,6 +436,10 @@ export default function QualityDashboard() {
   const [editingNode, setEditingNode] = useState(null);
   const [viewingNode, setViewingNode] = useState(null);
   const [showMore, setShowMore] = useState(false);
+  const [sortConfig, setSortConfig] = useState([
+    { key: 'updatedAt', direction: 'desc' },
+    { key: 'quality', direction: 'desc' }
+  ]);
 
   const report = useMemo(() => generateQualityReport(realMatrixNodes), []);
 
@@ -454,6 +475,9 @@ export default function QualityDashboard() {
       return sum + calculateNodeQuality(node).overall;
     }, 0) / total || 0;
 
+    const upgradedCount = filteredNodes.filter(n => ['live', 'wip'].includes(n.data?.status)).length;
+    const percentUpgraded = total ? (upgradedCount / total) * 100 : 0;
+
     const priorityCounts = {
       CRITICAL: filteredNodes.filter(n => calculateNodeQuality(n).priority === 'CRITICAL').length,
       HIGH: filteredNodes.filter(n => calculateNodeQuality(n).priority === 'HIGH').length,
@@ -462,17 +486,58 @@ export default function QualityDashboard() {
     };
 
     return {
-      total, stubCount, wipCount, liveCount, avgQuality, priorityCounts
+      total,
+      stubCount,
+      wipCount,
+      liveCount,
+      avgQuality,
+      priorityCounts,
+      percentUpgraded
     };
   }, [filteredNodes]);
 
+  const sortedNodes = useMemo(() => {
+    return [...filteredNodes].sort((a, b) => {
+      for (const { key, direction } of sortConfig) {
+        let valA;
+        let valB;
+        if (key === 'updatedAt') {
+          valA = new Date(
+            a.data?.enhancement?.updatedAt || a.data?.lastModified || 0
+          ).getTime();
+          valB = new Date(
+            b.data?.enhancement?.updatedAt || b.data?.lastModified || 0
+          ).getTime();
+        } else if (key === 'quality') {
+          valA = calculateNodeQuality(a).overall;
+          valB = calculateNodeQuality(b).overall;
+        } else {
+          valA = 0;
+          valB = 0;
+        }
+        if (valA < valB) return direction === 'asc' ? -1 : 1;
+        if (valA > valB) return direction === 'asc' ? 1 : -1;
+      }
+      return 0;
+    });
+  }, [filteredNodes, sortConfig]);
+
   // Display logic - show max 12 nodes by default
-  const displayNodes = showMore ? filteredNodes : filteredNodes.slice(0, 12);
+  const displayNodes = showMore ? sortedNodes : sortedNodes.slice(0, 12);
 
   const handleSaveEdit = (nodeId, editData) => {
     // In a real app, this would update the data source
     console.log('Saving edit for node:', nodeId, editData);
     // For now, just log the change
+  };
+
+  const toggleSort = (key) => {
+    setSortConfig((prev) => {
+      const existing = prev.find((p) => p.key === key);
+      const direction = existing && existing.direction === 'desc' ? 'asc' : 'desc';
+      const newConfig = [{ key, direction }, ...prev.filter((p) => p.key !== key)];
+      return newConfig;
+    });
   };
 
   return (
@@ -529,6 +594,26 @@ export default function QualityDashboard() {
             <div className="text-2xl font-bold text-gray-400">{kpis.priorityCounts.MEDIUM + kpis.priorityCounts.LOW}</div>
             <div className="text-xs text-gray-400">Low Priority</div>
           </div>
+          <div className="bg-gray-900 border border-cyan-500 rounded-lg p-4 text-center">
+            <div className="text-2xl font-bold text-cyan-500">{kpis.percentUpgraded.toFixed(1)}%</div>
+            <div className="text-xs text-gray-400">Upgraded</div>
+          </div>
+        </div>
+
+        {/* Sort Controls */}
+        <div className="flex gap-4 mb-4">
+          <button
+            onClick={() => toggleSort('updatedAt')}
+            className="text-sm text-cyan-300"
+          >
+            Updated {sortConfig[0].key === 'updatedAt' ? (sortConfig[0].direction === 'asc' ? '▲' : '▼') : ''}
+          </button>
+          <button
+            onClick={() => toggleSort('quality')}
+            className="text-sm text-cyan-300"
+          >
+            Quality {sortConfig[0].key === 'quality' ? (sortConfig[0].direction === 'asc' ? '▲' : '▼') : ''}
+          </button>
         </div>
 
         {/* Filters */}
