@@ -279,7 +279,7 @@ export const realMatrixNodes = [
   // === DEPTH 5: RED PILL GROUP ===
   {
     id: 'matrix-red-trainer',
-    type: 'training',
+    type: 'choice',
     depth: 5,
     group: 'red-pill',
     parentChoice: 'matrix-pill-choice',
@@ -287,18 +287,25 @@ export const realMatrixNodes = [
     data: {
       title: 'Training Upload',
       pageUrl: '/matrix-v1/guardian-call',
-      status: 'live',
-      summary: 'Neo enters training mode and begins combat simulation.',
-      characters: ['Neo'],
-      puzzles: ['Combat Basics'],
-      interactions: ['CombatEngine', 'InstructionOverlay'],
-      features: { hasTransition: false, hasChoice: false, hasCombat: true, hasNPC: false, hasAnimation: true },
-      dialogue: ['Loading training sequence.', 'Let\'s see what you can do.'],
+      status: 'wip',
+      summary: 'Morpheus initiates your first virtual download — everything you know is about to shift.',
+      characters: ['Morpheus', 'Operator'],
+      puzzles: [],
+      interactions: ['ChoicePrompt', 'TrainingInitiation'],
+      features: { hasDialogue: true, hasTransition: true, hasChoice: true, hasNPC: true, hasAnimation: true },
+      dialogue: [
+        'Operator: Initiating download sequence... neural pathways mapping...',
+        'Morpheus: This is your first taste of what training means.',
+        'Operator: Biomonitors stable. Cognitive load within acceptable parameters.',
+        'Morpheus: Your mind will resist the upload. Do not fight it.',
+        'Operator: Ready for neural interface. Standing by for confirmation.'
+      ],
+      options: ['Start training', 'Abort upload'],
       enhancement: {
-        qualityRating: 6,
-        status: "stub",
-        priority: "low",
-        updatedAt: "2025-06-03T00:00:00Z"
+        qualityRating: 8.0,
+        status: "wip",
+        priority: "high",
+        updatedAt: "2025-06-03T21:30:00Z"
       }
     }
   },
@@ -1220,6 +1227,11 @@ export const realMatrixEdges = [
   // === NEW FACTION CHOICE SYSTEM ===
   // Red path now branches to faction choice
   { id: 'edge-trainer-to-faction-choice', source: 'matrix-red-trainer', target: 'matrix-red-faction-choice' },
+  
+  // === NEW TRAINING UPLOAD CHOICES ===
+  // Training Upload choice branches
+  { id: 'edge-trainer-to-ghost', source: 'matrix-red-trainer', target: 'matrix-ghost-layer-2', label: 'Start training' },
+  { id: 'edge-trainer-to-awakening', source: 'matrix-red-trainer', target: 'matrix-red-awakening', label: 'Abort upload' },
   
   // Faction choice branches
   { id: 'edge-faction-to-zion', source: 'matrix-red-faction-choice', target: 'matrix-zion-fleet', label: 'Zion Fleet' },
