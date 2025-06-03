@@ -472,24 +472,31 @@ export const realMatrixNodes = [
   // === DEPTH 8: GHOST LAYER GROUP (SHARED) ===
   {
     id: 'matrix-ghost-layer-2',
-    type: 'scene',
+    type: 'choice',
     depth: 8,
     group: 'ghost-layer',
     data: {
-      title: 'Ghost Layer 2',
+      title: 'Ghost Layer: Breach Point',
       pageUrl: '/matrix-v1/ghost-layer-2',
-      status: 'stub',
-      summary: 'Both paths converge into a raw transmission chamber. The next phase awaits.',
-      characters: ['System', 'Neo'],
-      puzzles: [],
-      interactions: ['TransmissionReceiver'],
-      features: { hasTransition: true, hasCombat: false, hasChoice: false, hasPuzzle: false, hasAnimation: true, hasDialogue: true, hasNPC: true },
-      dialogue: ['This is no longer a test.', 'You are becoming signal.'],
+      status: 'wip',
+      summary: 'You reach the edge of the system — where the simulation\'s seams flicker. A breach is possible, but unstable.',
+      characters: ['Proxy', 'Fracture Entity'],
+      puzzles: ['Breach Control', 'System Stabilization'],
+      interactions: ['ChoicePrompt', 'BreachInterface'],
+      features: { hasPuzzle: true, hasTransition: true, hasNPC: true, hasChoice: true, hasAnimation: true, hasDialogue: true },
+      dialogue: [
+        'Proxy: You\'ve come too far too fast.',
+        'Fracture Entity: The code bends here. Step lightly.',
+        'System: Unauthorized presence. Trace initiated.',
+        'Proxy: Choose quickly — the breach window narrows.',
+        'Fracture Entity: Reality bleeds through the cracks.'
+      ],
+      options: ['Attempt controlled breach', 'Stabilize and transmit data'],
       enhancement: {
-        qualityRating: 6,
-        status: "stub",
-        priority: "low",
-        updatedAt: "2025-06-03T00:00:00Z"
+        qualityRating: 8.3,
+        status: "wip",
+        priority: "high",
+        updatedAt: "2025-06-03T22:00:00Z"
       }
     }
   },
@@ -1296,12 +1303,10 @@ export const realMatrixEdges = [
   { id: 'edge-nexus-to-source', source: 'matrix-knowledge-nexus', target: 'matrix-the-source', label: 'Enlightened Hacker' },
   { id: 'edge-rescue-to-source', source: 'matrix-trinity-rescue', target: 'matrix-the-source', label: 'Redeemed Agent' },
   
-  // Ghost Layer 2 also connects to The Source
-  { id: 'edge-ghost-to-source', source: 'matrix-ghost-layer-2', target: 'matrix-the-source', label: 'Signal Complete' },
-
-  // Choices from The Source
-  { id: 'edge-source-to-glitch-hunter', source: 'matrix-the-source', target: 'matrix-glitch-hunter', label: 'Reveal the truth' },
-  { id: 'edge-source-to-trinity-rescue', source: 'matrix-the-source', target: 'matrix-trinity-rescue', label: 'Refuse and walk away' },
+  // === GHOST LAYER BREACH CHOICES ===
+  // Ghost Layer 2 choice branches
+  { id: 'edge-ghost-to-glitch', source: 'matrix-ghost-layer-2', target: 'matrix-glitch-hunter', label: 'Attempt controlled breach' },
+  { id: 'edge-ghost-to-source', source: 'matrix-ghost-layer-2', target: 'matrix-the-source', label: 'Stabilize and transmit data' },
 
   // === NIGHT CITY CLUSTER CONNECTIONS ===
   // Glitch Portal connects to Night City Entry
@@ -1328,5 +1333,9 @@ export const realMatrixEdges = [
   { id: 'edge-witcher-mutation-to-signs', source: 'witcher-mutation-choice', target: 'witcher-sign-training', label: 'Trial Survived' },
   
   // Cross-reality connections (Witcher magic connects to Matrix systems)
-  { id: 'edge-witcher-signs-to-source', source: 'witcher-sign-training', target: 'matrix-the-source', label: 'Ancient Magic' }
+  { id: 'edge-witcher-signs-to-source', source: 'witcher-sign-training', target: 'matrix-the-source', label: 'Ancient Magic' },
+
+  // Choices from The Source
+  { id: 'edge-source-to-glitch-hunter', source: 'matrix-the-source', target: 'matrix-glitch-hunter', label: 'Reveal the truth' },
+  { id: 'edge-source-to-trinity-rescue', source: 'matrix-the-source', target: 'matrix-trinity-rescue', label: 'Refuse and walk away' }
 ];
