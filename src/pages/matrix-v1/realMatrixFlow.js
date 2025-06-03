@@ -198,7 +198,7 @@ export const realMatrixNodes = [
   // === DEPTH 3: BLUE PILL GROUP ===
   {
     id: 'matrix-pill-choice-blue',
-    type: 'scene',
+    type: 'choice', // CHANGED: From scene to choice to support crosslinks
     depth: 3,
     group: 'blue-pill',
     parentChoice: 'matrix-pill-choice',
@@ -213,7 +213,7 @@ export const realMatrixNodes = [
       interactions: ['SceneReset', 'MemoryBleed', 'DéjàVuTriggers', 'EnvironmentalGlitches'],
       features: { 
         hasTransition: true, 
-        hasChoice: false, 
+        hasChoice: true, // CHANGED: Now supports choices
         hasCombat: false, 
         hasNPC: true, 
         hasAnimation: true, 
@@ -235,7 +235,17 @@ export const realMatrixNodes = [
         'Neo: You reach for your phone. The number you dial doesn\'t exist... but you remember calling it.',
         'Memory Echo: This conversation happened before. And before that. And before that.',
         'Simulation Overseer: WARNING: SUBJECT EXHIBITING PATTERN RECOGNITION BEYOND ACCEPTABLE PARAMETERS.',
-        'Subconscious Fragment: You forgot something important. Something that wanted you to remember.'
+        'Subconscious Fragment: You forgot something important. Something that wanted you to remember.',
+        // NEW: Crosslink dialogue for hidden resistance branch
+        'Memory Echo: There\'s a crack in the wall behind the mirror. You can feel it calling.',
+        'Subconscious Fragment: The comfort is a cage. You could... deviate from protocol.'
+      ],
+      
+      // ENHANCED: Added crosslink choices for lateral narrative flow
+      options: [
+        'Accept the comfortable illusion',
+        'Follow the strange memory fragment', // NEW: Hidden resistance branch crosslink
+        'Continue normal routine'
       ],
       
       // 🎯 ENHANCED NARRATIVE METADATA
@@ -247,10 +257,10 @@ export const realMatrixNodes = [
       },
       
       enhancement: {
-        qualityRating: 8.4,
+        qualityRating: 8.6, // ENHANCED: Increased due to lateral connectivity improvements
         status: "live",
         priority: "medium",
-        updatedAt: "2025-06-04T16:00:00Z",
+        updatedAt: "2025-06-04T17:30:00Z",
         targetRating: 9,
         improvements: [
           '✅ COMPLETED: Added haunting déjà vu and memory bleed mechanics',
@@ -259,33 +269,37 @@ export const realMatrixNodes = [
           '✅ COMPLETED: Added Memory Echo and Subconscious Fragment characters',
           '✅ COMPLETED: Layered subconscious resistance against simulation control',
           '✅ COMPLETED: Created atmosphere of imposed normalcy fighting against truth',
-          '✅ COMPLETED: Added psychological puzzle elements around memory suppression'
+          '✅ COMPLETED: Added psychological puzzle elements around memory suppression',
+          '✅ NEW: Added lateral crosslink choices for nonlinear narrative flow',
+          '✅ NEW: Hidden resistance branch accessible through subconscious memory fragments'
         ],
         criteria: {
-          narrative: 9, // Rich psychological horror with memory bleed themes
-          interactivity: 7, // Memory resistance and déjà vu recognition elements
+          narrative: 9, // Rich psychological horror with memory bleed themes + crosslinks
+          interactivity: 8, // Memory resistance and choice branches for lateral connectivity  
           visual: 8, // Environmental glitches and reality distortion effects
           technical: 7, // Memory bleed and psychological state tracking
           character: 8, // Multiple internal voices and echo entities
-          consequences: 8 // Blue pill choice creates haunting rather than peaceful experience
+          consequences: 9 // Blue pill choice creates haunting experience + opens hidden paths
         },
         narrative: {
           atmosphere: 'Oppressive normalcy masking existential horror — a perfect simulation cracking under the weight of suppressed truth',
           soundscape: 'Muffled reality with audio echoes, phantom conversations, and the subtle breathing of artificial walls',
           visualElements: 'Flickering environmental details, wrong reflections, shadows that move independently, staged comfort',
-          emotionalTone: 'Creeping dread disguised as peace — the horror of voluntary blindness made manifest'
+          emotionalTone: 'Creeping dread disguised as peace — the horror of voluntary blindness made manifest with hidden escape routes'
         },
         interactivity: {
           memoryResistance: '✅ Subconscious fights against imposed forgetting with persistent truth fragments',
           déjàVuRecognition: '✅ Pattern recognition triggers that reveal simulation repetition',
           environmentalAwareness: '✅ Notice environmental inconsistencies and impossible details',
-          realityAnchorRejection: '✅ Subconscious rejection of artificial comfort and false memories'
+          realityAnchorRejection: '✅ Subconscious rejection of artificial comfort and false memories',
+          crosslinkChoices: '✅ NEW: Hidden narrative branches accessible through memory fragment resistance'
         },
         technical: {
           psychologicalTracking: 'Monitor player awareness of simulation inconsistencies',
           memoryBleedSystem: 'Gradual revelation of suppressed memories through environmental cues',
           déjàVuMechanics: 'Recognition patterns that build suspicion of reality',
-          subconsciousResistance: 'Internal voice system representing suppressed awareness'
+          subconsciousResistance: 'Internal voice system representing suppressed awareness',
+          lateralConnectivity: 'NEW: Choice system enabling nonlinear narrative paths through memory fragments'
         }
       }
     }
@@ -389,7 +403,7 @@ export const realMatrixNodes = [
   // === DEPTH 6: GHOST LAYER GROUP ===
   {
     id: 'matrix-shard-init',
-    type: 'scene',
+    type: 'choice', // CHANGED: From scene to choice to support crosslinks
     depth: 6,
     group: 'ghost-layer',
     data: {
@@ -405,7 +419,7 @@ export const realMatrixNodes = [
       features: { 
         hasTransition: true, 
         hasCombat: false, 
-        hasChoice: false, 
+        hasChoice: true, // CHANGED: Now supports choices for crosslinks
         hasPuzzle: true, 
         hasAnimation: true, 
         hasNPC: true, 
@@ -431,7 +445,18 @@ export const realMatrixNodes = [
         'System: Memory reconstruction at 73%. Proceed with caution.',
         'Fracture Entity: The scars in the code tell the story of your fractures.',
         'Memory Ghost: When you put the last piece in place, you\'ll remember why you deleted these memories.',
-        'Inner Voice: But remembering is the only way to heal.'
+        'Inner Voice: But remembering is the only way to heal.',
+        // NEW: Crosslink dialogue for emotional loop to Ghost Layer 2
+        'Memory Ghost: The fragments are calling to something deeper... a breach point in the system.',
+        'Fracture Entity: The emotional resonance is creating instabilities. The ghost layer is responding.',
+        'Inner Voice: I feel the memories pulling toward something... dangerous. But necessary.'
+      ],
+      
+      // NEW: Added crosslink choices for emotional loop to Ghost Layer 2
+      options: [
+        'Continue methodical memory reconstruction',
+        'Follow emotional resonance deeper', // NEW: Emotional loop crosslink to Ghost Layer 2
+        'Stabilize fragments and proceed normally'
       ],
       
       // 🎯 ENHANCED MEMORY ARCHAEOLOGY METADATA
@@ -458,10 +483,10 @@ export const realMatrixNodes = [
       },
       
       enhancement: {
-        qualityRating: 8.6,
+        qualityRating: 8.8, // ENHANCED: Increased due to emotional crosslink to Ghost Layer
         status: "live",
         priority: "high",
-        updatedAt: "2025-06-04T16:15:00Z",
+        updatedAt: "2025-06-04T17:35:00Z",
         targetRating: 9,
         improvements: [
           '✅ COMPLETED: Layered personal memory fragments into code assembly puzzle',
@@ -470,33 +495,37 @@ export const realMatrixNodes = [
           '✅ COMPLETED: Connected puzzle mechanics to emotional healing and personal discovery',
           '✅ COMPLETED: Enhanced from simple code reorder to memory archaeology experience',
           '✅ COMPLETED: Added Childhood Echo character for innocent memory perspective',
-          '✅ COMPLETED: Created emotional resonance system guiding fragment placement'
+          '✅ COMPLETED: Created emotional resonance system guiding fragment placement',
+          '✅ NEW: Added emotional loop crosslink to Ghost Layer 2 for deeper narrative exploration',
+          '✅ NEW: Emotional resonance creates system instabilities leading to breach points'
         ],
         criteria: {
-          narrative: 9, // Deep personal memory exploration with emotional archeology
-          interactivity: 8, // Memory fragment assembly with emotional guidance systems
+          narrative: 9, // Deep personal memory exploration with emotional archeology + crosslinks
+          interactivity: 9, // Memory fragment assembly with emotional guidance + choice branches
           visual: 9, // Rich visual metaphors for fragmentation and reconstruction
           technical: 8, // Complex emotional resonance and memory reconstruction systems
           character: 9, // Multiple internal voices representing different memory aspects
-          consequences: 8 // Memory reconstruction affects personal understanding and healing
+          consequences: 9 // Memory reconstruction affects personal understanding and opens lateral paths
         },
         narrative: {
           atmosphere: 'Digital archaeology site where personal memories lie buried in code fragments, waiting for resurrection',
           soundscape: 'Echoing voices from the past, soft clicks of assembling fragments, whispered memories becoming clear',
           visualElements: 'Shattered code fragments floating like broken glass, emotional warmth guiding correct connections, memory reconstruction progress',
-          emotionalTone: 'Bittersweet excavation of the soul — pain and healing intertwined through technological metaphor'
+          emotionalTone: 'Bittersweet excavation of the soul — pain and healing intertwined through technological metaphor with deeper mysteries'
         },
         interactivity: {
           memoryResonance: '✅ Emotional connection system guides correct fragment placement through warmth and color',
           personalDiscovery: '✅ Each assembled memory reveals deeper layers of personal history and trauma',
           healingProgression: '✅ Code reconstruction mirrors psychological healing and integration',
-          archaeologyMechanics: '✅ Careful excavation of memory fragments with potential for emotional damage if mishandled'
+          archaeologyMechanics: '✅ Careful excavation of memory fragments with potential for emotional damage if mishandled',
+          emotionalCrosslinks: '✅ NEW: Emotional resonance creates instabilities leading to Ghost Layer breach opportunities'
         },
         technical: {
           emotionalGuidance: 'Sophisticated emotional resonance system providing intuitive placement feedback',
           memoryReconstruction: 'Progressive assembly revealing personal narrative through code metaphors',
           fragmentMapping: 'Complex relationship system between code pieces and emotional memories',
-          healingTracking: 'Monitor psychological integration and emotional resolution progress'
+          healingTracking: 'Monitor psychological integration and emotional resolution progress',
+          crosslinkDetection: 'NEW: Emotional resonance monitoring system detecting Ghost Layer instabilities'
         }
       }
     }
@@ -985,14 +1014,58 @@ export const realMatrixNodes = [
         'Agent Brown: Your cooperation will be... rewarded.',
         'Agent Smith: Help us eliminate the anomalies. Root out the resistance.',
         'Agent Jones: Your human perspective provides unique advantages.',
-        'Agent Smith: The question is — how deep does your loyalty run?'
+        'Agent Smith: The question is — how deep does your loyalty run?',
+        // NEW: Crosslink dialogue for corruption exposure route
+        'Agent Brown: *glitches momentarily* The training... protocols... *static*',
+        'Agent Smith: *voice distorts* Sometimes the system... requires... *error cascade*',
+        'Agent Jones: *fractured speech* You could learn... true training... from the source...'
       ],
-      options: ['Full integration (Become an Agent)', 'Double agent (Infiltrate while loyal to resistance)'],
+      options: [
+        'Full integration (Become an Agent)', 
+        'Double agent (Infiltrate while loyal to resistance)',
+        'Expose the corruption in Agent protocols' // NEW: Crosslink to red-trainer via corruption route
+      ],
       enhancement: {
-        qualityRating: 8.3,
+        qualityRating: 8.5, // ENHANCED: Increased due to corruption crosslink narrative depth
         status: "wip",
         priority: "high",
-        updatedAt: "2025-06-03T23:30:00Z"
+        updatedAt: "2025-06-04T17:40:00Z",
+        targetRating: 9,
+        improvements: [
+          '✅ COMPLETED: Enhanced Agent Smith collaboration with sophisticated double-agent mechanics',
+          '✅ COMPLETED: Added Agent Brown and Jones for multi-Agent perspective dynamics',
+          '✅ COMPLETED: Created loyalty testing and resistance hunting gameplay elements',
+          '✅ COMPLETED: Established system integration vs resistance infiltration tension',
+          '✅ COMPLETED: Developed authority vs rebellion philosophical conflict layers',
+          '✅ NEW: Added corruption exposure crosslink revealing Agent protocol vulnerabilities',
+          '✅ NEW: Agent glitching behavior creates opportunity for training access through system flaws'
+        ],
+        criteria: {
+          narrative: 9, // Complex authority collaboration with corruption exposure possibilities
+          interactivity: 8, // Loyalty tests, double agent mechanics, and corruption detection
+          visual: 8, // Agent transformations, system integration effects, glitch corruption
+          technical: 8, // System integration tracking, loyalty measurement, corruption detection
+          character: 9, // Multi-Agent dynamics with sophisticated psychological manipulation
+          consequences: 9 // Authority collaboration affects resistance relationships + opens corruption paths
+        },
+        narrative: {
+          atmosphere: 'Sterile authority control masking systemic corruption — the perfect order hiding fundamental flaws',
+          soundscape: 'Authoritative Agent voices, system integration tones, occasional corruption static and glitches',
+          visualElements: 'Agent suit transformations, system interface integration, corruption glitches in Agent behavior',
+          emotionalTone: 'Cold authority collaboration with underlying systemic instabilities revealing exploitable vulnerabilities'
+        },
+        interactivity: {
+          loyaltyTesting: '✅ System measures commitment through resistance elimination tasks',
+          doubleAgentMechanics: '✅ Infiltration gameplay balancing authority trust with resistance loyalty',
+          systemIntegration: '✅ Progressive Agent transformation with human perspective advantages',
+          corruptionDetection: '✅ NEW: Recognition of Agent protocol vulnerabilities and system flaws'
+        },
+        technical: {
+          authorityTracking: 'Monitor integration progress and loyalty measurement systems',
+          resistanceHunting: 'Target identification and elimination protocol systems',
+          doubleAgentBalance: 'Complex relationship management between competing loyalties',
+          corruptionExposure: 'NEW: System flaw detection and exploitation opportunities for training access'
+        }
       }
     }
   },
@@ -1587,6 +1660,22 @@ export const realMatrixEdges = [
   // Ghost Layer 2 choice branches
   { id: 'edge-ghost-to-glitch', source: 'matrix-ghost-layer-2', target: 'matrix-glitch-hunter', label: '⚡ ATTEMPT CONTROLLED BREACH' },
   { id: 'edge-ghost-to-source', source: 'matrix-ghost-layer-2', target: 'matrix-the-source', label: '🛡️ STABILIZE AND TRANSMIT DATA' },
+
+  // === NEW: PHASE 1 NARRATIVE CROSSLINKS ===
+  // Blue pill crosslink - hidden resistance branch
+  { id: 'edge-blue-pill-to-shard-init', source: 'matrix-pill-choice-blue', target: 'matrix-shard-init', label: 'Follow the strange memory fragment' },
+  { id: 'edge-blue-pill-to-blue-loop', source: 'matrix-pill-choice-blue', target: 'matrix-blue-loop', label: 'Accept the comfortable illusion' },
+  { id: 'edge-blue-pill-continue', source: 'matrix-pill-choice-blue', target: 'matrix-blue-loop', label: 'Continue normal routine' },
+  
+  // Shard init crosslink - emotional loop to Ghost Layer 2
+  { id: 'edge-shard-init-to-ghost-2-emotional', source: 'matrix-shard-init', target: 'matrix-ghost-layer-2', label: 'Follow emotional resonance deeper' },
+  { id: 'edge-shard-init-to-insert', source: 'matrix-shard-init', target: 'matrix-shard-insert', label: 'Continue methodical memory reconstruction' },
+  { id: 'edge-shard-init-stabilize', source: 'matrix-shard-init', target: 'matrix-shard-insert', label: 'Stabilize fragments and proceed normally' },
+  
+  // Authority agent crosslink - corruption exposure to red trainer
+  { id: 'edge-agent-to-red-trainer-corruption', source: 'matrix-authority-agent', target: 'matrix-red-trainer', label: 'Expose the corruption in Agent protocols' },
+  { id: 'edge-agent-to-rescue', source: 'matrix-authority-agent', target: 'matrix-trinity-rescue', label: 'Double agent (Infiltrate while loyal to resistance)' },
+  { id: 'edge-agent-full-integration', source: 'matrix-authority-agent', target: 'matrix-echo-loop', label: 'Full integration (Become an Agent)' },
 
   // === NIGHT CITY CLUSTER CONNECTIONS ===
   // Glitch Portal connects to Night City Entry
