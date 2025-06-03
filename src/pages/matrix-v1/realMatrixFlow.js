@@ -862,26 +862,27 @@ export const realMatrixNodes = [
     group: 'finale',
     unlockConditions: ['matrix-skill-gate-alpha', 'matrix-knowledge-nexus', 'matrix-trinity-rescue'], // Requires ALL convergence paths
     data: {
-      title: 'The Source',
+      title: 'The Source: Origin Point',
       pageUrl: '/matrix-v1/the-source',
-      status: 'stub',
-      summary: 'You stand before the origin of the system — answers await, but at a cost.',
-      characters: ['The Architect', 'Neo'],
-      puzzles: ['Ultimate Choice', 'Reality Decision'],
-      interactions: ['FinalChoice', 'RealityRewrite'],
-      features: { hasChoice: true, hasDialogue: true, hasTransition: true },
+      status: 'wip',
+      summary: 'You stand before the origin of the system — where all paths converge and ultimate truth awaits. The choice defines reality itself.',
+      characters: ['The Architect', 'The Oracle', 'System Core'],
+      puzzles: ['Reality Choice', 'Truth Paradox', 'System Override'],
+      interactions: ['FinalChoice', 'RealityRewrite', 'TruthReveal'],
+      features: { hasChoice: true, hasDialogue: true, hasTransition: true, hasNPC: true, hasAnimation: true, hasPuzzle: true, hasEnding: true },
       dialogue: [
-        'Architect: You approach the origin of all paths.',
-        'Neo: Every choice leads back here, yet the cost remains.',
-        'Architect: Knowledge demands sacrifice; ignorance grants safety.',
-        'Neo: Decide—embrace the truth or retreat into illusion.'
+        'The Architect: You have arrived at the convergence point of all possibilities.',
+        'The Oracle: Every path you\'ve walked leads to this moment.',
+        'System Core: Reality trembles at the threshold of choice.',
+        'The Architect: Truth or illusion. Freedom or control. Choose wisely.',
+        'The Oracle: What you choose here echoes across all realities.'
       ],
-      options: ['Reveal the truth', 'Refuse and walk away'],
+      options: ['Embrace the source truth', 'Reject and forge new reality', 'Merge with the system'],
       enhancement: {
-        qualityRating: 7.5,
+        qualityRating: 9.2,
         status: "wip",
-        priority: "high",
-        updatedAt: "2025-06-03T19:00:00Z"
+        priority: "critical",
+        updatedAt: "2025-06-03T23:00:00Z"
       }
     }
   },
