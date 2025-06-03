@@ -1,5 +1,22 @@
 /* Global Theme Variables & Classes */
 
+
+/* Color mode styles */
+:root[data-color-mode='light'] {
+  color-scheme: light;
+}
+:root[data-color-mode='dark'] {
+  color-scheme: dark;
+}
+
+body[data-color-mode='light'] {
+  background: #f9fafb;
+  color: #111827;
+}
+body[data-color-mode='dark'] {
+  background: #111827;
+  color: white;
+}
 /* Base theme variables are injected by ThemeContext */
 :root {
   /* Default values - will be overridden by theme system */
