@@ -1,5 +1,7 @@
 import { useCallback, useRef } from 'react';
 import * as d3 from 'd3';
+import { calculateNodeQuality } from '../../utils/nodeQualitySystem';
+import worlds from '../../content/worlds.json';
 
 function applyExpansionState(tree, expandedNodes) {
   if (!tree) return null;
@@ -34,6 +36,7 @@ export default function useTreeLayout(params) {
     collideRadius,
     selectedNode,
     handleNodeClick,
+    showMetrics,
   } = params;
 
   const rootPosRef = useRef({ x: 0, y: 0 });
@@ -221,6 +224,64 @@ export default function useTreeLayout(params) {
         return title.length > 20 ? `${title.substring(0, 17)}...` : title;
       });
 
+    if (showMetrics) {
+      const metrics = nodeGroups
+        .append('g')
+        .attr('class', 'node-metrics')
+        .style('pointer-events', 'none');
+
+      // Status badge
+      metrics
+        .append('text')
+        .attr('y', (d) => -(typeof nodeRadius === 'function' ? nodeRadius(d) : nodeRadius) - 4)
+        .attr('text-anchor', 'middle')
+        .style('font-size', '8px')
+        .style('font-family', 'monospace')
+        .style('fill', '#fff')
+        .text((d) => (d.data?.status || 'stub').toUpperCase());
+
+      // Quality bar background
+      metrics
+        .append('rect')
+        .attr('x', -10)
+        .attr('y', (d) => (typeof nodeRadius === 'function' ? nodeRadius(d) : nodeRadius) + 4)
+        .attr('width', 20)
+        .attr('height', 3)
+        .attr('fill', '#333');
+
+      // Quality bar value
+      metrics
+        .append('rect')
+        .attr('x', -10)
+        .attr('y', (d) => (typeof nodeRadius === 'function' ? nodeRadius(d) : nodeRadius) + 4)
+        .attr('width', (d) => {
+          const q = calculateNodeQuality(d.data).overall;
+          return (q / 10) * 20;
+        })
+        .attr('height', 3)
+        .attr('fill', (d) => {
+          const q = calculateNodeQuality(d.data).overall;
+          if (q >= 9) return '#22c55e';
+          if (q >= 7) return '#eab308';
+          if (q >= 5) return '#f97316';
+          return '#ef4444';
+        });
+
+      // World content indicator
+      metrics
+        .append('text')
+        .attr('y', (d) => (typeof nodeRadius === 'function' ? nodeRadius(d) : nodeRadius) + 12)
+        .attr('text-anchor', 'middle')
+        .style('font-size', '8px')
+        .style('fill', '#0ea5e9')
+        .text((d) => (worlds[currentTheme] && worlds[currentTheme][d.data.id] ? '🌐' : ''));
+
+      // Hover glow for WIP nodes
+      nodeGroups
+        .select('circle')
+        .classed('wip-hover-glow', (d) => d.data?.status === 'wip');
+    }
+
     const expandNodes = nodeGroups.filter((d) => d.children || d._children);
     expandNodes
       .append('circle')
@@ -282,7 +343,7 @@ export default function useTreeLayout(params) {
         nodeGroups.attr('transform', (d) => `translate(${d.x},${d.y})`);
       });
     }
-  }, [svgRef, filteredTree, layoutType, expandedNodes, nodeMatchesFilters, themeConfigs, currentTheme, forceStrength, linkDistance, centerStrength, collideRadius, selectedNode, handleNodeClick]);
+  }, [svgRef, filteredTree, layoutType, expandedNodes, nodeMatchesFilters, themeConfigs, currentTheme, forceStrength, linkDistance, centerStrength, collideRadius, selectedNode, handleNodeClick, showMetrics]);
 
   return { drawTree, rootPosRef };
 }
