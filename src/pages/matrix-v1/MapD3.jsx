@@ -7,6 +7,7 @@ import useTreeLayout from './useTreeLayout';
 import SidebarFilters from './SidebarFilters';
 import DetailPanel from './DetailPanel';
 import ZoomControls from './ZoomControls';
+import DiagnosticOverlay from './DiagnosticOverlay';
 
 const LAYOUT_TYPES = {
   tree: 'tree',
@@ -923,6 +924,7 @@ export default function MapD3() {
       </div>
 
       <DetailPanel node={selectedNode} onClose={() => setSelectedNode(null)} />
+      <DiagnosticOverlay />
     </div>
   );
-} 
+}
