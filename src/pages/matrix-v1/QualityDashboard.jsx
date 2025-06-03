@@ -12,6 +12,7 @@ import {
   ENHANCEMENT_PRIORITY
 } from '../../utils/nodeQualitySystem';
 import { useTheme } from '../../theme/ThemeContext';
+import { useColorMode } from '../../theme/ColorModeContext';
 import DiagnosticOverlay from './DiagnosticOverlay';
 
 // Status icon mapping
@@ -27,7 +28,7 @@ const STATUS_LABELS = {
   'stub': 'Stub'
 };
 
-// World Group Mapping
+// World Group Mapping with enhanced theme awareness
 const WORLD_GROUPS = {
   'matrix': {
     name: 'Matrix',
@@ -52,52 +53,56 @@ const WORLD_GROUPS = {
   }
 };
 
-// Theme-aware Priority Color Mapping
-const getPriorityClasses = (priority, currentWorld) => {
-  const baseClasses = {
-    'CRITICAL': 'border-l-4',
-    'HIGH': 'border-l-4', 
-    'MEDIUM': 'border-l-4',
-    'LOW': 'border-l-4'
+// Enhanced Theme-aware Priority Color Mapping
+const getPriorityClasses = (priority, colorMode) => {
+  const baseClasses = 'border-l-4';
+  
+  // Use CSS variables for consistent theming
+  const priorityStyles = {
+    'CRITICAL': colorMode === 'light' 
+      ? 'border-l-red-700 bg-red-50' 
+      : 'border-l-red-400 bg-red-500/10',
+    'HIGH': colorMode === 'light' 
+      ? 'border-l-orange-700 bg-orange-50' 
+      : 'border-l-orange-400 bg-orange-500/10',
+    'MEDIUM': colorMode === 'light' 
+      ? 'border-l-yellow-700 bg-yellow-50' 
+      : 'border-l-yellow-400 bg-yellow-500/10',
+    'LOW': colorMode === 'light' 
+      ? 'border-l-green-700 bg-green-50' 
+      : 'border-l-green-400 bg-green-500/10'
   };
   
-  // Use CSS variables for theme-aware colors
-  const priorityColors = {
-    'CRITICAL': currentWorld === 'witcher' ? 'border-l-red-600' : 'border-l-red-400',
-    'HIGH': currentWorld === 'witcher' ? 'border-l-orange-600' : 'border-l-orange-400',
-    'MEDIUM': currentWorld === 'witcher' ? 'border-l-yellow-600' : 'border-l-yellow-400',
-    'LOW': 'border-l-green-400'
-  };
-  
-  const bgColors = {
-    'CRITICAL': 'bg-red-500/10',
-    'HIGH': 'bg-orange-500/10',
-    'MEDIUM': 'bg-yellow-500/10',
-    'LOW': 'bg-green-500/10'
-  };
-  
-  return `${baseClasses[priority]} ${priorityColors[priority]} ${bgColors[priority]}`;
+  return `${baseClasses} ${priorityStyles[priority] || priorityStyles.LOW}`;
 };
 
-// Mini Progress Bar Component - Theme Aware
+// Enhanced Progress Bar Component with better contrast
 const QualityProgress = ({ score }) => {
-  const { currentWorld } = useTheme();
+  const { colorMode } = useColorMode();
   const percentage = (score / 10) * 100;
   
-  const getColor = (score, world) => {
-    if (score >= 9) return world === 'witcher' ? 'bg-green-600' : 'bg-green-400';
-    if (score >= 7) return world === 'witcher' ? 'bg-yellow-600' : 'bg-yellow-400';
-    if (score >= 5) return world === 'witcher' ? 'bg-orange-600' : 'bg-orange-400';
-    return world === 'witcher' ? 'bg-red-600' : 'bg-red-400';
+  const getProgressColor = (score, mode) => {
+    if (mode === 'light') {
+      if (score >= 9) return 'bg-green-600';
+      if (score >= 7) return 'bg-yellow-600'; 
+      if (score >= 5) return 'bg-orange-600';
+      return 'bg-red-600';
+    } else {
+      if (score >= 9) return 'bg-green-400';
+      if (score >= 7) return 'bg-yellow-400';
+      if (score >= 5) return 'bg-orange-400';
+      return 'bg-red-400';
+    }
+  };
+  
+  const getBackgroundColor = (mode) => {
+    return mode === 'light' ? 'bg-gray-200' : 'bg-theme-tertiary';
   };
   
   return (
-    <div className={`w-full rounded-full h-2 overflow-hidden ${
-      currentWorld === 'witcher' ? 'bg-amber-900/40' : 
-      currentWorld === 'nightcity' ? 'bg-purple-900/40' : 'bg-gray-700'
-    }`}>
+    <div className={`w-full rounded-full h-2 overflow-hidden ${getBackgroundColor(colorMode)}`}>
       <div 
-        className={`h-full transition-all duration-500 ${getColor(score, currentWorld)}`}
+        className={`h-full transition-all duration-500 ${getProgressColor(score, colorMode)}`}
         style={{ width: `${percentage}%` }}
       />
     </div>
@@ -105,77 +110,79 @@ const QualityProgress = ({ score }) => {
 };
 
 const NodeScoreProgress = ({ score }) => {
-  const { currentWorld } = useTheme();
+  const { colorMode } = useColorMode();
   const percentage = score;
   
-  const getProgressColor = (world) => {
-    switch(world) {
-      case 'witcher': return 'bg-amber-500';
-      case 'nightcity': return 'bg-purple-400';
-      default: return 'bg-green-400';
-    }
+  const getProgressColor = (mode) => {
+    return mode === 'light' ? 'bg-blue-600' : 'bg-theme-primary';
+  };
+  
+  const getBackgroundColor = (mode) => {
+    return mode === 'light' ? 'bg-gray-200' : 'bg-theme-tertiary';
   };
   
   return (
-    <div className={`w-full rounded-full h-2 overflow-hidden ${
-      currentWorld === 'witcher' ? 'bg-amber-900/40' : 
-      currentWorld === 'nightcity' ? 'bg-purple-900/40' : 'bg-gray-700'
-    }`}>
+    <div className={`w-full rounded-full h-2 overflow-hidden ${getBackgroundColor(colorMode)}`}>
       <div
-        className={`h-full transition-all duration-500 ${getProgressColor(currentWorld)}`}
+        className={`h-full transition-all duration-500 ${getProgressColor(colorMode)}`}
         style={{ width: `${percentage}%` }}
       />
     </div>
   );
 };
 
-// Quality Score Badge Component - Theme Aware
+// Enhanced Quality Score Badge Component with better contrast
 const QualityBadge = ({ score }) => {
-  const { currentWorld } = useTheme();
+  const { colorMode } = useColorMode();
   
-  const getColor = (score, world) => {
-    if (score >= 9) {
-      return world === 'witcher' ? 'bg-green-600 text-white' : 
-             world === 'nightcity' ? 'bg-green-400 text-black' : 'bg-green-500 text-white';
+  const getBadgeStyles = (score, mode) => {
+    if (mode === 'light') {
+      if (score >= 9) return 'bg-green-600 text-white';
+      if (score >= 7) return 'bg-yellow-600 text-white';
+      if (score >= 5) return 'bg-orange-600 text-white';
+      return 'bg-red-600 text-white';
+    } else {
+      if (score >= 9) return 'bg-green-500 text-black';
+      if (score >= 7) return 'bg-yellow-500 text-black';
+      if (score >= 5) return 'bg-orange-500 text-white';
+      return 'bg-red-500 text-white';
     }
-    if (score >= 7) {
-      return world === 'witcher' ? 'bg-yellow-600 text-white' : 
-             world === 'nightcity' ? 'bg-yellow-400 text-black' : 'bg-yellow-500 text-black';
-    }
-    if (score >= 5) {
-      return world === 'witcher' ? 'bg-orange-600 text-white' : 
-             world === 'nightcity' ? 'bg-orange-400 text-black' : 'bg-orange-500 text-white';
-    }
-    return world === 'witcher' ? 'bg-red-600 text-white' : 
-           world === 'nightcity' ? 'bg-red-400 text-black' : 'bg-red-500 text-white';
   };
   
   return (
     <span className={`
       px-2 py-1 rounded-full text-xs font-bold font-mono
-      ${getColor(score, currentWorld)}
+      ${getBadgeStyles(score, colorMode)}
     `}>
       {score.toFixed(1)}
     </span>
   );
 };
 
-// Real-time Node Score badge
+// Enhanced Node Score badge with dynamic color
 const NodeScoreBadge = ({ score }) => {
-  const color = getScoreColor(score);
+  const { colorMode } = useColorMode();
+  
+  const getScoreBadgeStyles = (mode) => {
+    return mode === 'light' 
+      ? 'bg-blue-600 text-white' 
+      : 'bg-blue-400 text-black';
+  };
+  
   return (
-    <span
-      className="px-2 py-1 rounded-full text-xs font-bold font-mono"
-      style={{ backgroundColor: color }}
-    >
+    <span className={`
+      px-2 py-1 rounded-full text-xs font-bold font-mono
+      ${getScoreBadgeStyles(colorMode)}
+    `}>
       {score}
     </span>
   );
 };
 
-// Executive Node Card Component - Theme Aware
+// Enhanced Executive Node Card Component with complete theme awareness
 const ExecutiveNodeCard = ({ node, onView, onEdit }) => {
   const { currentWorld } = useTheme();
+  const { colorMode } = useColorMode();
   const quality = calculateNodeQuality(node);
   const { score: nodeScore, contributions } = calculateNodeScore(node, edges);
   const improvements = getNextImprovements(node, 2);
@@ -243,36 +250,40 @@ const ExecutiveNodeCard = ({ node, onView, onEdit }) => {
   const nodeStatus = getNodeStatus();
   const nodePriority = getNodePriority();
 
-  // Theme-aware card styling
-  const getCardClasses = (world) => {
-    const baseClasses = "relative rounded-xl p-3 hover:border-theme-primary transition-all duration-300 group shadow hover:shadow-xl hover:-translate-y-0.5 transform-gpu";
+  // Enhanced priority indicator with better contrast
+  const getPriorityIndicatorStyles = (priority, mode) => {
+    const baseClasses = 'absolute top-2 right-2 text-xs font-bold px-2 py-1 rounded';
     
-    switch(world) {
-      case 'witcher':
-        return `${baseClasses} bg-theme-secondary border-2 border-theme-accent text-theme-bright`;
-      case 'nightcity':
-        return `${baseClasses} bg-theme-secondary border-2 border-theme-accent text-theme-bright`;
-      default:
-        return `${baseClasses} bg-theme-secondary border-2 border-theme-accent text-theme-bright`;
+    if (mode === 'light') {
+      switch(priority) {
+        case 'CRITICAL': return `${baseClasses} bg-red-100 text-red-800 border border-red-300`;
+        case 'HIGH': return `${baseClasses} bg-orange-100 text-orange-800 border border-orange-300`;
+        case 'MEDIUM': return `${baseClasses} bg-yellow-100 text-yellow-800 border border-yellow-300`;
+        default: return `${baseClasses} bg-green-100 text-green-800 border border-green-300`;
+      }
+    } else {
+      switch(priority) {
+        case 'CRITICAL': return `${baseClasses} bg-red-500/20 text-red-300 border border-red-500/30`;
+        case 'HIGH': return `${baseClasses} bg-orange-500/20 text-orange-300 border border-orange-500/30`;
+        case 'MEDIUM': return `${baseClasses} bg-yellow-500/20 text-yellow-300 border border-yellow-500/30`;
+        default: return `${baseClasses} bg-green-500/20 text-green-300 border border-green-500/30`;
+      }
     }
   };
 
   return (
     <div className={`
-      ${getCardClasses(currentWorld)}
-      ${getPriorityClasses(nodePriority, currentWorld)}
+      relative rounded-xl p-3 hover:border-theme-primary transition-all duration-300 group 
+      shadow hover:shadow-xl hover:-translate-y-0.5 transform-gpu
+      bg-theme-secondary border-2 border-theme-accent text-theme-bright
+      ${getPriorityClasses(nodePriority, colorMode)}
     `}>
-      {/* Priority Indicator */}
-      <div className={`absolute top-2 right-2 text-xs font-bold px-2 py-1 rounded ${
-        nodePriority === 'CRITICAL' ? 'bg-red-500/20 text-red-300' :
-        nodePriority === 'HIGH' ? 'bg-orange-500/20 text-orange-300' :
-        nodePriority === 'MEDIUM' ? 'bg-yellow-500/20 text-yellow-300' :
-        'bg-green-500/20 text-green-300'
-      }`}>
+      {/* Enhanced Priority Indicator */}
+      <div className={getPriorityIndicatorStyles(nodePriority, colorMode)}>
         {nodePriority}
       </div>
 
-      {/* Top Section */}
+      {/* Top Section with enhanced readability */}
       <div className="flex items-start justify-between mb-3">
         <div className="flex-1 pr-2">
           <div className="flex items-center gap-2 mb-1">
@@ -287,55 +298,55 @@ const ExecutiveNodeCard = ({ node, onView, onEdit }) => {
         </div>
       </div>
 
-      {/* Quality & Score Section */}
+      {/* Quality & Score Section with enhanced contrast */}
       <div className="space-y-2 mb-3">
         <div className="flex items-center justify-between">
-          <span className="text-xs text-theme-secondary">Quality</span>
+          <span className="text-xs text-theme-secondary font-medium">Quality</span>
           <QualityBadge score={quality.overall} />
         </div>
         <QualityProgress score={quality.overall} />
         
         <div className="flex items-center justify-between">
-          <span className="text-xs text-theme-secondary">Node Score</span>
+          <span className="text-xs text-theme-secondary font-medium">Node Score</span>
           <NodeScoreBadge score={nodeScore} />
         </div>
         <NodeScoreProgress score={nodeScore} />
       </div>
 
-      {/* Metadata */}
+      {/* Enhanced Metadata with better contrast */}
       <div className="grid grid-cols-2 gap-2 text-xs mb-3">
         <div>
-          <span className="text-theme-muted">Type:</span>
-          <span className="ml-1 text-theme-secondary">{node.type}</span>
+          <span className="text-theme-muted font-medium">Type:</span>
+          <span className="ml-1 text-theme-bright">{node.type}</span>
         </div>
         <div>
-          <span className="text-theme-muted">Depth:</span>
-          <span className="ml-1 text-theme-secondary">{node.depth}</span>
+          <span className="text-theme-muted font-medium">Depth:</span>
+          <span className="ml-1 text-theme-bright">{node.depth}</span>
         </div>
         <div>
-          <span className="text-theme-muted">Status:</span>
-          <span className="ml-1">{STATUS_ICONS[nodeStatus]} {STATUS_LABELS[nodeStatus]}</span>
+          <span className="text-theme-muted font-medium">Status:</span>
+          <span className="ml-1">{STATUS_ICONS[nodeStatus]} <span className="text-theme-bright">{STATUS_LABELS[nodeStatus]}</span></span>
         </div>
         <div>
-          <span className="text-theme-muted">Edges:</span>
-          <span className="ml-1 text-theme-secondary">{edgeInfo.in}→{edgeInfo.out}</span>
+          <span className="text-theme-muted font-medium">Edges:</span>
+          <span className="ml-1 text-theme-bright">{edgeInfo.in}→{edgeInfo.out}</span>
         </div>
       </div>
 
-      {/* Updated Date */}
-      <div className="text-xs text-theme-muted mb-3">
-        <span>Updated: {formatDate(lastUpdated)}</span>
+      {/* Updated Date with better visibility */}
+      <div className="text-xs text-theme-muted mb-3 font-medium">
+        <span>Updated: <span className="text-theme-secondary">{formatDate(lastUpdated)}</span></span>
       </div>
 
-      {/* Next Improvements */}
+      {/* Next Improvements with enhanced readability */}
       {improvements.length > 0 && (
         <div className="mb-3">
-          <div className="text-xs text-theme-secondary mb-1">Next Improvements:</div>
+          <div className="text-xs text-theme-secondary mb-1 font-medium">Next Improvements:</div>
           <ul className="text-xs text-theme-muted space-y-1">
             {improvements.slice(0, 2).map((improvement, idx) => (
               <li key={idx} className="flex items-start">
-                <span className="text-theme-accent mr-1">•</span>
-                <span className="leading-tight">
+                <span className="text-theme-accent mr-1 font-bold">•</span>
+                <span className="leading-tight text-theme-bright">
                   {typeof improvement === 'string' ? improvement : improvement.description || improvement}
                 </span>
               </li>
@@ -344,19 +355,18 @@ const ExecutiveNodeCard = ({ node, onView, onEdit }) => {
         </div>
       )}
 
-      {/* Action Buttons */}
+      {/* Enhanced Action Buttons with better contrast */}
       <div className="flex gap-2">
         <button
           onClick={handleView}
-          className="flex-1 bg-theme-primary text-theme-inverse px-3 py-2 rounded text-xs font-medium 
-                     hover:bg-theme-secondary transition-colors focus:outline-none focus:ring-2 focus:ring-theme-accent"
+          className="flex-1 btn-theme-primary text-xs font-medium focus-theme"
         >
           {node.data?.pageUrl ? 'View Page' : 'Details'}
         </button>
         <button
           onClick={() => onEdit(node)}
-          className="px-3 py-2 border border-theme-accent text-theme-accent rounded text-xs 
-                     hover:bg-theme-accent hover:text-theme-inverse transition-colors focus:outline-none focus:ring-2 focus:ring-theme-accent"
+          className="px-3 py-2 border-2 border-theme-accent text-theme-accent rounded text-xs font-medium
+                     hover:bg-theme-accent hover:text-theme-inverse transition-colors focus-theme"
         >
           Edit
         </button>
@@ -380,9 +390,9 @@ const ExecutiveNodeCard = ({ node, onView, onEdit }) => {
   );
 };
 
-// Edit Node Modal Component - Theme Aware
+// Enhanced Edit Node Modal with better theme support
 const EditNodeModal = ({ node, onSave, onClose }) => {
-  const { currentWorld } = useTheme();
+  const { colorMode } = useColorMode();
   const [editData, setEditData] = useState({
     title: node.data?.title || '',
     summary: node.data?.summary || '',
@@ -395,28 +405,16 @@ const EditNodeModal = ({ node, onSave, onClose }) => {
     onClose();
   };
 
-  // Theme-aware modal styling
-  const getModalClasses = (world) => {
-    switch(world) {
-      case 'witcher':
-        return 'bg-theme-secondary border-2 border-theme-primary text-theme-bright';
-      case 'nightcity':
-        return 'bg-theme-secondary border-2 border-theme-primary text-theme-bright';
-      default:
-        return 'bg-theme-secondary border-2 border-theme-primary text-theme-bright';
-    }
-  };
-
   return (
     <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-      <div className={`${getModalClasses(currentWorld)} rounded-xl p-6 max-w-lg w-full max-h-96 overflow-y-auto`}>
+      <div className="bg-theme-secondary border-2 border-theme-primary text-theme-bright rounded-xl p-6 max-w-lg w-full max-h-96 overflow-y-auto">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold text-theme-bright">
             Edit Node: {node.id}
           </h2>
           <button
             onClick={onClose}
-            className="text-theme-muted hover:text-theme-bright text-2xl transition-colors"
+            className="text-theme-muted hover:text-theme-bright text-2xl transition-colors focus-theme"
           >
             ×
           </button>
@@ -429,8 +427,7 @@ const EditNodeModal = ({ node, onSave, onClose }) => {
               type="text"
               value={editData.title}
               onChange={(e) => setEditData({ ...editData, title: e.target.value })}
-              className="w-full px-3 py-2 bg-theme-tertiary border border-theme-accent rounded text-theme-bright 
-                         focus:border-theme-primary focus:outline-none focus:ring-2 focus:ring-theme-primary/50"
+              className="input-theme w-full focus-theme"
             />
           </div>
           
@@ -440,8 +437,7 @@ const EditNodeModal = ({ node, onSave, onClose }) => {
               value={editData.summary}
               onChange={(e) => setEditData({ ...editData, summary: e.target.value })}
               rows={3}
-              className="w-full px-3 py-2 bg-theme-tertiary border border-theme-accent rounded text-theme-bright 
-                         focus:border-theme-primary focus:outline-none focus:ring-2 focus:ring-theme-primary/50"
+              className="input-theme w-full focus-theme"
             />
           </div>
           
@@ -451,8 +447,7 @@ const EditNodeModal = ({ node, onSave, onClose }) => {
               <select
                 value={editData.status}
                 onChange={(e) => setEditData({ ...editData, status: e.target.value })}
-                className="w-full px-3 py-2 bg-theme-tertiary border border-theme-accent rounded text-theme-bright 
-                           focus:border-theme-primary focus:outline-none focus:ring-2 focus:ring-theme-primary/50"
+                className="input-theme w-full focus-theme"
               >
                 <option value="stub">Stub</option>
                 <option value="wip">WIP</option>
@@ -465,8 +460,7 @@ const EditNodeModal = ({ node, onSave, onClose }) => {
               <select
                 value={editData.priority}
                 onChange={(e) => setEditData({ ...editData, priority: e.target.value })}
-                className="w-full px-3 py-2 bg-theme-tertiary border border-theme-accent rounded text-theme-bright 
-                           focus:border-theme-primary focus:outline-none focus:ring-2 focus:ring-theme-primary/50"
+                className="input-theme w-full focus-theme"
               >
                 <option value="low">Low</option>
                 <option value="medium">Medium</option>
@@ -480,15 +474,14 @@ const EditNodeModal = ({ node, onSave, onClose }) => {
         <div className="flex gap-3 mt-6">
           <button
             onClick={handleSave}
-            className="flex-1 bg-theme-primary text-theme-inverse py-2 px-4 rounded font-medium 
-                       hover:bg-theme-secondary transition-colors focus:outline-none focus:ring-2 focus:ring-theme-accent"
+            className="flex-1 btn-theme-primary focus-theme"
           >
             Save Changes
           </button>
           <button
             onClick={onClose}
-            className="flex-1 border border-theme-accent text-theme-accent py-2 px-4 rounded font-medium 
-                       hover:bg-theme-accent hover:text-theme-inverse transition-colors focus:outline-none focus:ring-2 focus:ring-theme-accent"
+            className="flex-1 border-2 border-theme-accent text-theme-accent py-2 px-4 rounded font-medium 
+                       hover:bg-theme-accent hover:text-theme-inverse transition-colors focus-theme"
           >
             Cancel
           </button>
@@ -498,28 +491,17 @@ const EditNodeModal = ({ node, onSave, onClose }) => {
   );
 };
 
-// World Filter Component - Theme Aware
+// Enhanced World Filter Component
 const WorldFilter = ({ selectedWorlds, onChange, onToggle, isCollapsed }) => {
-  const { currentWorld } = useTheme();
+  const { colorMode } = useColorMode();
   
-  const getFilterClasses = (world) => {
-    switch(world) {
-      case 'witcher':
-        return 'bg-theme-secondary border border-theme-accent rounded-lg p-3';
-      case 'nightcity':
-        return 'bg-theme-secondary border border-theme-accent rounded-lg p-3';
-      default:
-        return 'bg-theme-secondary border border-theme-accent rounded-lg p-3';
-    }
-  };
-
   return (
-    <div className={`${getFilterClasses(currentWorld)} md:sticky top-2`}>
+    <div className="bg-theme-secondary border-2 border-theme-accent rounded-lg p-3 md:sticky top-2">
       <div className="flex items-center justify-between">
         <div className="text-theme-bright font-medium">🌍 Worlds</div>
         <button
           onClick={onToggle}
-          className="text-theme-muted hover:text-theme-secondary transition-colors md:hidden"
+          className="text-theme-muted hover:text-theme-secondary transition-colors md:hidden focus-theme"
         >
           {isCollapsed ? '▼' : '▲'}
         </button>
@@ -539,9 +521,9 @@ const WorldFilter = ({ selectedWorlds, onChange, onToggle, isCollapsed }) => {
                     onChange(selectedWorlds.filter(w => w !== worldKey));
                   }
                 }}
-                className="text-theme-primary focus:ring-theme-primary focus:ring-2"
+                className="w-4 h-4 text-theme-primary focus:ring-theme-primary focus:ring-2 rounded border-theme-accent"
               />
-              <span className="text-sm">
+              <span className="text-sm text-theme-bright">
                 {world.icon} {world.name}
               </span>
             </label>
@@ -552,9 +534,10 @@ const WorldFilter = ({ selectedWorlds, onChange, onToggle, isCollapsed }) => {
   );
 };
 
-// Main Executive Quality Dashboard
+// Main Executive Quality Dashboard with complete theme integration
 export default function QualityDashboard() {
   const { currentWorld } = useTheme();
+  const { colorMode } = useColorMode();
   
   // State management
   const [selectedWorlds, setSelectedWorlds] = useState(['matrix', 'witcher', 'nightcity']);
@@ -590,42 +573,33 @@ export default function QualityDashboard() {
     });
   }, [selectedWorlds, selectedStatuses, selectedPriorities]);
 
-  // Calculate KPIs
+  // Calculate KPIs with consistent status logic
   const kpis = useMemo(() => {
-    const total = filteredNodes.length;
-    // Use consistent status logic for KPIs too
-    const stubCount = filteredNodes.filter(n => {
-      const nodeStatus = n.data?.enhancement?.status || n.data?.status || 'stub';
-      return nodeStatus === 'stub';
-    }).length;
-    const wipCount = filteredNodes.filter(n => {
-      const nodeStatus = n.data?.enhancement?.status || n.data?.status || 'stub';
-      return nodeStatus === 'wip';
-    }).length;
-    const liveCount = filteredNodes.filter(n => {
-      const nodeStatus = n.data?.enhancement?.status || n.data?.status || 'stub';
-      return nodeStatus === 'live';
-    }).length;
-    
-    const avgQuality = filteredNodes.reduce((sum, node) => {
-      return sum + calculateNodeQuality(node).overall;
-    }, 0) / (total || 1);
-    
+    const statusCounts = filteredNodes.reduce((acc, node) => {
+      const status = node.data?.enhancement?.status || node.data?.status || 'stub';
+      acc[status] = (acc[status] || 0) + 1;
+      return acc;
+    }, {});
+
+    const qualities = filteredNodes.map(node => calculateNodeQuality(node).overall);
+    const avgQuality = qualities.length > 0 ? qualities.reduce((sum, q) => sum + q, 0) / qualities.length : 0;
+
     const priorityCounts = filteredNodes.reduce((acc, node) => {
       const priority = calculateNodeQuality(node).priority;
       acc[priority] = (acc[priority] || 0) + 1;
       return acc;
-    }, {});
-    
-    const percentUpgraded = total > 0 ? (filteredNodes.filter(n => 
-      (n.data?.enhancement?.qualityRating || 0) > 6
-    ).length / total) * 100 : 0;
+    }, { CRITICAL: 0, HIGH: 0, MEDIUM: 0, LOW: 0 });
+
+    const upgradedCount = filteredNodes.filter(node => 
+      node.data?.enhancement && Object.keys(node.data.enhancement).length > 0
+    ).length;
+    const percentUpgraded = filteredNodes.length > 0 ? (upgradedCount / filteredNodes.length) * 100 : 0;
 
     return {
-      total,
-      stubCount,
-      wipCount,
-      liveCount,
+      total: filteredNodes.length,
+      stubCount: statusCounts.stub || 0,
+      wipCount: statusCounts.wip || 0,
+      liveCount: statusCounts.live || 0,
       avgQuality,
       priorityCounts,
       percentUpgraded
@@ -676,62 +650,78 @@ export default function QualityDashboard() {
     });
   };
 
-  // Theme-aware background classes
-  const getBackgroundClasses = (world) => {
-    // Use CSS variables instead of hardcoded colors
-    return 'min-h-screen p-4 md:p-6 transition-colors duration-300';
-  };
-
-  // Theme-aware container classes
-  const getContainerClasses = (world) => {
-    switch(world) {
-      case 'witcher':
-        return 'bg-theme-primary text-theme-bright';
-      case 'nightcity':
-        return 'bg-theme-primary text-theme-bright';
-      default:
-        return 'bg-theme-primary text-theme-bright';
+  // Enhanced KPI card styling with better contrast
+  const getKpiCardStyles = (type, mode) => {
+    const baseClasses = 'border-2 rounded-lg p-4 text-center transition-colors duration-300';
+    
+    if (mode === 'light') {
+      switch(type) {
+        case 'total': return `${baseClasses} bg-white border-gray-300 shadow-sm`;
+        case 'stub': return `${baseClasses} bg-red-50 border-red-200`;
+        case 'wip': return `${baseClasses} bg-yellow-50 border-yellow-200`;
+        case 'live': return `${baseClasses} bg-green-50 border-green-200`;
+        case 'quality': return `${baseClasses} bg-blue-50 border-blue-200`;
+        case 'high-priority': return `${baseClasses} bg-orange-50 border-orange-200`;
+        case 'low-priority': return `${baseClasses} bg-gray-50 border-gray-200`;
+        case 'upgraded': return `${baseClasses} bg-purple-50 border-purple-200`;
+        default: return `${baseClasses} bg-white border-gray-300`;
+      }
+    } else {
+      switch(type) {
+        case 'total': return `${baseClasses} bg-theme-secondary border-theme-primary`;
+        case 'stub': return `${baseClasses} bg-theme-secondary border-red-400`;
+        case 'wip': return `${baseClasses} bg-theme-secondary border-yellow-400`;
+        case 'live': return `${baseClasses} bg-theme-secondary border-green-400`;
+        case 'quality': return `${baseClasses} bg-theme-accent/20 border-theme-primary`;
+        case 'high-priority': return `${baseClasses} bg-theme-secondary border-orange-400`;
+        case 'low-priority': return `${baseClasses} bg-theme-secondary border-theme-accent`;
+        case 'upgraded': return `${baseClasses} bg-theme-secondary border-theme-primary`;
+        default: return `${baseClasses} bg-theme-secondary border-theme-accent`;
+      }
     }
   };
 
-  // Theme-aware KPI card classes
-  const getKpiCardClasses = (type) => {
-    const baseClasses = 'border-2 rounded-lg p-4 text-center transition-colors duration-300';
-    
-    switch(type) {
-      case 'total':
-        return `${baseClasses} bg-theme-secondary border-theme-primary`;
-      case 'stub':
-        return `${baseClasses} bg-theme-secondary border-red-400`;
-      case 'wip':
-        return `${baseClasses} bg-theme-secondary border-yellow-400`;
-      case 'live':
-        return `${baseClasses} bg-theme-secondary border-green-400`;
-      case 'quality':
-        return `${baseClasses} bg-theme-accent/20 border-theme-primary`;
-      case 'high-priority':
-        return `${baseClasses} bg-theme-secondary border-orange-400`;
-      case 'low-priority':
-        return `${baseClasses} bg-theme-secondary border-theme-accent`;
-      case 'upgraded':
-        return `${baseClasses} bg-theme-secondary border-theme-primary`;
-      default:
-        return `${baseClasses} bg-theme-secondary border-theme-accent`;
+  // Enhanced KPI value styling with better contrast
+  const getKpiValueStyles = (type, mode) => {
+    if (mode === 'light') {
+      switch(type) {
+        case 'total': return 'text-gray-900 font-bold text-2xl';
+        case 'stub': return 'text-red-700 font-bold text-2xl';
+        case 'wip': return 'text-yellow-700 font-bold text-2xl';
+        case 'live': return 'text-green-700 font-bold text-2xl';
+        case 'quality': return 'text-blue-700 font-extrabold text-2xl';
+        case 'high-priority': return 'text-orange-700 font-bold text-2xl';
+        case 'low-priority': return 'text-gray-700 font-bold text-2xl';
+        case 'upgraded': return 'text-purple-700 font-bold text-2xl';
+        default: return 'text-gray-900 font-bold text-2xl';
+      }
+    } else {
+      switch(type) {
+        case 'total': return 'text-theme-primary font-bold text-2xl';
+        case 'stub': return 'text-red-400 font-bold text-2xl';
+        case 'wip': return 'text-yellow-400 font-bold text-2xl';
+        case 'live': return 'text-green-400 font-bold text-2xl';
+        case 'quality': return 'text-theme-bright font-extrabold text-2xl';
+        case 'high-priority': return 'text-orange-400 font-bold text-2xl';
+        case 'low-priority': return 'text-theme-muted font-bold text-2xl';
+        case 'upgraded': return 'text-theme-primary font-bold text-2xl';
+        default: return 'text-theme-bright font-bold text-2xl';
+      }
     }
   };
 
   return (
-    <div className={`${getBackgroundClasses(currentWorld)} ${getContainerClasses(currentWorld)}`} 
+    <div className="min-h-screen p-4 md:p-6 transition-colors duration-300 bg-theme-primary text-theme-bright" 
          style={{ background: 'var(--world-background)' }}>
-      {/* Header */}
+      {/* Enhanced Header */}
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-4xl font-bold text-theme-primary mb-2 font-theme-primary">
+            <h1 className="heading-theme text-4xl mb-2">
               Executive Quality Dashboard
             </h1>
             <p className="text-theme-secondary">
-              Command view for systematic node enhancement • Current World: {WORLD_GROUPS[currentWorld]?.icon} {WORLD_GROUPS[currentWorld]?.name}
+              Command view for systematic node enhancement • Current World: {WORLD_GROUPS[currentWorld]?.icon} {WORLD_GROUPS[currentWorld]?.name} • Mode: {colorMode}
             </p>
           </div>
           <div className="text-sm text-theme-muted">
@@ -739,65 +729,66 @@ export default function QualityDashboard() {
           </div>
         </div>
 
-        {/* Top-Level KPIs */}
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 mb-8">
-          <div className={getKpiCardClasses('total')}>
-            <div className="text-2xl font-bold text-theme-primary">{kpis.total}</div>
-            <div className="text-xs text-theme-muted">Total Nodes</div>
+        {/* Enhanced Top-Level KPIs with better contrast */}
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4 mb-8">
+          <div className={getKpiCardStyles('total', colorMode)}>
+            <div className={getKpiValueStyles('total', colorMode)}>{kpis.total}</div>
+            <div className="text-xs text-theme-muted font-medium">Total Nodes</div>
           </div>
           
-          <div className={getKpiCardClasses('stub')}>
-            <div className="text-2xl font-bold text-red-400">{kpis.stubCount}</div>
-            <div className="text-xs text-theme-muted">🟥 Stub</div>
+          <div className={getKpiCardStyles('stub', colorMode)}>
+            <div className={getKpiValueStyles('stub', colorMode)}>{kpis.stubCount}</div>
+            <div className="text-xs text-theme-muted font-medium">🟥 Stub</div>
           </div>
           
-          <div className={getKpiCardClasses('wip')}>
-            <div className="text-2xl font-bold text-yellow-400">{kpis.wipCount}</div>
-            <div className="text-xs text-theme-muted">🟨 WIP</div>
+          <div className={getKpiCardStyles('wip', colorMode)}>
+            <div className={getKpiValueStyles('wip', colorMode)}>{kpis.wipCount}</div>
+            <div className="text-xs text-theme-muted font-medium">🟨 WIP</div>
           </div>
           
-          <div className={getKpiCardClasses('live')}>
-            <div className="text-2xl font-bold text-green-400">{kpis.liveCount}</div>
-            <div className="text-xs text-theme-muted">🟩 Live</div>
+          <div className={getKpiCardStyles('live', colorMode)}>
+            <div className={getKpiValueStyles('live', colorMode)}>{kpis.liveCount}</div>
+            <div className="text-xs text-theme-muted font-medium">🟩 Live</div>
           </div>
           
-          <div className={getKpiCardClasses('quality')}>
-            <div className="text-2xl font-extrabold text-theme-bright">{kpis.avgQuality.toFixed(1)}</div>
-            <div className="text-xs text-theme-secondary">Avg Quality</div>
+          <div className={getKpiCardStyles('quality', colorMode)}>
+            <div className={getKpiValueStyles('quality', colorMode)}>{kpis.avgQuality.toFixed(1)}</div>
+            <div className="text-xs text-theme-secondary font-medium">Avg Quality</div>
           </div>
           
-          <div className={getKpiCardClasses('high-priority')}>
-            <div className="text-2xl font-bold text-orange-400">{kpis.priorityCounts.CRITICAL + kpis.priorityCounts.HIGH}</div>
-            <div className="text-xs text-theme-muted">High Priority</div>
+          <div className={getKpiCardStyles('high-priority', colorMode)}>
+            <div className={getKpiValueStyles('high-priority', colorMode)}>{kpis.priorityCounts.CRITICAL + kpis.priorityCounts.HIGH}</div>
+            <div className="text-xs text-theme-muted font-medium">High Priority</div>
           </div>
           
-          <div className={getKpiCardClasses('low-priority')}>
-            <div className="text-2xl font-bold text-theme-muted">{kpis.priorityCounts.MEDIUM + kpis.priorityCounts.LOW}</div>
-            <div className="text-xs text-theme-muted">Low Priority</div>
+          <div className={getKpiCardStyles('low-priority', colorMode)}>
+            <div className={getKpiValueStyles('low-priority', colorMode)}>{kpis.priorityCounts.MEDIUM + kpis.priorityCounts.LOW}</div>
+            <div className="text-xs text-theme-muted font-medium">Low Priority</div>
           </div>
-          <div className={getKpiCardClasses('upgraded')}>
-            <div className="text-2xl font-bold text-theme-primary">{kpis.percentUpgraded.toFixed(1)}%</div>
-            <div className="text-xs text-theme-muted">Upgraded</div>
+
+          <div className={getKpiCardStyles('upgraded', colorMode)}>
+            <div className={getKpiValueStyles('upgraded', colorMode)}>{kpis.percentUpgraded.toFixed(1)}%</div>
+            <div className="text-xs text-theme-muted font-medium">Upgraded</div>
           </div>
         </div>
 
-        {/* Sort Controls */}
+        {/* Enhanced Sort Controls */}
         <div className="flex gap-4 mb-4">
           <button
             onClick={() => toggleSort('updatedAt')}
-            className="text-sm text-theme-secondary hover:text-theme-primary transition-colors"
+            className="text-sm text-theme-secondary hover:text-theme-primary transition-colors focus-theme px-2 py-1 rounded"
           >
             Updated {sortConfig[0].key === 'updatedAt' ? (sortConfig[0].direction === 'asc' ? '▲' : '▼') : ''}
           </button>
           <button
             onClick={() => toggleSort('quality')}
-            className="text-sm text-theme-secondary hover:text-theme-primary transition-colors"
+            className="text-sm text-theme-secondary hover:text-theme-primary transition-colors focus-theme px-2 py-1 rounded"
           >
             Quality {sortConfig[0].key === 'quality' ? (sortConfig[0].direction === 'asc' ? '▲' : '▼') : ''}
           </button>
         </div>
 
-        {/* Filters */}
+        {/* Enhanced Filters */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-8">
           <WorldFilter
             selectedWorlds={selectedWorlds}
@@ -806,8 +797,8 @@ export default function QualityDashboard() {
             isCollapsed={worldFilterCollapsed}
           />
           
-          {/* Status Filter */}
-          <div className="bg-theme-secondary border border-theme-accent rounded-lg p-3 md:sticky top-2">
+          {/* Enhanced Status Filter */}
+          <div className="bg-theme-secondary border-2 border-theme-accent rounded-lg p-3 md:sticky top-2">
             <div className="text-theme-bright font-medium mb-3">📊 Status</div>
             <div className="flex gap-2">
               {['live', 'wip', 'stub'].map(status => (
@@ -822,19 +813,19 @@ export default function QualityDashboard() {
                         setSelectedStatuses(selectedStatuses.filter(s => s !== status));
                       }
                     }}
-                    className="text-theme-primary focus:ring-theme-primary focus:ring-2"
+                    className="w-4 h-4 text-theme-primary focus:ring-theme-primary focus:ring-2 rounded border-theme-accent"
                   />
-                  <span className="text-sm text-theme-secondary">{STATUS_ICONS[status]} {STATUS_LABELS[status]}</span>
+                  <span className="text-sm text-theme-bright">{STATUS_ICONS[status]} {STATUS_LABELS[status]}</span>
                 </label>
               ))}
             </div>
           </div>
 
-          {/* Priority Filter */}
-          <div className="bg-theme-secondary border border-theme-accent rounded-lg p-3 md:sticky top-2">
+          {/* Enhanced Priority Filter */}
+          <div className="bg-theme-secondary border-2 border-theme-accent rounded-lg p-3 md:sticky top-2">
             <div className="text-theme-bright font-medium mb-3">⚡ Priority</div>
             <div className="grid grid-cols-2 gap-2">
-              {Object.keys(ENHANCEMENT_PRIORITY).map(priority => (
+              {['CRITICAL', 'HIGH', 'MEDIUM', 'LOW'].map(priority => (
                 <label key={priority} className="flex items-center gap-1 cursor-pointer">
                   <input
                     type="checkbox"
@@ -846,17 +837,17 @@ export default function QualityDashboard() {
                         setSelectedPriorities(selectedPriorities.filter(p => p !== priority));
                       }
                     }}
-                    className="text-theme-primary focus:ring-theme-primary focus:ring-2"
+                    className="w-4 h-4 text-theme-primary focus:ring-theme-primary focus:ring-2 rounded border-theme-accent"
                   />
-                  <span className="text-xs text-theme-secondary">{priority}</span>
+                  <span className="text-xs text-theme-bright">{priority}</span>
                 </label>
               ))}
             </div>
           </div>
         </div>
 
-        {/* Node Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-6">
+        {/* Enhanced Node Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8">
           {displayNodes.map(node => (
             <ExecutiveNodeCard
               key={node.id}
@@ -867,22 +858,20 @@ export default function QualityDashboard() {
           ))}
         </div>
 
-        {/* Show More Button */}
-        {filteredNodes.length > 12 && (
+        {/* Enhanced Show More Button */}
+        {sortedNodes.length > 12 && (
           <div className="text-center">
             <button
               onClick={() => setShowMore(!showMore)}
-              className="bg-theme-secondary hover:bg-theme-tertiary text-theme-primary px-6 py-2 rounded-lg 
-                         transition-colors border border-theme-accent hover:border-theme-primary 
-                         focus:outline-none focus:ring-2 focus:ring-theme-primary"
+              className="btn-theme-secondary focus-theme"
             >
-              {showMore ? 'Show Less' : `Show ${filteredNodes.length - 12} More Nodes`}
+              {showMore ? 'Show Less' : `Show All ${sortedNodes.length} Nodes`}
             </button>
           </div>
         )}
       </div>
 
-      {/* Edit Modal */}
+      {/* Enhanced Edit Modal */}
       {editingNode && (
         <EditNodeModal
           node={editingNode}
@@ -891,7 +880,7 @@ export default function QualityDashboard() {
         />
       )}
 
-      {/* View Modal */}
+      {/* Enhanced View Modal */}
       {viewingNode && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
           <div className="bg-theme-secondary border-2 border-theme-primary rounded-xl p-6 max-w-lg w-full max-h-96 overflow-y-auto">
@@ -901,25 +890,25 @@ export default function QualityDashboard() {
               </h2>
               <button
                 onClick={() => setViewingNode(null)}
-                className="text-theme-muted hover:text-theme-bright text-2xl transition-colors"
+                className="text-theme-muted hover:text-theme-bright text-2xl transition-colors focus-theme"
               >
                 ×
               </button>
             </div>
             <div className="space-y-3 text-sm">
-              <p className="text-theme-secondary"><strong>Type:</strong> {viewingNode.type}</p>
-              <p className="text-theme-secondary"><strong>Group:</strong> {viewingNode.group}</p>
-              <p className="text-theme-secondary"><strong>Status:</strong> {STATUS_ICONS[viewingNode.data?.status]} {STATUS_LABELS[viewingNode.data?.status]}</p>
-              <p className="text-theme-secondary"><strong>Summary:</strong> {viewingNode.data?.summary || 'No summary available'}</p>
+              <p className="text-theme-secondary"><strong>Type:</strong> <span className="text-theme-bright">{viewingNode.type}</span></p>
+              <p className="text-theme-secondary"><strong>Group:</strong> <span className="text-theme-bright">{viewingNode.group}</span></p>
+              <p className="text-theme-secondary"><strong>Status:</strong> <span className="text-theme-bright">{STATUS_ICONS[viewingNode.data?.status]} {STATUS_LABELS[viewingNode.data?.status]}</span></p>
+              <p className="text-theme-secondary"><strong>Summary:</strong> <span className="text-theme-bright">{viewingNode.data?.summary || 'No summary available'}</span></p>
               {viewingNode.data?.characters && (
-                <p className="text-theme-secondary"><strong>Characters:</strong> {viewingNode.data.characters.join(', ')}</p>
+                <p className="text-theme-secondary"><strong>Characters:</strong> <span className="text-theme-bright">{viewingNode.data.characters.join(', ')}</span></p>
               )}
               {viewingNode.data?.dialogue && (
                 <div className="text-theme-secondary">
                   <strong>Dialogue:</strong>
                   <ul className="mt-1 space-y-1">
                     {viewingNode.data.dialogue.map((line, idx) => (
-                      <li key={idx} className="text-theme-muted">• {line}</li>
+                      <li key={idx} className="text-theme-bright">• {line}</li>
                     ))}
                   </ul>
                 </div>

@@ -1,7 +1,6 @@
 /* Global Theme Variables & Classes */
 
-
-/* Color mode styles */
+/* Enhanced Color mode styles with proper transitions */
 :root[data-color-mode='light'] {
   color-scheme: light;
 }
@@ -9,21 +8,24 @@
   color-scheme: dark;
 }
 
-body[data-color-mode='light'],
-body[data-color-mode='dark'] {
-  background: var(--world-background);
-}
-body[data-color-mode='light'] {
-  color: #111827;
-}
-body[data-color-mode='dark'] {
-  color: white;
-}
-
+/* Base body styling with color mode support */
 body {
   background: var(--world-background);
   transition: background-color 0.3s ease, color 0.3s ease;
 }
+
+/* Light mode body styling */
+body[data-color-mode='light'] {
+  background: var(--world-background);
+  color: var(--color-text-bright);
+}
+
+/* Dark mode body styling */
+body[data-color-mode='dark'] {
+  background: var(--world-background);
+  color: var(--color-text-bright);
+}
+
 /* Base theme variables are injected by ThemeContext */
 :root {
   /* Default values - will be overridden by theme system */
@@ -52,10 +54,10 @@ body {
   --color-info: #06b6d4;
   --color-glass-background: rgba(0, 255, 65, 0.1);
   --color-overlay-background: rgba(0, 0, 0, 0.9);
-  --color-shadow-primary: 0 0 20px rgba(34, 197, 94, 0.5);
-  --color-shadow-secondary: 0 0 10px rgba(16, 185, 129, 0.3);
-  --color-glow-primary: 0 0 15px #00ff41;
-  --color-glow-secondary: 0 0 10px #22c55e;
+  --color-shadow-primary: 0 0 10px rgba(34, 197, 94, 0.3);
+  --color-shadow-secondary: 0 0 5px rgba(16, 185, 129, 0.2);
+  --color-glow-primary: 0 0 8px #00ff41;
+  --color-glow-secondary: 0 0 5px #22c55e;
   
   --font-primary: "Courier New", "Monaco", "Consolas", monospace;
   --font-secondary: "JetBrains Mono", "Fira Code", monospace;
@@ -67,14 +69,14 @@ body {
   
   --d3-node-color: #22c55e;
   --d3-link-color: #10b981;
-  --d3-node-glow: 0 0 15px #00ff41;
+  --d3-node-glow: 0 0 8px #00ff41;
   --d3-text-color: #00ff41;
   --d3-background-color: #000000;
   --d3-grid-opacity: 0.3;
   --d3-stroke-width: 2;
 }
 
-/* Theme-aware utility classes with reduced glow intensity */
+/* Enhanced Theme-aware utility classes with mode support */
 .bg-theme-primary { 
   background-color: var(--color-primary); 
   transition: background-color 0.3s ease;
@@ -95,31 +97,39 @@ body {
   background-color: var(--color-overlay-background); 
 }
 
-/* Text colors with reduced glow intensity for better readability */
+/* Enhanced text colors with conditional glow effects */
 .text-theme-primary { 
   color: var(--color-text-primary); 
-  /* Reduced text shadow intensity */
-  text-shadow: 0 0 4px var(--color-text-primary);
+  text-shadow: var(--color-glow-primary);
+  transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 .text-theme-secondary { 
   color: var(--color-text-secondary); 
-  /* Reduced text shadow intensity */
-  text-shadow: 0 0 2px var(--color-text-secondary);
+  text-shadow: var(--color-glow-secondary);
+  transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 .text-theme-accent { 
-  color: var(--color-text-accent); 
+  color: var(--color-text-accent);
+  transition: color 0.3s ease; 
 }
 .text-theme-muted { 
-  color: var(--color-text-muted); 
+  color: var(--color-text-muted);
+  transition: color 0.3s ease; 
 }
 .text-theme-inverse { 
-  color: var(--color-text-inverse); 
+  color: var(--color-text-inverse);
+  transition: color 0.3s ease; 
 }
 .text-theme-bright { 
   color: var(--color-text-bright); 
-  /* Minimal glow for important text */
-  text-shadow: 0 0 3px var(--color-text-bright);
   font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+/* Light mode text adjustments - remove glows in light mode */
+body[data-color-mode='light'] .text-theme-primary,
+body[data-color-mode='light'] .text-theme-secondary {
+  text-shadow: none;
 }
 
 .border-theme-primary { 
@@ -139,28 +149,39 @@ body {
 .font-theme-secondary { font-family: var(--font-secondary); }
 .font-theme-ui { font-family: var(--font-ui); }
 
-/* Reduced shadow intensity for better UI readability */
+/* Enhanced shadow effects with mode-awareness */
 .shadow-theme-primary { 
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--color-shadow-primary);
+  transition: box-shadow 0.3s ease;
 }
 .shadow-theme-secondary { 
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  box-shadow: var(--color-shadow-secondary);
+  transition: box-shadow 0.3s ease;
 }
 
-/* Subtle glow effects that don't interfere with readability */
+/* Glow effects that respect light/dark mode */
 .glow-theme-primary { 
-  filter: drop-shadow(0 0 4px var(--color-border-primary)); 
+  filter: drop-shadow(var(--color-shadow-primary)); 
+  transition: filter 0.3s ease;
 }
 .glow-theme-secondary { 
-  filter: drop-shadow(0 0 2px var(--color-border-secondary)); 
+  filter: drop-shadow(var(--color-shadow-secondary)); 
+  transition: filter 0.3s ease;
 }
 
-/* Accessibility Focus Styles */
-.focus-matrix:focus,
-.focus-matrix:focus-visible {
+/* Light mode glow removal */
+body[data-color-mode='light'] .glow-theme-primary,
+body[data-color-mode='light'] .glow-theme-secondary {
+  filter: none;
+}
+
+/* Enhanced Accessibility Focus Styles */
+.focus-theme:focus,
+.focus-theme:focus-visible {
   outline: 2px solid var(--color-border-primary);
   outline-offset: 2px;
-  box-shadow: 0 0 0 4px rgba(var(--color-border-primary), 0.2);
+  box-shadow: 0 0 0 4px var(--color-glass-background);
+  transition: outline 0.2s ease, box-shadow 0.2s ease;
 }
 
 /* Screen reader only text */
@@ -189,6 +210,11 @@ body {
   .text-theme-bright {
     text-shadow: none !important;
   }
+  
+  .glow-theme-primary,
+  .glow-theme-secondary {
+    filter: none !important;
+  }
 }
 
 /* Reduced motion support */
@@ -206,9 +232,14 @@ body {
   .text-theme-bright {
     text-shadow: none !important;
   }
+  
+  .glow-theme-primary,
+  .glow-theme-secondary {
+    filter: none !important;
+  }
 }
 
-/* Enhanced Button styles with better visibility and reduced glows */
+/* Enhanced Button styles with improved contrast and mode support */
 .btn-theme-primary {
   background-color: var(--color-button-primary);
   color: var(--color-text-inverse);
@@ -217,15 +248,22 @@ body {
   padding: 0.75rem 1.5rem;
   font-family: var(--font-secondary);
   font-weight: 600;
+  font-size: 0.875rem;
   transition: all 0.2s ease;
   text-shadow: none;
+  cursor: pointer;
+  min-height: 44px; /* Accessibility: minimum touch target */
 }
 
 .btn-theme-primary:hover {
   background-color: var(--color-button-hover);
-  /* Subtle glow on hover instead of intense effects */
-  box-shadow: 0 0 8px rgba(var(--color-border-primary), 0.3);
+  box-shadow: var(--color-shadow-primary);
   transform: translateY(-1px);
+}
+
+.btn-theme-primary:focus {
+  outline: 2px solid var(--color-border-primary);
+  outline-offset: 2px;
 }
 
 .btn-theme-secondary {
@@ -236,160 +274,135 @@ body {
   padding: 0.75rem 1.5rem;
   font-family: var(--font-secondary);
   font-weight: 600;
+  font-size: 0.875rem;
   transition: all 0.2s ease;
   text-shadow: none;
+  cursor: pointer;
+  min-height: 44px;
 }
 
 .btn-theme-secondary:hover {
   background-color: var(--color-button-hover);
-  box-shadow: 0 0 8px rgba(var(--color-border-secondary), 0.3);
+  box-shadow: var(--color-shadow-secondary);
   transform: translateY(-1px);
+}
+
+.btn-theme-secondary:focus {
+  outline: 2px solid var(--color-border-secondary);
+  outline-offset: 2px;
+}
+
+/* Light mode button adjustments for better contrast */
+body[data-color-mode='light'] .btn-theme-primary,
+body[data-color-mode='light'] .btn-theme-secondary {
+  color: var(--color-text-inverse);
+  font-weight: 700; /* Increase weight for better contrast */
+}
+
+body[data-color-mode='light'] .btn-theme-primary:hover,
+body[data-color-mode='light'] .btn-theme-secondary:hover {
+  box-shadow: var(--color-shadow-primary);
 }
 
 .btn-theme-danger {
   background-color: var(--color-button-danger);
-  color: var(--color-text-bright);
+  color: #ffffff;
   border: var(--spacing-border-width) solid var(--color-button-danger);
   border-radius: var(--spacing-border-radius);
   padding: 0.75rem 1.5rem;
   font-family: var(--font-secondary);
   font-weight: 600;
+  font-size: 0.875rem;
   transition: all 0.2s ease;
   text-shadow: none;
+  cursor: pointer;
+  min-height: 44px;
 }
 
 .btn-theme-danger:hover {
   background-color: #dc2626;
-  box-shadow: 0 0 8px rgba(239, 68, 68, 0.3);
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
   transform: translateY(-1px);
 }
 
 .btn-theme-info {
   background-color: var(--color-button-info);
-  color: var(--color-text-bright);
+  color: #ffffff;
   border: var(--spacing-border-width) solid var(--color-button-info);
   border-radius: var(--spacing-border-radius);
   padding: 0.75rem 1.5rem;
   font-family: var(--font-secondary);
   font-weight: 600;
+  font-size: 0.875rem;
   transition: all 0.2s ease;
   text-shadow: none;
+  cursor: pointer;
+  min-height: 44px;
 }
 
 .btn-theme-info:hover {
-  background-color: #0284c7;
-  box-shadow: 0 0 8px rgba(6, 182, 212, 0.3);
+  background-color: #0891b2;
+  box-shadow: 0 0 8px rgba(6, 182, 212, 0.4);
   transform: translateY(-1px);
 }
 
 .btn-theme-success {
   background-color: var(--color-button-success);
-  color: var(--color-text-bright);
+  color: #ffffff;
   border: var(--spacing-border-width) solid var(--color-button-success);
   border-radius: var(--spacing-border-radius);
   padding: 0.75rem 1.5rem;
   font-family: var(--font-secondary);
   font-weight: 600;
+  font-size: 0.875rem;
   transition: all 0.2s ease;
   text-shadow: none;
+  cursor: pointer;
+  min-height: 44px;
 }
 
 .btn-theme-success:hover {
-  background-color: #16a34a;
-  box-shadow: 0 0 8px rgba(16, 185, 129, 0.3);
+  background-color: #059669;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
   transform: translateY(-1px);
 }
 
-/* Link styles with subtle effects */
+/* Enhanced link styles */
 .link-theme {
   color: var(--color-link-color);
   text-decoration: underline;
-  transition: all 0.2s ease;
+  transition: color 0.2s ease;
 }
 
 .link-theme:hover {
-  color: var(--color-button-hover);
-  text-shadow: 0 0 3px var(--color-link-color);
+  color: var(--color-text-primary);
+  text-decoration: none;
 }
 
-/* World-specific background classes */
+/* Theme-specific body classes for additional customization */
 body.theme-matrix,
-.world-background-matrix {
-  background: var(--color-primary);
-  color: var(--color-text-primary);
-}
-
 body.theme-witcher,
-.world-background-witcher {
-  background: var(--color-primary);
-  color: var(--color-text-primary);
+body.theme-nightcity {
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-body.theme-nightcity,
-.world-background-nightcity {
-  background: var(--color-primary);
-  color: var(--color-text-primary);
-}
-
-/* Reduced animation intensities */
-@keyframes matrix-glow {
-  0%, 100% { opacity: 0.8; }
-  50% { opacity: 1; }
-}
-
-@keyframes witcher-flame {
-  0%, 100% { opacity: 0.9; }
-  50% { opacity: 1; }
-}
-
-@keyframes nightcity-neon {
-  0%, 100% { opacity: 0.85; }
-  25% { opacity: 1; }
-  75% { opacity: 0.95; }
-}
-
-/* Subtle glitch effect for cyberpunk themes */
-@keyframes animate-glitch {
-  0% { transform: translate(0); }
-  20% { transform: translate(-1px, 1px); }
-  40% { transform: translate(-1px, -1px); }
-  60% { transform: translate(1px, 1px); }
-  80% { transform: translate(1px, -1px); }
-  100% { transform: translate(0); }
-}
-
-/* Theme-specific animations with reduced intensity */
-.animate-theme-glow {
-  animation: matrix-glow 3s ease-in-out infinite;
-}
-
-.animate-glitch {
-  animation: animate-glitch 0.3s ease-in-out infinite;
-}
-
-body.theme-witcher .animate-theme-glow {
-  animation: witcher-flame 4s ease-in-out infinite;
-}
-
-body.theme-nightcity .animate-theme-glow {
-  animation: nightcity-neon 2s ease-in-out infinite;
-}
-
-/* Input styles */
+/* Enhanced Input styles with better contrast */
 .input-theme {
-  background-color: var(--color-secondary);
-  border: 1px solid var(--color-border-secondary);
+  background-color: var(--color-tertiary);
+  border: 2px solid var(--color-border-secondary);
   border-radius: var(--spacing-border-radius);
-  color: var(--color-text-primary);
-  padding: 0.5rem 0.75rem;
-  transition: all 0.2s ease;
+  color: var(--color-text-bright);
+  padding: 0.75rem;
   font-family: var(--font-ui);
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  min-height: 44px; /* Accessibility: minimum touch target */
 }
 
 .input-theme:focus {
   outline: none;
   border-color: var(--color-border-primary);
-  box-shadow: 0 0 0 3px rgba(var(--color-border-primary), 0.1);
+  box-shadow: 0 0 0 3px var(--color-glass-background);
 }
 
 .input-theme::placeholder {
@@ -397,60 +410,77 @@ body.theme-nightcity .animate-theme-glow {
   opacity: 0.8;
 }
 
-/* Card component with subtle theme styling */
+/* Light mode input adjustments */
+body[data-color-mode='light'] .input-theme {
+  background-color: var(--color-secondary);
+  color: var(--color-text-bright);
+}
+
+/* Enhanced Card styles */
 .card-theme {
   background-color: var(--color-secondary);
-  border: 1px solid var(--color-border-secondary);
+  border: 2px solid var(--color-border-accent);
   border-radius: var(--spacing-border-radius);
-  padding: 1.5rem;
-  transition: all 0.2s ease;
+  padding: 1rem;
+  transition: all 0.3s ease;
 }
 
 .card-theme:hover {
   border-color: var(--color-border-primary);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--color-shadow-primary);
+  transform: translateY(-2px);
 }
 
-/* Typography with improved readability */
+/* Enhanced Typography */
 .heading-theme {
   color: var(--color-text-primary);
   font-family: var(--font-primary);
   font-weight: 700;
-  /* Minimal glow for headings */
-  text-shadow: 0 0 2px var(--color-text-primary);
+  text-shadow: var(--color-glow-primary);
+  transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
 .subheading-theme {
   color: var(--color-text-secondary);
   font-family: var(--font-secondary);
   font-weight: 600;
+  transition: color 0.3s ease;
 }
 
 .body-theme {
-  color: var(--color-text-secondary);
+  color: var(--color-text-bright);
   font-family: var(--font-ui);
   line-height: 1.6;
+  transition: color 0.3s ease;
 }
 
-/* Critical text with high visibility but not overwhelming */
+/* Light mode typography adjustments */
+body[data-color-mode='light'] .heading-theme {
+  text-shadow: none;
+}
+
+/* Enhanced critical text for better visibility */
 .critical-text {
-  color: var(--color-text-bright);
-  font-weight: 700;
-  text-shadow: 0 0 3px var(--color-text-bright);
-  animation: matrix-glow 2s ease-in-out infinite;
+  color: var(--color-text-bright) !important;
+  font-weight: 700 !important;
+  text-shadow: none !important;
+  background-color: var(--color-glass-background);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
 }
 
-/* Dialogue text styling */
+/* Enhanced dialogue text */
 .dialogue-text {
   color: var(--color-text-accent);
   font-family: var(--font-secondary);
   font-style: italic;
+  padding: 0.5rem;
   border-left: 3px solid var(--color-border-accent);
-  padding-left: 1rem;
-  margin: 0.5rem 0;
+  background-color: var(--color-glass-background);
+  transition: all 0.3s ease;
 }
 
-/* Utility animations with reduced intensity */
+/* Animation classes */
 .slow-reveal {
   animation: fadeInSlowly 2s ease-in-out;
 }
@@ -466,124 +496,142 @@ body.theme-nightcity .animate-theme-glow {
   }
 }
 
-/* Theme Dropdown Enhancements */
+/* Enhanced Theme dropdown */
 .theme-dropdown {
-  /* Ensure the dropdown appears above all content */
-  z-index: 1000 !important;
-  /* Smooth backdrop blur */
-  backdrop-filter: blur(16px) saturate(180%);
-  /* Enhanced shadow for depth */
-  box-shadow: 
-    0 25px 50px -12px rgba(0, 0, 0, 0.25),
-    0 0 0 1px rgba(255, 255, 255, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  /* Smooth transitions */
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: var(--color-secondary);
+  border: 2px solid var(--color-border-primary);
+  border-radius: var(--spacing-border-radius);
+  box-shadow: var(--color-shadow-primary);
+  color: var(--color-text-bright);
+  transition: all 0.3s ease;
 }
 
 .theme-dropdown-enter {
   opacity: 0;
-  transform: scale(0.95) translateY(-10px);
+  transform: scale(0.95);
 }
 
 .theme-dropdown-enter-active {
   opacity: 1;
-  transform: scale(1) translateY(0);
+  transform: scale(1);
+  transition: opacity 0.2s, transform 0.2s;
 }
 
 .theme-dropdown-exit {
   opacity: 1;
-  transform: scale(1) translateY(0);
+  transform: scale(1);
 }
 
 .theme-dropdown-exit-active {
   opacity: 0;
-  transform: scale(0.95) translateY(-10px);
+  transform: scale(0.95);
+  transition: opacity 0.2s, transform 0.2s;
 }
 
-/* Theme Button Enhancements */
+/* Enhanced Theme button */
 .theme-button {
-  /* Ensure button stays on top */
-  z-index: 999 !important;
-  /* Smooth button transitions */
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: var(--color-button-primary);
+  color: var(--color-text-inverse);
+  border: 2px solid var(--color-border-primary);
+  border-radius: var(--spacing-border-radius);
+  padding: 0.5rem 1rem;
+  transition: all 0.2s ease;
 }
 
 .theme-button:hover {
-  transform: scale(1.05);
+  background-color: var(--color-button-hover);
+  transform: translateY(-1px);
 }
 
 .theme-button:active {
-  transform: scale(0.98);
+  transform: translateY(0);
 }
 
-/* Theme Options Hover Effects */
+/* Enhanced Theme option */
 .theme-option {
-  transition: all 0.15s ease-out;
+  color: var(--color-text-bright);
+  padding: 0.75rem 1rem;
+  transition: all 0.2s ease;
 }
 
 .theme-option:hover {
-  transform: translateX(2px);
-  backdrop-filter: blur(8px);
+  background-color: var(--color-glass-background);
+  color: var(--color-text-primary);
 }
 
-/* Navigation Z-Index Fix */
+/* Navigation container */
 .navigation-container {
-  z-index: 100 !important;
-  /* Ensure nav doesn't clip dropdowns */
-  overflow: visible !important;
+  background-color: var(--color-secondary);
+  border-bottom: 2px solid var(--color-border-primary);
+  transition: all 0.3s ease;
 }
 
-/* Mobile Responsive Dropdown */
+/* Mobile responsive adjustments */
 @media (max-width: 640px) {
   .theme-dropdown {
-    /* Full width on mobile */
-    left: 0;
-    right: 0;
-    min-width: auto;
-    margin: 0 1rem;
+    width: 100%;
+    max-width: none;
+  }
+  
+  .btn-theme-primary,
+  .btn-theme-secondary,
+  .btn-theme-danger,
+  .btn-theme-info,
+  .btn-theme-success {
+    font-size: 0.75rem;
+    padding: 0.625rem 1.25rem;
   }
 }
 
-/* Prevent body scroll when dropdown is open (optional) */
+/* Enhanced dropdown open state */
 body.theme-dropdown-open {
   overflow: hidden;
 }
 
 /* Animation keyframes */
 @keyframes glow {
-  0%, 100% { text-shadow: 0 0 5px currentColor; }
-  50% { text-shadow: 0 0 20px currentColor, 0 0 30px currentColor; }
+  0%, 100% { 
+    filter: brightness(1);
+  }
+  50% { 
+    filter: brightness(1.2);
+  }
 }
 
 @keyframes fade-in {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes progress-bar {
   from { width: 0%; }
-  to { width: 100%; }
+  to { width: var(--progress-width, 100%); }
 }
 
 @keyframes slide-up {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* Animation classes */
+/* Animation utility classes */
 .animate-theme-glow {
   animation: glow 2s ease-in-out infinite;
 }
 
 .animate-fade-in {
-  animation: fade-in 0.5s ease-out forwards;
+  animation: fade-in 0.5s ease-out;
 }
 
 .animate-progress-bar {
-  animation: progress-bar 2s ease-out forwards;
+  animation: progress-bar 1s ease-out;
 }
 
 .animate-slide-up {
-  animation: slide-up 0.6s ease-out forwards;
+  animation: slide-up 0.6s ease-out;
 } 

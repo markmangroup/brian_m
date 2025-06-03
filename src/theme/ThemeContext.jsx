@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { themes, getThemeVariables, defaultTheme } from './themes';
+import { useColorMode } from './ColorModeContext';
 
 const ThemeContext = createContext();
 
@@ -30,6 +31,7 @@ export const ThemeProvider = ({ children }) => {
   const [currentTheme, setCurrentTheme] = useState(defaultTheme);
   const [currentWorld, setCurrentWorld] = useState('matrix');
   const [isLoading, setIsLoading] = useState(true);
+  const { colorMode } = useColorMode(); // Integration with ColorModeContext
 
   // Load theme and world from localStorage on mount
   useEffect(() => {
@@ -59,9 +61,9 @@ export const ThemeProvider = ({ children }) => {
     setIsLoading(false);
   }, []);
 
-  // Apply theme variables to the DOM
-  const applyThemeVariables = useCallback((themeId) => {
-    const variables = getThemeVariables(themeId);
+  // Apply theme variables to the DOM - NOW INCLUDES COLOR MODE
+  const applyThemeVariables = useCallback((themeId, mode = 'dark') => {
+    const variables = getThemeVariables(themeId, mode);
     const root = document.documentElement;
     
     // Apply CSS variables to :root
@@ -69,15 +71,17 @@ export const ThemeProvider = ({ children }) => {
       root.style.setProperty(property, value);
     });
     
-    // Set data-theme attribute for potential CSS selector usage
+    // Set data attributes for potential CSS selector usage
     document.body.setAttribute('data-theme', themeId);
     document.body.setAttribute('data-world', THEME_WORLD_MAP[themeId] || 'matrix');
+    document.body.setAttribute('data-color-mode', mode);
     
-    // Add theme class to body for additional styling
+    // Add theme and color mode classes to body for additional styling
     document.body.className = document.body.className
       .replace(/theme-\w+/g, '') // Remove existing theme classes
       .replace(/world-\w+/g, '') // Remove existing world classes
-      .trim() + ` theme-${themeId} world-${THEME_WORLD_MAP[themeId] || 'matrix'}`;
+      .replace(/mode-\w+/g, '') // Remove existing mode classes
+      .trim() + ` theme-${themeId} world-${THEME_WORLD_MAP[themeId] || 'matrix'} mode-${mode}`;
   }, []);
 
   // Unified world/theme change function
@@ -98,18 +102,19 @@ export const ThemeProvider = ({ children }) => {
     // Legacy support - update matrixTheme as well
     localStorage.setItem('matrixTheme', worldKey === 'nightcity' ? 'cyberpunk' : worldKey);
     
-    // Apply theme variables
-    applyThemeVariables(themeId);
+    // Apply theme variables with current color mode
+    applyThemeVariables(themeId, colorMode);
     
     // Dispatch legacy theme change event for backward compatibility
     window.dispatchEvent(new CustomEvent('themeChange', { 
       detail: { 
         theme: worldKey === 'nightcity' ? 'cyberpunk' : worldKey,
         world: worldKey,
-        themeId: themeId
+        themeId: themeId,
+        colorMode: colorMode
       } 
     }));
-  }, [applyThemeVariables]);
+  }, [applyThemeVariables, colorMode]);
 
   // Set theme function (for direct theme changes)
   const setTheme = useCallback((themeId) => {
@@ -122,12 +127,12 @@ export const ThemeProvider = ({ children }) => {
     setWorld(worldKey); // Use setWorld to maintain consistency
   }, [setWorld]);
 
-  // Apply theme variables when theme changes
+  // Apply theme variables when theme OR color mode changes
   useEffect(() => {
     if (!isLoading) {
-      applyThemeVariables(currentTheme);
+      applyThemeVariables(currentTheme, colorMode);
     }
-  }, [currentTheme, applyThemeVariables, isLoading]);
+  }, [currentTheme, colorMode, applyThemeVariables, isLoading]);
 
   // Get current theme object
   const theme = themes[currentTheme];
@@ -148,6 +153,15 @@ export const ThemeProvider = ({ children }) => {
   const isWitcherWorld = currentWorld === 'witcher';
   const isNightCityWorld = currentWorld === 'nightcity' || currentWorld === 'cyberpunk';
 
+  // Check if current mode is light or dark
+  const isLightMode = colorMode === 'light';
+  const isDarkMode = colorMode === 'dark';
+
+  // Get current mode colors
+  const getCurrentColors = () => {
+    return theme?.modes[colorMode]?.colors || theme?.modes.dark?.colors || {};
+  };
+
   const contextValue = {
     // Current theme state
     currentTheme,
@@ -156,6 +170,11 @@ export const ThemeProvider = ({ children }) => {
     
     // Current world state
     currentWorld,
+    
+    // Current color mode state
+    colorMode,
+    isLightMode,
+    isDarkMode,
     
     // Theme switching
     setTheme,
@@ -178,10 +197,13 @@ export const ThemeProvider = ({ children }) => {
     isWitcherWorld,
     isNightCityWorld,
     
-    // Utility functions
-    getThemeColor: (colorKey) => theme?.colors?.[colorKey] || '#ffffff',
+    // Utility functions with color mode support
+    getThemeColor: (colorKey) => {
+      const colors = getCurrentColors();
+      return colors[colorKey] || '#ffffff';
+    },
     getThemeFont: (fontKey) => theme?.fonts?.[fontKey] || 'inherit',
-    getThemeD3: (d3Key) => theme?.d3?.[d3Key] || undefined,
+    getCurrentColors,
     
     // CSS variable helpers
     cssVar: (varName) => `var(--${varName})`,
@@ -190,6 +212,9 @@ export const ThemeProvider = ({ children }) => {
     // World/theme mapping utilities
     getWorldFromTheme: (themeId) => THEME_WORLD_MAP[themeId],
     getThemeFromWorld: (worldKey) => WORLD_THEME_MAP[worldKey],
+    
+    // Apply theme variables manually (for advanced usage)
+    applyThemeVariables: (themeId, mode) => applyThemeVariables(themeId, mode || colorMode),
   };
 
   return (
