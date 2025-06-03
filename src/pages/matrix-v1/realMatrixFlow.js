@@ -485,25 +485,25 @@ export const realMatrixNodes = [
     data: {
       title: 'Ghost Layer: Breach Point',
       pageUrl: '/matrix-v1/ghost-layer-2',
-      status: 'wip',
-      summary: 'You reach the edge of the system — where the simulation\'s seams flicker. A breach is possible, but unstable.',
+      status: 'live',
+      summary: 'You reach the edge of the system — where the simulation\'s seams flicker. A sophisticated breach control puzzle with timing constraints and visual cues guides you through the edge-of-failure experience.',
       characters: ['Proxy', 'Fracture Entity'],
       puzzles: ['Breach Control', 'System Stabilization'],
-      interactions: ['ChoicePrompt', 'BreachInterface'],
-      features: { hasPuzzle: true, hasTransition: true, hasNPC: true, hasChoice: true, hasAnimation: true, hasDialogue: true },
+      interactions: ['ChoicePrompt', 'BreachInterface', 'TimingPuzzle', 'StabilityControl'],
+      features: { hasPuzzle: true, hasTransition: true, hasNPC: true, hasChoice: true, hasAnimation: true, hasDialogue: true, hasTiming: true, hasVisualCues: true },
       dialogue: [
-        'Proxy: You\'ve come too far too fast.',
-        'Fracture Entity: The code bends here. Step lightly.',
-        'System: Unauthorized presence. Trace initiated.',
-        'Proxy: Choose quickly — the breach window narrows.',
-        'Fracture Entity: Reality bleeds through the cracks.'
+        'Proxy: You\'ve come too far too fast. The system\'s seams are visible here - but they\'re unstable.',
+        'Fracture Entity: The code bends here. Step lightly. Reality bleeds through the cracks.',
+        'System: Unauthorized presence detected. Trace protocols activated.',
+        'Proxy: Choose quickly — the breach window narrows with each second.',
+        'Fracture Entity: Reality bleeds through the cracks. Either path leads to truth.'
       ],
       options: ['Attempt controlled breach', 'Stabilize and transmit data'],
       enhancement: {
-        qualityRating: 8.3,
-        status: "wip",
-        priority: "high",
-        updatedAt: "2025-06-03T22:00:00Z"
+        qualityRating: 9.1,
+        status: "live",
+        priority: "critical",
+        updatedAt: "2025-06-04T02:30:00Z"
       }
     }
   },
