@@ -2,6 +2,7 @@ export const themes = {
   matrix: {
     name: 'Matrix',
     id: 'matrix',
+    background: '#000',
     colors: {
       // Background colors
       primary: '#000000',
@@ -70,6 +71,7 @@ export const themes = {
   witcher: {
     name: 'Witcher',
     id: 'witcher',
+    background: '#f0f4f9',
     colors: {
       // Background colors
       primary: '#2c1810',
@@ -138,6 +140,7 @@ export const themes = {
   nightcity: {
     name: 'Night City',
     id: 'nightcity',
+    background: '#1a1a2e',
     colors: {
       // Background colors
       primary: '#0f0f23',
@@ -229,7 +232,12 @@ export const getThemeVariables = (themeId) => {
   Object.entries(theme.d3).forEach(([key, value]) => {
     variables[`--d3-${key.replace(/([A-Z])/g, '-$1').toLowerCase()}`] = value;
   });
-  
+
+  // Background for world
+  if (theme.background) {
+    variables['--world-background'] = theme.background;
+  }
+
   return variables;
 };
 
