@@ -723,6 +723,43 @@ export const realMatrixNodes = [
 
   // === DYNAMIC UNLOCK NODE ===
   {
+    id: 'matrix-alpha-trinity',
+    type: 'choice',
+    depth: 7,
+    group: 'dynamic',
+    data: {
+      title: 'Alpha Trinity Extraction',
+      pageUrl: '/matrix-v1/alpha-trinity',
+      status: 'wip',
+      summary: 'You intercept Trinity mid-mission — her extraction could tip the balance of the rebellion.',
+      characters: ['Trinity', 'Ghost Agent'],
+      puzzles: [],
+      interactions: ['TacticalComms', 'ExtractionChoice'],
+      features: { 
+        hasTransition: true, 
+        hasChoice: true, 
+        hasCombat: true, 
+        hasDialogue: true, 
+        hasNPC: true, 
+        hasAnimation: true 
+      },
+      dialogue: [
+        'Trinity: Incoming transmission... who is this?',
+        'Ghost Agent: Target acquired. Extraction window closing fast.',
+        'Trinity: Real-time tactical assessment required.',
+        'Your choice now determines the rebellion\'s future.'
+      ],
+      options: ['Break her out now', 'Wait for better timing'],
+      enhancement: {
+        qualityRating: 8.2,
+        status: "wip",
+        priority: "critical",
+        updatedAt: "2025-06-03T20:15:00Z"
+      }
+    }
+  },
+
+  {
     id: 'matrix-trinity-rescue',
     type: 'scene',
     depth: 8,
@@ -1159,6 +1196,11 @@ export const realMatrixEdges = [
   // Trinity Rescue (requires Agent + Zion)
   { id: 'edge-agent-to-rescue', source: 'matrix-authority-agent', target: 'matrix-trinity-rescue', label: 'Double Agent' },
   { id: 'edge-zion-to-rescue', source: 'matrix-zion-fleet', target: 'matrix-trinity-rescue', label: 'Rescue Mission' },
+
+  // === ALPHA TRINITY EXTRACTION EDGES ===
+  // Alpha Trinity choice branches
+  { id: 'edge-alpha-trinity-to-source', source: 'matrix-alpha-trinity', target: 'matrix-the-source', label: 'Break her out now' },
+  { id: 'edge-alpha-trinity-to-faction', source: 'matrix-alpha-trinity', target: 'matrix-red-faction-choice', label: 'Wait for better timing' },
 
   // === ADDITIONAL CROSS-CONNECTIONS ===
   // Oracle seekers can also connect to Ghost Layer
