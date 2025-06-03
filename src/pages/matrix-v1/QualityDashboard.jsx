@@ -32,48 +32,72 @@ const WORLD_GROUPS = {
   'matrix': {
     name: 'Matrix',
     icon: '🔴',
-    color: 'text-green-400',
-    borderColor: 'border-green-400',
+    color: 'text-theme-primary',
+    borderColor: 'border-theme-primary',
     groups: ['intro', 'red-pill', 'blue-pill', 'training', 'choice', 'awakening', 'factions', 'ghost-layer', 'echo', 'convergence', 'dynamic', 'finale', 'investigation', 'authority', 'compliance']
   },
   'witcher': {
     name: 'Witcher',
     icon: '⚔️',
-    color: 'text-amber-400',
-    borderColor: 'border-amber-400', 
+    color: 'text-theme-primary',
+    borderColor: 'border-theme-primary', 
     groups: ['witcher', 'kaer-morhen', 'novigrad', 'skellige']
   },
   'nightcity': {
     name: 'Night City',
     icon: '🌆',
-    color: 'text-purple-400',
-    borderColor: 'border-purple-400',
+    color: 'text-theme-primary',
+    borderColor: 'border-theme-primary',
     groups: ['night-city', 'nightcity', 'corpo', 'street', 'nomad']
   }
 };
 
-// Priority Color Mapping
-const PRIORITY_COLORS = {
-  'CRITICAL': 'border-l-red-500 bg-red-500/10',
-  'HIGH': 'border-l-orange-500 bg-orange-500/10',
-  'MEDIUM': 'border-l-yellow-500 bg-yellow-500/10', 
-  'LOW': 'border-l-green-500 bg-green-500/10'
+// Theme-aware Priority Color Mapping
+const getPriorityClasses = (priority, currentWorld) => {
+  const baseClasses = {
+    'CRITICAL': 'border-l-4',
+    'HIGH': 'border-l-4', 
+    'MEDIUM': 'border-l-4',
+    'LOW': 'border-l-4'
+  };
+  
+  // Use CSS variables for theme-aware colors
+  const priorityColors = {
+    'CRITICAL': currentWorld === 'witcher' ? 'border-l-red-600' : 'border-l-red-400',
+    'HIGH': currentWorld === 'witcher' ? 'border-l-orange-600' : 'border-l-orange-400',
+    'MEDIUM': currentWorld === 'witcher' ? 'border-l-yellow-600' : 'border-l-yellow-400',
+    'LOW': 'border-l-green-400'
+  };
+  
+  const bgColors = {
+    'CRITICAL': 'bg-red-500/10',
+    'HIGH': 'bg-orange-500/10',
+    'MEDIUM': 'bg-yellow-500/10',
+    'LOW': 'bg-green-500/10'
+  };
+  
+  return `${baseClasses[priority]} ${priorityColors[priority]} ${bgColors[priority]}`;
 };
 
-// Mini Progress Bar Component
+// Mini Progress Bar Component - Theme Aware
 const QualityProgress = ({ score }) => {
+  const { currentWorld } = useTheme();
   const percentage = (score / 10) * 100;
-  const getColor = (score) => {
-    if (score >= 9) return 'bg-green-400';
-    if (score >= 7) return 'bg-yellow-400';
-    if (score >= 5) return 'bg-orange-400';
-    return 'bg-red-400';
+  
+  const getColor = (score, world) => {
+    if (score >= 9) return world === 'witcher' ? 'bg-green-600' : 'bg-green-400';
+    if (score >= 7) return world === 'witcher' ? 'bg-yellow-600' : 'bg-yellow-400';
+    if (score >= 5) return world === 'witcher' ? 'bg-orange-600' : 'bg-orange-400';
+    return world === 'witcher' ? 'bg-red-600' : 'bg-red-400';
   };
   
   return (
-    <div className="w-full bg-gray-700 rounded-full h-2 overflow-hidden">
+    <div className={`w-full rounded-full h-2 overflow-hidden ${
+      currentWorld === 'witcher' ? 'bg-amber-900/40' : 
+      currentWorld === 'nightcity' ? 'bg-purple-900/40' : 'bg-gray-700'
+    }`}>
       <div 
-        className={`h-full transition-all duration-500 ${getColor(score)}`}
+        className={`h-full transition-all duration-500 ${getColor(score, currentWorld)}`}
         style={{ width: `${percentage}%` }}
       />
     </div>
@@ -81,30 +105,55 @@ const QualityProgress = ({ score }) => {
 };
 
 const NodeScoreProgress = ({ score }) => {
+  const { currentWorld } = useTheme();
   const percentage = score;
+  
+  const getProgressColor = (world) => {
+    switch(world) {
+      case 'witcher': return 'bg-amber-500';
+      case 'nightcity': return 'bg-purple-400';
+      default: return 'bg-green-400';
+    }
+  };
+  
   return (
-    <div className="w-full bg-gray-700 rounded-full h-2 overflow-hidden">
+    <div className={`w-full rounded-full h-2 overflow-hidden ${
+      currentWorld === 'witcher' ? 'bg-amber-900/40' : 
+      currentWorld === 'nightcity' ? 'bg-purple-900/40' : 'bg-gray-700'
+    }`}>
       <div
-        className="h-full bg-cyan-400 transition-all duration-500"
+        className={`h-full transition-all duration-500 ${getProgressColor(currentWorld)}`}
         style={{ width: `${percentage}%` }}
       />
     </div>
   );
 };
 
-// Quality Score Badge Component
+// Quality Score Badge Component - Theme Aware
 const QualityBadge = ({ score }) => {
-  const getColor = (score) => {
-    if (score >= 9) return 'bg-green-500 text-white';
-    if (score >= 7) return 'bg-yellow-500 text-black';
-    if (score >= 5) return 'bg-orange-500 text-white';
-    return 'bg-red-500 text-white';
+  const { currentWorld } = useTheme();
+  
+  const getColor = (score, world) => {
+    if (score >= 9) {
+      return world === 'witcher' ? 'bg-green-600 text-white' : 
+             world === 'nightcity' ? 'bg-green-400 text-black' : 'bg-green-500 text-white';
+    }
+    if (score >= 7) {
+      return world === 'witcher' ? 'bg-yellow-600 text-white' : 
+             world === 'nightcity' ? 'bg-yellow-400 text-black' : 'bg-yellow-500 text-black';
+    }
+    if (score >= 5) {
+      return world === 'witcher' ? 'bg-orange-600 text-white' : 
+             world === 'nightcity' ? 'bg-orange-400 text-black' : 'bg-orange-500 text-white';
+    }
+    return world === 'witcher' ? 'bg-red-600 text-white' : 
+           world === 'nightcity' ? 'bg-red-400 text-black' : 'bg-red-500 text-white';
   };
   
   return (
     <span className={`
       px-2 py-1 rounded-full text-xs font-bold font-mono
-      ${getColor(score)}
+      ${getColor(score, currentWorld)}
     `}>
       {score.toFixed(1)}
     </span>
@@ -124,8 +173,9 @@ const NodeScoreBadge = ({ score }) => {
   );
 };
 
-// Executive Node Card Component
+// Executive Node Card Component - Theme Aware
 const ExecutiveNodeCard = ({ node, onView, onEdit }) => {
+  const { currentWorld } = useTheme();
   const quality = calculateNodeQuality(node);
   const { score: nodeScore, contributions } = calculateNodeScore(node, edges);
   const improvements = getNextImprovements(node, 2);
@@ -193,115 +243,102 @@ const ExecutiveNodeCard = ({ node, onView, onEdit }) => {
   const nodeStatus = getNodeStatus();
   const nodePriority = getNodePriority();
 
+  // Theme-aware card styling
+  const getCardClasses = (world) => {
+    const baseClasses = "relative rounded-xl p-3 hover:border-theme-primary transition-all duration-300 group shadow hover:shadow-xl hover:-translate-y-0.5 transform-gpu";
+    
+    switch(world) {
+      case 'witcher':
+        return `${baseClasses} bg-theme-secondary border-2 border-theme-accent text-theme-bright`;
+      case 'nightcity':
+        return `${baseClasses} bg-theme-secondary border-2 border-theme-accent text-theme-bright`;
+      default:
+        return `${baseClasses} bg-theme-secondary border-2 border-theme-accent text-theme-bright`;
+    }
+  };
+
   return (
     <div className={`
-      relative bg-gray-900 border-2 border-gray-700 rounded-xl p-3
-      hover:border-cyan-400 transition-all duration-300 group shadow
-      hover:shadow-xl hover:-translate-y-0.5 transform-gpu
-      border-l-4 ${PRIORITY_COLORS[nodePriority]}
-      ${['CRITICAL','HIGH'].includes(nodePriority) ? 'animate-pulse-glow' : ''}
+      ${getCardClasses(currentWorld)}
+      ${getPriorityClasses(nodePriority, currentWorld)}
     `}>
-      {/* Header */}
+      {/* Priority Indicator */}
+      <div className={`absolute top-2 right-2 text-xs font-bold px-2 py-1 rounded ${
+        nodePriority === 'CRITICAL' ? 'bg-red-500/20 text-red-300' :
+        nodePriority === 'HIGH' ? 'bg-orange-500/20 text-orange-300' :
+        nodePriority === 'MEDIUM' ? 'bg-yellow-500/20 text-yellow-300' :
+        'bg-green-500/20 text-green-300'
+      }`}>
+        {nodePriority}
+      </div>
+
+      {/* Top Section */}
       <div className="flex items-start justify-between mb-3">
-        <div className="flex-1">
+        <div className="flex-1 pr-2">
           <div className="flex items-center gap-2 mb-1">
             <span className="text-lg">{getWorldIcon(node.group)}</span>
-            {node.data?.hasWorldVariant && (
-              <span title="Has world variant">🌍</span>
-            )}
-            <h3 className="text-white font-semibold text-base truncate">
+            <h3 className="font-bold text-sm text-theme-bright leading-tight">
               {node.data?.title || node.id}
             </h3>
           </div>
-          <div className="flex items-center gap-2 text-xs text-gray-400">
-            <span
-              title={`Status: ${STATUS_LABELS[nodeStatus]} (from enhancement.status)`}
-              className="cursor-help"
-            >
-              {STATUS_ICONS[nodeStatus]} {STATUS_LABELS[nodeStatus]}
-            </span>
-            <span>•</span>
-            <span className="capitalize">{node.type}</span>
-            <span
-              className="ml-1 bg-gray-700 text-gray-300 px-1 rounded text-[10px]"
-              title="Inbound/Outbound edges"
-            >
-              {edgeInfo.in}/{edgeInfo.out}
-            </span>
-          </div>
-        </div>
-        <div className="flex flex-col items-end gap-1">
-          <div title={`Quality Score: ${quality.overall.toFixed(1)}/10`} className="cursor-help">
-            <QualityBadge score={quality.overall} />
-          </div>
-          <div
-            title={Object.entries(contributions).map(([k,v]) => `${k}: ${v}%`).join('\n')}
-            className="cursor-help"
-          >
-            <NodeScoreBadge score={nodeScore} />
-          </div>
+          <p className="text-xs text-theme-muted mb-2 leading-relaxed">
+            {node.data?.summary || 'No summary available'}
+          </p>
         </div>
       </div>
 
-      {/* Quality Progress */}
-      <div className="mb-3">
+      {/* Quality & Score Section */}
+      <div className="space-y-2 mb-3">
+        <div className="flex items-center justify-between">
+          <span className="text-xs text-theme-secondary">Quality</span>
+          <QualityBadge score={quality.overall} />
+        </div>
         <QualityProgress score={quality.overall} />
+        
+        <div className="flex items-center justify-between">
+          <span className="text-xs text-theme-secondary">Node Score</span>
+          <NodeScoreBadge score={nodeScore} />
+        </div>
         <NodeScoreProgress score={nodeScore} />
       </div>
 
-      {/* Priority & Stats */}
-      <div className="flex items-center justify-between mb-3">
-        <span 
-          className={`
-            px-2 py-1 rounded text-xs font-bold cursor-help
-            ${nodePriority === 'CRITICAL' ? 'bg-red-500/20 text-red-400' :
-              nodePriority === 'HIGH' ? 'bg-orange-500/20 text-orange-400' :
-              nodePriority === 'MEDIUM' ? 'bg-yellow-500/20 text-yellow-400' :
-              'bg-green-500/20 text-green-400'}
-          `}
-          title={`Priority: ${nodePriority} (from enhancement.priority)`}
-        >
-          {nodePriority}
-        </span>
-        <span className="text-xs text-gray-500">
-          {improvements.length > 0 ? `${improvements.length} improvements` : 'No improvements'}
-        </span>
+      {/* Metadata */}
+      <div className="grid grid-cols-2 gap-2 text-xs mb-3">
+        <div>
+          <span className="text-theme-muted">Type:</span>
+          <span className="ml-1 text-theme-secondary">{node.type}</span>
+        </div>
+        <div>
+          <span className="text-theme-muted">Depth:</span>
+          <span className="ml-1 text-theme-secondary">{node.depth}</span>
+        </div>
+        <div>
+          <span className="text-theme-muted">Status:</span>
+          <span className="ml-1">{STATUS_ICONS[nodeStatus]} {STATUS_LABELS[nodeStatus]}</span>
+        </div>
+        <div>
+          <span className="text-theme-muted">Edges:</span>
+          <span className="ml-1 text-theme-secondary">{edgeInfo.in}→{edgeInfo.out}</span>
+        </div>
       </div>
 
-      {/* Last Updated */}
-      <div className="text-xs mb-3">
-        <span className={lastUpdated ? 'text-gray-500' : 'text-gray-600'}>
-          Updated: {formatDate(lastUpdated)}
-        </span>
+      {/* Updated Date */}
+      <div className="text-xs text-theme-muted mb-3">
+        <span>Updated: {formatDate(lastUpdated)}</span>
       </div>
 
-      {/* Enhancement JSON Modal Trigger */}
-      <div className="flex items-center gap-2 mb-3">
-        <button
-          type="button"
-          onClick={() => setShowJson(true)}
-          className="text-xs text-cyan-400 hover:text-cyan-300 underline"
-        >
-          📋 View enhancement JSON
-        </button>
-      </div>
-
-      {showJson && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-          <div className="bg-gray-900 border-2 border-cyan-400 rounded-xl p-6 max-w-lg w-full max-h-96 overflow-y-auto">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold text-white">Enhancement JSON</h2>
-              <button
-                onClick={() => setShowJson(false)}
-                className="text-gray-400 hover:text-white text-2xl"
-              >
-                ×
-              </button>
-            </div>
-            <pre className="text-xs whitespace-pre-wrap">
-{JSON.stringify(node.data?.enhancement, null, 2)}
-            </pre>
-          </div>
+      {/* Next Improvements */}
+      {improvements.length > 0 && (
+        <div className="mb-3">
+          <div className="text-xs text-theme-secondary mb-1">Next Improvements:</div>
+          <ul className="text-xs text-theme-muted space-y-1">
+            {improvements.slice(0, 2).map((improvement, idx) => (
+              <li key={idx} className="flex items-start">
+                <span className="text-theme-accent mr-1">•</span>
+                <span className="leading-tight">{improvement}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       )}
 
@@ -309,28 +346,46 @@ const ExecutiveNodeCard = ({ node, onView, onEdit }) => {
       <div className="flex gap-2">
         <button
           onClick={handleView}
-          className="flex-1 bg-cyan-600 hover:bg-cyan-500 text-white text-xs py-2 px-3 rounded transition-colors"
+          className="flex-1 bg-theme-primary text-theme-inverse px-3 py-2 rounded text-xs font-medium 
+                     hover:bg-theme-secondary transition-colors focus:outline-none focus:ring-2 focus:ring-theme-accent"
         >
-          View
+          {node.data?.pageUrl ? 'View Page' : 'Details'}
         </button>
         <button
           onClick={() => onEdit(node)}
-          className="flex-1 bg-gray-700 hover:bg-gray-600 text-gray-300 text-xs py-2 px-3 rounded transition-colors"
+          className="px-3 py-2 border border-theme-accent text-theme-accent rounded text-xs 
+                     hover:bg-theme-accent hover:text-theme-inverse transition-colors focus:outline-none focus:ring-2 focus:ring-theme-accent"
         >
           Edit
         </button>
+      </div>
+
+      {/* Debug JSON Toggle */}
+      <div className="mt-2">
+        <button
+          onClick={() => setShowJson(!showJson)}
+          className="text-xs text-theme-muted hover:text-theme-secondary transition-colors"
+        >
+          {showJson ? 'Hide' : 'Show'} JSON
+        </button>
+        {showJson && (
+          <pre className="text-xs text-theme-muted mt-2 p-2 bg-theme-tertiary rounded overflow-x-auto">
+            {JSON.stringify(node, null, 2)}
+          </pre>
+        )}
       </div>
     </div>
   );
 };
 
-// Edit Node Modal
+// Edit Node Modal Component - Theme Aware
 const EditNodeModal = ({ node, onSave, onClose }) => {
+  const { currentWorld } = useTheme();
   const [editData, setEditData] = useState({
-    qualityRating: node.data?.enhancement?.qualityRating || 5,
+    title: node.data?.title || '',
+    summary: node.data?.summary || '',
     status: node.data?.enhancement?.status || node.data?.status || 'stub',
-    notes: node.data?.enhancement?.notes || '',
-    priority: calculateNodeQuality(node).priority
+    priority: node.data?.enhancement?.priority || 'low'
   });
 
   const handleSave = () => {
@@ -338,78 +393,100 @@ const EditNodeModal = ({ node, onSave, onClose }) => {
     onClose();
   };
 
+  // Theme-aware modal styling
+  const getModalClasses = (world) => {
+    switch(world) {
+      case 'witcher':
+        return 'bg-theme-secondary border-2 border-theme-primary text-theme-bright';
+      case 'nightcity':
+        return 'bg-theme-secondary border-2 border-theme-primary text-theme-bright';
+      default:
+        return 'bg-theme-secondary border-2 border-theme-primary text-theme-bright';
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-      <div className="bg-gray-900 border-2 border-cyan-400 rounded-xl p-6 max-w-md w-full">
+      <div className={`${getModalClasses(currentWorld)} rounded-xl p-6 max-w-lg w-full max-h-96 overflow-y-auto`}>
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold text-white">
-            Edit Node: {node.data?.title || node.id}
+          <h2 className="text-xl font-bold text-theme-bright">
+            Edit Node: {node.id}
           </h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white text-2xl"
+            className="text-theme-muted hover:text-theme-bright text-2xl transition-colors"
           >
             ×
           </button>
         </div>
-
+        
         <div className="space-y-4">
-          {/* Quality Rating */}
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
-              Quality Rating (0-10)
-            </label>
+            <label className="block text-sm font-medium text-theme-secondary mb-1">Title</label>
             <input
-              type="number"
-              min="0"
-              max="10"
-              step="0.1"
-              value={editData.qualityRating}
-              onChange={(e) => setEditData(prev => ({ ...prev, qualityRating: parseFloat(e.target.value) }))}
-              className="w-full bg-gray-800 border border-gray-600 rounded px-3 py-2 text-white"
+              type="text"
+              value={editData.title}
+              onChange={(e) => setEditData({ ...editData, title: e.target.value })}
+              className="w-full px-3 py-2 bg-theme-tertiary border border-theme-accent rounded text-theme-bright 
+                         focus:border-theme-primary focus:outline-none focus:ring-2 focus:ring-theme-primary/50"
             />
           </div>
-
-          {/* Status */}
+          
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
-              Status (will update enhancement.status)
-            </label>
-            <select
-              value={editData.status}
-              onChange={(e) => setEditData(prev => ({ ...prev, status: e.target.value }))}
-              className="w-full bg-gray-800 border border-gray-600 rounded px-3 py-2 text-white"
-            >
-              <option value="stub">🟥 Stub</option>
-              <option value="wip">🟨 WIP</option>
-              <option value="live">🟩 Live</option>
-            </select>
-          </div>
-
-          {/* Notes */}
-          <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
-              Notes
-            </label>
+            <label className="block text-sm font-medium text-theme-secondary mb-1">Summary</label>
             <textarea
-              value={editData.notes}
-              onChange={(e) => setEditData(prev => ({ ...prev, notes: e.target.value }))}
-              className="w-full bg-gray-800 border border-gray-600 rounded px-3 py-2 text-white h-20"
-              placeholder="Add notes about this node..."
+              value={editData.summary}
+              onChange={(e) => setEditData({ ...editData, summary: e.target.value })}
+              rows={3}
+              className="w-full px-3 py-2 bg-theme-tertiary border border-theme-accent rounded text-theme-bright 
+                         focus:border-theme-primary focus:outline-none focus:ring-2 focus:ring-theme-primary/50"
             />
+          </div>
+          
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-theme-secondary mb-1">Status</label>
+              <select
+                value={editData.status}
+                onChange={(e) => setEditData({ ...editData, status: e.target.value })}
+                className="w-full px-3 py-2 bg-theme-tertiary border border-theme-accent rounded text-theme-bright 
+                           focus:border-theme-primary focus:outline-none focus:ring-2 focus:ring-theme-primary/50"
+              >
+                <option value="stub">Stub</option>
+                <option value="wip">WIP</option>
+                <option value="live">Live</option>
+              </select>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-theme-secondary mb-1">Priority</label>
+              <select
+                value={editData.priority}
+                onChange={(e) => setEditData({ ...editData, priority: e.target.value })}
+                className="w-full px-3 py-2 bg-theme-tertiary border border-theme-accent rounded text-theme-bright 
+                           focus:border-theme-primary focus:outline-none focus:ring-2 focus:ring-theme-primary/50"
+              >
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+                <option value="critical">Critical</option>
+              </select>
+            </div>
           </div>
         </div>
-
+        
         <div className="flex gap-3 mt-6">
           <button
             onClick={handleSave}
-            className="flex-1 bg-cyan-600 hover:bg-cyan-500 text-white py-2 px-4 rounded transition-colors"
+            className="flex-1 bg-theme-primary text-theme-inverse py-2 px-4 rounded font-medium 
+                       hover:bg-theme-secondary transition-colors focus:outline-none focus:ring-2 focus:ring-theme-accent"
           >
             Save Changes
           </button>
           <button
             onClick={onClose}
-            className="flex-1 bg-gray-700 hover:bg-gray-600 text-gray-300 py-2 px-4 rounded transition-colors"
+            className="flex-1 border border-theme-accent text-theme-accent py-2 px-4 rounded font-medium 
+                       hover:bg-theme-accent hover:text-theme-inverse transition-colors focus:outline-none focus:ring-2 focus:ring-theme-accent"
           >
             Cancel
           </button>
@@ -419,39 +496,51 @@ const EditNodeModal = ({ node, onSave, onClose }) => {
   );
 };
 
-// World Filter Component
+// World Filter Component - Theme Aware
 const WorldFilter = ({ selectedWorlds, onChange, onToggle, isCollapsed }) => {
+  const { currentWorld } = useTheme();
+  
+  const getFilterClasses = (world) => {
+    switch(world) {
+      case 'witcher':
+        return 'bg-theme-secondary border border-theme-accent rounded-lg p-3';
+      case 'nightcity':
+        return 'bg-theme-secondary border border-theme-accent rounded-lg p-3';
+      default:
+        return 'bg-theme-secondary border border-theme-accent rounded-lg p-3';
+    }
+  };
+
   return (
-    <div className="bg-gray-900 border border-gray-700 rounded-lg p-3 md:sticky top-2">
-      <button
-        onClick={onToggle}
-        className="flex items-center justify-between w-full text-left text-white font-medium"
-      >
-        <span>🌍 Worlds</span>
-        <span className="text-gray-400">
+    <div className={`${getFilterClasses(currentWorld)} md:sticky top-2`}>
+      <div className="flex items-center justify-between">
+        <div className="text-theme-bright font-medium">🌍 Worlds</div>
+        <button
+          onClick={onToggle}
+          className="text-theme-muted hover:text-theme-secondary transition-colors md:hidden"
+        >
           {isCollapsed ? '▼' : '▲'}
-        </span>
-      </button>
+        </button>
+      </div>
       
       {!isCollapsed && (
         <div className="mt-3 space-y-2">
-          {Object.entries(WORLD_GROUPS).map(([key, world]) => (
-            <label key={key} className="flex items-center gap-2 cursor-pointer">
+          {Object.entries(WORLD_GROUPS).map(([worldKey, world]) => (
+            <label key={worldKey} className="flex items-center gap-2 cursor-pointer">
               <input
                 type="checkbox"
-                checked={selectedWorlds.includes(key)}
+                checked={selectedWorlds.includes(worldKey)}
                 onChange={(e) => {
                   if (e.target.checked) {
-                    onChange([...selectedWorlds, key]);
+                    onChange([...selectedWorlds, worldKey]);
                   } else {
-                    onChange(selectedWorlds.filter(w => w !== key));
+                    onChange(selectedWorlds.filter(w => w !== worldKey));
                   }
                 }}
-                className="text-cyan-400"
+                className="text-theme-primary focus:ring-theme-primary focus:ring-2"
               />
-              <span className="text-sm flex items-center gap-1">
-                <span>{world.icon}</span>
-                <span className={world.color}>{world.name}</span>
+              <span className="text-sm">
+                {world.icon} {world.name}
               </span>
             </label>
           ))}
@@ -464,17 +553,16 @@ const WorldFilter = ({ selectedWorlds, onChange, onToggle, isCollapsed }) => {
 // Main Executive Quality Dashboard
 export default function QualityDashboard() {
   const { currentWorld } = useTheme();
+  
+  // State management
   const [selectedWorlds, setSelectedWorlds] = useState(['matrix', 'witcher', 'nightcity']);
-  const [selectedPriorities, setSelectedPriorities] = useState(['CRITICAL', 'HIGH', 'MEDIUM', 'LOW']);
   const [selectedStatuses, setSelectedStatuses] = useState(['live', 'wip', 'stub']);
+  const [selectedPriorities, setSelectedPriorities] = useState(['CRITICAL', 'HIGH', 'MEDIUM', 'LOW']);
   const [worldFilterCollapsed, setWorldFilterCollapsed] = useState(false);
+  const [showMore, setShowMore] = useState(false);
+  const [sortConfig, setSortConfig] = useState([{ key: 'updatedAt', direction: 'desc' }]);
   const [editingNode, setEditingNode] = useState(null);
   const [viewingNode, setViewingNode] = useState(null);
-  const [showMore, setShowMore] = useState(false);
-  const [sortConfig, setSortConfig] = useState([
-    { key: 'updatedAt', direction: 'desc' },
-    { key: 'quality', direction: 'desc' }
-  ]);
 
   const report = useMemo(() => generateQualityReport(realMatrixNodes), []);
 
@@ -519,20 +607,17 @@ export default function QualityDashboard() {
     
     const avgQuality = filteredNodes.reduce((sum, node) => {
       return sum + calculateNodeQuality(node).overall;
-    }, 0) / total || 0;
-
-    const upgradedCount = filteredNodes.filter(n => {
-      const nodeStatus = n.data?.enhancement?.status || n.data?.status || 'stub';
-      return ['live', 'wip'].includes(nodeStatus);
-    }).length;
-    const percentUpgraded = total ? (upgradedCount / total) * 100 : 0;
-
-    const priorityCounts = {
-      CRITICAL: filteredNodes.filter(n => calculateNodeQuality(n).priority === 'CRITICAL').length,
-      HIGH: filteredNodes.filter(n => calculateNodeQuality(n).priority === 'HIGH').length,
-      MEDIUM: filteredNodes.filter(n => calculateNodeQuality(n).priority === 'MEDIUM').length,
-      LOW: filteredNodes.filter(n => calculateNodeQuality(n).priority === 'LOW').length
-    };
+    }, 0) / (total || 1);
+    
+    const priorityCounts = filteredNodes.reduce((acc, node) => {
+      const priority = calculateNodeQuality(node).priority;
+      acc[priority] = (acc[priority] || 0) + 1;
+      return acc;
+    }, {});
+    
+    const percentUpgraded = total > 0 ? (filteredNodes.filter(n => 
+      (n.data?.enhancement?.qualityRating || 0) > 6
+    ).length / total) * 100 : 0;
 
     return {
       total,
@@ -589,63 +674,108 @@ export default function QualityDashboard() {
     });
   };
 
+  // Theme-aware background classes
+  const getBackgroundClasses = (world) => {
+    // Use CSS variables instead of hardcoded colors
+    return 'min-h-screen p-4 md:p-6 transition-colors duration-300';
+  };
+
+  // Theme-aware container classes
+  const getContainerClasses = (world) => {
+    switch(world) {
+      case 'witcher':
+        return 'bg-theme-primary text-theme-bright';
+      case 'nightcity':
+        return 'bg-theme-primary text-theme-bright';
+      default:
+        return 'bg-theme-primary text-theme-bright';
+    }
+  };
+
+  // Theme-aware KPI card classes
+  const getKpiCardClasses = (type) => {
+    const baseClasses = 'border-2 rounded-lg p-4 text-center transition-colors duration-300';
+    
+    switch(type) {
+      case 'total':
+        return `${baseClasses} bg-theme-secondary border-theme-primary`;
+      case 'stub':
+        return `${baseClasses} bg-theme-secondary border-red-400`;
+      case 'wip':
+        return `${baseClasses} bg-theme-secondary border-yellow-400`;
+      case 'live':
+        return `${baseClasses} bg-theme-secondary border-green-400`;
+      case 'quality':
+        return `${baseClasses} bg-theme-accent/20 border-theme-primary`;
+      case 'high-priority':
+        return `${baseClasses} bg-theme-secondary border-orange-400`;
+      case 'low-priority':
+        return `${baseClasses} bg-theme-secondary border-theme-accent`;
+      case 'upgraded':
+        return `${baseClasses} bg-theme-secondary border-theme-primary`;
+      default:
+        return `${baseClasses} bg-theme-secondary border-theme-accent`;
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gray-950 text-white p-4 md:p-6">
+    <div className={`${getBackgroundClasses(currentWorld)} ${getContainerClasses(currentWorld)}`} 
+         style={{ background: 'var(--world-background)' }}>
       {/* Header */}
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-4xl font-bold text-cyan-400 mb-2">
+            <h1 className="text-4xl font-bold text-theme-primary mb-2 font-theme-primary">
               Executive Quality Dashboard
             </h1>
-            <p className="text-gray-400">
+            <p className="text-theme-secondary">
               Command view for systematic node enhancement • Current World: {WORLD_GROUPS[currentWorld]?.icon} {WORLD_GROUPS[currentWorld]?.name}
             </p>
           </div>
-          <div className="text-sm text-gray-500">
+          <div className="text-sm text-theme-muted">
             Showing {displayNodes.length} of {filteredNodes.length} nodes
           </div>
         </div>
 
         {/* Top-Level KPIs */}
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 mb-8">
-          <div className="bg-gray-900 border border-cyan-400 rounded-lg p-4 text-center">
-            <div className="text-2xl font-bold text-cyan-400">{kpis.total}</div>
-            <div className="text-xs text-gray-400">Total Nodes</div>
+          <div className={getKpiCardClasses('total')}>
+            <div className="text-2xl font-bold text-theme-primary">{kpis.total}</div>
+            <div className="text-xs text-theme-muted">Total Nodes</div>
           </div>
           
-          <div className="bg-gray-900 border border-red-400 rounded-lg p-4 text-center">
+          <div className={getKpiCardClasses('stub')}>
             <div className="text-2xl font-bold text-red-400">{kpis.stubCount}</div>
-            <div className="text-xs text-gray-400">🟥 Stub</div>
+            <div className="text-xs text-theme-muted">🟥 Stub</div>
           </div>
           
-          <div className="bg-gray-900 border border-yellow-400 rounded-lg p-4 text-center">
+          <div className={getKpiCardClasses('wip')}>
             <div className="text-2xl font-bold text-yellow-400">{kpis.wipCount}</div>
-            <div className="text-xs text-gray-400">🟨 WIP</div>
+            <div className="text-xs text-theme-muted">🟨 WIP</div>
           </div>
           
-          <div className="bg-gray-900 border border-green-400 rounded-lg p-4 text-center">
+          <div className={getKpiCardClasses('live')}>
             <div className="text-2xl font-bold text-green-400">{kpis.liveCount}</div>
-            <div className="text-xs text-gray-400">🟩 Live</div>
+            <div className="text-xs text-theme-muted">🟩 Live</div>
           </div>
           
-          <div className="bg-purple-700/40 border border-purple-500 rounded-lg p-4 text-center">
-            <div className="text-2xl font-extrabold text-white">{kpis.avgQuality.toFixed(1)}</div>
-            <div className="text-xs text-purple-200">Avg Quality</div>
+          <div className={getKpiCardClasses('quality')}>
+            <div className="text-2xl font-extrabold text-theme-bright">{kpis.avgQuality.toFixed(1)}</div>
+            <div className="text-xs text-theme-secondary">Avg Quality</div>
           </div>
           
-          <div className="bg-gray-900 border border-orange-400 rounded-lg p-4 text-center">
+          <div className={getKpiCardClasses('high-priority')}>
             <div className="text-2xl font-bold text-orange-400">{kpis.priorityCounts.CRITICAL + kpis.priorityCounts.HIGH}</div>
-            <div className="text-xs text-gray-400">High Priority</div>
+            <div className="text-xs text-theme-muted">High Priority</div>
           </div>
           
-          <div className="bg-gray-900 border border-gray-400 rounded-lg p-4 text-center">
-            <div className="text-2xl font-bold text-gray-400">{kpis.priorityCounts.MEDIUM + kpis.priorityCounts.LOW}</div>
-            <div className="text-xs text-gray-400">Low Priority</div>
+          <div className={getKpiCardClasses('low-priority')}>
+            <div className="text-2xl font-bold text-theme-muted">{kpis.priorityCounts.MEDIUM + kpis.priorityCounts.LOW}</div>
+            <div className="text-xs text-theme-muted">Low Priority</div>
           </div>
-          <div className="bg-gray-900 border border-cyan-500 rounded-lg p-4 text-center">
-            <div className="text-2xl font-bold text-cyan-500">{kpis.percentUpgraded.toFixed(1)}%</div>
-            <div className="text-xs text-gray-400">Upgraded</div>
+          <div className={getKpiCardClasses('upgraded')}>
+            <div className="text-2xl font-bold text-theme-primary">{kpis.percentUpgraded.toFixed(1)}%</div>
+            <div className="text-xs text-theme-muted">Upgraded</div>
           </div>
         </div>
 
@@ -653,13 +783,13 @@ export default function QualityDashboard() {
         <div className="flex gap-4 mb-4">
           <button
             onClick={() => toggleSort('updatedAt')}
-            className="text-sm text-cyan-300"
+            className="text-sm text-theme-secondary hover:text-theme-primary transition-colors"
           >
             Updated {sortConfig[0].key === 'updatedAt' ? (sortConfig[0].direction === 'asc' ? '▲' : '▼') : ''}
           </button>
           <button
             onClick={() => toggleSort('quality')}
-            className="text-sm text-cyan-300"
+            className="text-sm text-theme-secondary hover:text-theme-primary transition-colors"
           >
             Quality {sortConfig[0].key === 'quality' ? (sortConfig[0].direction === 'asc' ? '▲' : '▼') : ''}
           </button>
@@ -675,8 +805,8 @@ export default function QualityDashboard() {
           />
           
           {/* Status Filter */}
-          <div className="bg-gray-900 border border-gray-700 rounded-lg p-3 md:sticky top-2">
-            <div className="text-white font-medium mb-3">📊 Status</div>
+          <div className="bg-theme-secondary border border-theme-accent rounded-lg p-3 md:sticky top-2">
+            <div className="text-theme-bright font-medium mb-3">📊 Status</div>
             <div className="flex gap-2">
               {['live', 'wip', 'stub'].map(status => (
                 <label key={status} className="flex items-center gap-1 cursor-pointer">
@@ -690,17 +820,17 @@ export default function QualityDashboard() {
                         setSelectedStatuses(selectedStatuses.filter(s => s !== status));
                       }
                     }}
-                    className="text-cyan-400"
+                    className="text-theme-primary focus:ring-theme-primary focus:ring-2"
                   />
-                  <span className="text-sm">{STATUS_ICONS[status]} {STATUS_LABELS[status]}</span>
+                  <span className="text-sm text-theme-secondary">{STATUS_ICONS[status]} {STATUS_LABELS[status]}</span>
                 </label>
               ))}
             </div>
           </div>
 
           {/* Priority Filter */}
-          <div className="bg-gray-900 border border-gray-700 rounded-lg p-3 md:sticky top-2">
-            <div className="text-white font-medium mb-3">⚡ Priority</div>
+          <div className="bg-theme-secondary border border-theme-accent rounded-lg p-3 md:sticky top-2">
+            <div className="text-theme-bright font-medium mb-3">⚡ Priority</div>
             <div className="grid grid-cols-2 gap-2">
               {Object.keys(ENHANCEMENT_PRIORITY).map(priority => (
                 <label key={priority} className="flex items-center gap-1 cursor-pointer">
@@ -714,9 +844,9 @@ export default function QualityDashboard() {
                         setSelectedPriorities(selectedPriorities.filter(p => p !== priority));
                       }
                     }}
-                    className="text-cyan-400"
+                    className="text-theme-primary focus:ring-theme-primary focus:ring-2"
                   />
-                  <span className="text-xs">{priority}</span>
+                  <span className="text-xs text-theme-secondary">{priority}</span>
                 </label>
               ))}
             </div>
@@ -740,7 +870,9 @@ export default function QualityDashboard() {
           <div className="text-center">
             <button
               onClick={() => setShowMore(!showMore)}
-              className="bg-gray-800 hover:bg-gray-700 text-cyan-400 px-6 py-2 rounded-lg transition-colors"
+              className="bg-theme-secondary hover:bg-theme-tertiary text-theme-primary px-6 py-2 rounded-lg 
+                         transition-colors border border-theme-accent hover:border-theme-primary 
+                         focus:outline-none focus:ring-2 focus:ring-theme-primary"
             >
               {showMore ? 'Show Less' : `Show ${filteredNodes.length - 12} More Nodes`}
             </button>
@@ -760,29 +892,40 @@ export default function QualityDashboard() {
       {/* View Modal */}
       {viewingNode && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-          <div className="bg-gray-900 border-2 border-cyan-400 rounded-xl p-6 max-w-lg w-full max-h-96 overflow-y-auto">
+          <div className="bg-theme-secondary border-2 border-theme-primary rounded-xl p-6 max-w-lg w-full max-h-96 overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold text-white">
+              <h2 className="text-xl font-bold text-theme-bright">
                 {viewingNode.data?.title || viewingNode.id}
               </h2>
               <button
                 onClick={() => setViewingNode(null)}
-                className="text-gray-400 hover:text-white text-2xl"
+                className="text-theme-muted hover:text-theme-bright text-2xl transition-colors"
               >
                 ×
               </button>
             </div>
             <div className="space-y-3 text-sm">
-              <p><strong>Type:</strong> {viewingNode.type}</p>
-              <p><strong>Group:</strong> {viewingNode.group}</p>
-              <p><strong>Status:</strong> {STATUS_ICONS[viewingNode.data?.status]} {STATUS_LABELS[viewingNode.data?.status]}</p>
-              <p><strong>Summary:</strong> {viewingNode.data?.summary || 'No summary available'}</p>
-              <p><strong>Quality:</strong> {calculateNodeQuality(viewingNode).overall.toFixed(1)}/10</p>
+              <p className="text-theme-secondary"><strong>Type:</strong> {viewingNode.type}</p>
+              <p className="text-theme-secondary"><strong>Group:</strong> {viewingNode.group}</p>
+              <p className="text-theme-secondary"><strong>Status:</strong> {STATUS_ICONS[viewingNode.data?.status]} {STATUS_LABELS[viewingNode.data?.status]}</p>
+              <p className="text-theme-secondary"><strong>Summary:</strong> {viewingNode.data?.summary || 'No summary available'}</p>
+              {viewingNode.data?.characters && (
+                <p className="text-theme-secondary"><strong>Characters:</strong> {viewingNode.data.characters.join(', ')}</p>
+              )}
+              {viewingNode.data?.dialogue && (
+                <div className="text-theme-secondary">
+                  <strong>Dialogue:</strong>
+                  <ul className="mt-1 space-y-1">
+                    {viewingNode.data.dialogue.map((line, idx) => (
+                      <li key={idx} className="text-theme-muted">• {line}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           </div>
         </div>
       )}
-      <DiagnosticOverlay />
     </div>
   );
 }

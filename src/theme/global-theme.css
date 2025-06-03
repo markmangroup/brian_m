@@ -22,6 +22,7 @@ body[data-color-mode='dark'] {
 
 body {
   background: var(--world-background);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 /* Base theme variables are injected by ThemeContext */
 :root {
@@ -73,54 +74,93 @@ body {
   --d3-stroke-width: 2;
 }
 
-/* Theme-aware utility classes */
-.bg-theme-primary { background-color: var(--color-primary); }
-.bg-theme-secondary { background-color: var(--color-secondary); }
-.bg-theme-tertiary { background-color: var(--color-tertiary); }
-.bg-theme-glass { background-color: var(--color-glass-background); }
-.bg-theme-overlay { background-color: var(--color-overlay-background); }
+/* Theme-aware utility classes with reduced glow intensity */
+.bg-theme-primary { 
+  background-color: var(--color-primary); 
+  transition: background-color 0.3s ease;
+}
+.bg-theme-secondary { 
+  background-color: var(--color-secondary); 
+  transition: background-color 0.3s ease;
+}
+.bg-theme-tertiary { 
+  background-color: var(--color-tertiary); 
+  transition: background-color 0.3s ease;
+}
+.bg-theme-glass { 
+  background-color: var(--color-glass-background); 
+  backdrop-filter: blur(8px);
+}
+.bg-theme-overlay { 
+  background-color: var(--color-overlay-background); 
+}
 
+/* Text colors with reduced glow intensity for better readability */
 .text-theme-primary { 
   color: var(--color-text-primary); 
-  text-shadow: 0 0 8px var(--color-text-primary);
+  /* Reduced text shadow intensity */
+  text-shadow: 0 0 4px var(--color-text-primary);
 }
 .text-theme-secondary { 
   color: var(--color-text-secondary); 
-  text-shadow: 0 0 4px var(--color-text-secondary);
+  /* Reduced text shadow intensity */
+  text-shadow: 0 0 2px var(--color-text-secondary);
 }
-.text-theme-accent { color: var(--color-text-accent); }
-.text-theme-muted { color: var(--color-text-muted); }
-.text-theme-inverse { color: var(--color-text-inverse); }
+.text-theme-accent { 
+  color: var(--color-text-accent); 
+}
+.text-theme-muted { 
+  color: var(--color-text-muted); 
+}
+.text-theme-inverse { 
+  color: var(--color-text-inverse); 
+}
 .text-theme-bright { 
   color: var(--color-text-bright); 
-  text-shadow: 0 0 6px var(--color-text-bright);
+  /* Minimal glow for important text */
+  text-shadow: 0 0 3px var(--color-text-bright);
   font-weight: 600;
 }
 
-.border-theme-primary { border-color: var(--color-border-primary); }
-.border-theme-secondary { border-color: var(--color-border-secondary); }
-.border-theme-accent { border-color: var(--color-border-accent); }
+.border-theme-primary { 
+  border-color: var(--color-border-primary); 
+  transition: border-color 0.3s ease;
+}
+.border-theme-secondary { 
+  border-color: var(--color-border-secondary); 
+  transition: border-color 0.3s ease;
+}
+.border-theme-accent { 
+  border-color: var(--color-border-accent); 
+  transition: border-color 0.3s ease;
+}
 
 .font-theme-primary { font-family: var(--font-primary); }
 .font-theme-secondary { font-family: var(--font-secondary); }
 .font-theme-ui { font-family: var(--font-ui); }
 
-.shadow-theme-primary { box-shadow: var(--color-shadow-primary); }
-.shadow-theme-secondary { box-shadow: var(--color-shadow-secondary); }
-.glow-theme-primary { filter: drop-shadow(var(--color-glow-primary)); }
-.glow-theme-secondary { filter: drop-shadow(var(--color-glow-secondary)); }
-
-/* Accessibility Focus Styles */
-.focus-matrix:focus {
-  outline: 2px solid var(--color-border-primary);
-  outline-offset: 2px;
-  box-shadow: var(--color-glow-secondary);
+/* Reduced shadow intensity for better UI readability */
+.shadow-theme-primary { 
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+.shadow-theme-secondary { 
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
 }
 
+/* Subtle glow effects that don't interfere with readability */
+.glow-theme-primary { 
+  filter: drop-shadow(0 0 4px var(--color-border-primary)); 
+}
+.glow-theme-secondary { 
+  filter: drop-shadow(0 0 2px var(--color-border-secondary)); 
+}
+
+/* Accessibility Focus Styles */
+.focus-matrix:focus,
 .focus-matrix:focus-visible {
   outline: 2px solid var(--color-border-primary);
   outline-offset: 2px;
-  box-shadow: var(--color-glow-secondary);
+  box-shadow: 0 0 0 4px rgba(var(--color-border-primary), 0.2);
 }
 
 /* Screen reader only text */
@@ -143,6 +183,12 @@ body {
     --color-border-primary: #ffffff;
     --color-background: #000000;
   }
+  
+  .text-theme-primary,
+  .text-theme-secondary,
+  .text-theme-bright {
+    text-shadow: none !important;
+  }
 }
 
 /* Reduced motion support */
@@ -154,9 +200,15 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+  
+  .text-theme-primary,
+  .text-theme-secondary,
+  .text-theme-bright {
+    text-shadow: none !important;
+  }
 }
 
-/* Enhanced Button styles with better visibility */
+/* Enhanced Button styles with better visibility and reduced glows */
 .btn-theme-primary {
   background-color: var(--color-button-primary);
   color: var(--color-text-inverse);
@@ -171,8 +223,9 @@ body {
 
 .btn-theme-primary:hover {
   background-color: var(--color-button-hover);
-  box-shadow: var(--color-glow-primary);
-  transform: scale(1.05);
+  /* Subtle glow on hover instead of intense effects */
+  box-shadow: 0 0 8px rgba(var(--color-border-primary), 0.3);
+  transform: translateY(-1px);
 }
 
 .btn-theme-secondary {
@@ -189,7 +242,8 @@ body {
 
 .btn-theme-secondary:hover {
   background-color: var(--color-button-hover);
-  box-shadow: var(--color-glow-secondary);
+  box-shadow: 0 0 8px rgba(var(--color-border-secondary), 0.3);
+  transform: translateY(-1px);
 }
 
 .btn-theme-danger {
@@ -201,13 +255,13 @@ body {
   font-family: var(--font-secondary);
   font-weight: 600;
   transition: all 0.2s ease;
-  text-shadow: 0 0 4px var(--color-text-bright);
+  text-shadow: none;
 }
 
 .btn-theme-danger:hover {
   background-color: #dc2626;
-  box-shadow: 0 0 15px var(--color-button-danger);
-  transform: scale(1.05);
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.3);
+  transform: translateY(-1px);
 }
 
 .btn-theme-info {
@@ -219,13 +273,13 @@ body {
   font-family: var(--font-secondary);
   font-weight: 600;
   transition: all 0.2s ease;
-  text-shadow: 0 0 4px var(--color-text-bright);
+  text-shadow: none;
 }
 
 .btn-theme-info:hover {
   background-color: #0284c7;
-  box-shadow: 0 0 15px var(--color-button-info);
-  transform: scale(1.05);
+  box-shadow: 0 0 8px rgba(6, 182, 212, 0.3);
+  transform: translateY(-1px);
 }
 
 .btn-theme-success {
@@ -237,93 +291,76 @@ body {
   font-family: var(--font-secondary);
   font-weight: 600;
   transition: all 0.2s ease;
-  text-shadow: 0 0 4px var(--color-text-bright);
+  text-shadow: none;
 }
 
 .btn-theme-success:hover {
   background-color: #16a34a;
-  box-shadow: 0 0 15px var(--color-button-success);
-  transform: scale(1.05);
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.3);
+  transform: translateY(-1px);
 }
 
-/* Link styles */
+/* Link styles with subtle effects */
 .link-theme {
   color: var(--color-link-color);
+  text-decoration: underline;
   transition: all 0.2s ease;
 }
 
 .link-theme:hover {
-  color: var(--color-text-accent);
-  text-shadow: var(--color-glow-secondary);
+  color: var(--color-button-hover);
+  text-shadow: 0 0 3px var(--color-link-color);
 }
 
-/* Theme-specific body classes for global styling */
+/* World-specific background classes */
 body.theme-matrix,
-body.theme-witcher,
-body.theme-nightcity {
-  background: var(--world-background);
-}
-
-/* World-specific root background classes */
 .world-background-matrix {
-  background-color: #000;
-  background-image: repeating-linear-gradient(
-    to bottom,
-    rgba(0, 255, 0, 0.05) 0%,
-    rgba(0, 255, 0, 0.05) 2px,
-    transparent 2px,
-    transparent 4px
-  );
-  background-size: 100% 4px;
+  background: var(--color-primary);
+  color: var(--color-text-primary);
 }
 
+body.theme-witcher,
 .world-background-witcher {
-  background-image: linear-gradient(to bottom, #f4f6f8, #e8ecef);
+  background: var(--color-primary);
+  color: var(--color-text-primary);
 }
 
+body.theme-nightcity,
 .world-background-nightcity {
-  background-color: #0d0d1a;
-  background-image:
-    linear-gradient(0deg, rgba(255, 0, 255, 0.15) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 255, 255, 0.15) 1px, transparent 1px);
-  background-size: 4px 4px;
+  background: var(--color-primary);
+  color: var(--color-text-primary);
 }
 
-/* Theme-aware animations */
+/* Reduced animation intensities */
 @keyframes matrix-glow {
-  0%, 100% { filter: drop-shadow(0 0 5px var(--color-text-primary)); }
-  50% { filter: drop-shadow(0 0 15px var(--color-text-primary)); }
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
 }
 
 @keyframes witcher-flame {
-  0%, 100% { filter: drop-shadow(0 0 10px var(--color-text-primary)); }
-  50% { filter: drop-shadow(0 0 20px var(--color-text-accent)); }
+  0%, 100% { opacity: 0.9; }
+  50% { opacity: 1; }
 }
 
 @keyframes nightcity-neon {
-  0%, 100% { 
-    filter: drop-shadow(0 0 5px var(--color-text-primary)) drop-shadow(0 0 15px var(--color-text-secondary)); 
-  }
-  50% { 
-    filter: drop-shadow(0 0 15px var(--color-text-primary)) drop-shadow(0 0 30px var(--color-text-secondary)); 
-  }
+  0%, 100% { opacity: 0.85; }
+  25% { opacity: 1; }
+  75% { opacity: 0.95; }
 }
 
+/* Subtle glitch effect for cyberpunk themes */
 @keyframes animate-glitch {
-  0%, 100% { transform: translate(0); }
-  10% { transform: translate(-2px, 2px); }
-  20% { transform: translate(2px, -2px); }
-  30% { transform: translate(-2px, 2px); }
-  40% { transform: translate(2px, -2px); }
-  50% { transform: translate(-2px, 2px); }
-  60% { transform: translate(2px, -2px); }
-  70% { transform: translate(-2px, 2px); }
-  80% { transform: translate(2px, -2px); }
-  90% { transform: translate(-2px, 2px); }
+  0% { transform: translate(0); }
+  20% { transform: translate(-1px, 1px); }
+  40% { transform: translate(-1px, -1px); }
+  60% { transform: translate(1px, 1px); }
+  80% { transform: translate(1px, -1px); }
+  100% { transform: translate(0); }
 }
 
+/* Theme-specific animations with reduced intensity */
 .animate-theme-glow {
-  animation: glow 2s ease-in-out infinite;
+  animation: matrix-glow 3s ease-in-out infinite;
 }
 
 .animate-glitch {
@@ -331,107 +368,100 @@ body.theme-nightcity {
 }
 
 body.theme-witcher .animate-theme-glow {
-  animation: witcher-flame 3s ease-in-out infinite;
+  animation: witcher-flame 4s ease-in-out infinite;
 }
 
 body.theme-nightcity .animate-theme-glow {
-  animation: nightcity-neon 1.5s ease-in-out infinite;
+  animation: nightcity-neon 2s ease-in-out infinite;
 }
 
-/* Input styles with better visibility */
+/* Input styles */
 .input-theme {
   background-color: var(--color-secondary);
-  color: var(--color-text-primary);
-  border: var(--spacing-border-width) solid var(--color-border-secondary);
+  border: 1px solid var(--color-border-secondary);
   border-radius: var(--spacing-border-radius);
-  font-family: var(--font-secondary);
-  padding: 0.75rem 1rem;
-  font-size: 1rem;
-  font-weight: 500;
-  text-shadow: 0 0 4px var(--color-text-primary);
+  color: var(--color-text-primary);
+  padding: 0.5rem 0.75rem;
+  transition: all 0.2s ease;
+  font-family: var(--font-ui);
 }
 
 .input-theme:focus {
-  border-color: var(--color-border-primary);
-  box-shadow: var(--color-glow-secondary);
   outline: none;
+  border-color: var(--color-border-primary);
+  box-shadow: 0 0 0 3px rgba(var(--color-border-primary), 0.1);
 }
 
 .input-theme::placeholder {
   color: var(--color-text-muted);
-  opacity: 0.7;
+  opacity: 0.8;
 }
 
-/* Card styles */
+/* Card component with subtle theme styling */
 .card-theme {
   background-color: var(--color-secondary);
-  border: var(--spacing-border-width) solid var(--color-border-secondary);
+  border: 1px solid var(--color-border-secondary);
   border-radius: var(--spacing-border-radius);
-  box-shadow: var(--color-shadow-secondary);
-  backdrop-filter: blur(10px);
+  padding: 1.5rem;
+  transition: all 0.2s ease;
 }
 
 .card-theme:hover {
   border-color: var(--color-border-primary);
-  box-shadow: var(--color-shadow-primary);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
-/* Typography responsive sizing with enhanced visibility */
+/* Typography with improved readability */
 .heading-theme {
-  font-family: var(--font-primary);
   color: var(--color-text-primary);
-  text-shadow: 0 0 10px var(--color-text-primary);
+  font-family: var(--font-primary);
   font-weight: 700;
-  letter-spacing: 0.02em;
+  /* Minimal glow for headings */
+  text-shadow: 0 0 2px var(--color-text-primary);
 }
 
 .subheading-theme {
-  font-family: var(--font-secondary);
   color: var(--color-text-secondary);
-  text-shadow: 0 0 6px var(--color-text-secondary);
+  font-family: var(--font-secondary);
   font-weight: 600;
 }
 
 .body-theme {
+  color: var(--color-text-secondary);
   font-family: var(--font-ui);
-  color: var(--color-text-muted);
-  font-weight: 500;
   line-height: 1.6;
 }
 
-/* Critical text for important messages */
+/* Critical text with high visibility but not overwhelming */
 .critical-text {
   color: var(--color-text-bright);
-  text-shadow: 0 0 8px var(--color-text-bright);
   font-weight: 700;
-  font-family: var(--font-primary);
+  text-shadow: 0 0 3px var(--color-text-bright);
+  animation: matrix-glow 2s ease-in-out infinite;
 }
 
-/* Dialogue and character text improvements */
+/* Dialogue text styling */
 .dialogue-text {
-  color: var(--color-text-bright);
-  text-shadow: 0 0 6px var(--color-text-primary);
+  color: var(--color-text-accent);
   font-family: var(--font-secondary);
-  font-weight: 500;
-  line-height: 1.5;
-  padding: 1rem;
-  background: var(--color-overlay-background);
-  border: var(--spacing-border-width) solid var(--color-border-primary);
-  border-radius: var(--spacing-border-radius);
+  font-style: italic;
+  border-left: 3px solid var(--color-border-accent);
+  padding-left: 1rem;
+  margin: 0.5rem 0;
 }
 
-/* Slow text animation for important messages */
+/* Utility animations with reduced intensity */
 .slow-reveal {
-  animation: fadeInSlowly 3s ease-out forwards;
+  animation: fadeInSlowly 2s ease-in-out;
 }
 
 @keyframes fadeInSlowly {
-  0% { 
-    opacity: 0; 
+  from {
+    opacity: 0;
     transform: translateY(10px);
   }
-  100% { 
-    opacity: 1; 
+  to {
+    opacity: 1;
     transform: translateY(0);
   }
 }
