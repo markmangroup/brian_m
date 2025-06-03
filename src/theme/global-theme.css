@@ -264,6 +264,31 @@ body.theme-nightcity {
   background: var(--world-background);
 }
 
+/* World-specific root background classes */
+.world-background-matrix {
+  background-color: #000;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 255, 0, 0.05) 0%,
+    rgba(0, 255, 0, 0.05) 2px,
+    transparent 2px,
+    transparent 4px
+  );
+  background-size: 100% 4px;
+}
+
+.world-background-witcher {
+  background-image: linear-gradient(to bottom, #f4f6f8, #e8ecef);
+}
+
+.world-background-nightcity {
+  background-color: #0d0d1a;
+  background-image:
+    linear-gradient(0deg, rgba(255, 0, 255, 0.15) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 255, 0.15) 1px, transparent 1px);
+  background-size: 4px 4px;
+}
+
 /* Theme-aware animations */
 @keyframes matrix-glow {
   0%, 100% { filter: drop-shadow(0 0 5px var(--color-text-primary)); }

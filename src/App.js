@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 import { UserProvider } from './components/UserContext';
-import { ThemeProvider } from './theme/ThemeContext';
+import { ThemeProvider, useTheme } from './theme/ThemeContext';
 import { ColorModeProvider } from './theme/ColorModeContext';
 
 import Navigation from './components/Navigation';
@@ -70,84 +70,94 @@ import WitcherEntry from './pages/witcher/WitcherEntry';
 import MutationChoice from './pages/witcher/MutationChoice';
 import SignTraining from './pages/witcher/SignTraining';
 
+function AppLayout() {
+  const { currentWorld } = useTheme();
+
+  return (
+    <div
+      className={`min-h-screen bg-theme-primary text-theme-primary pt-20 pb-4 relative font-theme-ui world-background-${currentWorld}`}
+    >
+      <Navigation />
+      <Breadcrumbs />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/snack-trail" element={<SnackTrailPage />} />
+        <Route path="/pixel-art" element={<PixelArtMaker />} />
+        <Route path="/robot-lab" element={<RobotLab />} />
+        <Route path="/lego-build" element={<LegoBuildMode />} />
+        <Route path="/lego-inventory" element={<LegoInventory />} />
+        <Route path="/rc-plane" element={<RCPlaneDesigner />} />
+        <Route path="/little-alchemy" element={<LittleAlchemy />} />
+        <Route path="/updates" element={<Updates />} />
+
+        {/* Matrix V1 Routes */}
+        <Route path="/matrix-v1" element={<Entry />} />
+        <Route path="/matrix-v1/name-prompt" element={<MatrixNamePrompt />} />
+        <Route path="/matrix-v1/terminal" element={<Terminal />} />
+        <Route path="/matrix-v1/checkpoint" element={<Checkpoint />} />
+        <Route path="/matrix-v1/message" element={<Message />} />
+        <Route path="/matrix-v1/puzzle" element={<Puzzle />} />
+        <Route path="/matrix-v1/trace" element={<Trace />} />
+        <Route path="/matrix-v1/observer" element={<Observer />} />
+        <Route path="/matrix-v1/stage-1" element={<Stage1 />} />
+        <Route path="/matrix-v1/stage-2" element={<Stage2 />} />
+        <Route path="/matrix-v1/stage-3" element={<Stage3 />} />
+        <Route path="/matrix-v1/compliance-route" element={<PathA />} />
+        <Route path="/matrix-v1/anomaly-route" element={<PathB />} />
+        <Route path="/matrix-v1/map" element={<Map />} />
+        <Route path="/matrix-v1/map-d3" element={<MapD3 />} />
+        <Route path="/matrix-v1/quality-dashboard" element={<QualityDashboard />} />
+        <Route path="/matrix-v1/node-editor" element={<NodeEditor />} />
+        <Route path="/matrix-v1/deeper-profile" element={<DeeperProfile />} />
+        <Route path="/matrix-v1/interference" element={<Interference />} />
+        <Route path="/matrix-v1/stabilize" element={<Stabilize />} />
+        <Route path="/matrix-v1/guardian-call" element={<GuardianCall />} />
+        <Route path="/matrix-v1/path-b-glitch" element={<PathBGlitch />} />
+        <Route path="/matrix-v1/factions" element={<Factions />} />
+        <Route path="/matrix-v1/align-:slug" element={<Align />} />
+
+        {/* Faction Choice Routes */}
+        <Route path="/matrix-v1/faction-choice" element={<FactionChoice />} />
+        <Route path="/matrix-v1/zion-fleet" element={<ZionFleet />} />
+        <Route path="/matrix-v1/rebel-hackers" element={<RebelHackers />} />
+        <Route path="/matrix-v1/oracle-seekers" element={<OracleSeeker />} />
+
+        {/* Ghost Layer and Echo Fork Routes */}
+        <Route path="/matrix-v1/shard-init" element={<ShardInit />} />
+        <Route path="/matrix-v1/shard-insert" element={<ShardInsert />} />
+        <Route path="/matrix-v1/echo-loop" element={<EchoLoop />} />
+        <Route path="/matrix-v1/echo-verify" element={<EchoVerify />} />
+        <Route path="/matrix-v1/ghost-layer-2" element={<GhostLayer2 />} />
+
+        {/* New routes */}
+        <Route path="/matrix-v1/portal/factions" element={<FactionPortal />} />
+        <Route path="/matrix-v1/glitch-portal" element={<GlitchPortal />} />
+        <Route path="/matrix-v1/oracle-seekers" element={<OracleSeekers />} />
+
+        {/* Night City routes */}
+        <Route path="/matrix-v1/night-city/entry" element={<NightCityEntry />} />
+        <Route path="/matrix-v1/night-city/bouncer" element={<NightCityBouncer />} />
+
+        {/* Witcher routes */}
+        <Route path="/witcher/entry" element={<WitcherEntry />} />
+        <Route path="/witcher/mutation-choice" element={<MutationChoice />} />
+        <Route path="/witcher/sign-training" element={<SignTraining />} />
+
+        {/* Legacy Matrix Routes - Redirect to V1 */}
+        <Route path="/the-matrix/*" element={<Navigate to="/matrix-v1" replace />} />
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </div>
+  );
+}
+
 export default function App() {
   return (
     <UserProvider>
       <ThemeProvider>
         <ColorModeProvider>
           <Router>
-          <div className="min-h-screen bg-theme-primary text-theme-primary pt-20 pb-4 relative font-theme-ui">
-            <Navigation />
-            <Breadcrumbs />
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/snack-trail" element={<SnackTrailPage />} />
-              <Route path="/pixel-art" element={<PixelArtMaker />} />
-              <Route path="/robot-lab" element={<RobotLab />} />
-              <Route path="/lego-build" element={<LegoBuildMode />} />
-              <Route path="/lego-inventory" element={<LegoInventory />} />
-              <Route path="/rc-plane" element={<RCPlaneDesigner />} />
-              <Route path="/little-alchemy" element={<LittleAlchemy />} />
-              <Route path="/updates" element={<Updates />} />
-              
-              {/* Matrix V1 Routes */}
-              <Route path="/matrix-v1" element={<Entry />} />
-              <Route path="/matrix-v1/name-prompt" element={<MatrixNamePrompt />} />
-              <Route path="/matrix-v1/terminal" element={<Terminal />} />
-              <Route path="/matrix-v1/checkpoint" element={<Checkpoint />} />
-              <Route path="/matrix-v1/message" element={<Message />} />
-              <Route path="/matrix-v1/puzzle" element={<Puzzle />} />
-              <Route path="/matrix-v1/trace" element={<Trace />} />
-              <Route path="/matrix-v1/observer" element={<Observer />} />
-              <Route path="/matrix-v1/stage-1" element={<Stage1 />} />
-              <Route path="/matrix-v1/stage-2" element={<Stage2 />} />
-              <Route path="/matrix-v1/stage-3" element={<Stage3 />} />
-              <Route path="/matrix-v1/compliance-route" element={<PathA />} />
-              <Route path="/matrix-v1/anomaly-route" element={<PathB />} />
-              <Route path="/matrix-v1/map" element={<Map />} />
-              <Route path="/matrix-v1/map-d3" element={<MapD3 />} />
-              <Route path="/matrix-v1/quality-dashboard" element={<QualityDashboard />} />
-              <Route path="/matrix-v1/node-editor" element={<NodeEditor />} />
-              <Route path="/matrix-v1/deeper-profile" element={<DeeperProfile />} />
-              <Route path="/matrix-v1/interference" element={<Interference />} />
-              <Route path="/matrix-v1/stabilize" element={<Stabilize />} />
-              <Route path="/matrix-v1/guardian-call" element={<GuardianCall />} />
-              <Route path="/matrix-v1/path-b-glitch" element={<PathBGlitch />} />
-              <Route path="/matrix-v1/factions" element={<Factions />} />
-              <Route path="/matrix-v1/align-:slug" element={<Align />} />
-              
-              {/* Faction Choice Routes */}
-              <Route path="/matrix-v1/faction-choice" element={<FactionChoice />} />
-              <Route path="/matrix-v1/zion-fleet" element={<ZionFleet />} />
-              <Route path="/matrix-v1/rebel-hackers" element={<RebelHackers />} />
-              <Route path="/matrix-v1/oracle-seekers" element={<OracleSeeker />} />
-              
-              {/* Ghost Layer and Echo Fork Routes */}
-              <Route path="/matrix-v1/shard-init" element={<ShardInit />} />
-              <Route path="/matrix-v1/shard-insert" element={<ShardInsert />} />
-              <Route path="/matrix-v1/echo-loop" element={<EchoLoop />} />
-              <Route path="/matrix-v1/echo-verify" element={<EchoVerify />} />
-              <Route path="/matrix-v1/ghost-layer-2" element={<GhostLayer2 />} />
-              
-              {/* New routes */}
-              <Route path="/matrix-v1/portal/factions" element={<FactionPortal />} />
-              <Route path="/matrix-v1/glitch-portal" element={<GlitchPortal />} />
-              <Route path="/matrix-v1/oracle-seekers" element={<OracleSeekers />} />
-              
-              {/* Night City routes */}
-              <Route path="/matrix-v1/night-city/entry" element={<NightCityEntry />} />
-              <Route path="/matrix-v1/night-city/bouncer" element={<NightCityBouncer />} />
-              
-              {/* Witcher routes */}
-              <Route path="/witcher/entry" element={<WitcherEntry />} />
-              <Route path="/witcher/mutation-choice" element={<MutationChoice />} />
-              <Route path="/witcher/sign-training" element={<SignTraining />} />
-              
-              {/* Legacy Matrix Routes - Redirect to V1 */}
-              <Route path="/the-matrix/*" element={<Navigate to="/matrix-v1" replace />} />
-              <Route path="*" element={<Navigate to="/" />} />
-            </Routes>
-          </div>
+            <AppLayout />
           </Router>
         </ColorModeProvider>
       </ThemeProvider>
