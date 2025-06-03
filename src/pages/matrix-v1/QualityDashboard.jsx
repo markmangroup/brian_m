@@ -31,7 +31,7 @@ const WORLD_GROUPS = {
     icon: '🔴',
     color: 'text-green-400',
     borderColor: 'border-green-400',
-    groups: ['intro', 'red-pill', 'blue-pill', 'training', 'choice', 'awakening', 'factions']
+    groups: ['intro', 'red-pill', 'blue-pill', 'training', 'choice', 'awakening', 'factions', 'ghost-layer', 'echo', 'convergence', 'dynamic', 'finale', 'investigation', 'authority', 'compliance']
   },
   'witcher': {
     name: 'Witcher',
@@ -45,7 +45,7 @@ const WORLD_GROUPS = {
     icon: '🌆',
     color: 'text-purple-400',
     borderColor: 'border-purple-400',
-    groups: ['nightcity', 'corpo', 'street', 'nomad']
+    groups: ['night-city', 'nightcity', 'corpo', 'street', 'nomad']
   }
 };
 
@@ -453,8 +453,9 @@ export default function QualityDashboard() {
       
       if (!selectedWorlds.includes(nodeWorld)) return false;
 
-      // Status filtering
-      if (!selectedStatuses.includes(node.data?.status || 'stub')) return false;
+      // Status filtering - consistent with getNodeStatus() logic
+      const nodeStatus = node.data?.enhancement?.status || node.data?.status || 'stub';
+      if (!selectedStatuses.includes(nodeStatus)) return false;
 
       // Priority filtering
       const quality = calculateNodeQuality(node);
@@ -467,15 +468,28 @@ export default function QualityDashboard() {
   // Calculate KPIs
   const kpis = useMemo(() => {
     const total = filteredNodes.length;
-    const stubCount = filteredNodes.filter(n => n.data?.status === 'stub').length;
-    const wipCount = filteredNodes.filter(n => n.data?.status === 'wip').length;
-    const liveCount = filteredNodes.filter(n => n.data?.status === 'live').length;
+    // Use consistent status logic for KPIs too
+    const stubCount = filteredNodes.filter(n => {
+      const nodeStatus = n.data?.enhancement?.status || n.data?.status || 'stub';
+      return nodeStatus === 'stub';
+    }).length;
+    const wipCount = filteredNodes.filter(n => {
+      const nodeStatus = n.data?.enhancement?.status || n.data?.status || 'stub';
+      return nodeStatus === 'wip';
+    }).length;
+    const liveCount = filteredNodes.filter(n => {
+      const nodeStatus = n.data?.enhancement?.status || n.data?.status || 'stub';
+      return nodeStatus === 'live';
+    }).length;
     
     const avgQuality = filteredNodes.reduce((sum, node) => {
       return sum + calculateNodeQuality(node).overall;
     }, 0) / total || 0;
 
-    const upgradedCount = filteredNodes.filter(n => ['live', 'wip'].includes(n.data?.status)).length;
+    const upgradedCount = filteredNodes.filter(n => {
+      const nodeStatus = n.data?.enhancement?.status || n.data?.status || 'stub';
+      return ['live', 'wip'].includes(nodeStatus);
+    }).length;
     const percentUpgraded = total ? (upgradedCount / total) * 100 : 0;
 
     const priorityCounts = {
