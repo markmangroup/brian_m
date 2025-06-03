@@ -831,25 +831,30 @@ export const realMatrixNodes = [
 
   {
     id: 'matrix-trinity-rescue',
-    type: 'scene',
+    type: 'choice',
     depth: 8,
     group: 'dynamic',
     unlockConditions: ['matrix-authority-agent', 'matrix-zion-fleet'], // Unexpected combination
     data: {
-      title: 'Trinity Rescue',
+      title: 'Trinity Rescue Operation',
       pageUrl: '/matrix-v1/deeper-profile',
-      status: 'stub',
-      summary: 'Your agent training helps you infiltrate and rescue Trinity from her own mission.',
-      characters: ['Trinity', 'Agent Smith', 'Neo'],
+      status: 'wip',
+      summary: 'You enter a stealth corridor to intercept and liberate Trinity from a controlled extraction trap.',
+      characters: ['Neo', 'Operator', 'Morpheus'],
       puzzles: ['Stealth Infiltration', 'Double Agent'],
-      interactions: ['StealthMission', 'MoralChoice'],
-      features: { hasTransition: true, hasCombat: true, hasChoice: true, hasPuzzle: true, hasAnimation: true, hasNPC: true },
-      dialogue: ['I know you\'re not really one of them.', 'Will you help me escape?'],
+      interactions: ['StealthMission', 'MoralChoice', 'ChoicePrompt'],
+      features: { hasPuzzle: true, hasTransition: true, hasNPC: true, hasChoice: true, hasAnimation: true },
+      dialogue: [
+        'Neo: She\'s being pulled from both realities...',
+        'Operator: You\'ll need to ghost her signal or risk detection.',
+        'Morpheus: Get her out. Quietly. No casualties.'
+      ],
+      options: ['Use cloaking uplink', 'Force override with noise'],
       enhancement: {
-        qualityRating: 6,
-        status: "stub",
-        priority: "low",
-        updatedAt: "2025-06-03T00:00:00Z"
+        status: "wip",
+        priority: "critical",
+        qualityRating: 8.9,
+        updatedAt: "2025-06-03T22:50:00Z"
       }
     }
   },
@@ -1312,7 +1317,7 @@ export const realMatrixEdges = [
   { id: 'edge-skill-gate-glitch', source: 'matrix-skill-gate-alpha', target: 'matrix-knowledge-nexus', label: 'Glitch-first approach' },
   
   { id: 'edge-nexus-to-source', source: 'matrix-knowledge-nexus', target: 'matrix-the-source', label: 'Enlightened Hacker' },
-  { id: 'edge-rescue-to-source', source: 'matrix-trinity-rescue', target: 'matrix-the-source', label: 'Redeemed Agent' },
+  { id: 'edge-rescue-to-source', source: 'matrix-trinity-rescue', target: 'matrix-the-source', label: 'Use cloaking uplink' },
 
   // === GHOST LAYER BREACH CHOICES ===
   // Ghost Layer 2 choice branches
@@ -1348,5 +1353,9 @@ export const realMatrixEdges = [
 
   // Choices from The Source
   { id: 'edge-source-to-glitch-hunter', source: 'matrix-the-source', target: 'matrix-glitch-hunter', label: 'Reveal the truth' },
-  { id: 'edge-source-to-trinity-rescue', source: 'matrix-the-source', target: 'matrix-trinity-rescue', label: 'Refuse and walk away' }
+  { id: 'edge-source-to-trinity-rescue', source: 'matrix-the-source', target: 'matrix-trinity-rescue', label: 'Refuse and walk away' },
+
+  // === TRINITY RESCUE OPERATION CHOICES ===
+  // Trinity Rescue choice branches
+  { id: 'edge-rescue-to-nexus', source: 'matrix-trinity-rescue', target: 'matrix-knowledge-nexus', label: 'Force override with noise' }
 ];
