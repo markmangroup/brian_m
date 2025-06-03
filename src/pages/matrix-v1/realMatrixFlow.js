@@ -736,25 +736,32 @@ export const realMatrixNodes = [
   // === CROSS-PATH CONVERGENCE NODES ===
   {
     id: 'matrix-skill-gate-alpha',
-    type: 'scene',
+    type: 'choice',
     depth: 7,
     group: 'convergence',
     unlockConditions: ['matrix-zion-fleet', 'matrix-glitch-hunter'], // Requires BOTH paths
     data: {
-      title: 'Skill Gate Alpha',
+      title: 'Skill Gate Alpha: Convergence Point',
       pageUrl: '/matrix-v1/skill-gate-alpha',
-      status: 'stub',
-      summary: 'Only those with both combat training and glitch awareness can enter.',
-      characters: ['Sentinel AI', 'Training Construct'],
-      puzzles: ['Combined Skills Test'],
-      interactions: ['SkillValidation', 'CombinedChallenge'],
-      features: { hasTransition: true, hasCombat: true, hasChoice: false, hasPuzzle: true, hasAnimation: true, hasNPC: false },
-      dialogue: ['Prove you have learned from both worlds.', 'Integration test initiated.'],
+      status: 'wip',
+      summary: 'Combat training merges with glitch awareness — only mastery of both disciplines unlocks the next layer.',
+      characters: ['Nexus Guardian', 'Combat AI', 'Anomaly Detector'],
+      puzzles: ['Dual Mastery Test', 'Combat Glitch Fusion'],
+      interactions: ['ChoicePrompt', 'SkillFusion'],
+      features: { hasPuzzle: true, hasTransition: true, hasNPC: true, hasChoice: true, hasAnimation: true, hasDialogue: true, hasCombat: true },
+      dialogue: [
+        'Nexus Guardian: Two paths converge here. Combat and code.',
+        'Combat AI: Your warrior training will be tested.',
+        'Anomaly Detector: Glitch patterns must be decoded simultaneously.',
+        'Nexus Guardian: Few can balance both disciplines.',
+        'Combat AI: Choose your approach to the convergence test.'
+      ],
+      options: ['Warrior-first approach', 'Glitch-first approach', 'Balanced fusion'],
       enhancement: {
-        qualityRating: 6,
-        status: "stub",
-        priority: "low",
-        updatedAt: "2025-06-03T00:00:00Z"
+        qualityRating: 8.7,
+        status: "wip",
+        priority: "critical",
+        updatedAt: "2025-06-03T22:45:00Z"
       }
     }
   },
@@ -1296,10 +1303,16 @@ export const realMatrixEdges = [
 
   // === FINAL CONVERGENCE ===
   // All convergence nodes lead to The Source
-  { id: 'edge-skill-gate-to-source', source: 'matrix-skill-gate-alpha', target: 'matrix-the-source', label: 'Proven Warrior' },
+  { id: 'edge-skill-gate-to-source', source: 'matrix-skill-gate-alpha', target: 'matrix-the-source', label: 'Balanced fusion' },
+  
+  // === SKILL GATE ALPHA APPROACH CHOICES ===
+  // Skill Gate Alpha choice branches
+  { id: 'edge-skill-gate-warrior', source: 'matrix-skill-gate-alpha', target: 'matrix-trinity-rescue', label: 'Warrior-first approach' },
+  { id: 'edge-skill-gate-glitch', source: 'matrix-skill-gate-alpha', target: 'matrix-knowledge-nexus', label: 'Glitch-first approach' },
+  
   { id: 'edge-nexus-to-source', source: 'matrix-knowledge-nexus', target: 'matrix-the-source', label: 'Enlightened Hacker' },
   { id: 'edge-rescue-to-source', source: 'matrix-trinity-rescue', target: 'matrix-the-source', label: 'Redeemed Agent' },
-  
+
   // === GHOST LAYER BREACH CHOICES ===
   // Ghost Layer 2 choice branches
   { id: 'edge-ghost-to-glitch', source: 'matrix-ghost-layer-2', target: 'matrix-glitch-hunter', label: 'Attempt controlled breach' },
