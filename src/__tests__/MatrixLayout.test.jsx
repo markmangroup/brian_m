@@ -3,6 +3,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { ThemeProvider } from '../theme/ThemeContext';
 import MatrixLayout, { MatrixCard, MatrixButton, MatrixInput } from '../components/MatrixLayout';
+import { themes } from '../theme/themes';
 
 // Mock MatrixRain to avoid canvas issues in tests
 jest.mock('../components/MatrixRain', () => {
@@ -74,8 +75,21 @@ describe('MatrixLayout', () => {
         </MatrixLayout>
       </TestWrapper>
     );
-    
+
     expect(container.querySelector('.custom-class')).toBeInTheDocument();
+  });
+
+  test('uses theme background when none provided', () => {
+    const { container } = render(
+      <TestWrapper>
+        <MatrixLayout>
+          <div>Test</div>
+        </MatrixLayout>
+      </TestWrapper>
+    );
+
+    const wrapper = container.firstChild;
+    expect(wrapper).toHaveStyle(`background: ${themes.matrix.background}`);
   });
 });
 
