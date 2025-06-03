@@ -12,6 +12,7 @@ import {
   ENHANCEMENT_PRIORITY
 } from '../../utils/nodeQualitySystem';
 import { useTheme } from '../../theme/ThemeContext';
+import DiagnosticOverlay from './DiagnosticOverlay';
 
 // Status icon mapping
 const STATUS_ICONS = {
@@ -781,6 +782,7 @@ export default function QualityDashboard() {
           </div>
         </div>
       )}
+      <DiagnosticOverlay />
     </div>
   );
-} 
+}
