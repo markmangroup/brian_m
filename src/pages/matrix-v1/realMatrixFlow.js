@@ -491,21 +491,58 @@ export const realMatrixNodes = [
     parentChoice: 'matrix-pill-choice',
     choiceValue: 'red',
     data: {
-      title: 'Faction Choice',
+      title: 'Red Faction Allegiance',
       pageUrl: '/matrix-v1/faction-choice',
-      status: 'stub',
-      summary: 'Morpheus offers you a choice of resistance factions to join.',
-      characters: ['Morpheus', 'Niobe', 'Commander Locke'],
+      status: 'wip',
+      summary: 'You\'re offered a seat at the inner table — but it comes at the cost of personal autonomy.',
+      characters: ['Commander V', 'Resistance Strategist'],
       puzzles: [],
-      interactions: ['ChoicePrompt', 'FactionAnalysis'],
-      features: { hasTransition: true, hasChoice: true, hasCombat: false, hasNPC: true, hasAnimation: true },
-      dialogue: ['Each faction serves the resistance differently.', 'Choose wisely - this will define your path.'],
-      options: ['Zion Fleet', 'Rebel Hackers', 'Oracle Seekers'],
+      interactions: ['ChoicePrompt', 'TensionDialogue'],
+      features: { hasChoice: true, hasDialogue: true, hasTransition: true, hasNPC: true, hasAnimation: true },
+      dialogue: [
+        'Commander V: The inner circle demands absolute loyalty.',
+        'Resistance Strategist: Your skills are valuable... but autonomy is the price.',
+        'Commander V: Accept our terms, or forge your path alone.',
+        'Resistance Strategist: Choose wisely — this decision reshapes everything.'
+      ],
+      options: ['Accept the faction\'s control', 'Decline and forge solo path'],
+      enhancement: {
+        qualityRating: 7.9,
+        status: "wip",
+        priority: "high",
+        updatedAt: "2025-06-03T21:00:00Z"
+      }
+    }
+  },
+
+  // === DEPTH 6: COMPLIANCE PATH ===
+  {
+    id: 'matrix-compliance-path',
+    type: 'scene',
+    depth: 6,
+    group: 'compliance',
+    parentChoice: 'matrix-red-faction-choice',
+    choiceValue: 'control',
+    data: {
+      title: 'Controlled Resistance',
+      pageUrl: '/matrix-v1/compliance-path',
+      status: 'stub',
+      summary: 'You\'ve accepted the faction\'s control. Power comes with invisible chains.',
+      characters: ['Commander V', 'Faction Controller'],
+      puzzles: ['Loyalty Assessment', 'Controlled Operations'],
+      interactions: ['ComplianceProtocol', 'ControlledMission'],
+      features: { hasTransition: true, hasChoice: false, hasCombat: true, hasNPC: true, hasAnimation: true, hasConsequences: true },
+      dialogue: [
+        'Commander V: Welcome to the inner circle.',
+        'Faction Controller: Your autonomy is now... managed.',
+        'Commander V: Power flows through structure.',
+        'Faction Controller: Question nothing. Execute everything.'
+      ],
       enhancement: {
         qualityRating: 6,
         status: "stub",
-        priority: "low",
-        updatedAt: "2025-06-03T00:00:00Z"
+        priority: "medium",
+        updatedAt: "2025-06-03T21:00:00Z"
       }
     }
   },
@@ -1181,6 +1218,11 @@ export const realMatrixEdges = [
   { id: 'edge-faction-to-zion', source: 'matrix-red-faction-choice', target: 'matrix-zion-fleet', label: 'Zion Fleet' },
   { id: 'edge-faction-to-hackers', source: 'matrix-red-faction-choice', target: 'matrix-rebel-hackers', label: 'Rebel Hackers' },
   { id: 'edge-faction-to-oracle', source: 'matrix-red-faction-choice', target: 'matrix-oracle-seekers', label: 'Oracle Seekers' },
+
+  // === NEW RED FACTION ALLEGIANCE EDGES ===
+  // Red Faction Allegiance choice branches
+  { id: 'edge-faction-to-compliance', source: 'matrix-red-faction-choice', target: 'matrix-compliance-path', label: 'Accept the faction\'s control' },
+  { id: 'edge-faction-to-solo', source: 'matrix-red-faction-choice', target: 'matrix-knowledge-nexus', label: 'Decline and forge solo path' },
 
   // Blue path investigation choice
   { id: 'edge-blue-loop-to-investigation', source: 'matrix-blue-loop', target: 'matrix-blue-investigation' },

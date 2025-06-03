@@ -26,8 +26,29 @@ export function convertToTree(nodes, edges) {
     edgeMap.get(edge.source).push(edge);
   });
   
-  // Build the tree structure based on edges
-  edges.forEach(edge => {
+  // Create a safe edge list by filtering out cycles using depth-based heuristic
+  // Only allow edges that go from lower depth to higher depth (forward progression)
+  const safeEdges = edges.filter(edge => {
+    const sourceNode = nodes.find(n => n.id === edge.source);
+    const targetNode = nodes.find(n => n.id === edge.target);
+    
+    if (!sourceNode || !targetNode) {
+      return false;
+    }
+    
+    // Allow edges that go to higher depth (forward progression)
+    // Or edges within the same depth (horizontal movement)
+    const isForwardOrHorizontal = targetNode.depth >= sourceNode.depth;
+    
+    if (!isForwardOrHorizontal) {
+      console.warn(`Skipping backwards edge ${edge.source} (depth ${sourceNode.depth}) -> ${edge.target} (depth ${targetNode.depth}) to prevent cycles`);
+    }
+    
+    return isForwardOrHorizontal;
+  });
+  
+  // Build the tree structure using only safe edges
+  safeEdges.forEach(edge => {
     const parent = nodeMap.get(edge.source);
     const child = nodeMap.get(edge.target);
     
@@ -150,4 +171,68 @@ export function findPathToNode(tree, targetId) {
   
   search(tree, []);
   return path;
+}
+
+/**
+ * Validates that a tree structure has no cycles
+ * @param {Object} tree - Tree node to validate
+ * @param {Set} visited - Set of visited node IDs
+ * @returns {Boolean} True if no cycles detected
+ */
+export function validateTreeNoCycles(tree, visited = new Set()) {
+  if (visited.has(tree.id)) {
+    console.error(`Cycle detected at node: ${tree.id}`);
+    return false;
+  }
+  
+  visited.add(tree.id);
+  
+  if (tree.children) {
+    for (const child of tree.children) {
+      if (!validateTreeNoCycles(child, new Set(visited))) {
+        return false;
+      }
+    }
+  }
+  
+  return true;
+}
+
+/**
+ * Debug function to analyze the tree structure
+ * @param {Object} tree - Tree root
+ * @returns {Object} Statistics about the tree
+ */
+export function analyzeTree(tree) {
+  const stats = {
+    totalNodes: 0,
+    maxDepth: 0,
+    nodesByDepth: {},
+    nodesByGroup: {}
+  };
+  
+  function traverse(node, currentDepth = 0) {
+    stats.totalNodes++;
+    stats.maxDepth = Math.max(stats.maxDepth, currentDepth);
+    
+    const nodeDepth = node.depth ?? currentDepth;
+    const nodeGroup = node.group ?? 'unknown';
+    
+    if (!stats.nodesByDepth[nodeDepth]) {
+      stats.nodesByDepth[nodeDepth] = 0;
+    }
+    stats.nodesByDepth[nodeDepth]++;
+    
+    if (!stats.nodesByGroup[nodeGroup]) {
+      stats.nodesByGroup[nodeGroup] = 0;
+    }
+    stats.nodesByGroup[nodeGroup]++;
+    
+    if (node.children) {
+      node.children.forEach(child => traverse(child, currentDepth + 1));
+    }
+  }
+  
+  traverse(tree);
+  return stats;
 } 

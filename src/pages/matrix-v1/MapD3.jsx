@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import * as d3 from 'd3';
 import { realMatrixNodes, realMatrixEdges } from './realMatrixFlow';
-import { convertToTree, filterTreeByStatus, findPathToNode } from '../../utils/convertToTree';
+import { convertToTree, filterTreeByStatus, findPathToNode, validateTreeNoCycles, analyzeTree } from '../../utils/convertToTree';
 import { useTheme } from '../../theme/ThemeContext';
 import useTreeLayout from './useTreeLayout';
 import SidebarFilters from './SidebarFilters';
@@ -437,6 +437,20 @@ export default function MapD3() {
 
   // Convert data to tree structure
   const originalTree = convertToTree(realMatrixNodes, realMatrixEdges);
+  
+  // Validate the tree structure for cycles (development only)
+  if (process.env.NODE_ENV === 'development') {
+    const isValid = validateTreeNoCycles(originalTree);
+    const treeStats = analyzeTree(originalTree);
+    
+    console.log('Tree validation:', isValid ? '✅ No cycles detected' : '❌ Cycles detected');
+    console.log('Tree stats:', treeStats);
+    
+    if (!isValid) {
+      console.error('Tree structure has cycles! This may cause rendering issues.');
+    }
+  }
+  
   const filteredTree = filterTreeByStatus(originalTree, statusFilter);
 
   // Node expansion toggle function
