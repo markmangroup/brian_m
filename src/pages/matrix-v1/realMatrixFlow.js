@@ -676,7 +676,7 @@ export const realMatrixNodes = [
   // === DEPTH 6: BLUE INVESTIGATION PATHS ===
   {
     id: 'matrix-glitch-hunter',
-    type: 'scene',
+    type: 'choice',
     depth: 6,
     group: 'investigation',
     parentChoice: 'matrix-blue-investigation',
@@ -684,32 +684,25 @@ export const realMatrixNodes = [
     data: {
       title: 'Glitch Hunter',
       pageUrl: '/matrix-v1/glitch-hunter',
-      status: 'stub',
-      summary: 'You pursue the anomaly deeper \u2014 traces of unauthorized code echo across the grid.',
-      characters: ['Ghost Agent', 'System AI'],
-      puzzles: ['Pattern Recognition', 'Anomaly Detection'],
-      interactions: ['GlitchHunting', 'AnomalyTracker'],
-      features: {
-        hasTransition: true,
-        hasCombat: true,
-        hasChoice: true,
-        hasPuzzle: true,
-        hasAnimation: true,
-        hasDialogue: true,
-        hasNPC: true
-      },
+      status: 'wip',
+      summary: 'You\'ve entered the corrupted sub-layer — tracking instability through code fractures and anomaly echoes.',
+      characters: ['Hunter AI', 'Glitch Fragment'],
+      puzzles: ['Pattern Recognition', 'Anomaly Detection', 'Code Fracture Analysis'],
+      interactions: ['ChoicePrompt', 'GlitchTracking'],
+      features: { hasPuzzle: true, hasTransition: true, hasNPC: true, hasChoice: true, hasAnimation: true, hasDialogue: true, hasCombat: true },
       dialogue: [
-        'Ghost Agent: This line isn\'t logged anywhere.',
-        'System AI: Unauthorized signal replication detected.',
-        'Ghost Agent: Something\'s breaching our control layers.',
-        'System AI: Hidden subroutines whisper through the static.'
+        'System Echo: Loop unstable. Signal bleed increasing...',
+        'Glitch Fragment: Memory shards detected.',
+        'Hunter AI: Begin pattern triangulation.',
+        'System Echo: Corruption depth exceeds normal parameters.',
+        'Hunter AI: Choose your vector carefully.'
       ],
-      options: ['Trace the signal', 'Terminate investigation'],
+      options: ['Dive deeper into corruption', 'Surface with extracted data'],
       enhancement: {
-        qualityRating: 7.8,
+        qualityRating: 8.5,
         status: "wip",
         priority: "high",
-        updatedAt: "2025-06-03T19:15:00Z"
+        updatedAt: "2025-06-03T22:30:00Z"
       }
     }
   },
@@ -1269,11 +1262,15 @@ export const realMatrixEdges = [
   // === CROSS-PATH CONVERGENCE EDGES ===
   // Skill Gate Alpha (requires Zion Fleet + Glitch Hunter)
   { id: 'edge-zion-to-skill-gate', source: 'matrix-zion-fleet', target: 'matrix-skill-gate-alpha', label: 'Combat Ready' },
-  { id: 'edge-glitch-to-skill-gate', source: 'matrix-glitch-hunter', target: 'matrix-skill-gate-alpha', label: 'Awareness Ready' },
+  { id: 'edge-glitch-to-skill-gate', source: 'matrix-glitch-hunter', target: 'matrix-skill-gate-alpha', label: 'Dive deeper into corruption' },
 
   // Knowledge Nexus (requires Oracle + Hackers)
   { id: 'edge-oracle-to-nexus', source: 'matrix-oracle-seekers', target: 'matrix-knowledge-nexus', label: 'Wisdom Path' },
   { id: 'edge-hackers-to-nexus', source: 'matrix-rebel-hackers', target: 'matrix-knowledge-nexus', label: 'Tech Path' },
+
+  // === GLITCH HUNTER SURFACE PATH ===
+  // Glitch Hunter surface extraction
+  { id: 'edge-glitch-to-faction', source: 'matrix-glitch-hunter', target: 'matrix-red-faction-choice', label: 'Surface with extracted data' },
 
   // Trinity Rescue (requires Agent + Zion)
   { id: 'edge-agent-to-rescue', source: 'matrix-authority-agent', target: 'matrix-trinity-rescue', label: 'Double Agent' },
