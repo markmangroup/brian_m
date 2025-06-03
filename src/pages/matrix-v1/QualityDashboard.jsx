@@ -100,6 +100,7 @@ const ExecutiveNodeCard = ({ node, onView, onEdit }) => {
   const quality = calculateNodeQuality(node);
   const improvements = getNextImprovements(node, 2);
   const navigate = useNavigate();
+  const [showJson, setShowJson] = useState(false);
   
   const getWorldIcon = (group) => {
     for (const [worldKey, world] of Object.entries(WORLD_GROUPS)) {
@@ -157,16 +158,18 @@ const ExecutiveNodeCard = ({ node, onView, onEdit }) => {
 
   return (
     <div className={`
-      relative bg-gray-900 border-2 border-gray-700 rounded-xl p-4 
-      hover:border-cyan-400 transition-all duration-300 group
+      relative bg-gray-900 border-2 border-gray-700 rounded-xl p-3
+      hover:border-cyan-400 transition-all duration-300 group shadow
+      hover:shadow-xl hover:-translate-y-0.5 transform-gpu
       border-l-4 ${PRIORITY_COLORS[nodePriority]}
+      ${['CRITICAL','HIGH'].includes(nodePriority) ? 'animate-pulse-glow' : ''}
     `}>
       {/* Header */}
       <div className="flex items-start justify-between mb-3">
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-1">
             <span className="text-lg">{getWorldIcon(node.group)}</span>
-            <h3 className="text-white font-bold text-sm truncate">
+            <h3 className="text-white font-semibold text-base truncate">
               {node.data?.title || node.id}
             </h3>
           </div>
@@ -209,7 +212,7 @@ const ExecutiveNodeCard = ({ node, onView, onEdit }) => {
           {nodePriority}
         </span>
         <span className="text-xs text-gray-500">
-          {improvements.length} improvements
+          {improvements.length > 0 ? `${improvements.length} improvements` : 'No improvements'}
         </span>
       </div>
 
@@ -220,15 +223,35 @@ const ExecutiveNodeCard = ({ node, onView, onEdit }) => {
         </span>
       </div>
 
-      {/* Enhancement JSON Tooltip */}
+      {/* Enhancement JSON Modal Trigger */}
       <div className="flex items-center gap-2 mb-3">
-        <span 
-          className="text-xs text-cyan-400 cursor-help hover:text-cyan-300 transition-colors"
-          title={getEnhancementTooltip()}
+        <button
+          type="button"
+          onClick={() => setShowJson(true)}
+          className="text-xs text-cyan-400 hover:text-cyan-300 underline"
         >
-          📋 Hover for enhancement JSON
-        </span>
+          📋 View enhancement JSON
+        </button>
       </div>
+
+      {showJson && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+          <div className="bg-gray-900 border-2 border-cyan-400 rounded-xl p-6 max-w-lg w-full max-h-96 overflow-y-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold text-white">Enhancement JSON</h2>
+              <button
+                onClick={() => setShowJson(false)}
+                className="text-gray-400 hover:text-white text-2xl"
+              >
+                ×
+              </button>
+            </div>
+            <pre className="text-xs whitespace-pre-wrap">
+{JSON.stringify(node.data?.enhancement, null, 2)}
+            </pre>
+          </div>
+        </div>
+      )}
 
       {/* Action Buttons */}
       <div className="flex gap-2">
@@ -347,7 +370,7 @@ const EditNodeModal = ({ node, onSave, onClose }) => {
 // World Filter Component
 const WorldFilter = ({ selectedWorlds, onChange, onToggle, isCollapsed }) => {
   return (
-    <div className="bg-gray-900 border border-gray-700 rounded-lg p-3">
+    <div className="bg-gray-900 border border-gray-700 rounded-lg p-3 md:sticky top-2">
       <button
         onClick={onToggle}
         className="flex items-center justify-between w-full text-left text-white font-medium"
@@ -453,7 +476,7 @@ export default function QualityDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white p-6">
+    <div className="min-h-screen bg-gray-950 text-white p-4 md:p-6">
       {/* Header */}
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-8">
@@ -492,9 +515,9 @@ export default function QualityDashboard() {
             <div className="text-xs text-gray-400">🟩 Live</div>
           </div>
           
-          <div className="bg-gray-900 border border-purple-400 rounded-lg p-4 text-center">
-            <div className="text-2xl font-bold text-purple-400">{kpis.avgQuality.toFixed(1)}</div>
-            <div className="text-xs text-gray-400">Avg Quality</div>
+          <div className="bg-purple-700/40 border border-purple-500 rounded-lg p-4 text-center">
+            <div className="text-2xl font-extrabold text-white">{kpis.avgQuality.toFixed(1)}</div>
+            <div className="text-xs text-purple-200">Avg Quality</div>
           </div>
           
           <div className="bg-gray-900 border border-orange-400 rounded-lg p-4 text-center">
@@ -518,7 +541,7 @@ export default function QualityDashboard() {
           />
           
           {/* Status Filter */}
-          <div className="bg-gray-900 border border-gray-700 rounded-lg p-3">
+          <div className="bg-gray-900 border border-gray-700 rounded-lg p-3 md:sticky top-2">
             <div className="text-white font-medium mb-3">📊 Status</div>
             <div className="flex gap-2">
               {['live', 'wip', 'stub'].map(status => (
@@ -542,7 +565,7 @@ export default function QualityDashboard() {
           </div>
 
           {/* Priority Filter */}
-          <div className="bg-gray-900 border border-gray-700 rounded-lg p-3">
+          <div className="bg-gray-900 border border-gray-700 rounded-lg p-3 md:sticky top-2">
             <div className="text-white font-medium mb-3">⚡ Priority</div>
             <div className="grid grid-cols-2 gap-2">
               {Object.keys(ENHANCEMENT_PRIORITY).map(priority => (
