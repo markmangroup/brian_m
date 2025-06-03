@@ -34,6 +34,7 @@ import DeeperProfile from './pages/matrix-v1/DeeperProfile';
 import Map from './pages/matrix-v1/Map';
 import MapD3 from './pages/matrix-v1/MapD3';
 import QualityDashboard from './pages/matrix-v1/QualityDashboard';
+import NodeEditor from './pages/matrix-v1/NodeEditor';
 import Interference from './pages/matrix-v1/Interference';
 import PathBGlitch from './pages/matrix-v1/PathBGlitch';
 import Factions from './pages/matrix-v1/Factions';
@@ -104,6 +105,7 @@ export default function App() {
               <Route path="/matrix-v1/map" element={<Map />} />
               <Route path="/matrix-v1/map-d3" element={<MapD3 />} />
               <Route path="/matrix-v1/quality-dashboard" element={<QualityDashboard />} />
+              <Route path="/matrix-v1/node-editor" element={<NodeEditor />} />
               <Route path="/matrix-v1/deeper-profile" element={<DeeperProfile />} />
               <Route path="/matrix-v1/interference" element={<Interference />} />
               <Route path="/matrix-v1/stabilize" element={<Stabilize />} />
