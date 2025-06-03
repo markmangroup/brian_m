@@ -544,7 +544,7 @@ export const realMatrixNodes = [
     choiceValue: 'control',
     data: {
       title: 'Controlled Resistance',
-      pageUrl: '/matrix-v1/compliance-path',
+      pageUrl: '/matrix-v1/compliance-route',
       status: 'stub',
       summary: 'You\'ve accepted the faction\'s control. Power comes with invisible chains.',
       characters: ['Commander V', 'Faction Controller'],
@@ -655,7 +655,7 @@ export const realMatrixNodes = [
     choiceValue: 'blue',
     data: {
       title: 'Investigation Path',
-      pageUrl: '/matrix-v1/investigation',
+      pageUrl: '/matrix-v1/observer',
       status: 'stub',
       summary: 'Despite taking the blue pill, you notice glitches. Investigate or ignore?',
       characters: ['Agent Smith', 'Trinity (disguised)'],
@@ -683,7 +683,7 @@ export const realMatrixNodes = [
     choiceValue: 'investigate',
     data: {
       title: 'Glitch Hunter',
-      pageUrl: '/matrix-v1/glitch-hunter',
+      pageUrl: '/matrix-v1/path-b-glitch',
       status: 'wip',
       summary: 'You\'ve entered the corrupted sub-layer — tracking instability through code fractures and anomaly echoes.',
       characters: ['Hunter AI', 'Glitch Fragment'],
@@ -716,7 +716,7 @@ export const realMatrixNodes = [
     choiceValue: 'report',
     data: {
       title: 'Authority Agent',
-      pageUrl: '/matrix-v1/authority-agent',
+      pageUrl: '/matrix-v1/trace',
       status: 'stub',
       summary: 'You\'ve reported the glitches. Now you\'re working with Agent Smith.',
       characters: ['Agent Smith', 'Agent Brown'],
@@ -742,7 +742,7 @@ export const realMatrixNodes = [
     unlockConditions: ['matrix-zion-fleet', 'matrix-glitch-hunter'], // Requires BOTH paths
     data: {
       title: 'Skill Gate Alpha: Convergence Point',
-      pageUrl: '/matrix-v1/skill-gate-alpha',
+      pageUrl: '/matrix-v1/guardian-call',
       status: 'wip',
       summary: 'Combat training merges with glitch awareness — only mastery of both disciplines unlocks the next layer.',
       characters: ['Nexus Guardian', 'Combat AI', 'Anomaly Detector'],
@@ -774,7 +774,7 @@ export const realMatrixNodes = [
     unlockConditions: ['matrix-oracle-seekers', 'matrix-rebel-hackers'], // Requires wisdom AND hacking
     data: {
       title: 'Knowledge Nexus',
-      pageUrl: '/matrix-v1/knowledge-nexus',
+      pageUrl: '/matrix-v1/oracle-seekers',
       status: 'stub',
       summary: 'Where Oracle wisdom meets hacker innovation. A dangerous combination.',
       characters: ['Oracle', 'The Architect', 'Advanced AI'],
@@ -799,7 +799,7 @@ export const realMatrixNodes = [
     group: 'dynamic',
     data: {
       title: 'Alpha Trinity Extraction',
-      pageUrl: '/matrix-v1/alpha-trinity',
+      pageUrl: '/matrix-v1/echo-loop',
       status: 'wip',
       summary: 'You intercept Trinity mid-mission — her extraction could tip the balance of the rebellion.',
       characters: ['Trinity', 'Ghost Agent'],
@@ -837,7 +837,7 @@ export const realMatrixNodes = [
     unlockConditions: ['matrix-authority-agent', 'matrix-zion-fleet'], // Unexpected combination
     data: {
       title: 'Trinity Rescue',
-      pageUrl: '/matrix-v1/trinity-rescue',
+      pageUrl: '/matrix-v1/deeper-profile',
       status: 'stub',
       summary: 'Your agent training helps you infiltrate and rescue Trinity from her own mission.',
       characters: ['Trinity', 'Agent Smith', 'Neo'],
@@ -863,7 +863,7 @@ export const realMatrixNodes = [
     unlockConditions: ['matrix-skill-gate-alpha', 'matrix-knowledge-nexus', 'matrix-trinity-rescue'], // Requires ALL convergence paths
     data: {
       title: 'The Source: Origin Point',
-      pageUrl: '/matrix-v1/the-source',
+      pageUrl: '/matrix-v1/map-d3',
       status: 'wip',
       summary: 'You stand before the origin of the system — where all paths converge and ultimate truth awaits. The choice defines reality itself.',
       characters: ['The Architect', 'The Oracle', 'System Core'],
