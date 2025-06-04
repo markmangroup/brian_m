@@ -69,6 +69,8 @@ import NightCityBouncer from './pages/matrix-v1/NightCityBouncer';
 import NightCityNetdiver from './pages/matrix-v1/NightCityNetdiver';
 import NightCityFile from './pages/matrix-v1/NightCityFile';
 import NightCityAccessConfirmed from './pages/matrix-v1/NightCityAccessConfirmed';
+import AfterlifeAccessGranted from './pages/matrix-v1/night-city/AfterlifeAccessGranted';
+import AfterlifeInterior from './pages/matrix-v1/night-city/AfterlifeInterior';
 
 // Witcher routes
 import WitcherEntry from './pages/witcher/WitcherEntry';
@@ -145,6 +147,8 @@ function AppLayout() {
         {/* Night City routes */}
         <Route path="/matrix-v1/night-city/entry" element={<NightCityEntry />} />
         <Route path="/matrix-v1/night-city/bouncer" element={<NightCityBouncer />} />
+        <Route path="/matrix-v1/night-city/afterlife-access-granted" element={<AfterlifeAccessGranted />} />
+        <Route path="/matrix-v1/night-city/afterlife-interior" element={<AfterlifeInterior />} />
         <Route path="/matrix-v1/night-city/netdiver" element={<NightCityNetdiver />} />
         <Route path="/matrix-v1/night-city/file" element={<NightCityFile />} />
         <Route path="/matrix-v1/night-city/access-confirmed" element={<NightCityAccessConfirmed />} />
