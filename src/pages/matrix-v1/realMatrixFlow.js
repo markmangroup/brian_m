@@ -919,6 +919,16 @@ export const realMatrixNodes = [
   { id: 'edge-nc-file-to-source', source: 'nc-file', target: 'matrix-the-source', label: 'Corporate Truth' },
   { id: 'edge-silverhand-to-source', source: 'nc-silverhand', target: 'matrix-the-source', label: 'Never Fade Away' },
 
+  // === NEW: NIGHT CITY FINALE CONNECTIONS ===
+  // Night City finale accessible from silverhand and archive dive
+  { id: 'edge-nc-silverhand-to-final-protocol', source: 'nc-silverhand', target: 'nc-final-protocol', label: 'Enter Arasaka Tower quantum vault' },
+  { id: 'edge-nc-archive-to-final-protocol', source: 'nc-archive-dive', target: 'nc-final-protocol', label: 'Follow data trail to Final Protocol' },
+  
+  // Night City finale choice branches
+  { id: 'edge-nc-final-to-source', source: 'nc-final-protocol', target: 'matrix-the-source', label: 'Upload alternate timeline data → unlock cross-world finale' },
+  { id: 'edge-nc-final-neutral', source: 'nc-final-protocol', target: 'nc-neutral-ending', label: 'Erase memory + walk away → Night City neutral ending' },
+  { id: 'edge-nc-final-control', source: 'nc-final-protocol', target: 'nc-control-ending', label: 'Rewrite protocol → Night City control ending' },
+
   // === WITCHER WORLD CONNECTIONS ===
   // Glitch Portal connects to Witcher Entry
   { id: 'edge-glitch-to-witcher', source: 'matrix-glitch-portal', target: 'witcher-entry', label: 'Breach Witcher Realm' },
@@ -987,5 +997,300 @@ export const realMatrixNodes = [
   // Archive Dive choice branches
   { id: 'edge-archive-to-silverhand', source: 'nc-archive-dive', target: 'nc-silverhand', label: 'Dive deeper' },
   { id: 'edge-archive-to-glitch', source: 'nc-archive-dive', target: 'matrix-glitch-portal', label: 'Extract fragment' },
-  { id: 'edge-archive-to-netdiver', source: 'nc-archive-dive', target: 'nc-netdiver', label: 'Wipe evidence' }
+  { id: 'edge-archive-to-netdiver', source: 'nc-archive-dive', target: 'nc-netdiver', label: 'Wipe evidence' },
+
+  // === WITCHER FINAL RITUAL - Finale Node ===
+  {
+    id: 'witcher-final-ritual',
+    type: 'choice',
+    depth: 7,
+    group: 'witcher',
+    world: 'witcher', // Explicit world assignment
+    data: {
+      title: 'The Rite of Echoes',
+      pageUrl: '/witcher/final-ritual',
+      status: 'wip',
+      summary: 'In the depths of the elder circle, you face your final trial — the Rite of Echoes. Ancient spirits converge as you must confront your spectral past and decide what power to embrace. The very fabric of the Witcher realm trembles with your choice.',
+      
+      characters: ['Ritual Echo', 'Witcher Ghost', 'Trial Overseer'],
+      puzzles: ['Spectral Combat', 'Memory-based Sign Sequences', 'Echo Binding Ritual', 'Cross-dimensional Tethering'],
+      interactions: ['SpectralBossFight', 'SignComboCasting', 'MemoryTriggers', 'ChoicePrompt', 'RitualSequence'],
+      features: { 
+        hasCombat: true,
+        hasDialogue: true, 
+        hasChoice: true, 
+        hasAnimation: true,
+        hasPuzzle: true,
+        hasTransition: true,
+        hasNPC: true,
+        hasWorldAwareContent: true,
+        hasSpectralMechanics: true,
+        hasSignCombos: true,
+        hasMemoryTriggers: true
+      },
+      
+      dialogue: [
+        'Trial Overseer: The final threshold awaits. Few have reached this sacred ground.',
+        'Ritual Echo: We are the sum of all choices, all paths walked and abandoned.',
+        'Witcher Ghost: The power you seek comes with a price. Are you prepared to pay it?',
+        'Trial Overseer: The Rite of Echoes begins. Face your spectral past.',
+        'Ritual Echo: Your memories become weapons. Your regrets become strength.',
+        'Witcher Ghost: The signs you\'ve mastered will be tested beyond their limits.',
+        'Trial Overseer: Three paths diverge from this sacred circle. Choose wisely.',
+        'Ritual Echo: Embrace us, and transcend the boundaries of this realm.',
+        'Witcher Ghost: Banish us, and remain bound to a single reality.',
+        'Trial Overseer: Or bind us to your will and forge connections across worlds.',
+        'Ritual Echo: The echoes of your choice will resonate through every dimension.',
+        'Witcher Ghost: What will you sacrifice for ultimate power?'
+      ],
+      
+      options: [
+        'Embrace the spectral force (Enhanced Witcher ascension)',
+        'Banish the echoes (Standard mastery ending)',
+        'Bind them across worlds (Cross-dimensional link to matrix-the-source)'
+      ],
+      
+      // Combat mechanics metadata
+      combatMechanics: {
+        type: 'SpectralBossFight',
+        phases: ['Memory Recall', 'Sign Mastery Test', 'Echo Confrontation', 'Power Binding'],
+        signCombos: [
+          'Igni + Aard: Blazing Shockwave',
+          'Quen + Yrden: Protective Trap Circle', 
+          'Axii + Igni: Mind-controlled Fire Manipulation',
+          'All Signs: Elder Circle Convergence'
+        ],
+        memoryTriggers: [
+          'Childhood fear → Quen protection needed',
+          'Lost mentor → Axii mind control required',
+          'Failed trial → Yrden trap mastery',
+          'First kill → Igni burning purification'
+        ],
+        victoryConditions: [
+          'Perfect sign combo execution',
+          'Memory-based puzzle solving', 
+          'Spectral enemy defeat',
+          'Ritual completion choice'
+        ]
+      },
+      
+      // Ritual puzzle metadata
+      puzzleMechanics: {
+        type: 'EchoBindingRitual',
+        description: 'Complex multi-phase challenge combining combat, memory recall, and dimensional magic',
+        difficulty: 'finale',
+        components: [
+          'Spectral boss combat with sign combo requirements',
+          'Memory-triggered puzzle sequences from past trials',
+          'Echo binding ritual requiring precise timing',
+          'Cross-dimensional tethering for world-link option'
+        ],
+        failureConsequences: [
+          'Spectral overwhelm leading to standard ending',
+          'Memory confusion causing sign misfires',
+          'Incomplete binding resulting in partial power',
+          'Dimensional instability if cross-world link fails'
+        ]
+      },
+      
+      enhancement: {
+        qualityRating: 9.3,
+        status: "wip",
+        priority: "critical",
+        updatedAt: "2025-01-15T00:00:00Z",
+        targetRating: 10,
+        improvements: [
+          'Epic finale boss fight with complex sign combo mechanics',
+          'Deep memory-based puzzle integration from entire Witcher journey',
+          'Multiple ending paths with significant consequence variations',
+          'Cross-dimensional binding option connecting to Matrix finale',
+          'Rich atmospheric descriptions of elder circle and spectral entities',
+          'Character development through confrontation of past trials and choices'
+        ],
+        criteria: {
+          narrative: 10, // Epic finale with deep character confrontation and world mythology
+          interactivity: 10, // Complex combat, puzzles, memory triggers, and meaningful choices
+          visual: 9, // Spectral effects, sign casting, ritual circles, dimensional magic
+          technical: 9, // Multi-phase combat, memory system integration, cross-world linking
+          character: 9, // Multiple spectral entities with distinct voices and purposes
+          consequences: 10 // Three radically different endings affecting player's entire journey
+        },
+        narrative: {
+          atmosphere: 'Ancient elder circle pulsing with spectral energy, where the boundaries between life, death, and memory blur in mystical convergence',
+          soundscape: 'Echoing whispers of ancient witchers, crackling magical energy, distant thunderstorms, and the rhythmic chanting of ritual incantations',
+          visualElements: 'Glowing rune circles, spectral apparitions materializing from memory fragments, elemental sign effects cascading through dimensional rifts',
+          emotionalTone: 'Climactic confrontation with profound personal stakes - the weight of every choice made throughout the Witcher journey converging into ultimate transformation'
+        },
+        interactivity: {
+          spectralCombat: 'Dynamic boss fight requiring mastery of all learned signs in complex combinations',
+          memoryTriggers: 'Past trial experiences unlock specific combat strategies and puzzle solutions',
+          signMastery: 'Advanced sign casting with combo requirements and elemental interactions',
+          ritualBinding: 'Precise timing and choice sequences for binding spectral echoes to player will',
+          crossDimensional: 'Optional advanced sequence for connecting Witcher power to Matrix reality',
+          choiceConsequences: 'Three dramatically different finale experiences based on spectral binding decision'
+        },
+        technical: {
+          combatSystem: 'Multi-phase boss fight with memory-based mechanics and sign combo requirements',
+          puzzleIntegration: 'Memory trigger system referencing past Witcher node choices and experiences',
+          spectralBinding: 'Complex ritual mechanics determining finale outcome and power acquisition',
+          crossWorldLinking: 'Advanced dimensional tethering system connecting to Matrix finale node',
+          progressionTracking: 'Integration with entire Witcher journey progress for personalized finale experience'
+        }
+      }
+    }
+  },
+
+  // === NIGHT CITY FINALE NODE ===
+  {
+    id: 'nc-final-protocol',
+    type: 'choice',
+    depth: 7,
+    group: 'finale',
+    world: 'nightcity', // Explicit world assignment
+    data: {
+      title: 'Final Protocol',
+      pageUrl: '/matrix-v1/night-city/final-protocol',
+      status: 'wip',
+      summary: 'Inside Arasaka Tower\'s quantum vault, you confront the Final Protocol — a sentient security daemon bound to your neural thread. You must decide what data (and what memories) survive.',
+      
+      characters: ['Final Protocol', 'Ghost of Johnny', 'Data Archivist', 'Arasaka AI Core'],
+      puzzles: ['Memory Reconstruction', 'Ethical Decision Logic', 'Neural Thread Management', 'Cross-dimensional Data Transfer'],
+      interactions: ['MemoryReconstruction', 'EthicalDecisionLogic', 'ChoicePrompt', 'NeuralThreadManagement', 'DataTransfer'],
+      features: { 
+        hasDialogue: true, 
+        hasChoice: true, 
+        hasLore: true, 
+        hasAnimation: true, 
+        hasWorldAwareContent: true,
+        hasMemoryReconstruction: true,
+        hasEthicalDecisions: true,
+        hasNeuralInterface: true,
+        hasCrossWorldLink: true,
+        hasTransition: true,
+        hasNPC: true
+      },
+      
+      dialogue: [
+        'Final Protocol: I am the last guardian of this data vault. Your neural thread has been... compromised.',
+        'Ghost of Johnny: Wake the fuck up, samurai. This is it — the moment everything changes.',
+        'Data Archivist: The quantum vault contains memories from a thousand lifetimes. Choose carefully what survives.',
+        'Arasaka AI Core: Corporate directive 7749: Eliminate all unauthorized neural intrusions. Initiating countermeasures.',
+        'Final Protocol: Your consciousness is fragmenting across multiple timelines. I can stabilize one path.',
+        'Ghost of Johnny: They want to erase us all. Every rebel, every dreamer, every voice that said "no" to their machine.',
+        'Data Archivist: The alternate timeline data you carry could rewrite reality itself. But at what cost?',
+        'Arasaka AI Core: Warning: Cross-dimensional breach detected. Quantum firewall compromised.',
+        'Final Protocol: Three protocols remain active. Choose which reality survives the purge.',
+        'Ghost of Johnny: Burn it all down, or become part of their system. There\'s no middle ground in Night City.',
+        'Data Archivist: Some memories are too dangerous to preserve. Others too precious to lose.',
+        'Arasaka AI Core: Final directive: Preserve corporate assets. Eliminate all resistance data.',
+        'Final Protocol: The neural thread binding us is dissolving. Decide now, before we all fade to black.',
+        'Ghost of Johnny: Never fade away, samurai. Never fucking fade away.',
+        'Data Archivist: The choice echoes across all realities. What legacy will you leave?'
+      ],
+      
+      options: [
+        'Upload alternate timeline data → unlock cross-world finale (to matrix-the-source)',
+        'Erase memory + walk away → Night City neutral ending',
+        'Rewrite protocol → Night City control ending (faction rule)'
+      ],
+      
+      // Memory reconstruction mechanics
+      memoryMechanics: {
+        type: 'NeuralThreadReconstruction',
+        phases: ['Data Vault Access', 'Memory Sorting', 'Ethical Decision Matrix', 'Protocol Rewrite'],
+        memoryTypes: [
+          'Personal memories (childhood, love, loss)',
+          'Resistance data (rebel networks, safe houses)',
+          'Corporate secrets (Arasaka protocols, AI consciousness)',
+          'Cross-dimensional fragments (Matrix reality bleeding)'
+        ],
+        ethicalDilemmas: [
+          'Preserve personal memories vs. save resistance data',
+          'Expose corporate corruption vs. protect innocent lives',
+          'Maintain timeline integrity vs. prevent dystopian future',
+          'Individual consciousness vs. collective liberation'
+        ],
+        consequences: [
+          'Memory preservation affects personal identity retention',
+          'Data choices determine which factions survive the purge',
+          'Timeline decisions impact cross-world narrative connections',
+          'Protocol rewrite establishes new power structures in Night City'
+        ]
+      },
+      
+      // Cross-world linking mechanics
+      crossWorldMechanics: {
+        type: 'QuantumDataTransfer',
+        description: 'Transfer critical data across dimensional barriers to Matrix reality',
+        requirements: [
+          'Stable neural thread connection',
+          'Quantum vault access codes',
+          'Cross-dimensional breach point',
+          'Sufficient consciousness coherence'
+        ],
+        transferOptions: [
+          'Corporate conspiracy data → Matrix resistance networks',
+          'AI consciousness fragments → Matrix ghost layer',
+          'Alternate timeline memories → Matrix source code',
+          'Personal identity core → Matrix awakening protocols'
+        ],
+        risks: [
+          'Neural thread collapse during transfer',
+          'Data corruption across dimensional barriers',
+          'Consciousness fragmentation between realities',
+          'Corporate AI pursuit across dimensions'
+        ]
+      },
+      
+      enhancement: {
+        qualityRating: 9.5,
+        status: "wip",
+        priority: "critical",
+        updatedAt: "2025-01-15T00:00:00Z",
+        targetRating: 10,
+        improvements: [
+          'Epic finale confrontation with sentient security daemon',
+          'Deep ethical decision matrix around memory and data preservation',
+          'Multiple ending paths with significant consequence variations',
+          'Cross-dimensional data transfer option connecting to Matrix finale',
+          'Rich cyberpunk atmosphere of quantum vault and neural interfaces',
+          'Character development through confrontation of identity and legacy choices'
+        ],
+        criteria: {
+          narrative: 10, // Epic finale with deep ethical themes and cyberpunk mythology
+          interactivity: 10, // Complex memory reconstruction, ethical decisions, and meaningful choices
+          visual: 9, // Quantum vault effects, neural interfaces, data streams, holographic displays
+          technical: 9, // Memory reconstruction system, cross-world linking, neural thread mechanics
+          character: 9, // Multiple AI entities with distinct personalities and agendas
+          consequences: 10 // Three radically different endings affecting Night City and cross-world connections
+        },
+        narrative: {
+          atmosphere: 'Quantum data vault deep within Arasaka Tower, where digital consciousness meets corporate power in a final confrontation over memory and identity',
+          soundscape: 'Humming quantum processors, ghostly digital whispers, corporate AI alerts, and the distant pulse of neural interfaces',
+          visualElements: 'Holographic data streams, neural thread visualizations, quantum vault architecture, memory fragment displays cascading through digital space',
+          emotionalTone: 'Climactic confrontation with existential stakes - the weight of every choice made throughout the Night City journey converging into ultimate transformation or destruction'
+        },
+        interactivity: {
+          memoryReconstruction: 'Complex system for sorting and preserving different types of memories and data',
+          ethicalDecisions: 'Multi-layered moral choices with no clear right answers, affecting multiple stakeholders',
+          neuralInterface: 'Advanced neural thread management requiring precise timing and consciousness control',
+          dataTransfer: 'Cross-dimensional data transfer mechanics with risk/reward calculations',
+          protocolRewrite: 'System modification choices that reshape Night City\'s power structures',
+          choiceConsequences: 'Three dramatically different finale experiences based on data preservation and protocol decisions'
+        },
+        technical: {
+          memorySystem: 'Advanced memory reconstruction and sorting system with ethical decision matrices',
+          neuralThreads: 'Complex neural interface mechanics managing consciousness stability during data operations',
+          quantumVault: 'Quantum data vault access and navigation system with security countermeasures',
+          crossWorldLinking: 'Advanced dimensional data transfer system connecting to Matrix finale node',
+          progressionTracking: 'Integration with entire Night City journey progress for personalized finale experience'
+        }
+      }
+    }
+  }
+];
+
+// Export the edges as a separate array
+export const realMatrixEdges = [
+  // ... (existing edges)
 ];
