@@ -13,7 +13,7 @@ function Donut({ ratio }) {
         cy="20"
         r={radius}
         fill="transparent"
-        stroke="#e5e7eb"
+        stroke="#374151"
         strokeWidth="4"
       />
       <circle
@@ -21,7 +21,7 @@ function Donut({ ratio }) {
         cy="20"
         r={radius}
         fill="transparent"
-        stroke="#10b981"
+        stroke="#22c55e"
         strokeWidth="4"
         strokeDasharray={circumference}
         strokeDashoffset={offset}
@@ -36,18 +36,18 @@ export default function MetricsHeader() {
   const percent = Math.round(cleanliness);
   const livePercent = Math.round(stubRatio * 100);
   return (
-    <div className="rounded-2xl bg-white/90 shadow-lg p-6 backdrop-blur flex justify-around">
+    <div className="rounded-2xl bg-theme-overlay shadow-lg p-6 backdrop-blur flex justify-around">
       <div className="text-center">
-        <div className="text-2xl font-bold">{percent}%</div>
-        <div className="text-sm text-gray-500">Cleanliness</div>
+        <div className="text-2xl font-bold text-theme-bright">{percent}%</div>
+        <div className="text-sm text-theme-muted">Cleanliness</div>
       </div>
       <div className="text-center flex flex-col items-center">
         <Donut ratio={stubRatio} />
-        <div className="text-sm text-gray-500 mt-1">{livePercent}% live</div>
+        <div className="text-sm text-theme-muted mt-1">{livePercent}% live</div>
       </div>
       <div className="text-center">
-        <div className="text-2xl font-bold">{rulesApplied}</div>
-        <div className="text-sm text-gray-500">Rules</div>
+        <div className="text-2xl font-bold text-theme-bright">{rulesApplied}</div>
+        <div className="text-sm text-theme-muted">Rules</div>
       </div>
     </div>
   );
