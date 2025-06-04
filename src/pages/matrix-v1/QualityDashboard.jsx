@@ -67,6 +67,14 @@ const WORLD_GROUPS = {
     borderColor: 'border-theme-primary',
     groups: ['night-city', 'nightcity', 'corpo', 'street', 'nomad']
   }
+  ,
+  'finance': {
+    name: 'Finance',
+    icon: '💰',
+    color: 'text-theme-primary',
+    borderColor: 'border-theme-primary',
+    groups: ['finance']
+  }
 };
 
 // Utility function to get node world - checks node.world first, then group lookup
@@ -776,7 +784,7 @@ export default function QualityDashboard() {
   const { colorMode } = useColorMode();
   
   // State management
-  const [selectedWorlds, setSelectedWorlds] = useState(['matrix', 'witcher', 'nightcity']);
+  const [selectedWorlds, setSelectedWorlds] = useState(['matrix', 'witcher', 'nightcity', 'finance']);
   const [selectedStatuses, setSelectedStatuses] = useState(['live', 'wip', 'stub']);
   const [selectedPriorities, setSelectedPriorities] = useState(['CRITICAL', 'HIGH', 'MEDIUM', 'LOW']);
   const [showMissingSummaries, setShowMissingSummaries] = useState(false);

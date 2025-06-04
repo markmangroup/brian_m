@@ -34,6 +34,11 @@ const WORLD_GROUPS = {
     name: 'Night City',
     icon: '🌆',
     groups: ['night-city', 'nightcity', 'corpo', 'street', 'nomad']
+  },
+  finance: {
+    name: 'Finance',
+    icon: '💰',
+    groups: ['finance']
   }
 };
 
