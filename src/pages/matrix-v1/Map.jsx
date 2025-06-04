@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import 'reactflow/dist/base.css';
 import { nodes } from './nodes';
@@ -15,14 +15,65 @@ const nodeTypes = {
 
 const commit = process.env.REACT_APP_GIT_SHA;
 
+// Narrative tier filter options
+const NARRATIVE_TIER_OPTIONS = [
+  { value: 'all', label: 'All Tiers', icon: '🌟' },
+  { value: 'intro', label: 'Introduction', icon: '🎬' },
+  { value: 'mid', label: 'Mid-Story', icon: '⚡' },
+  { value: 'climax', label: 'Climax', icon: '🔥' },
+  { value: 'finale', label: 'Finale', icon: '🏆' }
+];
+
 export default function MapPage() {
   const [devView, setDevView] = useState(false);
+  const [selectedTier, setSelectedTier] = useState('all');
 
   console.log('Rendering nodes:', nodes);
+
+  // Filter nodes based on selected narrative tier
+  const filteredNodes = useMemo(() => {
+    if (selectedTier === 'all') {
+      return nodes;
+    }
+    return nodes.filter(node => node.narrativeTier === selectedTier);
+  }, [selectedTier]);
+
+  const handleTierChange = (event) => {
+    setSelectedTier(event.target.value);
+  };
 
   return (
     <div className="relative bg-black bg-gradient-to-br from-gray-900 to-black min-h-screen p-8 overflow-hidden">
       <h1 className="sr-only">Matrix Story Map</h1>
+      
+      {/* Narrative Tier Filter */}
+      <div className="fixed top-6 left-6 z-50">
+        <div className="bg-[#111] border border-purple-400/60 rounded-lg p-4 shadow-[0_0_8px_purple] backdrop-blur-sm">
+          <label htmlFor="tier-filter" className="block text-purple-400 font-mono text-sm font-semibold mb-2">
+            📖 Narrative Tier Filter
+          </label>
+          <select
+            id="tier-filter"
+            value={selectedTier}
+            onChange={handleTierChange}
+            className="bg-[#1a1a1a] text-white border border-purple-400/60 rounded px-3 py-2 font-mono text-sm
+                     focus:outline-none focus:border-purple-400 focus:shadow-[0_0_4px_purple] 
+                     hover:border-purple-400/80 transition-all cursor-pointer min-w-[160px]"
+          >
+            {NARRATIVE_TIER_OPTIONS.map(option => (
+              <option key={option.value} value={option.value} className="bg-[#1a1a1a] text-white">
+                {option.icon} {option.label}
+              </option>
+            ))}
+          </select>
+          
+          {/* Tier Info Display */}
+          <div className="mt-2 text-xs text-gray-400 font-mono">
+            Showing: {filteredNodes.length} / {nodes.length} nodes
+          </div>
+        </div>
+      </div>
+
       <div style={{ position: 'fixed', bottom: 20, left: 20, zIndex: 50 }}>
         <div className="flex gap-2">
           <Link
@@ -53,7 +104,7 @@ export default function MapPage() {
         Build: {commit || 'dev'}
       </div>
       <MapCanvas
-        nodes={nodes}
+        nodes={filteredNodes}
         edges={edges}
         nodeTypes={nodeTypes}
       />
