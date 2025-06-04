@@ -31,6 +31,18 @@ const STATUS_LABELS = {
   'stub': 'Stub'
 };
 
+// Human readable labels for node types
+const NODE_TYPE_LABELS = {
+  scene: 'Scene',
+  dialogue: 'Dialogue',
+  choice: 'Choice',
+  ending: 'Ending',
+  npc: 'NPC',
+  faction: 'Faction',
+  training: 'Training',
+  end: 'End'
+};
+
 // Enhanced World Group Mapping with all group labels
 const WORLD_GROUPS = {
   'matrix': {
@@ -780,6 +792,24 @@ export default function QualityDashboard() {
   const [editingNode, setEditingNode] = useState(null);
   const [viewingNode, setViewingNode] = useState(null);
 
+  // Reusable date formatting helper
+  const formatDate = (date) => {
+    if (!date) return 'Unknown';
+    if (date === 'Never') return 'Never';
+    try {
+      const dateObj = new Date(date);
+      return dateObj.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    } catch {
+      return 'Unknown';
+    }
+  };
+
   // Enhanced filtering logic using unified world detection
   const filteredNodes = useMemo(() => {
     const allNodes = getAllStoryNodes();
@@ -1127,9 +1157,12 @@ export default function QualityDashboard() {
               </button>
             </div>
             <div className="space-y-3 text-sm">
-              <p className="text-theme-secondary"><strong>Type:</strong> <span className="text-theme-bright">{viewingNode.type}</span></p>
+              <p className="text-theme-secondary"><strong>Type:</strong> <span className="text-theme-bright">{NODE_TYPE_LABELS[viewingNode.type] || viewingNode.type}</span></p>
               <p className="text-theme-secondary"><strong>Group:</strong> <span className="text-theme-bright">{viewingNode.group}</span></p>
+              <p className="text-theme-secondary"><strong>Narrative Tier:</strong> <span className="text-theme-bright">{viewingNode.narrativeTier || 'Unknown'}</span></p>
+              <p className="text-theme-secondary"><strong>World:</strong> <span className="text-theme-bright">{getNodeWorld(viewingNode)}</span></p>
               <p className="text-theme-secondary"><strong>Status:</strong> <span className="text-theme-bright">{STATUS_ICONS[viewingNode.data?.status]} {STATUS_LABELS[viewingNode.data?.status]}</span></p>
+              <p className="text-theme-secondary"><strong>Updated:</strong> <span className="text-theme-bright">{formatDate(viewingNode.data?.enhancement?.updatedAt || viewingNode.data?.lastModified)}</span></p>
               
               {/* World-aware Summary */}
               <p className="text-theme-secondary">
