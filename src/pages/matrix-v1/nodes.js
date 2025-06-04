@@ -3,6 +3,7 @@ export const nodes = [
     id: 'visible-test',
     type: 'scene',
     position: { x: 50, y: 50 },
+    narrativeTier: 'intro',
     data: {
       title: 'Visible Test',
       description: 'This should always be on screen.',
@@ -14,6 +15,7 @@ export const nodes = [
     id: 'scene-1',
     type: 'scene',
     position: { x: 0, y: 0 },
+    narrativeTier: 'intro',
     data: {
       title: 'The Matrix',
       description: 'A dark room filled with monitors. The air hums with digital energy.',
@@ -24,6 +26,7 @@ export const nodes = [
     id: 'scene-2',
     type: 'scene',
     position: { x: 200, y: 0 },
+    narrativeTier: 'mid',
     data: {
       title: 'The Construct',
       description: 'An endless white space where anything is possible.',
@@ -36,6 +39,7 @@ export const nodes = [
     id: 'dialogue-1',
     type: 'dialogue',
     position: { x: 0, y: 200 },
+    narrativeTier: 'intro',
     data: {
       character: 'Morpheus',
       dialogue: 'I\'m going to show you how deep the rabbit hole goes.',
@@ -46,6 +50,7 @@ export const nodes = [
     id: 'dialogue-2',
     type: 'dialogue',
     position: { x: 200, y: 200 },
+    narrativeTier: 'mid',
     data: {
       character: 'Neo',
       dialogue: 'I know kung fu.',
@@ -58,6 +63,7 @@ export const nodes = [
     id: 'choice-1',
     type: 'choice',
     position: { x: 0, y: 400 },
+    narrativeTier: 'climax',
     data: {
       prompt: 'Choose your path',
       options: [
@@ -70,6 +76,7 @@ export const nodes = [
     id: 'choice-2',
     type: 'choice',
     position: { x: 200, y: 400 },
+    narrativeTier: 'climax',
     data: {
       prompt: 'How do you proceed?',
       options: [
@@ -85,6 +92,7 @@ export const nodes = [
     id: 'ending-1',
     type: 'ending',
     position: { x: 0, y: 600 },
+    narrativeTier: 'finale',
     data: {
       title: 'The One',
       outcome: 'Victory',
@@ -95,6 +103,7 @@ export const nodes = [
     id: 'ending-2',
     type: 'ending',
     position: { x: 200, y: 600 },
+    narrativeTier: 'finale',
     data: {
       title: 'System Failure',
       outcome: 'Defeat',
@@ -108,6 +117,7 @@ export const nodes = [
     type: 'training',
     depth: 0,
     group: 'training',
+    narrativeTier: 'intro',
     data: {
       label: 'Training Entry',
       tooltip: 'Begin your training',
@@ -121,6 +131,7 @@ export const nodes = [
     type: 'training',
     depth: 1,
     group: 'training',
+    narrativeTier: 'mid',
     data: {
       label: 'AWAKEN Challenge',
       tooltip: 'Face the guardian',
@@ -134,6 +145,7 @@ export const nodes = [
     type: 'training',
     depth: 2,
     group: 'training',
+    narrativeTier: 'mid',
     data: {
       label: 'Find the Real Signal',
       tooltip: 'Discern truth from noise',
@@ -147,6 +159,7 @@ export const nodes = [
     type: 'training',
     depth: 3,
     group: 'training',
+    narrativeTier: 'climax',
     data: {
       label: 'Memory Puzzle',
       tooltip: 'Test your recall',
@@ -162,6 +175,7 @@ export const nodes = [
     type: 'npc',
     depth: 0,
     group: 'main',
+    narrativeTier: 'intro',
     data: {
       label: 'Agent Echo',
       tooltip: 'System Guardian: Echo',
@@ -175,6 +189,7 @@ export const nodes = [
     type: 'npc',
     depth: 1,
     group: 'main',
+    narrativeTier: 'mid',
     data: {
       label: 'Archivist (Simulated Recovery)',
       tooltip: 'Archivist: Simulated Recovery',
@@ -188,6 +203,7 @@ export const nodes = [
     type: 'npc',
     depth: 1,
     group: 'main',
+    narrativeTier: 'mid',
     data: {
       label: 'Agent Shadow (Signal Distorted)',
       tooltip: 'System anomaly containment unit',
@@ -201,6 +217,7 @@ export const nodes = [
     type: 'end',
     depth: 2,
     group: 'main',
+    narrativeTier: 'finale',
     data: {
       label: 'Safe Mode (Fabricated Timeline)',
       tooltip: 'End: Fabricated Timeline',
@@ -214,6 +231,7 @@ export const nodes = [
     type: 'end',
     depth: 2,
     group: 'main',
+    narrativeTier: 'finale',
     data: {
       label: 'Reset / Entry',
       tooltip: 'Restart the journey',
@@ -227,6 +245,7 @@ export const nodes = [
     type: 'choice',
     depth: 2,
     group: 'main',
+    narrativeTier: 'climax',
     data: {
       label: 'Stabilize (Puzzle)',
       tooltip: 'Puzzle node (under construction)',
@@ -241,6 +260,7 @@ export const nodes = [
     type: 'end',
     depth: 2,
     group: 'main',
+    narrativeTier: 'finale',
     data: {
       label: 'Error Loop (Recursive)',
       tooltip: 'Unstable recursive logic state',
@@ -256,6 +276,7 @@ export const nodes = [
     type: 'faction',
     depth: 0,
     group: 'factions',
+    narrativeTier: 'intro',
     data: {
       label: 'Deeper Profile',
       tooltip: 'Profile analysis',
@@ -269,6 +290,7 @@ export const nodes = [
     type: 'faction',
     depth: 1,
     group: 'factions',
+    narrativeTier: 'mid',
     data: {
       label: "Choose who's watching you",
       tooltip: 'Faction selection',
@@ -282,6 +304,7 @@ export const nodes = [
     type: 'faction',
     depth: 2,
     group: 'factions',
+    narrativeTier: 'climax',
     data: {
       label: 'Aligned: Signal Brokers',
       tooltip: 'Signal Brokers (teal)',
@@ -296,6 +319,7 @@ export const nodes = [
     type: 'faction',
     depth: 2,
     group: 'factions',
+    narrativeTier: 'climax',
     data: {
       label: 'Aligned: Oblivion Hand',
       tooltip: 'Oblivion Hand (gray)',
@@ -310,6 +334,7 @@ export const nodes = [
     type: 'faction',
     depth: 2,
     group: 'factions',
+    narrativeTier: 'climax',
     data: {
       label: 'Aligned: Architects of Silence',
       tooltip: 'Architects of Silence (gold)',
