@@ -2118,40 +2118,80 @@ const rawMatrixNodes = [
     type: 'scene',
     world: 'fallout',
     narrativeTier: 'intro',
-    status: 'stub',
-    enhancement: { reviewNeeded: true }
+    data: {
+      title: 'Vault Exit',
+      pageUrl: '/matrix-v1/fallout/vault-entry',
+      status: 'live',
+      summary: 'You step into the sunlight for the first time and behold the desolate wasteland.',
+      characters: ['Lone Survivor'],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
   },
   {
     id: 'fo-faction-choice',
-    type: 'scene',
+    type: 'choice',
     world: 'fallout',
     narrativeTier: 'mid',
-    status: 'stub',
-    enhancement: { reviewNeeded: true }
+    data: {
+      title: 'Faction Negotiations',
+      pageUrl: '/matrix-v1/fallout/faction-choice',
+      status: 'live',
+      summary: 'Representatives of three groups ask for your loyalty in exchange for protection.',
+      characters: ['Faction Leaders'],
+      puzzles: [],
+      interactions: ['ChoicePrompt'],
+      features: { hasChoice: true, hasTransition: true }
+    }
   },
   {
     id: 'fo-wasteland-scout',
     type: 'scene',
     world: 'fallout',
     narrativeTier: 'mid',
-    status: 'stub',
-    enhancement: { reviewNeeded: true }
+    data: {
+      title: 'Wasteland Scout Mission',
+      pageUrl: '/matrix-v1/fallout/wasteland-scout',
+      status: 'live',
+      summary: 'You scour nearby ruins for supplies and gather intel for your chosen faction.',
+      characters: ['Lone Survivor'],
+      puzzles: ['Scavenge'],
+      interactions: [],
+      features: { hasTransition: true }
+    }
   },
   {
     id: 'fo-data-terminal',
     type: 'scene',
     world: 'fallout',
     narrativeTier: 'mid',
-    status: 'stub',
-    enhancement: { reviewNeeded: true }
+    data: {
+      title: 'Abandoned Data Terminal',
+      pageUrl: '/matrix-v1/fallout/data-terminal',
+      status: 'live',
+      summary: 'An old terminal reveals coordinates to a hidden vault with valuable technology.',
+      characters: ['Lone Survivor'],
+      puzzles: [],
+      interactions: ['DataDownload'],
+      features: { hasTransition: true }
+    }
   },
   {
     id: 'fo-main-quest',
     type: 'scene',
     world: 'fallout',
     narrativeTier: 'climax',
-    status: 'stub',
-    enhancement: { reviewNeeded: true }
+    data: {
+      title: 'Toward the Future',
+      pageUrl: '/matrix-v1/fallout/main-quest',
+      status: 'live',
+      summary: 'With new knowledge in hand, the real adventure begins.',
+      characters: ['Lone Survivor'],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
   },
 ];
 
@@ -2180,5 +2220,13 @@ export const realMatrixEdges = [
   { id: 'edge-witcher-entry-to-mutation', source: 'witcher-entry', target: 'witcher-mutation-choice' },
   { id: 'edge-witcher-mutation-to-signs', source: 'witcher-mutation-choice', target: 'witcher-sign-training', label: 'Trial Survived' },
   { id: 'edge-witcher-signs-to-final-ritual', source: 'witcher-sign-training', target: 'witcher-final-ritual', label: 'Final Trial Beckons' },
-  { id: 'edge-witcher-trial-to-final-ritual', source: 'witcher-trial-of-reflection', target: 'witcher-final-ritual', label: 'Elder Circle Calls' }
+  { id: 'edge-witcher-trial-to-final-ritual', source: 'witcher-trial-of-reflection', target: 'witcher-final-ritual', label: 'Elder Circle Calls' },
+
+  // Fallout world flow
+  { id: 'edge-fo-entry-to-choice', source: 'fo-vault-entry', target: 'fo-faction-choice' },
+  { id: 'edge-fo-choice-brotherhood', source: 'fo-faction-choice', target: 'fo-wasteland-scout', label: 'Brotherhood of Steel' },
+  { id: 'edge-fo-choice-raiders', source: 'fo-faction-choice', target: 'fo-wasteland-scout', label: 'Raiders' },
+  { id: 'edge-fo-choice-independent', source: 'fo-faction-choice', target: 'fo-wasteland-scout', label: 'Independent' },
+  { id: 'edge-fo-scout-to-terminal', source: 'fo-wasteland-scout', target: 'fo-data-terminal' },
+  { id: 'edge-fo-terminal-to-main', source: 'fo-data-terminal', target: 'fo-main-quest' }
 ];
