@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { realMatrixNodes } from './realMatrixFlow';
+import { nodes } from './nodes'; // Import regular nodes too
 import { edges } from './edges';
 import { 
   generateQualityReport,
@@ -29,14 +30,14 @@ const STATUS_LABELS = {
   'stub': 'Stub'
 };
 
-// World Group Mapping with enhanced theme awareness
+// Enhanced World Group Mapping with all group labels
 const WORLD_GROUPS = {
   'matrix': {
     name: 'Matrix',
     icon: '🔴',
     color: 'text-theme-primary',
     borderColor: 'border-theme-primary',
-    groups: ['intro', 'red-pill', 'blue-pill', 'training', 'choice', 'awakening', 'factions', 'ghost-layer', 'echo', 'convergence', 'dynamic', 'finale', 'investigation', 'authority', 'compliance']
+    groups: ['intro', 'red-pill', 'blue-pill', 'training', 'choice', 'awakening', 'factions', 'ghost-layer', 'echo', 'convergence', 'dynamic', 'finale', 'investigation', 'authority', 'compliance', 'main', 'matrix']
   },
   'witcher': {
     name: 'Witcher',
@@ -52,6 +53,39 @@ const WORLD_GROUPS = {
     borderColor: 'border-theme-primary',
     groups: ['night-city', 'nightcity', 'corpo', 'street', 'nomad']
   }
+};
+
+// Utility function to get node world - checks node.world first, then group lookup
+const getNodeWorld = (node) => {
+  // First check if node has explicit world field
+  if (node.world) return node.world;
+  if (node.data?.world) return node.data.world;
+  
+  // Fall back to group lookup
+  const group = node.group || node.data?.group;
+  if (!group) return 'matrix'; // default fallback
+  
+  // Find world by group
+  const worldEntry = Object.entries(WORLD_GROUPS).find(([_, worldInfo]) => 
+    worldInfo.groups.includes(group)
+  );
+  
+  return worldEntry ? worldEntry[0] : 'matrix';
+};
+
+// Utility function to get all story nodes (combines realMatrixNodes and nodes)
+const getAllStoryNodes = () => {
+  // Combine both node sources, with realMatrixNodes taking precedence
+  const allNodes = [...realMatrixNodes];
+  
+  // Add nodes from nodes.js that aren't already in realMatrixNodes
+  nodes.forEach(node => {
+    if (!allNodes.find(rNode => rNode.id === node.id)) {
+      allNodes.push(node);
+    }
+  });
+  
+  return allNodes;
 };
 
 // Enhanced Theme-aware Priority Color Mapping
@@ -536,44 +570,43 @@ const WorldFilter = ({ selectedWorlds, onChange, onToggle, isCollapsed }) => {
 };
 
 // Enhanced Metrics Widget Component
-const MetricsWidget = ({ colorMode }) => {
+const MetricsWidget = ({ colorMode, filteredNodes = null }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   
   const systemMetrics = useMemo(() => {
-    // Calculate all requested metrics
-    const totalNodes = realMatrixNodes.length;
+    // Use filtered nodes if provided, otherwise get all nodes
+    const nodesToAnalyze = filteredNodes || getAllStoryNodes();
+    const totalNodes = nodesToAnalyze.length;
     
     // Calculate average quality rating
-    const qualityRatings = realMatrixNodes.map(node => calculateNodeQuality(node).overall);
+    const qualityRatings = nodesToAnalyze.map(node => calculateNodeQuality(node).overall);
     const avgQuality = qualityRatings.length > 0 ? qualityRatings.reduce((sum, q) => sum + q, 0) / qualityRatings.length : 0;
     
     // % with world-aware content
-    const worldAwareNodes = realMatrixNodes.filter(node => node.data?.features?.hasWorldAwareContent);
+    const worldAwareNodes = nodesToAnalyze.filter(node => node.data?.features?.hasWorldAwareContent);
     const worldAwarePercent = totalNodes > 0 ? (worldAwareNodes.length / totalNodes) * 100 : 0;
     
     // % with puzzles 
-    const puzzleNodes = realMatrixNodes.filter(node => node.data?.puzzles && node.data.puzzles.length >= 1);
+    const puzzleNodes = nodesToAnalyze.filter(node => node.data?.puzzles && node.data.puzzles.length >= 1);
     const puzzlePercent = totalNodes > 0 ? (puzzleNodes.length / totalNodes) * 100 : 0;
     
     // % with branching (has choices or multiple options)
-    const branchingNodes = realMatrixNodes.filter(node => 
+    const branchingNodes = nodesToAnalyze.filter(node => 
       node.data?.features?.hasChoice || 
       (node.data?.options && node.data.options.length > 1)
     );
     const branchingPercent = totalNodes > 0 ? (branchingNodes.length / totalNodes) * 100 : 0;
     
     // Count of critical-priority nodes
-    const criticalNodes = realMatrixNodes.filter(node => {
+    const criticalNodes = nodesToAnalyze.filter(node => {
       const quality = calculateNodeQuality(node);
       return quality.priority === 'CRITICAL';
     });
     
-    // Per-world distribution
+    // Per-world distribution using improved world detection
     const worldDistribution = Object.keys(WORLD_GROUPS).reduce((acc, worldKey) => {
-      const worldNodes = realMatrixNodes.filter(node => {
-        const nodeWorld = Object.keys(WORLD_GROUPS).find(wKey => 
-          WORLD_GROUPS[wKey].groups.includes(node.group)
-        ) || 'matrix';
+      const worldNodes = nodesToAnalyze.filter(node => {
+        const nodeWorld = getNodeWorld(node);
         return nodeWorld === worldKey;
       });
       
@@ -593,7 +626,7 @@ const MetricsWidget = ({ colorMode }) => {
       criticalCount: criticalNodes.length,
       worldDistribution
     };
-  }, []);
+  }, [filteredNodes]);
   
   const getMetricCardStyles = (colorMode) => {
     return colorMode === 'light' 
@@ -738,14 +771,12 @@ export default function QualityDashboard() {
   const [editingNode, setEditingNode] = useState(null);
   const [viewingNode, setViewingNode] = useState(null);
 
-  // Enhanced filtering logic
+  // Enhanced filtering logic using unified world detection
   const filteredNodes = useMemo(() => {
-    return realMatrixNodes.filter(node => {
-      // World filtering
-      const nodeWorld = Object.keys(WORLD_GROUPS).find(worldKey => 
-        WORLD_GROUPS[worldKey].groups.includes(node.group)
-      ) || 'matrix';
-      
+    const allNodes = getAllStoryNodes();
+    return allNodes.filter(node => {
+      // World filtering using improved world detection
+      const nodeWorld = getNodeWorld(node);
       if (!selectedWorlds.includes(nodeWorld)) return false;
 
       // Status filtering - consistent with getNodeStatus() logic
@@ -917,7 +948,7 @@ export default function QualityDashboard() {
         </div>
 
         {/* System-wide Metrics Widget */}
-        <MetricsWidget colorMode={colorMode} />
+        <MetricsWidget colorMode={colorMode} filteredNodes={filteredNodes} />
 
         {/* Enhanced Top-Level KPIs with better contrast */}
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4 mb-8">
