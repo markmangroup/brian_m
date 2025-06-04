@@ -2,16 +2,7 @@ import React, { useState, useMemo, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import 'reactflow/dist/base.css';
 import { nodes } from './nodes';
-import { edges } from './edges';
-import { SceneNode, DialogueNode, ChoiceNode, EndingNode } from './CustomNode';
 import MapCanvas from './MapCanvas';
-
-const nodeTypes = {
-  scene: SceneNode,
-  dialogue: DialogueNode,
-  choice: ChoiceNode,
-  ending: EndingNode
-};
 
 const commit = process.env.REACT_APP_GIT_SHA;
 
@@ -300,8 +291,6 @@ export default function MapPage() {
       <MapCanvas
         ref={mapCanvasRef}
         nodes={filteredNodes}
-        edges={edges}
-        nodeTypes={nodeTypes}
       />
     </div>
   );
