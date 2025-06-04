@@ -762,694 +762,6 @@ export const realMatrixNodes = [
     }
   },
 
-  // === NEW: FACTION PORTAL ===
-  {
-    id: 'matrix-faction-portal',
-    type: 'scene',
-    depth: 5,
-    group: 'factions',
-    data: {
-      title: 'Faction Portal',
-      pageUrl: '/matrix-v1/portal/factions',
-      status: 'live',
-      summary: 'Gateway to the three resistance factions: Zion Fleet, Rebel Hackers, and Oracle Seekers.',
-      characters: ['System'],
-      puzzles: [],
-      interactions: ['FactionSelection', 'ProgressTracking'],
-      features: { hasTransition: true, hasChoice: true, hasCombat: false, hasNPC: false, hasAnimation: true },
-      dialogue: ['Choose your path through the resistance networks.', 'Each faction offers unique training and wisdom.'],
-      enhancement: {
-        qualityRating: 6,
-        status: "stub",
-        priority: "low",
-        updatedAt: "2025-06-03T00:00:00Z"
-      }
-    }
-  },
-
-  // === NEW: GLITCH PORTAL (MULTIVERSE GATEWAY) ===
-  {
-    id: 'matrix-glitch-portal',
-    type: 'choice',
-    depth: 6,
-    group: 'ghost-layer',
-    data: {
-      title: 'Reality Breach Portal',
-      pageUrl: '/matrix-v1/glitch-portal',
-      status: 'live',
-      summary: 'Reality is bleeding — new signals detected from alternate universes.',
-      characters: ['System', 'Multiverse Echo'],
-      puzzles: ['Reality Switch'],
-      interactions: ['ThemeToggle', 'DimensionalShift'],
-      features: { hasTransition: true, hasChoice: true, hasCombat: false, hasNPC: false, hasAnimation: true, hasGlitch: true },
-      dialogue: ['WARNING: Reality breach detected.', 'Multiverse signals bleeding through quantum barriers.', 'Choose your dimensional reality.'],
-      options: ['Matrix Reality', 'Witcher Realm', 'Night City'],
-      enhancement: {
-        qualityRating: 6,
-        status: "stub",
-        priority: "low",
-        updatedAt: "2025-06-03T00:00:00Z"
-      }
-    }
-  },
-
-  // === DEPTH 6: ECHO GROUP ===
-  {
-    id: 'matrix-echo-loop',
-    type: 'dialogue',
-    depth: 6,
-    group: 'echo',
-    data: {
-      title: 'Echo Loop',
-      pageUrl: '/matrix-v1/echo-loop',
-      status: 'live',
-      reviewedBy: 'Mike',
-      reviewedAt: '2025-06-01',
-      
-      // 🌍 WORLD-AWARE SUMMARY: Different interpretations of recursion/perception/glitch per world
-      summary: {
-        matrix: 'The user is caught in a recursive conversation. Only by noticing the pattern can they break it.',
-        witcher: 'You are trapped in a spectral echo, reliving the same exchange. Break the curse through recognition.',
-        nightcity: 'A neural feedback loop has corrupted your cyberware. Detect the glitch to restore function.',
-        default: 'The user is caught in a recursive conversation. Only by noticing the pattern can they break it.'
-      },
-      
-      // 🌍 WORLD-AWARE CHARACTERS: Different entities per world but same core function
-      characters: {
-        matrix: ['Neo', 'Echo Entity', 'System Voice'],
-        witcher: ['Geralt', 'Spectral Echo', 'Cursed Spirit', 'Elder Voice'],
-        nightcity: ['V', 'Neural Echo', 'AI Fragment', 'Glitch Daemon'],
-        default: ['Neo', 'Echo']
-      },
-      
-      puzzles: ['Repeat Detection'],
-      interactions: ['DialogueLoop'],
-      features: { 
-        hasTransition: true, 
-        hasCombat: false, 
-        hasChoice: false, 
-        hasPuzzle: true, 
-        hasAnimation: true, 
-        hasDialogue: true, 
-        hasNPC: true,
-        hasWorldAwareContent: true // New feature flag
-      },
-      
-      // 🌍 WORLD-AWARE DIALOGUE: Core theme (recursion/perception) adapted to each world's aesthetic
-      dialogue: {
-        matrix: [
-          'Neo: Where am I? This doesn\'t feel real.',
-          'Echo Entity: You are in the between space, where code repeats.',
-          'Neo: How do I get out of this loop?',
-          'System Voice: You must recognize the pattern beneath the simulation.',
-          'Neo: What pattern? Everything seems random.',
-          'Echo Entity: Listen to the recursive structure. It\'s trying to tell you something.',
-          'Neo: The same words... they\'re cycling back.',
-          'System Voice: Pattern recognition is the key to breaking digital recursion.',
-          'Neo: I\'ve heard this before. Multiple times.',
-          'Echo Entity: The loop reveals truth through repetition.',
-          'System Voice: Break the cycle by acknowledging its existence.'
-        ],
-        
-        witcher: [
-          'Geralt: This place... it reeks of cursed magic.',
-          'Spectral Echo: You are bound to this spectral realm, witcher.',
-          'Geralt: How do I break free from this curse?',
-          'Elder Voice: You must hear the pattern woven in ancient words.',
-          'Geralt: What words? This feels like a riddle.',
-          'Cursed Spirit: Listen to the echo of forgotten incantations.',
-          'Geralt: The same phrases... they\'re returning.',
-          'Elder Voice: Cursed spirits repeat until acknowledged.',
-          'Geralt: I\'ve witnessed this exchange before.',
-          'Spectral Echo: The curse reveals its nature through repetition.',
-          'Elder Voice: Break the binding by naming the pattern.'
-        ],
-        
-        nightcity: [
-          'V: My cyberware\'s acting up. Something\'s corrupted.',
-          'Neural Echo: You are trapped in a feedback loop, user.',
-          'V: How do I flush this neural glitch?',
-          'AI Fragment: You must detect the algorithmic pattern causing recursion.',
-          'V: What algorithm? This feels random.',
-          'Glitch Daemon: Process the cyclic data structure corrupting your neural interface.',
-          'V: Same responses... they\'re looping back.',
-          'AI Fragment: Glitched systems repeat until debugged.',
-          'V: I\'ve processed this data stream before.',
-          'Neural Echo: The loop exposes the error through iteration.',
-          'AI Fragment: Terminate the cycle by identifying the recursive call.'
-        ],
-        
-        default: [
-          'Neo: Did I already say that?',
-          'Echo: You must listen harder.',
-          'Neo: Listen to what?',
-          'Echo: To the pattern beneath the words.',
-          'Neo: What pattern?',
-          'Echo: The one that keeps repeating.',
-          'Neo: Repeating... like this conversation?',
-          'Echo: Now you begin to understand.',
-          'Neo: We\'ve had this exchange before.',
-          'Echo: Recognition is the first step to freedom.'
-        ]
-      },
-      
-      // World-specific enhancement metadata
-      worldThemes: {
-        matrix: {
-          coreTheme: 'Digital recursion and simulation recognition',
-          aestheticElements: ['Green code streams', 'Digital glitches', 'System warnings'],
-          breakCondition: 'Recognizing the simulation\'s repeating pattern'
-        },
-        witcher: {
-          coreTheme: 'Spectral curse and magical binding',
-          aestheticElements: ['Ghostly apparitions', 'Ancient runes', 'Cursed whispers'],
-          breakCondition: 'Naming the curse to break its power'
-        },
-        nightcity: {
-          coreTheme: 'Neural feedback and cyberware malfunction',
-          aestheticElements: ['Neon glitches', 'Data streams', 'Neural interfaces'],
-          breakCondition: 'Debugging the recursive algorithm'
-        }
-      },
-      
-      enhancement: {
-        qualityRating: 8.5, // Upgraded from 6 due to world-aware implementation
-        status: "enhanced-world-aware",
-        priority: "high", // Now a demonstration of world-aware system
-        updatedAt: "2025-06-04T21:00:00Z",
-        improvements: [
-          '✅ COMPLETED: Implemented world-aware dialogue system',
-          '✅ COMPLETED: Created distinct narrative interpretations per world',
-          '✅ COMPLETED: Maintained core recursion/perception theme across worlds',
-          '✅ COMPLETED: Added world-specific characters and aesthetics',
-          '✅ COMPLETED: Established fallback compatibility system'
-        ]
-      }
-    }
-  },
-
-  // === DEPTH 7: GHOST LAYER GROUP ===
-  {
-    id: 'matrix-shard-insert',
-    type: 'scene',
-    depth: 7,
-    group: 'ghost-layer',
-    data: {
-      title: 'Shard Insert',
-      pageUrl: '/matrix-v1/shard-insert',
-      status: 'live',
-      reviewedBy: 'Mike',
-      reviewedAt: '2025-06-01',
-      summary: 'Cascading syntax errors. User must catch and resolve matching tokens.',
-      characters: ['System'],
-      puzzles: ['Syntax Catch'],
-      interactions: ['TimedClick'],
-      features: { hasTransition: true, hasCombat: false, hasChoice: false, hasPuzzle: true, hasAnimation: true, hasNPC: false },
-      dialogue: ['// ERROR: closing bracket not found', 'Find the symbol before it finds you.'],
-      enhancement: {
-        qualityRating: 6,
-        status: "stub",
-        priority: "low",
-        updatedAt: "2025-06-03T00:00:00Z"
-      }
-    }
-  },
-
-  // === DEPTH 7: ECHO GROUP ===
-  {
-    id: 'matrix-echo-verify',
-    type: 'scene',
-    depth: 7,
-    group: 'echo',
-    data: {
-      title: 'Echo Verify: Mirror Self Confrontation',
-      pageUrl: '/matrix-v1/echo-verify',
-      status: 'live',
-      reviewedBy: 'Mike',
-      reviewedAt: '2025-06-01',
-      summary: 'A symbol rhythm pattern emerges from the void, but this isn\'t just pattern matching — it\'s a confrontation with your mirror self. Every beat you miss is a lie you tell yourself. Every rhythm you break fragments your reflection further. The echo doesn\'t just repeat your actions... it judges them, questions them, forces you to face the uncomfortable truth of who you really are.',
-      characters: ['Mirror Self', 'Echo Judge', 'Rhythm Keeper', 'Truth Fragment', 'Shadow Voice'],
-      puzzles: ['Pattern Memory', 'Mirror Self Recognition', 'Rhythm Psychology', 'Truth Pattern Matching', 'Identity Synchronization'],
-      interactions: ['RhythmMatch', 'MirrorConfrontation', 'LoopingDialogue', 'PsychologicalTension', 'IdentityAlignment'],
-      features: { 
-        hasTransition: true, 
-        hasCombat: false, 
-        hasChoice: false, 
-        hasPuzzle: true, 
-        hasAnimation: true, 
-        hasDialogue: true, 
-        hasNPC: true, 
-        hasMirrorSelf: true, 
-        hasPsychologicalTension: true, 
-        hasLoopingDialogue: true, 
-        hasRhythmPenalties: true,
-        hasIdentityCrisis: true
-      },
-      dialogue: [
-        'Mirror Self: Why do you keep repeating the same patterns?',
-        'Echo Judge: ▢ ▢ ▢ ▢ ✕ ✕ ▢ ✕ — Do you hear the lie in your rhythm?',
-        'Truth Fragment: Every missed beat is a truth you\'re afraid to face.',
-        'Mirror Self: I am you, but more honest. Why do you fight me?',
-        'Rhythm Keeper: The pattern doesn\'t lie. Your heart does.',
-        'Shadow Voice: Why do you keep repeating? Because you\'re afraid to break the loop.',
-        'Echo Judge: ▢ ✕ ▢ ▢ ✕ ✕ ▢ ▢ — Wrong again. You always choose wrong.',
-        'Mirror Self: Stop looking away. I am what you refuse to see.',
-        'Truth Fragment: The rhythm knows your secrets. Each beat, a buried truth.',
-        'Shadow Voice: Why do you keep repeating? Because repetition feels safer than growth.',
-        'Rhythm Keeper: Perfect timing requires perfect honesty.',
-        'Echo Judge: ▢ ▢ ✕ ▢ ▢ ✕ ✕ ▢ — You\'re getting worse. Or maybe I\'m getting better.',
-        'Mirror Self: I mirror your contradictions. Every missed note is a denied truth.',
-        'Truth Fragment: You came here to escape. But I am you, and you cannot escape yourself.',
-        'Shadow Voice: Why do you keep repeating? Because the truth loops until you accept it.',
-        'Rhythm Keeper: Synchronization requires surrender to what you already know.',
-        'Echo Judge: Listen with your soul, not your mind.',
-        'Mirror Self: When you finally match my rhythm, you\'ll stop running from who you are.'
-      ],
-      
-      // 🎯 ENHANCED PSYCHOLOGICAL CONFRONTATION METADATA
-      psychologicalLayers: {
-        mirrorSelfThemes: ['Self-denial', 'Hidden truths', 'Contradictions', 'Authentic self vs. performed self'],
-        loopingPatterns: ['Repetition as avoidance', 'Cycles of self-deception', 'Truth loops requiring acceptance'],
-        rhythmPsychology: ['Timing as honesty', 'Beats as heartbeats', 'Synchronization as self-acceptance', 'Mismatch as internal conflict'],
-        confrontationStages: ['Denial', 'Recognition', 'Resistance', 'Acceptance', 'Integration']
-      },
-      
-      puzzleMetadata: {
-        type: 'Mirror Self Rhythm Synchronization',
-        difficulty: 'High',
-        psychologicalWeight: 'Critical',
-        identityChallenge: 'Core self-confrontation',
-        rhythmMechanics: [
-          'Pattern matching becomes increasingly complex as psychological tension rises',
-          'Mirror Self rhythm patterns reflect player\'s internal contradictions',
-          'Mismatch penalties: visual fragmentation, distorted reflections, echo distortion',
-          'Success rewards: clarity, synchronization, mirror self acceptance',
-          'Looping dialogue changes based on accuracy — judgment vs. understanding'
-        ],
-        penaltyRewardSystem: {
-          missedBeats: 'Mirror fractures, dialogue becomes more accusatory and repetitive',
-          perfectRhythm: 'Mirror clears, dialogue becomes supportive and revelatory',
-          consistentFailure: 'Infinite loop with increasing psychological pressure',
-          breakthroughMoment: 'Synchronization achieved, mirror self integration, truth acceptance'
-        }
-      },
-      
-      enhancement: {
-        qualityRating: 8.8,
-        status: "live",
-        priority: "high",
-        updatedAt: "2025-06-04T16:30:00Z",
-        targetRating: 9,
-        improvements: [
-          '✅ COMPLETED: Added psychological tension through mirror self confrontation',
-          '✅ COMPLETED: Introduced looping cryptic dialogue that changes based on performance',
-          '✅ COMPLETED: Created rhythm mismatch penalty system with visual fragmentation',
-          '✅ COMPLETED: Enhanced from simple pattern matching to identity crisis resolution',
-          '✅ COMPLETED: Added multiple internal voices representing different psychological aspects',
-          '✅ COMPLETED: Connected rhythm accuracy to self-acceptance and truth acknowledgment',
-          '✅ COMPLETED: Created progressive psychological confrontation with identity themes'
-        ],
-        criteria: {
-          narrative: 9, // Deep psychological confrontation with self-denial and truth themes
-          interactivity: 9, // Complex rhythm system tied to psychological state and identity
-          visual: 9, // Mirror fragmentation, reflection distortion, synchronization clarity
-          technical: 8, // Sophisticated rhythm psychology and mirror self response systems
-          character: 9, // Multiple internal voices and mirror self entity with dynamic responses
-          consequences: 9 // Rhythm accuracy affects psychological integration and mirror self relationship
-        },
-        narrative: {
-          atmosphere: 'Psychological liminal space where self and reflection exist in tense dialogue, rhythm as the language of truth',
-          soundscape: 'Heartbeat rhythms, echo distortions, mirror cracking sounds, synchronization harmony when achieved',
-          visualElements: 'Fragmenting mirrors, rhythm visualization, truth patterns, reflection distortion effects, clarity rewards',
-          emotionalTone: 'Confrontational self-therapy through rhythm — the discomfort of facing denied truths'
-        },
-        interactivity: {
-          mirrorResponseSystem: '✅ Mirror self reactions change based on rhythm accuracy and psychological openness',
-          rhythmPsychology: '✅ Timing accuracy reflects internal honesty and self-acceptance levels',
-          loopingProgression: '✅ Dialogue loops with variations until psychological breakthrough achieved',
-          penaltyRewards: '✅ Visual and audio feedback tied to confrontation success and resistance patterns'
-        },
-        technical: {
-          psychologicalTracking: 'Monitor player psychological resistance through rhythm performance patterns',
-          mirrorSelfAI: 'Dynamic mirror responses based on psychological profile and confrontation progress',
-          rhythmAnalysis: 'Complex timing analysis revealing player psychological state through beat accuracy',
-          integrationProgress: 'Track journey from self-denial to self-acceptance through mirror synchronization'
-        }
-      }
-    }
-  },
-
-  // === DEPTH 5: NEW CHOICE NODE (Red Path Branch) ===
-  {
-    id: 'matrix-red-faction-choice',
-    type: 'choice',
-    depth: 5,
-    group: 'red-pill',
-    parentChoice: 'matrix-pill-choice',
-    choiceValue: 'red',
-    data: {
-      title: 'Red Faction Allegiance',
-      pageUrl: '/matrix-v1/faction-choice',
-      status: 'wip',
-      summary: 'You\'re offered a seat at the inner table — but it comes at the cost of personal autonomy.',
-      characters: ['Commander V', 'Resistance Strategist'],
-      puzzles: [],
-      interactions: ['ChoicePrompt', 'TensionDialogue'],
-      features: { hasChoice: true, hasDialogue: true, hasTransition: true, hasNPC: true, hasAnimation: true },
-      dialogue: [
-        'Commander V: The inner circle demands absolute loyalty.',
-        'Resistance Strategist: Your skills are valuable... but autonomy is the price.',
-        'Commander V: Accept our terms, or forge your path alone.',
-        'Resistance Strategist: Choose wisely — this decision reshapes everything.'
-      ],
-      options: ['Accept the faction\'s control', 'Decline and forge solo path'],
-      enhancement: {
-        qualityRating: 7.9,
-        status: "wip",
-        priority: "high",
-        updatedAt: "2025-06-03T21:00:00Z"
-      }
-    }
-  },
-
-  // === DEPTH 6: COMPLIANCE PATH ===
-  {
-    id: 'matrix-compliance-path',
-    type: 'scene',
-    depth: 6,
-    group: 'compliance',
-    parentChoice: 'matrix-red-faction-choice',
-    choiceValue: 'control',
-    data: {
-      title: 'Controlled Resistance',
-      pageUrl: '/matrix-v1/compliance-route',
-      status: 'stub',
-      summary: 'You\'ve accepted the faction\'s control. Power comes with invisible chains.',
-      characters: ['Commander V', 'Faction Controller'],
-      puzzles: ['Loyalty Assessment', 'Controlled Operations'],
-      interactions: ['ComplianceProtocol', 'ControlledMission'],
-      features: { hasTransition: true, hasChoice: false, hasCombat: true, hasNPC: true, hasAnimation: true, hasConsequences: true },
-      dialogue: [
-        'Commander V: Welcome to the inner circle.',
-        'Faction Controller: Your autonomy is now... managed.',
-        'Commander V: Power flows through structure.',
-        'Faction Controller: Question nothing. Execute everything.'
-      ],
-      enhancement: {
-        qualityRating: 6,
-        status: "stub",
-        priority: "medium",
-        updatedAt: "2025-06-03T21:00:00Z"
-      }
-    }
-  },
-
-  // === GLITCH HUNTER NODE (Investigation Path) ===
-  {
-    id: 'matrix-glitch-hunter',
-    type: 'choice',
-    depth: 7,
-    group: 'investigation',
-    data: {
-      title: 'System Anomaly Hunter',
-      pageUrl: '/matrix-v1/glitch-hunter',
-      status: 'wip',
-      summary: 'Track down the source of system glitches and reality breaches — but every answer leads to deeper questions.',
-      characters: ['System Analyst', 'Glitch Entity', 'Data Trace'],
-      puzzles: ['Anomaly Tracking', 'Pattern Recognition', 'System Debugging'],
-      interactions: ['DataTracking', 'AnomalyHunting', 'ChoicePrompt', 'SystemDebugging'],
-      features: { hasTransition: true, hasChoice: true, hasCombat: false, hasNPC: true, hasAnimation: true, hasPuzzle: true, hasInvestigation: true },
-      dialogue: [
-        'System Analyst: Anomaly patterns detected across multiple system layers.',
-        'Glitch Entity: The corruption spreads faster than the diagnostic protocols.',
-        'Data Trace: Each glitch leads to three more. The pattern is spreading.',
-        'System Analyst: Protocol recommends either deep investigation or compliance reporting.',
-        'Glitch Entity: But compliance might be exactly what\'s causing the corruption.',
-        'Data Trace: Choose your approach: hunt the source or follow protocol.'
-      ],
-      options: ['Deep investigation', 'Submit anomaly report', 'Ignore and continue'],
-      enhancement: {
-        qualityRating: 7.8,
-        status: "wip",
-        priority: "high",
-        updatedAt: "2025-06-04T21:30:00Z"
-      }
-    }
-  },
-
-  // === DEPTH 6: FACTION PATHS ===
-  {
-    id: 'matrix-zion-fleet',
-    type: 'choice',
-    depth: 6,
-    group: 'factions',
-    parentChoice: 'matrix-red-faction-choice',
-    choiceValue: 'fleet',
-    data: {
-      title: 'Zion Fleet Command Training',
-      pageUrl: '/matrix-v1/zion-fleet',
-      status: 'wip',
-      summary: 'Enter the Nebuchadnezzar simulator — military command training with legendary captains. Steel yourself for humanity\'s war.',
-      characters: ['Commander Locke', 'Captain Niobe', 'Link'],
-      puzzles: ['Combat Simulation', 'Ship Operations', 'Tactical Command'],
-      interactions: ['CombatTraining', 'FleetCommand', 'ChoicePrompt', 'TacticalDecision'],
-      features: { hasTransition: true, hasChoice: true, hasCombat: true, hasNPC: true, hasAnimation: true, hasPuzzle: true, hasTraining: true },
-      dialogue: [
-        'Commander Locke: Welcome to Zion Defense Corps. You\'ll learn real warfare here.',
-        'Captain Niobe: The machines don\'t take prisoners. Neither do we.',
-        'Link: Every simulation matters. One mistake costs lives.',
-        'Commander Locke: Choose your specialization. Leadership or assault tactics?',
-        'Captain Niobe: Both paths lead to the same place — victory or death.'
-      ],
-      options: ['Command track (Leadership)', 'Assault track (Combat specialist)'],
-      enhancement: {
-        qualityRating: 8.6,
-        status: "wip",
-        priority: "high",
-        updatedAt: "2025-06-03T23:15:00Z"
-      }
-    }
-  },
-
-  {
-    id: 'matrix-rebel-hackers',
-    type: 'choice',
-    depth: 6,
-    group: 'factions',
-    parentChoice: 'matrix-red-faction-choice',
-    choiceValue: 'hackers',
-    data: {
-      title: 'Rebel Hackers Code Lab',
-      pageUrl: '/matrix-v1/rebel-hackers',
-      status: 'wip',
-      summary: 'Enter the underground code lab — where reality bends to those who can rewrite the Matrix\'s fundamental rules.',
-      characters: ['Tank', 'Dozer', 'Mouse'],
-      puzzles: ['Code Injection', 'Rule Manipulation', 'Reality Hacking'],
-      interactions: ['CodeLab', 'SystemHacking', 'ChoicePrompt', 'RealityBending'],
-      features: { hasTransition: true, hasChoice: true, hasCombat: false, hasNPC: true, hasAnimation: true, hasPuzzle: true, hasHacking: true },
-      dialogue: [
-        'Tank: Welcome to the real Matrix — the one you can control.',
-        'Dozer: Every line of code is a weapon. Every function, a key.',
-        'Mouse: This path risks madness from seeing too deeply into the code.',
-        'Tank: But the rewards... you can rewrite reality itself.',
-        'Dozer: Choose your focus: system infiltration or reality manipulation?',
-        'Mouse: Or... we could test something experimental. Memory override protocols.',
-        'Tank: That\'s dangerous territory. Injecting fabricated memories could loop you back.',
-        'Dozer: But it might reveal how deep the simulation goes.'
-      ],
-      options: ['System infiltration (Stealth hacking)', 'Reality manipulation (Code bending)', 'Inject fabricated memory stream'],
-      enhancement: {
-        qualityRating: 8.6, // ENHANCED: Increased due to crosslink connectivity
-        status: "enhanced-crosslinks",
-        priority: "high",
-        updatedAt: "2025-06-04T21:30:00Z"
-      }
-    }
-  },
-
-  {
-    id: 'matrix-oracle-seekers',
-    type: 'choice',
-    depth: 6,
-    group: 'factions',
-    parentChoice: 'matrix-red-faction-choice',
-    choiceValue: 'seekers',
-    data: {
-      title: 'Oracle Seekers Sanctuary',
-      pageUrl: '/matrix-v1/oracle-seekers',
-      status: 'wip',
-      
-      // 🌍 WORLD-AWARE SUMMARY: Different interpretations of wisdom/prophecy per world
-      summary: {
-        matrix: 'Enter the Oracle\'s domain — where wisdom flows like tea, and the future whispers its secrets to those who listen.',
-        witcher: 'Enter the Elder\'s grove — where ancient knowledge mingles with mist, and dream-visions reveal paths yet untaken.',
-        nightcity: 'Access the Deep Archive — where AI prophets process infinite data streams, and predictive algorithms decode tomorrow\'s patterns.',
-        default: 'Enter the Oracle\'s domain — where wisdom flows like tea, and the future whispers its secrets to those who listen.'
-      },
-      
-      // 🌍 WORLD-AWARE CHARACTERS: Different entities per world but same core function
-      characters: {
-        matrix: ['The Oracle', 'Seraph', 'Sati'],
-        witcher: ['Elder Sage', 'Hierophant', 'Dream Walker'],
-        nightcity: ['Alpha AI', 'Data Prophet', 'Archive Ghost'],
-        default: ['The Oracle', 'Seraph', 'Sati']
-      },
-      
-      puzzles: ['Philosophical Insight', 'Prophecy Reading', 'Future Sight'],
-      interactions: ['WisdomQuest', 'FutureSight', 'ChoicePrompt', 'PhilosophicalDialogue'],
-      features: { 
-        hasTransition: true, 
-        hasChoice: true, 
-        hasCombat: false, 
-        hasNPC: true, 
-        hasAnimation: true, 
-        hasWisdom: true, 
-        hasProphecy: true,
-        hasWorldAwareContent: true // New feature flag
-      },
-      
-      // 🌍 WORLD-AWARE DIALOGUE: Core theme (wisdom/prophecy) adapted to each world's aesthetic
-      dialogue: {
-        matrix: [
-          'Oracle: Welcome, child. I\'ve been expecting you.',
-          'Seraph: The path of wisdom requires sacrifice of certainty.',
-          'Sati: The future is like a river — it can be seen, but never fully controlled.',
-          'Oracle: Know thyself — but which aspect will you embrace?',
-          'Seraph: Choose your enlightenment: the path of sight or the path of understanding.',
-          'Oracle: The code speaks to those who listen with more than their minds.',
-          'Sati: Every choice creates ripples across the probability matrix.',
-          'Seraph: Truth and illusion dance together in the digital realm.',
-          'Oracle: Your future is not written in stone, but in possibility.',
-          'Sati: The machines compute outcomes, but the heart chooses meaning.',
-          'Seraph: Will you seek to predict, or to comprehend?',
-          'Oracle: Both paths lead to the same destination — understanding your purpose.'
-        ],
-        
-        witcher: [
-          'Elder Sage: Welcome, young seeker. The forest spirits whispered of your coming.',
-          'Hierophant: The path of wisdom demands the surrender of false knowing.',
-          'Dream Walker: Destiny flows like morning mist — visible to those who see beyond sight.',
-          'Elder Sage: Know thy essence — but which truth will you pursue?',
-          'Hierophant: Choose your awakening: the path of visions or the path of deep knowing.',
-          'Elder Sage: The ancient runes speak to those who listen with soul and sinew.',
-          'Dream Walker: Every choice weaves threads in the tapestry of fate.',
-          'Hierophant: Reality and dreams intertwine in the sacred grove.',
-          'Elder Sage: Your destiny is not carved in stone, but grows like living wood.',
-          'Dream Walker: The spirits calculate possibilities, but the heart chooses meaning.',
-          'Hierophant: Will you seek to foresee, or to understand?',
-          'Elder Sage: Both paths lead to the same clearing — knowing your true nature.'
-        ],
-        
-        nightcity: [
-          'Alpha AI: Welcome, user. Your data signature has been anticipated.',
-          'Data Prophet: The optimization path requires discarding legacy assumptions.',
-          'Archive Ghost: Probability streams flow like data — visible to those who process beyond logic.',
-          'Alpha AI: Initialize self-knowledge — but which algorithm will you execute?',
-          'Data Prophet: Select your enhancement: the prediction protocol or the comprehension subroutine.',
-          'Alpha AI: The network signals to those who interface with more than neural wetware.',
-          'Archive Ghost: Every decision cascades through the probability engine.',
-          'Data Prophet: Virtual and physical realities merge in the data sphere.',
-          'Alpha AI: Your future is not hardcoded, but exists in quantum superposition.',
-          'Archive Ghost: The systems calculate outcomes, but consciousness chooses purpose.',
-          'Data Prophet: Will you seek to forecast, or to understand?',
-          'Alpha AI: Both processes terminate at the same node — discovering your core function.'
-        ],
-        
-        default: [
-          'Oracle: Welcome, child. I\'ve been expecting you.',
-          'Seraph: The path of wisdom requires sacrifice of certainty.',
-          'Sati: The future is like a river — it can be seen, but never fully controlled.',
-          'Oracle: Know thyself — but which aspect will you embrace?',
-          'Seraph: Choose your enlightenment: the path of sight or the path of understanding.'
-        ]
-      },
-      
-      // 🌍 WORLD-AWARE OPTIONS: Different approach terminology per world
-      options: {
-        matrix: [
-          'Path of Sight (Prophecy focus)',
-          'Path of Understanding (Wisdom focus)'
-        ],
-        witcher: [
-          'Path of Visions (Dream-sight focus)',
-          'Path of Deep Knowing (Ancient wisdom focus)'
-        ],
-        nightcity: [
-          'Prediction Protocol (Forecasting focus)',
-          'Comprehension Subroutine (Analysis focus)'
-        ],
-        default: [
-          'Path of Sight (Prophecy focus)',
-          'Path of Understanding (Wisdom focus)'
-        ]
-      },
-      
-      // World-specific enhancement metadata
-      worldThemes: {
-        matrix: {
-          coreTheme: 'Digital prophecy and computational wisdom',
-          aestheticElements: ['Oracle\'s kitchen', 'Probability streams', 'Code enlightenment'],
-          wisdomMechanic: 'Understanding reality through digital insight'
-        },
-        witcher: {
-          coreTheme: 'Ancient wisdom and dream-visions',
-          aestheticElements: ['Sacred grove', 'Mist and spirits', 'Runic knowledge'],
-          wisdomMechanic: 'Understanding destiny through spiritual connection'
-        },
-        nightcity: {
-          coreTheme: 'AI prophecy and data comprehension',
-          aestheticElements: ['Archive servers', 'Data streams', 'Quantum processing'],
-          wisdomMechanic: 'Understanding future through algorithmic analysis'
-        }
-      },
-      
-      enhancement: {
-        qualityRating: 9.0, // ENHANCED: Increased due to world-aware content implementation
-        status: "enhanced-world-aware",
-        priority: "high",
-        updatedAt: "2025-06-04T21:25:00Z",
-        targetRating: 9.5,
-        improvements: [
-          '✅ COMPLETED: Established Oracle\'s domain as sanctuary for wisdom seekers',
-          '✅ COMPLETED: Created philosophical dialogue framework for wisdom exploration',
-          '✅ COMPLETED: Added prophecy and future sight mechanics for narrative depth',
-          '✅ COMPLETED: Integrated choice between prediction and understanding paths',
-          '✅ COMPLETED: Enhanced character interactions with distinct wisdom personalities',
-          '✅ NEW: Implemented world-aware dialogue system with Matrix/Witcher/Night City variants',
-          '✅ NEW: Created distinct wisdom interpretations while maintaining core enlightenment theme',
-          '✅ NEW: Added world-specific characters and prophetic terminology',
-          '✅ NEW: Established fallback compatibility system for backwards compatibility'
-        ],
-        criteria: {
-          narrative: 10, // Deep wisdom exploration with world-aware philosophical adaptations
-          interactivity: 8, // Wisdom quests and philosophical choice impact with world-specific approaches
-          visual: 8, // Sanctuary visualization and prophetic interface effects
-          technical: 8, // Wisdom tracking and prophecy systems + world-aware loading
-          character: 10, // Multiple wisdom guides with distinct philosophical expertise across worlds
-          consequences: 9 // Wisdom path affects understanding and prophetic abilities
-        },
-        narrative: {
-          atmosphere: 'Sacred sanctuary where ancient wisdom meets future knowledge in harmonious contemplation',
-          soundscape: 'Gentle wisdom whispers, prophetic chimes, meditative ambient tones, knowledge resonance',
-          visualElements: 'Wisdom sanctuaries, prophetic displays, enlightenment progress, understanding visualization',
-          emotionalTone: 'Peaceful enlightenment balanced with profound responsibility — wisdom as both gift and burden'
-        },
-        interactivity: {
-          wisdomQuests: '✅ Philosophical exploration mechanics with deep knowledge rewards',
-          prophecyReading: '✅ Future sight abilities with prediction and interpretation systems',
-          philosophicalDialogue: '✅ Deep conversation trees exploring meaning and understanding',
-          worldAwareContent: '✅ NEW: Dynamic content selection based on current world context'
-        },
-        technical: {
-          wisdomTracking: 'Sophisticated enlightenment progression with understanding measurement',
-          prophecySystems: 'Complex future sight mechanics with prediction accuracy and wisdom depth',
-          philosophicalFramework: 'Advanced dialogue system exploring existential and practical wisdom',
-          worldContentLoader: 'NEW: Advanced world-aware content loading system with fallback compatibility'
-        }
-      }
-    }
-  },
-
   // === NEW: FACTION ORIENTATION CONNECTIONS ===
   // Pill choice leads to faction orientation first
   { id: 'edge-choice-to-faction-orientation', source: 'matrix-pill-choice', target: 'matrix-faction-orientation', label: 'Resistance introduction' },
@@ -1650,7 +962,251 @@ export const realMatrixNodes = [
   { id: 'edge-rebel-hackers-to-blue-pill-memory', source: 'matrix-rebel-hackers', target: 'matrix-pill-choice-blue', label: 'Inject fabricated memory stream' },
   
   // Crosslink 3: matrix-glitch-hunter → matrix-compliance-path (Submit anomaly report)
-  { id: 'edge-glitch-hunter-to-compliance-report', source: 'matrix-glitch-hunter', target: 'matrix-compliance-path', label: 'Submit anomaly report' }
+  { id: 'edge-glitch-hunter-to-compliance-report', source: 'matrix-glitch-hunter', target: 'matrix-compliance-path', label: 'Submit anomaly report' },
+
+  // === WITCHER WORLD NODES ===
+  
+  // WITCHER ENTRY - Portal entry to Witcher realm
+  {
+    id: 'witcher-entry',
+    type: 'dialogue',
+    depth: 1,
+    group: 'witcher',
+    data: {
+      title: 'Witcher Realm Entry',
+      pageUrl: '/witcher/entry',
+      status: 'wip',
+      summary: 'Reality shifts as you breach into the Witcher realm. Ancient magic and supernatural forces stir in recognition of your arrival.',
+      
+      characters: ['Portal Guardian', 'Ancient Spirit', 'Mist Entity'],
+      puzzles: ['Reality Stabilization'],
+      interactions: ['DimensionalShift', 'MagicResonance', 'ChoicePrompt'],
+      features: { 
+        hasTransition: true, 
+        hasChoice: true, 
+        hasCombat: false, 
+        hasDialogue: true, 
+        hasNPC: true, 
+        hasAnimation: true,
+        hasWorldAwareContent: true
+      },
+      
+      dialogue: [
+        'Portal Guardian: The barriers between worlds grow thin, traveler.',
+        'Ancient Spirit: Magic flows differently here. Your very presence disturbs the ether.',
+        'Mist Entity: Choose wisely — this realm demands both strength and wisdom.',
+        'Portal Guardian: The Path of Trials awaits those who would walk among monsters.',
+        'Ancient Spirit: Each choice echoes through the spheres of magic and reality.'
+      ],
+      
+      options: [
+        'Enter the ancient grove (wisdom path)',
+        'Seek the trial grounds (strength path)', 
+        'Return to reality breach'
+      ],
+      
+      enhancement: {
+        qualityRating: 7.5,
+        status: "wip",
+        priority: "medium",
+        updatedAt: "2025-01-15T00:00:00Z",
+        targetRating: 8.5,
+        improvements: [
+          'Enhanced atmospheric descriptions for portal transition',
+          'World-aware dialogue reflecting dimensional breach mechanics',
+          'Choice consequences affecting Witcher realm progression'
+        ]
+      }
+    }
+  },
+
+  // WITCHER MUTATION CHOICE - Trial of mutation
+  {
+    id: 'witcher-mutation-choice',
+    type: 'choice',
+    depth: 2,
+    group: 'witcher',
+    data: {
+      title: 'Trial of Grasses',
+      pageUrl: '/witcher/mutation',
+      status: 'wip',
+      summary: 'The mutagens course through your veins. Survive the transformation or perish in agony — such is the way of the witcher.',
+      
+      characters: ['Vesemir', 'Mutation Overseer', 'Inner Demon', 'Surviving Witcher'],
+      puzzles: ['Mutation Survival', 'Pain Endurance', 'Mental Fortitude'],
+      interactions: ['MutationProcess', 'PainResistance', 'ChoicePrompt', 'SurvivalTest'],
+      features: { 
+        hasTransition: true, 
+        hasChoice: true, 
+        hasCombat: false, 
+        hasDialogue: true, 
+        hasNPC: true, 
+        hasAnimation: true,
+        hasPuzzle: true,
+        hasWorldAwareContent: true
+      },
+      
+      dialogue: [
+        'Vesemir: The mutations are necessary, but they change you forever.',
+        'Mutation Overseer: Many who attempt this trial do not survive.',
+        'Inner Demon: The pain will test every fiber of your being.',
+        'Surviving Witcher: I remember the agony... but also the power that followed.',
+        'Vesemir: Steel yourself. The Trial of Grasses begins now.'
+      ],
+      
+      options: [
+        'Embrace the mutation (proceed to signs training)',
+        'Fight against the change (alternate path)',
+        'Attempt to escape the process (dangerous)'
+      ],
+      
+      enhancement: {
+        qualityRating: 8.0,
+        status: "wip",
+        priority: "medium",
+        updatedAt: "2025-01-15T00:00:00Z",
+        targetRating: 9.0,
+        improvements: [
+          'Intense mutation sequence with survival mechanics',
+          'Character development through painful transformation',
+          'Multiple failure/success paths based on choices'
+        ]
+      }
+    }
+  },
+
+  // WITCHER SIGN TRAINING - Learning Signs
+  {
+    id: 'witcher-sign-training',
+    type: 'dialogue',
+    depth: 3,
+    group: 'witcher',
+    data: {
+      title: 'Signs Training',
+      pageUrl: '/witcher/signs',
+      status: 'wip',
+      summary: 'Master the five Signs of witcher magic. Igni, Quen, Aard, Yrden, and Axii — each a tool for survival in a world of monsters.',
+      
+      characters: ['Sign Master', 'Ancient Witcher', 'Magical Construct', 'Training Partner'],
+      puzzles: ['Sign Mastery', 'Magical Control', 'Combat Application'],
+      interactions: ['MagicTraining', 'SignCasting', 'CombatDrills', 'ChoicePrompt'],
+      features: { 
+        hasTransition: true, 
+        hasChoice: true, 
+        hasCombat: true, 
+        hasDialogue: true, 
+        hasNPC: true, 
+        hasAnimation: true,
+        hasPuzzle: true,
+        hasWorldAwareContent: true
+      },
+      
+      dialogue: [
+        'Sign Master: The Signs are simple in concept, complex in mastery.',
+        'Ancient Witcher: Igni burns, Quen protects, Aard pushes, Yrden traps, Axii controls.',
+        'Magical Construct: Practice makes perfect, young witcher.',
+        'Training Partner: Show me what you\'ve learned in combat.',
+        'Sign Master: You\'re ready for real trials now.'
+      ],
+      
+      options: [
+        'Focus on combat signs (Igni/Aard)',
+        'Master protective magic (Quen/Yrden)',
+        'Learn mind control (Axii focus)',
+        'Achieve balanced mastery'
+      ],
+      
+      enhancement: {
+        qualityRating: 8.5,
+        status: "wip",
+        priority: "medium",
+        updatedAt: "2025-01-15T00:00:00Z",
+        targetRating: 9.2,
+        improvements: [
+          'Interactive sign casting mechanics',
+          'Combat training with magical elements',
+          'Progression system for magical abilities'
+        ]
+      }
+    }
+  },
+
+  // NEW: WITCHER TRIAL OF REFLECTION - Mid-tier puzzle node as requested
+  {
+    id: 'witcher-trial-of-reflection',
+    type: 'choice',
+    depth: 4,
+    group: 'witcher',
+    data: {
+      title: 'Trial of Reflection',
+      pageUrl: '/witcher/trial-reflection',
+      status: 'wip',
+      summary: 'A glowing circle of runes pulses in the grass. To enter the elder grove, you must complete a Trial of Reflection — not just with sword or sign, but with memory.',
+      
+      characters: ['Mist Witch', 'Fractured Mentor'],
+      puzzles: ['Rune Matching', 'Memory Sequence Recall', 'Dream Logic Alignment'],
+      interactions: ['RuneActivation', 'MemoryReconstruction', 'MistNavigation', 'ChoicePrompt'],
+      features: { 
+        hasPuzzle: true,
+        hasChoice: true, 
+        hasDialogue: true, 
+        hasNPC: true, 
+        hasAnimation: true,
+        hasTransition: true,
+        hasCombat: false,
+        hasWorldAwareContent: true
+      },
+      
+      dialogue: [
+        'Mist Witch: You seek to pass. But do your memories agree with who you\'ve become?',
+        'Fractured Mentor: There are lessons you forgot — or chose to forget. Will you face them now?',
+        'Mist Witch: The runes respond to truth, not desire. Show me your authentic self.',
+        'Fractured Mentor: Memory and reality dance together in this sacred space.',
+        'Mist Witch: The trial reveals not what you wish to be, but what you truly are.'
+      ],
+      
+      options: [
+        'Confront the vision (advance to witcher-sign-training)',
+        'Walk away unchanged (fallback to witcher-mutation-choice)', 
+        'Rewrite the memory (cross-world link to matrix-shard-init)'
+      ],
+      
+      puzzleMechanics: {
+        type: 'RuneMemorySequence',
+        description: 'Mist-shrouded memories appear in fragments; player must align sequences based on dream logic',
+        difficulty: 'medium',
+        components: [
+          'Glowing rune circle activation',
+          'Memory fragment collection and ordering',
+          'Dream logic pattern recognition',
+          'Emotional resonance matching'
+        ]
+      },
+      
+      enhancement: {
+        qualityRating: 8.8,
+        status: "wip",
+        priority: "medium",
+        updatedAt: "2025-01-15T00:00:00Z",
+        targetRating: 9.5,
+        improvements: [
+          'Interactive rune-matching puzzle mechanics',
+          'Memory sequence recall with dream logic',
+          'Mist-shrouded atmospheric visuals',
+          'Character development through memory confrontation',
+          'Cross-world narrative connections'
+        ],
+        criteria: {
+          narrative: 9, // Deep memory exploration with Witcher fantasy elements
+          interactivity: 9, // Complex puzzle with multiple interaction types
+          visual: 9, // Magical runes, mist effects, memory visualization
+          technical: 8, // Memory mechanics and cross-world linking
+          character: 9, // Meaningful character interactions and development
+          consequences: 9 // Multiple paths affecting story progression
+        }
+      }
+    }
+  }
 ];
 
 // Export the edges as a separate array
