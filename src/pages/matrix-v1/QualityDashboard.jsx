@@ -14,6 +14,7 @@ import {
 import { useTheme } from '../../theme/ThemeContext';
 import { useColorMode } from '../../theme/ColorModeContext';
 import DiagnosticOverlay from './DiagnosticOverlay';
+import { getWorldDialogue, getWorldSummary, getWorldCharacters } from '../../utils/worldContentLoader';
 
 // Status icon mapping
 const STATUS_ICONS = {
@@ -899,18 +900,49 @@ export default function QualityDashboard() {
               <p className="text-theme-secondary"><strong>Type:</strong> <span className="text-theme-bright">{viewingNode.type}</span></p>
               <p className="text-theme-secondary"><strong>Group:</strong> <span className="text-theme-bright">{viewingNode.group}</span></p>
               <p className="text-theme-secondary"><strong>Status:</strong> <span className="text-theme-bright">{STATUS_ICONS[viewingNode.data?.status]} {STATUS_LABELS[viewingNode.data?.status]}</span></p>
-              <p className="text-theme-secondary"><strong>Summary:</strong> <span className="text-theme-bright">{viewingNode.data?.summary || 'No summary available'}</span></p>
+              
+              {/* World-aware Summary */}
+              <p className="text-theme-secondary">
+                <strong>Summary:</strong> 
+                <span className="text-theme-bright">
+                  {getWorldSummary(viewingNode.data?.summary, currentWorld) || 'No summary available'}
+                </span>
+              </p>
+              
+              {/* World-aware Characters */}
               {viewingNode.data?.characters && (
-                <p className="text-theme-secondary"><strong>Characters:</strong> <span className="text-theme-bright">{viewingNode.data.characters.join(', ')}</span></p>
+                <p className="text-theme-secondary">
+                  <strong>Characters:</strong> 
+                  <span className="text-theme-bright">
+                    {getWorldCharacters(viewingNode.data.characters, currentWorld).join(', ')}
+                  </span>
+                </p>
               )}
+              
+              {/* World-aware Dialogue */}
               {viewingNode.data?.dialogue && (
                 <div className="text-theme-secondary">
-                  <strong>Dialogue:</strong>
+                  <strong>Dialogue ({currentWorld} theme):</strong>
                   <ul className="mt-1 space-y-1">
-                    {viewingNode.data.dialogue.map((line, idx) => (
+                    {getWorldDialogue(viewingNode.data.dialogue, currentWorld).map((line, idx) => (
                       <li key={idx} className="text-theme-bright">• {line}</li>
                     ))}
                   </ul>
+                  {/* Show world availability indicator */}
+                  {typeof viewingNode.data.dialogue === 'object' && !Array.isArray(viewingNode.data.dialogue) && (
+                    <div className="mt-2 text-xs text-theme-muted">
+                      Available worlds: {Object.keys(viewingNode.data.dialogue).filter(key => key !== 'default').join(', ')}
+                    </div>
+                  )}
+                </div>
+              )}
+              
+              {/* World-aware content indicator */}
+              {viewingNode.data?.features?.hasWorldAwareContent && (
+                <div className="bg-theme-info/20 border border-theme-info/30 rounded p-2 mt-3">
+                  <div className="text-theme-info text-xs font-medium">
+                    🌍 World-Aware Content: This node adapts to different world themes
+                  </div>
                 </div>
               )}
             </div>
