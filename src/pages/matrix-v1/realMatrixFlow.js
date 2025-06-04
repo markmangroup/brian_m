@@ -1524,7 +1524,9 @@ const rawMatrixNodes = [
   
   // Night City internal flow
   { id: 'edge-nc-entry-to-bouncer', source: 'nc-entry', target: 'nc-bouncer' },
-  { id: 'edge-nc-bouncer-to-netdiver', source: 'nc-bouncer', target: 'nc-netdiver', label: 'Access Granted' },
+  { id: 'edge-nc-bouncer-to-afterlife-granted', source: 'nc-bouncer', target: 'nc-afterlife-access-granted', label: 'Access Granted' },
+  { id: 'edge-afterlife-granted-to-interior', source: 'nc-afterlife-access-granted', target: 'nc-afterlife-interior' },
+  { id: 'edge-afterlife-interior-to-netdiver', source: 'nc-afterlife-interior', target: 'nc-netdiver' },
   { id: 'edge-nc-bouncer-to-escape', source: 'nc-bouncer', target: 'nc-escape', label: 'Fight Started' },
   { id: 'edge-nc-netdiver-to-file', source: 'nc-netdiver', target: 'nc-file', label: 'Data Stolen' },
   { id: 'edge-nc-file-to-silverhand', source: 'nc-file', target: 'nc-silverhand', label: 'Truth Revealed' },
@@ -1972,6 +1974,21 @@ const rawMatrixNodes = [
         }
       }
     }
+  }
+  ,
+  {
+    id: 'nc-afterlife-access-granted',
+    displayName: 'Afterlife Access Granted',
+    type: 'scene',
+    narrativeTier: 'mid',
+    enhancement: { priority: 'medium' }
+  },
+  {
+    id: 'nc-afterlife-interior',
+    displayName: 'Afterlife Interior',
+    type: 'scene',
+    narrativeTier: 'mid',
+    enhancement: { priority: 'medium' }
   }
 ];
 
