@@ -172,7 +172,7 @@ function getInitialExpandedNodes(nodes, edges, rootId = 'matrix-v1-entry') {
 export default function MapD3() {
   const svgRef = useRef();
   const searchInputRef = useRef();
-  const { currentTheme, theme, getThemeD3, currentWorld } = useTheme();
+  const { currentTheme, theme, getThemeD3, currentWorld, setWorld } = useTheme();
   const location = useLocation();
   const [searchParams] = useSearchParams();
   const focusNodeId = location.state?.focusNode || searchParams.get('node');
@@ -452,6 +452,19 @@ export default function MapD3() {
 
   // Convert data to tree structure
   const originalTree = convertToTree(realMatrixNodes, realMatrixEdges);
+
+  useEffect(() => {
+    if (originalTree && originalTree.id === 'world-root' && currentWorld !== 'all') {
+      // When multiple top-level worlds exist, show all by default
+      if (typeof setWorld === 'function') {
+        try {
+          setWorld('all');
+        } catch {
+          // setWorld may not accept "all" if theme mapping missing
+        }
+      }
+    }
+  }, [originalTree, currentWorld, setWorld]);
   
   // Validate the tree structure for cycles (development only)
   if (process.env.NODE_ENV === 'development') {

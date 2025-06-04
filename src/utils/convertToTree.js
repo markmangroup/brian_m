@@ -57,12 +57,32 @@ export function convertToTree(nodes, edges) {
     }
   });
   
-  // Find the root node (depth 0 or first node if no depth 0)
-  const rootNode = nodes.find(node => node.depth === 0) || nodes[0];
+  // Determine top level nodes
+  const rootCandidates = nodes.filter(node => node.depth === 0);
+
+  // If multiple depth 0 nodes exist, create a synthetic root to group them
+  if (rootCandidates.length > 1) {
+    return {
+      id: 'world-root',
+      type: 'root',
+      depth: -1,
+      group: 'system',
+      data: {
+        title: 'Worlds',
+        description: 'Synthetic root node',
+        status: 'live'
+      },
+      children: rootCandidates.map(n => nodeMap.get(n.id)).filter(Boolean),
+      _originalNode: null
+    };
+  }
+
+  // Otherwise use the single depth 0 node or fallback to first node
+  const rootNode = rootCandidates[0] || nodes[0];
   const root = nodeMap.get(rootNode?.id);
-  
+
   if (!root) {
-    // Fallback: create a synthetic root
+    // Fallback: create a generic root
     return {
       id: 'root',
       type: 'root',
@@ -77,7 +97,7 @@ export function convertToTree(nodes, edges) {
       _originalNode: null
     };
   }
-  
+
   return root;
 }
 
