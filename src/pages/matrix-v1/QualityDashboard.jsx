@@ -793,6 +793,7 @@ export default function QualityDashboard() {
   const [selectedWorlds, setSelectedWorlds] = useState(['matrix', 'witcher', 'nightcity']);
   const [selectedStatuses, setSelectedStatuses] = useState(['live', 'wip', 'stub']);
   const [selectedPriorities, setSelectedPriorities] = useState(['CRITICAL', 'HIGH', 'MEDIUM', 'LOW']);
+  const [showMissingSummaries, setShowMissingSummaries] = useState(false);
   const [worldFilterCollapsed, setWorldFilterCollapsed] = useState(false);
   const [showMore, setShowMore] = useState(false);
   const [sortConfig, setSortConfig] = useState([{ key: 'updatedAt', direction: 'desc' }]);
@@ -834,9 +835,15 @@ export default function QualityDashboard() {
       const priority = quality.priority || 'LOW';
       if (!selectedPriorities.includes(priority)) return false;
 
+      // Optional filter for nodes missing summary/description
+      if (showMissingSummaries) {
+        const hasSummary = Boolean(node.data?.summary || node.data?.description);
+        if (hasSummary) return false;
+      }
+
       return true;
     });
-  }, [selectedWorlds, selectedStatuses, selectedPriorities]);
+  }, [selectedWorlds, selectedStatuses, selectedPriorities, showMissingSummaries]);
 
   // Calculate KPIs with consistent status logic
   const kpis = useMemo(() => {
@@ -1057,7 +1064,7 @@ export default function QualityDashboard() {
         </div>
 
         {/* Enhanced Filters */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-8">
           <WorldFilter
             selectedWorlds={selectedWorlds}
             onChange={setSelectedWorlds}
@@ -1092,9 +1099,9 @@ export default function QualityDashboard() {
           {/* Enhanced Priority Filter */}
           <div className="bg-theme-secondary border-2 border-theme-accent rounded-lg p-3 md:sticky top-2">
             <div className="text-theme-bright font-medium mb-3">⚡ Priority</div>
-            <div className="grid grid-cols-2 gap-2">
-              {['CRITICAL', 'HIGH', 'MEDIUM', 'LOW'].map(priority => (
-                <label key={priority} className="flex items-center gap-1 cursor-pointer">
+          <div className="grid grid-cols-2 gap-2">
+            {['CRITICAL', 'HIGH', 'MEDIUM', 'LOW'].map(priority => (
+              <label key={priority} className="flex items-center gap-1 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={selectedPriorities.includes(priority)}
@@ -1111,6 +1118,19 @@ export default function QualityDashboard() {
                 </label>
               ))}
             </div>
+          </div>
+
+          {/* Filter for nodes missing summaries */}
+          <div className="bg-theme-secondary border-2 border-theme-accent rounded-lg p-3 md:sticky top-2 flex items-center">
+            <label className="flex items-center gap-1 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={showMissingSummaries}
+                onChange={(e) => setShowMissingSummaries(e.target.checked)}
+                className="w-4 h-4 text-theme-primary focus:ring-theme-primary focus:ring-2 rounded border-theme-accent"
+              />
+              <span className="text-sm text-theme-bright">Show nodes missing summaries</span>
+            </label>
           </div>
         </div>
 
