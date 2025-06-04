@@ -12,7 +12,7 @@ export default function MatrixRain({
   const animationRef = useRef(null);
   const [isTabVisible, setIsTabVisible] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
-  const { currentTheme, currentThemeData } = useTheme();
+  const { currentTheme, getCurrentColors } = useTheme();
 
   // Detect mobile devices and tab visibility
   useEffect(() => {
@@ -63,11 +63,12 @@ export default function MatrixRain({
     };
 
     const getThemeColors = () => {
-      if (currentThemeData) {
+      const currentColors = getCurrentColors();
+      if (currentColors) {
         return {
-          primary: currentThemeData.colors.textPrimary,
-          fade: currentThemeData.colors.primary + '80', // Add transparency
-          background: currentThemeData.colors.primary + '20'
+          primary: currentColors.textPrimary,
+          fade: currentColors.primary + '80', // Add transparency
+          background: currentColors.primary + '20'
         };
       }
       // Fallback colors
@@ -156,7 +157,7 @@ export default function MatrixRain({
         clearTimeout(animationRef.current);
       }
     };
-  }, [currentTheme, currentThemeData, isTabVisible, isMobile, intensity, fontSize, speed]);
+  }, [currentTheme, getCurrentColors, isTabVisible, isMobile, intensity, fontSize, speed]);
 
   return (
     <canvas

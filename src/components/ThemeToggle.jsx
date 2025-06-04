@@ -1,9 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useTheme } from '../theme/ThemeContext';
+import { useColorMode } from '../theme/ColorModeContext';
 import { FaPalette, FaCaretDown } from 'react-icons/fa';
 
 const ThemeToggle = () => {
-  const { currentTheme, availableThemes, setTheme, isLoading } = useTheme();
+  const { currentTheme, availableThemes, setTheme, isLoading, getCurrentColors } = useTheme();
+  const { colorMode } = useColorMode();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -25,6 +27,9 @@ const ThemeToggle = () => {
   };
 
   const currentThemeData = availableThemes.find(theme => theme.id === currentTheme);
+  
+  // Get current colors using the new structure
+  const currentColors = getCurrentColors();
 
   if (isLoading) {
     return (
@@ -48,10 +53,10 @@ const ThemeToggle = () => {
           ${currentTheme === 'nightcity' ? 'bg-purple-600 text-purple-100 border border-purple-400' : ''}
         `}
         style={{
-          backgroundColor: currentThemeData?.colors?.buttonPrimary,
-          color: currentThemeData?.colors?.textInverse,
-          borderColor: currentThemeData?.colors?.borderPrimary,
-          boxShadow: currentThemeData?.colors?.shadowSecondary
+          backgroundColor: currentColors?.buttonPrimary,
+          color: currentColors?.textInverse,
+          borderColor: currentColors?.borderPrimary,
+          boxShadow: currentColors?.shadowSecondary
         }}
       >
         <FaPalette className="text-xs" />
@@ -73,9 +78,9 @@ const ThemeToggle = () => {
           ${currentTheme === 'nightcity' ? 'bg-gray-900/95 border-purple-400/40' : ''}
         `}
         style={{
-          backgroundColor: currentThemeData?.colors?.overlayBackground,
-          borderColor: currentThemeData?.colors?.borderSecondary,
-          boxShadow: `${currentThemeData?.colors?.shadowPrimary}, 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.05)`
+          backgroundColor: currentColors?.overlayBackground,
+          borderColor: currentColors?.borderSecondary,
+          boxShadow: `${currentColors?.shadowPrimary}, 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.05)`
         }}
       >
         <div className="p-2">
@@ -85,6 +90,8 @@ const ThemeToggle = () => {
           
           {availableThemes.map((theme) => {
             const isSelected = theme.id === currentTheme;
+            // Get colors for this specific theme in current color mode
+            const themeColors = theme.modes?.[colorMode]?.colors || theme.modes?.dark?.colors || {};
             
             return (
               <button
@@ -96,11 +103,11 @@ const ThemeToggle = () => {
                   ${isSelected ? 'ring-2 ring-offset-2 ring-offset-transparent' : 'hover:bg-white/10'}
                 `}
                 style={{
-                  backgroundColor: isSelected ? theme.colors.buttonPrimary + '20' : 'transparent',
-                  color: theme.colors.textPrimary,
+                  backgroundColor: isSelected ? themeColors.buttonPrimary + '20' : 'transparent',
+                  color: themeColors.textPrimary,
                   ...(isSelected && { 
-                    ringColor: theme.colors.borderPrimary,
-                    boxShadow: theme.colors.glowSecondary 
+                    ringColor: themeColors.borderPrimary,
+                    boxShadow: themeColors.glowSecondary 
                   })
                 }}
               >
@@ -108,9 +115,9 @@ const ThemeToggle = () => {
                 <div 
                   className="w-4 h-4 rounded-full border-2 flex-shrink-0"
                   style={{
-                    background: `linear-gradient(45deg, ${theme.colors.textPrimary}, ${theme.colors.textSecondary})`,
-                    borderColor: theme.colors.borderPrimary,
-                    boxShadow: `0 0 8px ${theme.colors.textPrimary}40`
+                    background: `linear-gradient(45deg, ${themeColors.textPrimary}, ${themeColors.textSecondary})`,
+                    borderColor: themeColors.borderPrimary,
+                    boxShadow: `0 0 8px ${themeColors.textPrimary}40`
                   }}
                 />
                 
@@ -119,7 +126,7 @@ const ThemeToggle = () => {
                   <div className="font-semibold">{theme.name}</div>
                   <div 
                     className="text-xs opacity-70"
-                    style={{ color: theme.colors.textMuted }}
+                    style={{ color: themeColors.textMuted }}
                   >
                     {theme.id === 'matrix' && '🟢 Terminal Hacker'}
                     {theme.id === 'witcher' && '🟡 Medieval Fantasy'}
@@ -131,7 +138,7 @@ const ThemeToggle = () => {
                 {isSelected && (
                   <div 
                     className="text-xs font-mono font-bold"
-                    style={{ color: theme.colors.textAccent }}
+                    style={{ color: themeColors.textAccent }}
                   >
                     ✓
                   </div>
@@ -145,8 +152,8 @@ const ThemeToggle = () => {
         <div 
           className="px-3 py-2 border-t text-xs font-mono text-center opacity-60"
           style={{ 
-            borderColor: currentThemeData?.colors?.borderSecondary + '30',
-            color: currentThemeData?.colors?.textMuted 
+            borderColor: currentColors?.borderSecondary + '30',
+            color: currentColors?.textMuted 
           }}
         >
           Themes persist across sessions
