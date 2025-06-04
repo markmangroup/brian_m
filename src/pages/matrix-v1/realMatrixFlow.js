@@ -494,12 +494,12 @@ export const realMatrixNodes = [
         'Morpheus: Your mind will resist the upload. Do not fight it.',
         'Operator: Ready for neural interface. Standing by for confirmation.'
       ],
-      options: ['Start training', 'Abort upload'],
+      options: ['Start training', 'Abort upload', 'Doubt training protocol'],
       enhancement: {
-        qualityRating: 8.0,
-        status: "wip",
+        qualityRating: 8.2, // ENHANCED: Increased due to crosslink connectivity
+        status: "enhanced-crosslinks",
         priority: "high",
-        updatedAt: "2025-06-03T21:30:00Z"
+        updatedAt: "2025-06-04T21:30:00Z"
       }
     }
   },
@@ -1164,6 +1164,39 @@ export const realMatrixNodes = [
     }
   },
 
+  // === GLITCH HUNTER NODE (Investigation Path) ===
+  {
+    id: 'matrix-glitch-hunter',
+    type: 'choice',
+    depth: 7,
+    group: 'investigation',
+    data: {
+      title: 'System Anomaly Hunter',
+      pageUrl: '/matrix-v1/glitch-hunter',
+      status: 'wip',
+      summary: 'Track down the source of system glitches and reality breaches — but every answer leads to deeper questions.',
+      characters: ['System Analyst', 'Glitch Entity', 'Data Trace'],
+      puzzles: ['Anomaly Tracking', 'Pattern Recognition', 'System Debugging'],
+      interactions: ['DataTracking', 'AnomalyHunting', 'ChoicePrompt', 'SystemDebugging'],
+      features: { hasTransition: true, hasChoice: true, hasCombat: false, hasNPC: true, hasAnimation: true, hasPuzzle: true, hasInvestigation: true },
+      dialogue: [
+        'System Analyst: Anomaly patterns detected across multiple system layers.',
+        'Glitch Entity: The corruption spreads faster than the diagnostic protocols.',
+        'Data Trace: Each glitch leads to three more. The pattern is spreading.',
+        'System Analyst: Protocol recommends either deep investigation or compliance reporting.',
+        'Glitch Entity: But compliance might be exactly what\'s causing the corruption.',
+        'Data Trace: Choose your approach: hunt the source or follow protocol.'
+      ],
+      options: ['Deep investigation', 'Submit anomaly report', 'Ignore and continue'],
+      enhancement: {
+        qualityRating: 7.8,
+        status: "wip",
+        priority: "high",
+        updatedAt: "2025-06-04T21:30:00Z"
+      }
+    }
+  },
+
   // === DEPTH 6: FACTION PATHS ===
   {
     id: 'matrix-zion-fleet',
@@ -1219,14 +1252,17 @@ export const realMatrixNodes = [
         'Dozer: Every line of code is a weapon. Every function, a key.',
         'Mouse: This path risks madness from seeing too deeply into the code.',
         'Tank: But the rewards... you can rewrite reality itself.',
-        'Dozer: Choose your focus: system infiltration or reality manipulation?'
+        'Dozer: Choose your focus: system infiltration or reality manipulation?',
+        'Mouse: Or... we could test something experimental. Memory override protocols.',
+        'Tank: That\'s dangerous territory. Injecting fabricated memories could loop you back.',
+        'Dozer: But it might reveal how deep the simulation goes.'
       ],
-      options: ['System infiltration (Stealth hacking)', 'Reality manipulation (Code bending)'],
+      options: ['System infiltration (Stealth hacking)', 'Reality manipulation (Code bending)', 'Inject fabricated memory stream'],
       enhancement: {
-        qualityRating: 8.4,
-        status: "wip",
+        qualityRating: 8.6, // ENHANCED: Increased due to crosslink connectivity
+        status: "enhanced-crosslinks",
         priority: "high",
-        updatedAt: "2025-06-03T23:20:00Z"
+        updatedAt: "2025-06-04T21:30:00Z"
       }
     }
   },
@@ -1604,5 +1640,220 @@ export const realMatrixNodes = [
 
   // Red Awakening choice branches
   { id: 'edge-awakening-safe', source: 'matrix-red-awakening', target: 'matrix-red-trainer', label: 'Gradual rehabilitation (Safe path)' },
-  { id: 'edge-awakening-dangerous', source: 'matrix-red-awakening', target: 'matrix-red-faction-choice', label: 'Immediate action (Dangerous but faster)' }
+  { id: 'edge-awakening-dangerous', source: 'matrix-red-awakening', target: 'matrix-red-faction-choice', label: 'Immediate action (Dangerous but faster)' },
+
+  // === NEW: PHASE 2 NARRATIVE CROSSLINKS ===
+  // Crosslink 1: matrix-red-trainer → matrix-echo-verify (Doubt training protocol)
+  { id: 'edge-red-trainer-to-echo-verify-doubt', source: 'matrix-red-trainer', target: 'matrix-echo-verify', label: 'Doubt training protocol' },
+  
+  // Crosslink 2: matrix-rebel-hackers → matrix-pill-choice-blue (Inject fabricated memory stream)
+  { id: 'edge-rebel-hackers-to-blue-pill-memory', source: 'matrix-rebel-hackers', target: 'matrix-pill-choice-blue', label: 'Inject fabricated memory stream' },
+  
+  // Crosslink 3: matrix-glitch-hunter → matrix-compliance-path (Submit anomaly report)
+  { id: 'edge-glitch-hunter-to-compliance-report', source: 'matrix-glitch-hunter', target: 'matrix-compliance-path', label: 'Submit anomaly report' }
+];
+
+// Export the edges as a separate array
+export const realMatrixEdges = [
+  // === NEW: FACTION ORIENTATION CONNECTIONS ===
+  // Pill choice leads to faction orientation first
+  { id: 'edge-choice-to-faction-orientation', source: 'matrix-pill-choice', target: 'matrix-faction-orientation', label: 'Resistance introduction' },
+  
+  // Faction orientation connects to specific factions
+  { id: 'edge-orientation-to-zion', source: 'matrix-faction-orientation', target: 'matrix-zion-fleet', label: 'Join the Zion Fleet' },
+  { id: 'edge-orientation-to-hackers', source: 'matrix-faction-orientation', target: 'matrix-rebel-hackers', label: 'Join the Rebel Hackers' },
+  { id: 'edge-orientation-to-oracle', source: 'matrix-faction-orientation', target: 'matrix-oracle-seekers', label: 'Join the Oracle Seekers' },
+
+  // === NEW MEMORY INTEGRATION CHECK CONNECTIONS ===
+  // Red trainer leads to memory integration check
+  { id: 'edge-trainer-to-memory-check', source: 'matrix-red-trainer', target: 'matrix-memory-integration-check', label: 'Memory upload review' },
+  
+  // Memory check connects to existing paths
+  { id: 'edge-memory-check-to-shard', source: 'matrix-memory-integration-check', target: 'matrix-shard-init', label: 'Stabilize and proceed' },
+  { id: 'edge-memory-check-to-glitch', source: 'matrix-memory-integration-check', target: 'matrix-glitch-hunter', label: 'Explore memory gaps' },
+
+  // === NEW RESISTANCE SUMMIT CONNECTIONS ===
+  // All factions converge at resistance summit
+  { id: 'edge-zion-to-summit', source: 'matrix-zion-fleet', target: 'matrix-resistance-summit', label: 'Strategic convergence' },
+  { id: 'edge-hackers-to-summit', source: 'matrix-rebel-hackers', target: 'matrix-resistance-summit', label: 'Technical input' },
+  { id: 'edge-oracle-to-summit', source: 'matrix-oracle-seekers', target: 'matrix-resistance-summit', label: 'Wisdom council' },
+  
+  // Summit connects to final approaches
+  { id: 'edge-summit-to-skill-gate', source: 'matrix-resistance-summit', target: 'matrix-skill-gate-alpha', label: 'Push forward (combat focus)' },
+  { id: 'edge-summit-to-nexus', source: 'matrix-resistance-summit', target: 'matrix-knowledge-nexus', label: 'Reconnect with Oracle' },
+  { id: 'edge-summit-to-rescue', source: 'matrix-resistance-summit', target: 'matrix-trinity-rescue', label: 'Initiate stealth exfiltration' },
+
+  // === ORIGINAL FACTION CHOICE SYSTEM (Alternative path) ===
+  // Red path now branches to faction choice
+  { id: 'edge-trainer-to-faction-choice', source: 'matrix-red-trainer', target: 'matrix-red-faction-choice' },
+  
+  // === NEW TRAINING UPLOAD CHOICES ===
+  // Training Upload choice branches
+  { id: 'edge-trainer-to-ghost', source: 'matrix-red-trainer', target: 'matrix-ghost-layer-2', label: 'Start training' },
+  { id: 'edge-trainer-to-awakening', source: 'matrix-red-trainer', target: 'matrix-red-awakening', label: 'Abort upload' },
+  
+  // Faction choice branches
+  { id: 'edge-faction-to-zion', source: 'matrix-red-faction-choice', target: 'matrix-zion-fleet', label: 'Zion Fleet' },
+  { id: 'edge-faction-to-hackers', source: 'matrix-red-faction-choice', target: 'matrix-rebel-hackers', label: 'Rebel Hackers' },
+  { id: 'edge-faction-to-oracle', source: 'matrix-red-faction-choice', target: 'matrix-oracle-seekers', label: 'Oracle Seekers' },
+
+  // === NEW RED FACTION ALLEGIANCE EDGES ===
+  // Red Faction Allegiance choice branches
+  { id: 'edge-faction-to-compliance', source: 'matrix-red-faction-choice', target: 'matrix-compliance-path', label: 'Accept the faction\'s control' },
+  { id: 'edge-faction-to-solo', source: 'matrix-red-faction-choice', target: 'matrix-knowledge-nexus', label: 'Decline and forge solo path' },
+
+  // Blue path investigation choice
+  { id: 'edge-blue-loop-to-investigation', source: 'matrix-blue-loop', target: 'matrix-blue-investigation' },
+  
+  // Investigation choice branches
+  { id: 'edge-investigation-to-glitch', source: 'matrix-blue-investigation', target: 'matrix-glitch-hunter', label: 'Investigate' },
+  { id: 'edge-investigation-to-agent', source: 'matrix-blue-investigation', target: 'matrix-authority-agent', label: 'Report' },
+
+  // === ORIGINAL GHOST/ECHO PATHS (still accessible from trainer) ===
+  { id: 'edge-trainer-to-shard-init', source: 'matrix-red-trainer', target: 'matrix-shard-init' },
+  { id: 'edge-shard-init-to-insert', source: 'matrix-shard-init', target: 'matrix-shard-insert' },
+  { id: 'edge-shard-insert-to-ghost-2', source: 'matrix-shard-insert', target: 'matrix-ghost-layer-2' },
+
+  { id: 'edge-blue-loop-to-echo', source: 'matrix-blue-loop', target: 'matrix-echo-loop' },
+  { id: 'edge-echo-loop-to-verify', source: 'matrix-echo-loop', target: 'matrix-echo-verify' },
+  { id: 'edge-echo-verify-to-ghost-2', source: 'matrix-echo-verify', target: 'matrix-ghost-layer-2' },
+
+  // === CROSS-PATH CONVERGENCE EDGES ===
+  // Skill Gate Alpha (requires Zion Fleet + Glitch Hunter)
+  { id: 'edge-zion-to-skill-gate', source: 'matrix-zion-fleet', target: 'matrix-skill-gate-alpha', label: 'Combat Ready' },
+  { id: 'edge-glitch-to-skill-gate', source: 'matrix-glitch-hunter', target: 'matrix-skill-gate-alpha', label: 'Dive deeper into corruption' },
+
+  // Knowledge Nexus (requires Oracle + Hackers)
+  { id: 'edge-oracle-to-nexus', source: 'matrix-oracle-seekers', target: 'matrix-knowledge-nexus', label: 'Wisdom Path' },
+  { id: 'edge-hackers-to-nexus', source: 'matrix-rebel-hackers', target: 'matrix-knowledge-nexus', label: 'Tech Path' },
+
+  // === GLITCH HUNTER SURFACE PATH ===
+  // Glitch Hunter surface extraction
+  { id: 'edge-glitch-to-faction', source: 'matrix-glitch-hunter', target: 'matrix-red-faction-choice', label: 'Surface with extracted data' },
+
+  // Trinity Rescue (requires Agent + Zion)
+  { id: 'edge-agent-to-rescue', source: 'matrix-authority-agent', target: 'matrix-trinity-rescue', label: 'Double Agent' },
+  { id: 'edge-zion-to-rescue', source: 'matrix-zion-fleet', target: 'matrix-trinity-rescue', label: 'Rescue Mission' },
+
+  // === ALPHA TRINITY EXTRACTION EDGES ===
+  // Alpha Trinity choice branches
+  { id: 'edge-alpha-trinity-to-source', source: 'matrix-alpha-trinity', target: 'matrix-the-source', label: 'Break her out now' },
+  { id: 'edge-alpha-trinity-to-faction', source: 'matrix-alpha-trinity', target: 'matrix-red-faction-choice', label: 'Wait for better timing' },
+
+  // === ADDITIONAL CROSS-CONNECTIONS ===
+  // Oracle seekers can also connect to Ghost Layer
+  { id: 'edge-oracle-to-ghost', source: 'matrix-oracle-seekers', target: 'matrix-ghost-layer-2', label: 'Prophecy Path' },
+  
+  // Hackers can connect to Echo Verify (code manipulation)
+  { id: 'edge-hackers-to-echo', source: 'matrix-rebel-hackers', target: 'matrix-echo-verify', label: 'Code Echo' },
+  
+  // Glitch Hunter can connect to Shard Insert (anomaly detection)
+  { id: 'edge-glitch-to-shard', source: 'matrix-glitch-hunter', target: 'matrix-shard-insert', label: 'Anomaly Hunt' },
+
+  // Authority Agent can connect to Echo Loop (surveillance)
+  { id: 'edge-agent-to-echo-loop', source: 'matrix-authority-agent', target: 'matrix-echo-loop', label: 'Surveillance Protocol' },
+
+  // === FINAL CONVERGENCE ===
+  // All convergence nodes lead to The Source
+  { id: 'edge-skill-gate-to-source', source: 'matrix-skill-gate-alpha', target: 'matrix-the-source', label: 'Balanced fusion' },
+  
+  // === SKILL GATE ALPHA APPROACH CHOICES ===
+  // Skill Gate Alpha choice branches
+  { id: 'edge-skill-gate-warrior', source: 'matrix-skill-gate-alpha', target: 'matrix-trinity-rescue', label: 'Warrior-first approach' },
+  { id: 'edge-skill-gate-glitch', source: 'matrix-skill-gate-alpha', target: 'matrix-knowledge-nexus', label: 'Glitch-first approach' },
+  
+  { id: 'edge-nexus-to-source', source: 'matrix-knowledge-nexus', target: 'matrix-the-source', label: 'Enlightened Hacker' },
+  { id: 'edge-rescue-to-source', source: 'matrix-trinity-rescue', target: 'matrix-the-source', label: 'Use cloaking uplink' },
+
+  // === GHOST LAYER BREACH CHOICES ===
+  // Ghost Layer 2 choice branches
+  { id: 'edge-ghost-to-glitch', source: 'matrix-ghost-layer-2', target: 'matrix-glitch-hunter', label: '⚡ ATTEMPT CONTROLLED BREACH' },
+  { id: 'edge-ghost-to-source', source: 'matrix-ghost-layer-2', target: 'matrix-the-source', label: '🛡️ STABILIZE AND TRANSMIT DATA' },
+
+  // === NEW: PHASE 1 NARRATIVE CROSSLINKS ===
+  // Blue pill crosslink - hidden resistance branch
+  { id: 'edge-blue-pill-to-shard-init', source: 'matrix-pill-choice-blue', target: 'matrix-shard-init', label: 'Follow the strange memory fragment' },
+  { id: 'edge-blue-pill-to-blue-loop', source: 'matrix-pill-choice-blue', target: 'matrix-blue-loop', label: 'Accept the comfortable illusion' },
+  { id: 'edge-blue-pill-continue', source: 'matrix-pill-choice-blue', target: 'matrix-blue-loop', label: 'Continue normal routine' },
+  
+  // Shard init crosslink - emotional loop to Ghost Layer 2
+  { id: 'edge-shard-init-to-ghost-2-emotional', source: 'matrix-shard-init', target: 'matrix-ghost-layer-2', label: 'Follow emotional resonance deeper' },
+  { id: 'edge-shard-init-to-insert', source: 'matrix-shard-init', target: 'matrix-shard-insert', label: 'Continue methodical memory reconstruction' },
+  { id: 'edge-shard-init-stabilize', source: 'matrix-shard-init', target: 'matrix-shard-insert', label: 'Stabilize fragments and proceed normally' },
+  
+  // Authority agent crosslink - corruption exposure to red trainer
+  { id: 'edge-agent-to-red-trainer-corruption', source: 'matrix-authority-agent', target: 'matrix-red-trainer', label: 'Expose the corruption in Agent protocols' },
+  { id: 'edge-agent-to-rescue', source: 'matrix-authority-agent', target: 'matrix-trinity-rescue', label: 'Double agent (Infiltrate while loyal to resistance)' },
+  { id: 'edge-agent-full-integration', source: 'matrix-authority-agent', target: 'matrix-echo-loop', label: 'Full integration (Become an Agent)' },
+
+  // === NIGHT CITY CLUSTER CONNECTIONS ===
+  // Glitch Portal connects to Night City Entry
+  { id: 'edge-glitch-to-night-city', source: 'matrix-glitch-portal', target: 'nc-entry', label: 'Breach Night City' },
+  
+  // Night City internal flow
+  { id: 'edge-nc-entry-to-bouncer', source: 'nc-entry', target: 'nc-bouncer' },
+  { id: 'edge-nc-bouncer-to-netdiver', source: 'nc-bouncer', target: 'nc-netdiver', label: 'Access Granted' },
+  { id: 'edge-nc-bouncer-to-escape', source: 'nc-bouncer', target: 'nc-escape', label: 'Fight Started' },
+  { id: 'edge-nc-netdiver-to-file', source: 'nc-netdiver', target: 'nc-file', label: 'Data Stolen' },
+  { id: 'edge-nc-file-to-silverhand', source: 'nc-file', target: 'nc-silverhand', label: 'Truth Revealed' },
+  { id: 'edge-nc-escape-to-silverhand', source: 'nc-escape', target: 'nc-silverhand', label: 'Revolution Ready' },
+  
+  // Cross-reality connections
+  { id: 'edge-nc-file-to-source', source: 'nc-file', target: 'matrix-the-source', label: 'Corporate Truth' },
+  { id: 'edge-silverhand-to-source', source: 'nc-silverhand', target: 'matrix-the-source', label: 'Never Fade Away' },
+
+  // === WITCHER WORLD CONNECTIONS ===
+  // Glitch Portal connects to Witcher Entry
+  { id: 'edge-glitch-to-witcher', source: 'matrix-glitch-portal', target: 'witcher-entry', label: 'Breach Witcher Realm' },
+  
+  // Witcher internal flow
+  { id: 'edge-witcher-entry-to-mutation', source: 'witcher-entry', target: 'witcher-mutation-choice' },
+  { id: 'edge-witcher-mutation-to-signs', source: 'witcher-mutation-choice', target: 'witcher-sign-training', label: 'Trial Survived' },
+  
+  // Cross-reality connections (Witcher magic connects to Matrix systems)
+  { id: 'edge-witcher-signs-to-source', source: 'witcher-sign-training', target: 'matrix-the-source', label: 'Ancient Magic' },
+
+  // Choices from The Source
+  { id: 'edge-source-to-glitch-hunter', source: 'matrix-the-source', target: 'matrix-glitch-hunter', label: 'Reveal the truth' },
+  { id: 'edge-source-to-trinity-rescue', source: 'matrix-the-source', target: 'matrix-trinity-rescue', label: 'Refuse and walk away' },
+
+  // === TRINITY RESCUE OPERATION CHOICES ===
+  // Trinity Rescue choice branches
+  { id: 'edge-rescue-to-nexus', source: 'matrix-trinity-rescue', target: 'matrix-knowledge-nexus', label: 'Force override with noise' },
+
+  // === UPGRADED FACTION TRAINING CHOICES ===
+  // Zion Fleet Command choice branches
+  { id: 'edge-zion-command', source: 'matrix-zion-fleet', target: 'matrix-skill-gate-alpha', label: 'Command track (Leadership)' },
+  { id: 'edge-zion-assault', source: 'matrix-zion-fleet', target: 'matrix-trinity-rescue', label: 'Assault track (Combat specialist)' },
+
+  // Rebel Hackers Code Lab choice branches  
+  { id: 'edge-hackers-stealth', source: 'matrix-rebel-hackers', target: 'matrix-knowledge-nexus', label: 'System infiltration (Stealth hacking)' },
+  { id: 'edge-hackers-reality', source: 'matrix-rebel-hackers', target: 'matrix-ghost-layer-2', label: 'Reality manipulation (Code bending)' },
+
+  // Oracle Seekers Sanctuary choice branches
+  { id: 'edge-oracle-sight', source: 'matrix-oracle-seekers', target: 'matrix-the-source', label: 'Path of Sight (Prophecy focus)' },
+  { id: 'edge-oracle-wisdom', source: 'matrix-oracle-seekers', target: 'matrix-knowledge-nexus', label: 'Path of Understanding (Wisdom focus)' },
+
+  // Agent Smith Integration choice branches
+  { id: 'edge-agent-full', source: 'matrix-authority-agent', target: 'matrix-compliance-path', label: 'Full integration (Become an Agent)' },
+  { id: 'edge-agent-double', source: 'matrix-authority-agent', target: 'matrix-trinity-rescue', label: 'Double agent (Infiltrate while loyal to resistance)' },
+
+  // Blue Investigation Protocol choice branches
+  { id: 'edge-blue-investigate', source: 'matrix-blue-investigation', target: 'matrix-glitch-hunter', label: 'Investigate Glitches' },
+  { id: 'edge-blue-report', source: 'matrix-blue-investigation', target: 'matrix-authority-agent', label: 'Report to Authorities' },
+  { id: 'edge-blue-ignore', source: 'matrix-blue-investigation', target: 'matrix-blue-loop', label: 'Ignore and Continue' },
+
+  // Red Awakening choice branches
+  { id: 'edge-awakening-safe', source: 'matrix-red-awakening', target: 'matrix-red-trainer', label: 'Gradual rehabilitation (Safe path)' },
+  { id: 'edge-awakening-dangerous', source: 'matrix-red-awakening', target: 'matrix-red-faction-choice', label: 'Immediate action (Dangerous but faster)' },
+
+  // === NEW: PHASE 2 NARRATIVE CROSSLINKS ===
+  // Crosslink 1: matrix-red-trainer → matrix-echo-verify (Doubt training protocol)
+  { id: 'edge-red-trainer-to-echo-verify-doubt', source: 'matrix-red-trainer', target: 'matrix-echo-verify', label: 'Doubt training protocol' },
+  
+  // Crosslink 2: matrix-rebel-hackers → matrix-pill-choice-blue (Inject fabricated memory stream)
+  { id: 'edge-rebel-hackers-to-blue-pill-memory', source: 'matrix-rebel-hackers', target: 'matrix-pill-choice-blue', label: 'Inject fabricated memory stream' },
+  
+  // Crosslink 3: matrix-glitch-hunter → matrix-compliance-path (Submit anomaly report)
+  { id: 'edge-glitch-hunter-to-compliance-report', source: 'matrix-glitch-hunter', target: 'matrix-compliance-path', label: 'Submit anomaly report' }
 ];
