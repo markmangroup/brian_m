@@ -575,9 +575,25 @@ export default function MapD3() {
 
   useEffect(() => {
     if (!initialCentered && rootPosRef?.current && svgRef.current) {
-      const target = focusNodeId && nodePosRef.current[focusNodeId]
-        ? nodePosRef.current[focusNodeId]
-        : rootPosRef.current;
+      const targetNode = realMatrixNodes.find((n) => n.id === focusNodeId);
+      const targetWorldRaw = targetNode?.world;
+      const targetWorld = targetWorldRaw?.replace(/-/g, '');
+
+      if (
+        focusNodeId &&
+        targetWorld &&
+        currentWorld !== 'all' &&
+        targetWorld !== 'matrix' &&
+        currentWorld !== targetWorld
+      ) {
+        setWorld(targetWorld);
+        return;
+      }
+
+      const target =
+        focusNodeId && nodePosRef.current[focusNodeId]
+          ? nodePosRef.current[focusNodeId]
+          : rootPosRef.current;
       if (!target) return;
       const { x, y } = target;
       const svgRect = svgRef.current.getBoundingClientRect();
@@ -591,7 +607,7 @@ export default function MapD3() {
         );
       setInitialCentered(true);
     }
-  }, [rootPosRef, nodePosRef, focusNodeId, initialCentered]);
+  }, [rootPosRef, nodePosRef, focusNodeId, initialCentered, currentWorld, setWorld]);
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white flex">
