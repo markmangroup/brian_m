@@ -535,6 +535,194 @@ const WorldFilter = ({ selectedWorlds, onChange, onToggle, isCollapsed }) => {
   );
 };
 
+// Enhanced Metrics Widget Component
+const MetricsWidget = ({ colorMode }) => {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  
+  const systemMetrics = useMemo(() => {
+    // Calculate all requested metrics
+    const totalNodes = realMatrixNodes.length;
+    
+    // Calculate average quality rating
+    const qualityRatings = realMatrixNodes.map(node => calculateNodeQuality(node).overall);
+    const avgQuality = qualityRatings.length > 0 ? qualityRatings.reduce((sum, q) => sum + q, 0) / qualityRatings.length : 0;
+    
+    // % with world-aware content
+    const worldAwareNodes = realMatrixNodes.filter(node => node.data?.features?.hasWorldAwareContent);
+    const worldAwarePercent = totalNodes > 0 ? (worldAwareNodes.length / totalNodes) * 100 : 0;
+    
+    // % with puzzles 
+    const puzzleNodes = realMatrixNodes.filter(node => node.data?.puzzles && node.data.puzzles.length >= 1);
+    const puzzlePercent = totalNodes > 0 ? (puzzleNodes.length / totalNodes) * 100 : 0;
+    
+    // % with branching (has choices or multiple options)
+    const branchingNodes = realMatrixNodes.filter(node => 
+      node.data?.features?.hasChoice || 
+      (node.data?.options && node.data.options.length > 1)
+    );
+    const branchingPercent = totalNodes > 0 ? (branchingNodes.length / totalNodes) * 100 : 0;
+    
+    // Count of critical-priority nodes
+    const criticalNodes = realMatrixNodes.filter(node => {
+      const quality = calculateNodeQuality(node);
+      return quality.priority === 'CRITICAL';
+    });
+    
+    // Per-world distribution
+    const worldDistribution = Object.keys(WORLD_GROUPS).reduce((acc, worldKey) => {
+      const worldNodes = realMatrixNodes.filter(node => {
+        const nodeWorld = Object.keys(WORLD_GROUPS).find(wKey => 
+          WORLD_GROUPS[wKey].groups.includes(node.group)
+        ) || 'matrix';
+        return nodeWorld === worldKey;
+      });
+      
+      acc[worldKey] = {
+        count: worldNodes.length,
+        percentage: totalNodes > 0 ? (worldNodes.length / totalNodes) * 100 : 0
+      };
+      return acc;
+    }, {});
+    
+    return {
+      totalNodes,
+      avgQuality,
+      worldAwarePercent,
+      puzzlePercent,
+      branchingPercent,
+      criticalCount: criticalNodes.length,
+      worldDistribution
+    };
+  }, []);
+  
+  const getMetricCardStyles = (colorMode) => {
+    return colorMode === 'light' 
+      ? 'bg-white border-gray-300 shadow-sm border-2 rounded-lg p-4 text-center transition-colors duration-300'
+      : 'bg-theme-secondary border-theme-accent border-2 rounded-lg p-4 text-center transition-colors duration-300';
+  };
+  
+  const getMetricValueStyles = (colorMode) => {
+    return colorMode === 'light' 
+      ? 'text-gray-900 font-bold text-xl'
+      : 'text-theme-bright font-bold text-xl';
+  };
+  
+  const getMetricLabelStyles = (colorMode) => {
+    return colorMode === 'light' 
+      ? 'text-gray-600 text-xs font-medium'
+      : 'text-theme-muted text-xs font-medium';
+  };
+
+  return (
+    <div className="mb-8">
+      {/* Collapsible Header */}
+      <div 
+        className={`${colorMode === 'light' ? 'bg-blue-50 border-blue-200' : 'bg-theme-accent/20 border-theme-primary'} border-2 rounded-lg p-4 cursor-pointer transition-colors duration-300`}
+        onClick={() => setIsCollapsed(!isCollapsed)}
+      >
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">📊</span>
+            <div>
+              <h2 className={`${colorMode === 'light' ? 'text-blue-900' : 'text-theme-bright'} text-lg font-bold`}>
+                System-wide Metrics
+              </h2>
+              <p className={`${colorMode === 'light' ? 'text-blue-700' : 'text-theme-secondary'} text-sm`}>
+                Comprehensive analysis of {systemMetrics.totalNodes} nodes across all worlds
+              </p>
+            </div>
+          </div>
+          <div className={`${colorMode === 'light' ? 'text-blue-600' : 'text-theme-primary'} text-xl transition-transform duration-300 ${isCollapsed ? 'rotate-180' : ''}`}>
+            ▼
+          </div>
+        </div>
+      </div>
+
+      {/* Metrics Content */}
+      {!isCollapsed && (
+        <div className={`${colorMode === 'light' ? 'bg-gray-50 border-gray-200' : 'bg-theme-secondary/50 border-theme-accent'} border-2 border-t-0 rounded-b-lg p-6 transition-all duration-300`}>
+          
+          {/* Key Metrics Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
+            
+            {/* Total Nodes */}
+            <div className={getMetricCardStyles(colorMode)}>
+              <div className={getMetricValueStyles(colorMode)}>{systemMetrics.totalNodes}</div>
+              <div className={getMetricLabelStyles(colorMode)}>📁 Total Nodes</div>
+            </div>
+            
+            {/* Average Quality */}
+            <div className={getMetricCardStyles(colorMode)}>
+              <div className={getMetricValueStyles(colorMode)}>{systemMetrics.avgQuality.toFixed(1)}</div>
+              <div className={getMetricLabelStyles(colorMode)}>⭐ Avg Quality</div>
+            </div>
+            
+            {/* World-Aware Content */}
+            <div className={getMetricCardStyles(colorMode)}>
+              <div className={getMetricValueStyles(colorMode)}>{systemMetrics.worldAwarePercent.toFixed(1)}%</div>
+              <div className={getMetricLabelStyles(colorMode)}>🌍 World-Aware</div>
+            </div>
+            
+            {/* Puzzles */}
+            <div className={getMetricCardStyles(colorMode)}>
+              <div className={getMetricValueStyles(colorMode)}>{systemMetrics.puzzlePercent.toFixed(1)}%</div>
+              <div className={getMetricLabelStyles(colorMode)}>🧩 With Puzzles</div>
+            </div>
+            
+            {/* Branching */}
+            <div className={getMetricCardStyles(colorMode)}>
+              <div className={getMetricValueStyles(colorMode)}>{systemMetrics.branchingPercent.toFixed(1)}%</div>
+              <div className={getMetricLabelStyles(colorMode)}>🌿 Branching</div>
+            </div>
+            
+            {/* Critical Priority */}
+            <div className={getMetricCardStyles(colorMode)}>
+              <div className={`${colorMode === 'light' ? 'text-red-700' : 'text-red-400'} font-bold text-xl`}>{systemMetrics.criticalCount}</div>
+              <div className={getMetricLabelStyles(colorMode)}>🚨 Critical</div>
+            </div>
+            
+          </div>
+
+          {/* Per-World Distribution */}
+          <div>
+            <h3 className={`${colorMode === 'light' ? 'text-gray-900' : 'text-theme-bright'} text-md font-bold mb-4`}>
+              📍 World Distribution
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {Object.entries(WORLD_GROUPS).map(([worldKey, worldInfo]) => {
+                const worldData = systemMetrics.worldDistribution[worldKey];
+                return (
+                  <div key={worldKey} className={getMetricCardStyles(colorMode)}>
+                    <div className="flex items-center justify-center mb-2">
+                      <span className="text-2xl mr-2">{worldInfo.icon}</span>
+                      <span className={`${colorMode === 'light' ? 'text-gray-900' : 'text-theme-bright'} font-bold`}>
+                        {worldInfo.name}
+                      </span>
+                    </div>
+                    <div className={getMetricValueStyles(colorMode)}>{worldData.count}</div>
+                    <div className={getMetricLabelStyles(colorMode)}>
+                      {worldData.percentage.toFixed(1)}% of total nodes
+                    </div>
+                    
+                    {/* Progress bar for visual representation */}
+                    <div className={`mt-2 w-full rounded-full h-2 overflow-hidden ${colorMode === 'light' ? 'bg-gray-200' : 'bg-theme-tertiary'}`}>
+                      <div 
+                        className={`h-full transition-all duration-500 ${colorMode === 'light' ? 'bg-blue-600' : 'bg-theme-primary'}`}
+                        style={{ width: `${worldData.percentage}%` }}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          
+        </div>
+      )}
+    </div>
+  );
+};
+
 // Main Executive Quality Dashboard with complete theme integration
 export default function QualityDashboard() {
   const { currentWorld } = useTheme();
@@ -549,8 +737,6 @@ export default function QualityDashboard() {
   const [sortConfig, setSortConfig] = useState([{ key: 'updatedAt', direction: 'desc' }]);
   const [editingNode, setEditingNode] = useState(null);
   const [viewingNode, setViewingNode] = useState(null);
-
-  const report = useMemo(() => generateQualityReport(realMatrixNodes), []);
 
   // Enhanced filtering logic
   const filteredNodes = useMemo(() => {
@@ -729,6 +915,9 @@ export default function QualityDashboard() {
             Showing {displayNodes.length} of {filteredNodes.length} nodes
           </div>
         </div>
+
+        {/* System-wide Metrics Widget */}
+        <MetricsWidget colorMode={colorMode} />
 
         {/* Enhanced Top-Level KPIs with better contrast */}
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4 mb-8">
