@@ -343,5 +343,162 @@ export const nodes = [
       guardian: 'Architects of Silence',
       color: 'gold'
     }
+  },
+
+  // Night City nodes
+  {
+    id: 'nc-entry',
+    type: 'scene',
+    position: { x: 600, y: 0 },
+    depth: 0,
+    group: 'night-city',
+    narrativeTier: 'intro',
+    data: {
+      title: 'Night City Entry',
+      description: 'The neon-soaked streets of Night City stretch before you.',
+      setting: 'Watson District',
+      status: 'live'
+    }
+  },
+  {
+    id: 'nc-bouncer',
+    type: 'npc',
+    position: { x: 600, y: 200 },
+    depth: 1,
+    group: 'night-city',
+    narrativeTier: 'intro',
+    data: {
+      title: 'Afterlife Bouncer',
+      description: 'A chrome-enhanced bouncer guards the entrance to the legendary bar.',
+      character: 'Bouncer',
+      setting: 'The Afterlife',
+      status: 'live'
+    }
+  },
+  {
+    id: 'nc-netdiver',
+    type: 'choice',
+    position: { x: 600, y: 400 },
+    depth: 2,
+    group: 'night-city',
+    narrativeTier: 'mid',
+    data: {
+      title: 'Netrunner Dive',
+      description: 'Jack into the Net and dive deep into the data stream.',
+      prompt: 'How do you proceed with the hack?',
+      options: ['Stealth approach', 'Brute force', 'Social engineering'],
+      setting: 'Cyberspace',
+      status: 'live'
+    }
+  },
+  {
+    id: 'nc-file',
+    type: 'scene',
+    position: { x: 600, y: 600 },
+    depth: 3,
+    group: 'night-city',
+    narrativeTier: 'mid',
+    data: {
+      title: 'Data Theft',
+      description: 'Corporate secrets flow through your neural interface.',
+      setting: 'Data Vault',
+      status: 'live'
+    }
+  },
+  {
+    id: 'nc-silverhand',
+    type: 'dialogue',
+    position: { x: 600, y: 800 },
+    depth: 4,
+    group: 'night-city',
+    narrativeTier: 'climax',
+    data: {
+      title: 'Ghost of Johnny',
+      character: 'Johnny Silverhand',
+      dialogue: 'Wake the fuck up, samurai. We have a city to burn.',
+      emotion: 'rebellious',
+      setting: 'Neural Interface',
+      status: 'live'
+    }
+  },
+  {
+    id: 'nc-escape',
+    type: 'choice',
+    position: { x: 800, y: 400 },
+    depth: 2,
+    group: 'night-city',
+    narrativeTier: 'mid',
+    data: {
+      title: 'Corporate Escape',
+      description: 'Security forces are closing in. Time to run.',
+      prompt: 'How do you escape?',
+      options: ['Rooftop parkour', 'Underground tunnels', 'Hijack vehicle'],
+      setting: 'Corporate Plaza',
+      status: 'live'
+    }
+  },
+  {
+    id: 'nc-archive-dive',
+    type: 'scene',
+    position: { x: 800, y: 600 },
+    depth: 3,
+    group: 'night-city',
+    narrativeTier: 'climax',
+    data: {
+      title: 'Archive Dive',
+      description: 'Deep in the corporate data archives, truth awaits.',
+      setting: 'Arasaka Data Center',
+      status: 'live'
+    }
+  },
+  {
+    id: 'nc-final-protocol',
+    type: 'choice',
+    position: { x: 600, y: 1000 },
+    depth: 5,
+    group: 'night-city',
+    narrativeTier: 'finale',
+    data: {
+      title: 'Final Protocol',
+      description: 'The ultimate choice: upload, erase, or rewrite reality.',
+      prompt: 'What is your final decision?',
+      options: [
+        'Upload alternate timeline data',
+        'Erase memory and walk away',
+        'Rewrite protocol for control'
+      ],
+      setting: 'Quantum Vault',
+      status: 'wip'
+    }
+  },
+  {
+    id: 'nc-neutral-ending',
+    type: 'ending',
+    position: { x: 400, y: 1200 },
+    depth: 6,
+    group: 'night-city',
+    narrativeTier: 'finale',
+    data: {
+      title: 'Neutral Ending',
+      outcome: 'Freedom',
+      description: 'You walk away from it all, memories intact but changed.',
+      setting: 'Night City Streets',
+      status: 'stub'
+    }
+  },
+  {
+    id: 'nc-control-ending',
+    type: 'ending',
+    position: { x: 800, y: 1200 },
+    depth: 6,
+    group: 'night-city',
+    narrativeTier: 'finale',
+    data: {
+      title: 'Control Ending',
+      outcome: 'Power',
+      description: 'You seize control of the corporate machinery.',
+      setting: 'Arasaka Tower',
+      status: 'stub'
+    }
   }
 ]; 
