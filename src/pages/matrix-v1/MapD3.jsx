@@ -588,7 +588,9 @@ export default function MapD3() {
         .style('fill', 'none')
         .style('stroke', '#06b6d4')
         .style('stroke-width', 2)
-        .style('pointer-events', 'none');
+        .style('pointer-events', 'none')
+        .style('z-index', 20)
+        .style('position', 'relative');
     }
   }, [showRealPath, drawTree]);
 
@@ -760,7 +762,7 @@ export default function MapD3() {
           <svg
             ref={svgRef}
             className="w-full h-full bg-gradient-to-br from-gray-900 to-black border-l border-green-400/20"
-          style={{ minHeight: '600px' }}
+          style={{ minHeight: '600px', overflow: 'visible' }}
           />
           <ZoomControls svgRef={svgRef} />
           <MapOverlayControls
@@ -771,7 +773,7 @@ export default function MapD3() {
           />
           
           {/* Help Text */}
-          <div className="absolute top-[72px] left-4 bg-black/80 text-xs text-gray-400 p-3 rounded border border-gray-600 font-mono z-[110]">
+          <div className="absolute top-[72px] left-4 bg-black/80 text-xs text-gray-400 p-3 rounded border border-gray-600 font-mono z-30 pointer-events-none">
             <div>🖱️ Click nodes to explore</div>
             <div>🔍 Scroll to zoom</div>
             <div>✋ Drag to pan</div>
@@ -782,7 +784,7 @@ export default function MapD3() {
 
           {/* Active Filters Mini-Display */}
           {activeFilterCount > 0 && (
-            <div className="absolute bottom-4 left-4 bg-black/90 text-xs p-3 rounded border border-purple-400/40 font-mono max-w-xs">
+            <div className="absolute bottom-4 left-4 bg-black/90 text-xs p-3 rounded border border-purple-400/40 font-mono max-w-xs z-30 pointer-events-none">
               <div className="text-purple-400 font-bold mb-1">🎯 Showing filtered results</div>
               <div className="text-gray-300">
                 {activeCharacterFilters.length > 0 && `🎭 ${activeCharacterFilters.length} characters`}

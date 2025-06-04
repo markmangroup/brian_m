@@ -241,9 +241,14 @@ code {
 /* Overlay specific optimizations */
 .overlay-group-container {
   padding: 12px 0 0 12px;
-  z-index: 5;
+  z-index: 10;
   pointer-events: none;
   contain: layout style; /* CSS containment for better performance */
+}
+
+.real-path-overlay {
+  z-index: 20;
+  pointer-events: none;
 }
 
 /* Reduce motion for users who prefer it */
