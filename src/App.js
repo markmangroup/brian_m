@@ -71,6 +71,15 @@ import NightCityFile from './pages/matrix-v1/NightCityFile';
 import NightCityAccessConfirmed from './pages/matrix-v1/NightCityAccessConfirmed';
 import AfterlifeAccessGranted from './pages/matrix-v1/night-city/AfterlifeAccessGranted';
 import AfterlifeInterior from './pages/matrix-v1/night-city/AfterlifeInterior';
+import NcEntry from './pages/matrix-v1/night-city/NcEntry';
+import NcBouncer from './pages/matrix-v1/night-city/NcBouncer';
+import NcNetdiver from './pages/matrix-v1/night-city/NcNetdiver';
+import NcEscape from './pages/matrix-v1/night-city/NcEscape';
+import NcFile from './pages/matrix-v1/night-city/NcFile';
+import NcSilverhand from './pages/matrix-v1/night-city/NcSilverhand';
+import NcArchiveDive from './pages/matrix-v1/night-city/NcArchiveDive';
+import NcNeutralEnding from './pages/matrix-v1/night-city/NcNeutralEnding';
+import NcControlEnding from './pages/matrix-v1/night-city/NcControlEnding';
 
 // Witcher routes
 import WitcherEntry from './pages/witcher/WitcherEntry';
@@ -152,6 +161,15 @@ function AppLayout() {
         <Route path="/matrix-v1/night-city/netdiver" element={<NightCityNetdiver />} />
         <Route path="/matrix-v1/night-city/file" element={<NightCityFile />} />
         <Route path="/matrix-v1/night-city/access-confirmed" element={<NightCityAccessConfirmed />} />
+        <Route path="/matrix-v1/night-city/nc-entry" element={<NcEntry />} />
+        <Route path="/matrix-v1/night-city/nc-bouncer" element={<NcBouncer />} />
+        <Route path="/matrix-v1/night-city/nc-netdiver" element={<NcNetdiver />} />
+        <Route path="/matrix-v1/night-city/nc-escape" element={<NcEscape />} />
+        <Route path="/matrix-v1/night-city/nc-file" element={<NcFile />} />
+        <Route path="/matrix-v1/night-city/nc-silverhand" element={<NcSilverhand />} />
+        <Route path="/matrix-v1/night-city/nc-archive-dive" element={<NcArchiveDive />} />
+        <Route path="/matrix-v1/night-city/nc-neutral-ending" element={<NcNeutralEnding />} />
+        <Route path="/matrix-v1/night-city/nc-control-ending" element={<NcControlEnding />} />
 
         {/* Witcher routes */}
         <Route path="/witcher/entry" element={<WitcherEntry />} />

@@ -1989,7 +1989,88 @@ const rawMatrixNodes = [
     type: 'scene',
     narrativeTier: 'mid',
     enhancement: { priority: 'medium' }
-  }
+  },
+  {
+    id: 'nc-entry',
+    displayName: 'Nc Entry',
+    type: 'scene',
+    world: 'night-city',
+    narrativeTier: 'mid',
+    status: 'stub',
+    enhancement: { reviewNeeded: true }
+  },
+  {
+    id: 'nc-bouncer',
+    displayName: 'Nc Bouncer',
+    type: 'scene',
+    world: 'night-city',
+    narrativeTier: 'mid',
+    status: 'stub',
+    enhancement: { reviewNeeded: true }
+  },
+  {
+    id: 'nc-netdiver',
+    displayName: 'Nc Netdiver',
+    type: 'scene',
+    world: 'night-city',
+    narrativeTier: 'mid',
+    status: 'stub',
+    enhancement: { reviewNeeded: true }
+  },
+  {
+    id: 'nc-escape',
+    displayName: 'Nc Escape',
+    type: 'scene',
+    world: 'night-city',
+    narrativeTier: 'mid',
+    status: 'stub',
+    enhancement: { reviewNeeded: true }
+  },
+  {
+    id: 'nc-file',
+    displayName: 'Nc File',
+    type: 'scene',
+    world: 'night-city',
+    narrativeTier: 'mid',
+    status: 'stub',
+    enhancement: { reviewNeeded: true }
+  },
+  {
+    id: 'nc-silverhand',
+    displayName: 'Nc Silverhand',
+    type: 'scene',
+    world: 'night-city',
+    narrativeTier: 'mid',
+    status: 'stub',
+    enhancement: { reviewNeeded: true }
+  },
+  {
+    id: 'nc-archive-dive',
+    displayName: 'Nc Archive Dive',
+    type: 'scene',
+    world: 'night-city',
+    narrativeTier: 'mid',
+    status: 'stub',
+    enhancement: { reviewNeeded: true }
+  },
+  {
+    id: 'nc-neutral-ending',
+    displayName: 'Nc Neutral Ending',
+    type: 'scene',
+    world: 'night-city',
+    narrativeTier: 'mid',
+    status: 'stub',
+    enhancement: { reviewNeeded: true }
+  },
+  {
+    id: 'nc-control-ending',
+    displayName: 'Nc Control Ending',
+    type: 'scene',
+    world: 'night-city',
+    narrativeTier: 'mid',
+    status: 'stub',
+    enhancement: { reviewNeeded: true }
+  },
 ];
 
 // Provide simple default positions so new nodes render even without layout
