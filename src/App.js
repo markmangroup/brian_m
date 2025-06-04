@@ -73,6 +73,7 @@ import NightCityAccessConfirmed from './pages/matrix-v1/NightCityAccessConfirmed
 import WitcherEntry from './pages/witcher/WitcherEntry';
 import MutationChoice from './pages/witcher/MutationChoice';
 import SignTraining from './pages/witcher/SignTraining';
+import TrialOfReflection from './pages/witcher/TrialOfReflection';
 
 function AppLayout() {
   const { currentWorld } = useTheme();
@@ -150,6 +151,7 @@ function AppLayout() {
         <Route path="/witcher/entry" element={<WitcherEntry />} />
         <Route path="/witcher/mutation-choice" element={<MutationChoice />} />
         <Route path="/witcher/sign-training" element={<SignTraining />} />
+        <Route path="/witcher/trial-of-reflection" element={<TrialOfReflection />} />
 
         {/* Legacy Matrix Routes - Redirect to V1 */}
         <Route path="/the-matrix/*" element={<Navigate to="/matrix-v1" replace />} />

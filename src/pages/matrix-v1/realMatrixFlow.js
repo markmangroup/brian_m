@@ -1613,6 +1613,76 @@ export const realMatrixNodes = [
   { id: 'edge-archive-to-glitch', source: 'nc-archive-dive', target: 'matrix-glitch-portal', label: 'Extract fragment' },
   { id: 'edge-archive-to-netdiver', source: 'nc-archive-dive', target: 'nc-netdiver', label: 'Wipe evidence' },
 
+  // === WITCHER PLACEHOLDER NODES ===
+  {
+    id: 'witcher-entry',
+    type: 'scene',
+    depth: 7,
+    group: 'witcher',
+    world: 'witcher',
+    data: {
+      title: 'Witcher Entry',
+      pageUrl: '/witcher/entry',
+      status: 'stub',
+      summary: 'Placeholder scene.',
+      characters: [],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
+  },
+  {
+    id: 'witcher-mutation-choice',
+    type: 'scene',
+    depth: 7,
+    group: 'witcher',
+    world: 'witcher',
+    data: {
+      title: 'Mutation Choice',
+      pageUrl: '/witcher/mutation-choice',
+      status: 'stub',
+      summary: 'Placeholder scene.',
+      characters: [],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
+  },
+  {
+    id: 'witcher-sign-training',
+    type: 'scene',
+    depth: 7,
+    group: 'witcher',
+    world: 'witcher',
+    data: {
+      title: 'Sign Training',
+      pageUrl: '/witcher/sign-training',
+      status: 'stub',
+      summary: 'Placeholder scene.',
+      characters: [],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
+  },
+  {
+    id: 'witcher-trial-of-reflection',
+    type: 'scene',
+    depth: 7,
+    group: 'witcher',
+    world: 'witcher',
+    data: {
+      title: 'Trial of Reflection',
+      pageUrl: '/witcher/trial-of-reflection',
+      status: 'stub',
+      summary: 'Placeholder scene.',
+      characters: [],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
+  },
+
   // === WITCHER FINAL RITUAL - Finale Node ===
   {
     id: 'witcher-final-ritual',
