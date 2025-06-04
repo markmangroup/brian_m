@@ -168,7 +168,7 @@ function getInitialExpandedNodes(nodes, edges, rootId = 'matrix-v1-entry') {
 export default function MapD3() {
   const svgRef = useRef();
   const searchInputRef = useRef();
-  const { currentTheme, theme, getThemeD3 } = useTheme();
+  const { currentTheme, theme, getThemeD3, currentWorld } = useTheme();
   
   const [layoutType, setLayoutType] = useState(LAYOUT_TYPES.tree);
   const [statusFilter, setStatusFilter] = useState(['live', 'wip', 'stub']);
@@ -311,7 +311,6 @@ export default function MapD3() {
   
   // Calculate filter options from nodes data
   const filterOptions = useMemo(() => {
-    const { currentWorld } = useTheme();
     const characterCounts = new Map();
     const puzzleCounts = new Map();
     const interactionCounts = new Map();
@@ -356,7 +355,7 @@ export default function MapD3() {
       interactions: Array.from(interactionCounts.entries()).map(([name, count]) => ({ name, count })).sort((a, b) => a.name.localeCompare(b.name)),
       features: Array.from(featureCounts.entries()).map(([name, count]) => ({ name, count })).sort((a, b) => a.name.localeCompare(b.name))
     };
-  }, []);
+  }, [currentWorld]);
 
   // Filter options based on search query
   const filteredOptions = useMemo(() => {
@@ -394,8 +393,6 @@ export default function MapD3() {
 
   // Check if a node matches active filters
   const nodeMatchesFilters = useCallback((node) => {
-    const { currentWorld } = useTheme();
-    
     // If no filters are active, show all nodes
     if (activeCharacterFilters.length === 0 && 
         activePuzzleFilters.length === 0 && 
@@ -436,7 +433,7 @@ export default function MapD3() {
     }
     
     return matches;
-  }, [activeCharacterFilters, activePuzzleFilters, activeInteractionFilters, activeFeatureFilters]);
+  }, [activeCharacterFilters, activePuzzleFilters, activeInteractionFilters, activeFeatureFilters, currentWorld]);
 
   // Reset all filters
   const resetAllFilters = () => {
