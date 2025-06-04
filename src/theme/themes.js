@@ -333,6 +333,9 @@ export const themes = {
   }
 };
 
+// Fallout uses Matrix theme colors by default
+themes.fallout = { ...themes.matrix, name: 'Fallout', id: 'fallout' };
+
 export const getThemeVariables = (themeId, colorMode = 'dark') => {
   const theme = themes[themeId];
   if (!theme) return {};

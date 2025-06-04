@@ -35,6 +35,11 @@ const WORLD_GROUPS = {
     icon: '🌆',
     groups: ['night-city', 'nightcity', 'corpo', 'street', 'nomad']
   },
+  fallout: {
+    name: 'Fallout',
+    icon: '☢️',
+    groups: ['fallout']
+  },
   finance: {
     name: 'Finance',
     icon: '💰',
