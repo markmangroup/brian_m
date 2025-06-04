@@ -1,4 +1,5 @@
-export const realMatrixNodes = [
+// Raw node list without default positions
+const rawMatrixNodes = [
   // === DEPTH 0: INTRO GROUP ===
   {
     id: 'matrix-v1-entry',
@@ -1973,6 +1974,16 @@ export const realMatrixNodes = [
     }
   }
 ];
+
+// Provide simple default positions so new nodes render even without layout
+const worldIndex = { matrix: 0, witcher: 1, nightcity: 2 };
+export const realMatrixNodes = rawMatrixNodes.map((n) => ({
+  ...n,
+  position: n.position || {
+    x: (n.depth || 0) * 220,
+    y: (worldIndex[n.world] ?? 0) * 180,
+  },
+}));
 
 // Export the edges as a separate array
 export const realMatrixEdges = [
