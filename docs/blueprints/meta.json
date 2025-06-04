@@ -1,0 +1,32 @@
+{
+  "matrix_narrative_log": {
+    "lastUpdated": "2025-06-04",
+    "relatedFiles": ["realMatrixFlow.js", "MapCanvas.jsx"],
+    "type": "log"
+  },
+  "btc_dashboard": {
+    "lastUpdated": "2025-06-04",
+    "relatedFiles": ["/investor-intelligence/index.tsx", "BTCPriceCard.tsx"],
+    "type": "spec"
+  },
+  "retail_command": {
+    "lastUpdated": "2025-06-04",
+    "relatedFiles": ["/retail-dashboard/", "RetailSummaryCard.tsx"],
+    "type": "spec"
+  },
+  "theme_engine": {
+    "lastUpdated": "2025-06-04",
+    "relatedFiles": ["ThemeProvider.tsx", "themeConfig.js"],
+    "type": "guide"
+  },
+  "life_hud_spec": {
+    "lastUpdated": "2025-06-04",
+    "relatedFiles": ["/life-tracker/", "LifeTrackerHUD.jsx"],
+    "type": "spec"
+  },
+  "laurel_rental_tool": {
+    "lastUpdated": "2025-06-04",
+    "relatedFiles": ["/laurel-ag/", "RentalMap.jsx"],
+    "type": "spec"
+  }
+}
