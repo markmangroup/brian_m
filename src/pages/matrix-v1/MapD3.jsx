@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import * as d3 from 'd3';
-import { nodes as realMatrixNodes } from './nodes';
-import { edges as realMatrixEdges } from './edges';
+import { realMatrixNodes as rawMatrixNodes, realMatrixEdges } from './realMatrixFlow';
+import { migrateLegacyNodes } from '../../utils/migrateLegacyNodes';
 import { convertToTree, filterTreeByStatus, findPathToNode, validateTreeNoCycles, analyzeTree } from '../../utils/convertToTree';
 import { useTheme } from '../../theme/ThemeContext';
 import { useLocation, useSearchParams } from 'react-router-dom';
@@ -11,6 +11,8 @@ import DetailPanel from './DetailPanel';
 import ZoomControls from './ZoomControls';
 import DiagnosticOverlay from './DiagnosticOverlay';
 import { getWorldCharacters } from '../../utils/worldContentLoader';
+
+const realMatrixNodes = migrateLegacyNodes(rawMatrixNodes);
 
 const LAYOUT_TYPES = {
   tree: 'tree',
