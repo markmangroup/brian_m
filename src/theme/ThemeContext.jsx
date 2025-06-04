@@ -7,9 +7,10 @@ const ThemeContext = createContext();
 // World mappings - each world corresponds to a theme
 const WORLD_THEME_MAP = {
   'matrix': 'matrix',
-  'witcher': 'witcher', 
+  'witcher': 'witcher',
   'nightcity': 'nightcity',
-  'cyberpunk': 'nightcity' // Legacy support
+  'cyberpunk': 'nightcity', // Legacy support
+  'all': 'matrix'
 };
 
 // Reverse mapping for theme to world

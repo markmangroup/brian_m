@@ -228,6 +228,7 @@ export default function useTreeLayout(params) {
         const radius = typeof nodeRadius === 'function' ? nodeRadius(d) : nodeRadius;
         return radius + 15;
       })
+      .style('display', (d) => (d.data?.id === 'world-root' ? 'none' : null))
       .style('text-anchor', 'start')
       .style('font-size', '12px')
       .style('font-weight', 'bold')
