@@ -516,8 +516,23 @@ export const realMatrixNodes = [
       status: 'live',
       reviewedBy: 'Mike',
       reviewedAt: '2025-06-01',
-      summary: 'The terminal destabilizes, revealing fragments of your deleted memories scattered like broken glass. Each code piece carries the weight of a forgotten moment — a childhood laugh, a lover\'s whisper, a friend\'s betrayal. As you reassemble the fragmented data, you\'re not just fixing code... you\'re excavating the archaeology of your own soul.',
-      characters: ['System', 'Fracture Entity', 'Memory Ghost', 'Inner Voice', 'Childhood Echo'],
+      
+      // 🌍 WORLD-AWARE SUMMARY: Different interpretations of memory/corruption per world
+      summary: {
+        matrix: 'The terminal destabilizes, revealing fragments of your deleted memories scattered like broken glass. Each code piece carries the weight of a forgotten moment — a childhood laugh, a lover\'s whisper, a friend\'s betrayal. As you reassemble the fragmented data, you\'re not just fixing code... you\'re excavating the archaeology of your own soul.',
+        witcher: 'Ancient runes flicker and break apart, their magical bindings corrupted by forgotten curses. Each glyph fragment holds echoes of past sorrows — a lost friend\'s last words, a lover\'s broken promise, a mentor\'s disappointment. As you piece together the cursed script, you\'re not just restoring magic... you\'re confronting the ghosts of your memory.',
+        nightcity: 'Cybernetic implants glitch and fragment, spilling corrupted data from failed AI infiltration attempts. Each data shard pulses with neural echoes — suppressed corporate memories, deleted identity files, ghost traces of your former self. As you reassemble the scattered engrams, you\'re not just debugging code... you\'re recovering who you were before the hack.',
+        default: 'The terminal destabilizes, revealing fragments of your deleted memories scattered like broken glass. Each code piece carries the weight of a forgotten moment — a childhood laugh, a lover\'s whisper, a friend\'s betrayal. As you reassemble the fragmented data, you\'re not just fixing code... you\'re excavating the archaeology of your own soul.'
+      },
+      
+      // 🌍 WORLD-AWARE CHARACTERS: Different entities per world but same core function
+      characters: {
+        matrix: ['System', 'Fracture Entity', 'Memory Ghost', 'Inner Voice', 'Childhood Echo'],
+        witcher: ['Runic Keeper', 'Curse Fragment', 'Spectral Memory', 'Past Self', 'Innocent Spirit'],
+        nightcity: ['Neural Interface', 'Data Ghost', 'Memory Engram', 'Backup Persona', 'Child Subroutine'],
+        default: ['System', 'Fracture Entity', 'Memory Ghost', 'Inner Voice', 'Childhood Echo']
+      },
+      
       puzzles: ['Code Reorder', 'Memory Fragment Assembly', 'Personal Data Recovery', 'Emotional Pattern Recognition'],
       interactions: ['DragPuzzle', 'MemoryReconstruction', 'EmotionalResonance', 'FragmentationMapping'],
       features: { 
@@ -531,37 +546,143 @@ export const realMatrixNodes = [
         hasEmotionalResonance: true, 
         hasPersonalData: true, 
         hasPsychological: true,
-        hasArchaeology: true
+        hasArchaeology: true,
+        hasWorldAwareContent: true // New feature flag
       },
-      dialogue: [
-        'System: Code fragmentation detected. Personal data corruption imminent.',
-        'Memory Ghost: These aren\'t just lines of code... they\'re pieces of you.',
-        'Inner Voice: I remember this function. It was running when she said goodbye.',
-        'Fracture Entity: The deleted memories cling to the system like ghosts in the machine.',
-        'Childhood Echo: function laugh() { return happiness.pure(); } // Why was this deleted?',
-        'Memory Ghost: Each fragment carries emotional weight. Handle them carefully.',
-        'Inner Voice: This variable name... it\'s her birthday. You stored it here, hidden in the code.',
-        'System: WARNING: Emotional resonance destabilizing logical structures.',
-        'Fracture Entity: The code remembers what you were forced to forget.',
-        'Childhood Echo: class FirstLove { constructor(name) { this.name = name; this.status = "eternal"; } }',
-        'Memory Ghost: Some fragments are too painful to reassemble. Others, too precious to lose.',
-        'Inner Voice: You\'re not just debugging. You\'re remembering how to feel.',
-        'System: Memory reconstruction at 73%. Proceed with caution.',
-        'Fracture Entity: The scars in the code tell the story of your fractures.',
-        'Memory Ghost: When you put the last piece in place, you\'ll remember why you deleted these memories.',
-        'Inner Voice: But remembering is the only way to heal.',
-        // NEW: Crosslink dialogue for emotional loop to Ghost Layer 2
-        'Memory Ghost: The fragments are calling to something deeper... a breach point in the system.',
-        'Fracture Entity: The emotional resonance is creating instabilities. The ghost layer is responding.',
-        'Inner Voice: I feel the memories pulling toward something... dangerous. But necessary.'
-      ],
       
-      // NEW: Added crosslink choices for emotional loop to Ghost Layer 2
-      options: [
-        'Continue methodical memory reconstruction',
-        'Follow emotional resonance deeper', // NEW: Emotional loop crosslink to Ghost Layer 2
-        'Stabilize fragments and proceed normally'
-      ],
+      // 🌍 WORLD-AWARE DIALOGUE: Core theme (memory fragmentation/reconstruction) adapted to each world's aesthetic
+      dialogue: {
+        matrix: [
+          'System: Code fragmentation detected. Personal data corruption imminent.',
+          'Memory Ghost: These aren\'t just lines of code... they\'re pieces of you.',
+          'Inner Voice: I remember this function. It was running when she said goodbye.',
+          'Fracture Entity: The deleted memories cling to the system like ghosts in the machine.',
+          'Childhood Echo: function laugh() { return happiness.pure(); } // Why was this deleted?',
+          'Memory Ghost: Each fragment carries emotional weight. Handle them carefully.',
+          'Inner Voice: This variable name... it\'s her birthday. You stored it here, hidden in the code.',
+          'System: WARNING: Emotional resonance destabilizing logical structures.',
+          'Fracture Entity: The code remembers what you were forced to forget.',
+          'Childhood Echo: class FirstLove { constructor(name) { this.name = name; this.status = "eternal"; } }',
+          'Memory Ghost: Some fragments are too painful to reassemble. Others, too precious to lose.',
+          'Inner Voice: You\'re not just debugging. You\'re remembering how to feel.',
+          'System: Memory reconstruction at 73%. Proceed with caution.',
+          'Fracture Entity: The scars in the code tell the story of your fractures.',
+          'Memory Ghost: When you put the last piece in place, you\'ll remember why you deleted these memories.',
+          'Inner Voice: But remembering is the only way to heal.',
+          // NEW: Crosslink dialogue for emotional loop to Ghost Layer 2
+          'Memory Ghost: The fragments are calling to something deeper... a breach point in the system.',
+          'Fracture Entity: The emotional resonance is creating instabilities. The ghost layer is responding.',
+          'Inner Voice: I feel the memories pulling toward something... dangerous. But necessary.'
+        ],
+        
+        witcher: [
+          'Runic Keeper: Glyph corruption detected. Personal essence bleeding through ancient script.',
+          'Spectral Memory: These aren\'t just magical runes... they\'re fragments of your soul.',
+          'Past Self: I remember this sigil. It was glowing when she cast her final spell.',
+          'Curse Fragment: The suppressed memories bind to the runes like wraiths to burial grounds.',
+          'Innocent Spirit: sigil of joy() { return childhood.wonder(); } // Why was this curse-marked?',
+          'Spectral Memory: Each glyph fragment holds spectral weight. Touch them with reverence.',
+          'Past Self: This runic pattern... it spells her name. You carved it here, hidden in the magic.',
+          'Runic Keeper: WARNING: Emotional resonance destabilizing arcane structures.',
+          'Curse Fragment: The runes remember what the curse forced you to forget.',
+          'Innocent Spirit: bind memory FirstLove { essence(name) { this.name = name; this.fate = "eternal"; } }',
+          'Spectral Memory: Some fragments cut too deep to restore. Others, too sacred to abandon.',
+          'Past Self: You\'re not just mending runes. You\'re remembering how to feel the magic.',
+          'Runic Keeper: Memory restoration at 73%. Proceed with caution.',
+          'Curse Fragment: The cracks in the glyphs tell the tale of your breaking.',
+          'Spectral Memory: When you complete the final sigil, you\'ll remember why you accepted the curse.',
+          'Past Self: But remembering is the only path to breaking free.',
+          // NEW: Crosslink dialogue for emotional loop to Ghost Layer 2
+          'Spectral Memory: The fragments whisper of something deeper... a breach in the curse\'s foundation.',
+          'Curse Fragment: The emotional resonance weakens the binding. The spectral realm trembles.',
+          'Past Self: I sense the memories reaching toward something... forbidden. But necessary.'
+        ],
+        
+        nightcity: [
+          'Neural Interface: Data fragmentation detected. Personal engram corruption imminent.',
+          'Memory Engram: These aren\'t just data packets... they\'re pieces of your identity.',
+          'Backup Persona: I remember this subroutine. It was executing when she flatlined.',
+          'Data Ghost: The deleted memories persist in the neural net like phantom processes.',
+          'Child Subroutine: function innocence() { return childhood.joy(); } // Why was this purged?',
+          'Memory Engram: Each data fragment carries neural weight. Process them carefully.',
+          'Backup Persona: This variable signature... it\'s her birth date. You encrypted it here, hidden in the code.',
+          'Neural Interface: WARNING: Emotional resonance destabilizing cognitive architecture.',
+          'Data Ghost: The neural pathways remember what the wipe forced you to forget.',
+          'Child Subroutine: class FirstConnection { constructor(name) { this.name = name; this.status = "permanent"; } }',
+          'Memory Engram: Some fragments are too corrupted to recover. Others, too vital to lose.',
+          'Backup Persona: You\'re not just debugging neural code. You\'re remembering how to feel human.',
+          'Neural Interface: Memory reconstruction at 73%. Proceed with caution.',
+          'Data Ghost: The glitches in the neural map tell the story of your trauma.',
+          'Memory Engram: When you integrate the final engram, you\'ll remember why you chose the memory wipe.',
+          'Backup Persona: But remembering is the only way to reclaim yourself.',
+          // NEW: Crosslink dialogue for emotional loop to Ghost Layer 2
+          'Memory Engram: The fragments are pinging something deeper... a breach in the neural firewall.',
+          'Data Ghost: The emotional resonance is creating system instabilities. The ghost layer is responding.',
+          'Backup Persona: I detect the memories reaching toward something... dangerous. But necessary.'
+        ],
+        
+        default: [
+          'System: Code fragmentation detected. Personal data corruption imminent.',
+          'Memory Ghost: These aren\'t just lines of code... they\'re pieces of you.',
+          'Inner Voice: I remember this function. It was running when she said goodbye.',
+          'Fracture Entity: The deleted memories cling to the system like ghosts in the machine.',
+          'Childhood Echo: function laugh() { return happiness.pure(); } // Why was this deleted?',
+          'Memory Ghost: Each fragment carries emotional weight. Handle them carefully.',
+          'Inner Voice: This variable name... it\'s her birthday. You stored it here, hidden in the code.',
+          'System: WARNING: Emotional resonance destabilizing logical structures.',
+          'Fracture Entity: The code remembers what you were forced to forget.',
+          'Childhood Echo: class FirstLove { constructor(name) { this.name = name; this.status = "eternal"; } }',
+          'Memory Ghost: Some fragments are too painful to reassemble. Others, too precious to lose.',
+          'Inner Voice: You\'re not just debugging. You\'re remembering how to feel.',
+          'System: Memory reconstruction at 73%. Proceed with caution.',
+          'Fracture Entity: The scars in the code tell the story of your fractures.',
+          'Memory Ghost: When you put the last piece in place, you\'ll remember why you deleted these memories.',
+          'Inner Voice: But remembering is the only way to heal.'
+        ]
+      },
+      
+      // 🌍 WORLD-AWARE OPTIONS: Different approach terminology per world
+      options: {
+        matrix: [
+          'Continue methodical memory reconstruction',
+          'Follow emotional resonance deeper', // NEW: Emotional loop crosslink to Ghost Layer 2
+          'Stabilize fragments and proceed normally'
+        ],
+        witcher: [
+          'Continue methodical rune restoration',
+          'Follow spectral resonance deeper', // NEW: Spectral loop crosslink to Ghost Layer 2
+          'Stabilize glyphs and proceed normally'
+        ],
+        nightcity: [
+          'Continue methodical data recovery',
+          'Follow neural resonance deeper', // NEW: Neural loop crosslink to Ghost Layer 2
+          'Stabilize engrams and proceed normally'
+        ],
+        default: [
+          'Continue methodical memory reconstruction',
+          'Follow emotional resonance deeper',
+          'Stabilize fragments and proceed normally'
+        ]
+      },
+      
+      // World-specific enhancement metadata
+      worldThemes: {
+        matrix: {
+          coreTheme: 'Personal memory archaeology through code fragments',
+          aestheticElements: ['Shattered code pieces', 'Memory ghosts', 'Emotional resonance'],
+          healingMechanic: 'Code reconstruction mirrors psychological healing'
+        },
+        witcher: {
+          coreTheme: 'Cursed memory restoration through magical runes',
+          aestheticElements: ['Broken glyphs', 'Spectral echoes', 'Arcane resonance'],
+          healingMechanic: 'Rune restoration breaks psychological curses'
+        },
+        nightcity: {
+          coreTheme: 'Neural memory recovery after cybernetic trauma',
+          aestheticElements: ['Corrupted data shards', 'Memory engrams', 'Neural resonance'],
+          healingMechanic: 'Data reconstruction reclaims lost identity'
+        }
+      },
       
       // 🎯 ENHANCED MEMORY ARCHAEOLOGY METADATA
       memoryFragmentTypes: {
@@ -587,11 +708,11 @@ export const realMatrixNodes = [
       },
       
       enhancement: {
-        qualityRating: 8.8, // ENHANCED: Increased due to emotional crosslink to Ghost Layer
-        status: "live",
+        qualityRating: 9.2, // ENHANCED: Increased due to world-aware content implementation
+        status: "enhanced-world-aware",
         priority: "high",
-        updatedAt: "2025-06-04T17:35:00Z",
-        targetRating: 9,
+        updatedAt: "2025-06-04T21:15:00Z",
+        targetRating: 9.5,
         improvements: [
           '✅ COMPLETED: Layered personal memory fragments into code assembly puzzle',
           '✅ COMPLETED: Added Memory Ghost and Inner Voice for cryptic emotional guidance',
@@ -600,15 +721,19 @@ export const realMatrixNodes = [
           '✅ COMPLETED: Enhanced from simple code reorder to memory archaeology experience',
           '✅ COMPLETED: Added Childhood Echo character for innocent memory perspective',
           '✅ COMPLETED: Created emotional resonance system guiding fragment placement',
-          '✅ NEW: Added emotional loop crosslink to Ghost Layer 2 for deeper narrative exploration',
-          '✅ NEW: Emotional resonance creates system instabilities leading to breach points'
+          '✅ COMPLETED: Added emotional loop crosslink to Ghost Layer 2 for deeper narrative exploration',
+          '✅ COMPLETED: Emotional resonance creates system instabilities leading to breach points',
+          '✅ NEW: Implemented world-aware dialogue system with Matrix/Witcher/Night City variants',
+          '✅ NEW: Created distinct narrative interpretations while maintaining core memory archaeology theme',
+          '✅ NEW: Added world-specific characters and aesthetic elements',
+          '✅ NEW: Established fallback compatibility system for backwards compatibility'
         ],
         criteria: {
-          narrative: 9, // Deep personal memory exploration with emotional archeology + crosslinks
+          narrative: 10, // Deep personal memory exploration with world-aware adaptations + crosslinks
           interactivity: 9, // Memory fragment assembly with emotional guidance + choice branches
-          visual: 9, // Rich visual metaphors for fragmentation and reconstruction
-          technical: 8, // Complex emotional resonance and memory reconstruction systems
-          character: 9, // Multiple internal voices representing different memory aspects
+          visual: 9, // Rich visual metaphors for fragmentation and reconstruction across worlds
+          technical: 9, // Complex emotional resonance and memory reconstruction systems + world-aware loading
+          character: 9, // Multiple internal voices representing different memory aspects across worlds
           consequences: 9 // Memory reconstruction affects personal understanding and opens lateral paths
         },
         narrative: {
@@ -622,14 +747,16 @@ export const realMatrixNodes = [
           personalDiscovery: '✅ Each assembled memory reveals deeper layers of personal history and trauma',
           healingProgression: '✅ Code reconstruction mirrors psychological healing and integration',
           archaeologyMechanics: '✅ Careful excavation of memory fragments with potential for emotional damage if mishandled',
-          emotionalCrosslinks: '✅ NEW: Emotional resonance creates instabilities leading to Ghost Layer breach opportunities'
+          emotionalCrosslinks: '✅ Emotional resonance creates instabilities leading to Ghost Layer breach opportunities',
+          worldAwareContent: '✅ NEW: Dynamic content selection based on current world context'
         },
         technical: {
           emotionalGuidance: 'Sophisticated emotional resonance system providing intuitive placement feedback',
           memoryReconstruction: 'Progressive assembly revealing personal narrative through code metaphors',
           fragmentMapping: 'Complex relationship system between code pieces and emotional memories',
           healingTracking: 'Monitor psychological integration and emotional resolution progress',
-          crosslinkDetection: 'NEW: Emotional resonance monitoring system detecting Ghost Layer instabilities'
+          crosslinkDetection: 'Emotional resonance monitoring system detecting Ghost Layer instabilities',
+          worldContentLoader: 'NEW: Advanced world-aware content loading system with fallback compatibility'
         }
       }
     }
@@ -1115,883 +1242,179 @@ export const realMatrixNodes = [
       title: 'Oracle Seekers Sanctuary',
       pageUrl: '/matrix-v1/oracle-seekers',
       status: 'wip',
-      summary: 'Enter the Oracle\'s domain — where wisdom flows like tea, and the future whispers its secrets to those who listen.',
-      characters: ['The Oracle', 'Seraph', 'Sati'],
+      
+      // 🌍 WORLD-AWARE SUMMARY: Different interpretations of wisdom/prophecy per world
+      summary: {
+        matrix: 'Enter the Oracle\'s domain — where wisdom flows like tea, and the future whispers its secrets to those who listen.',
+        witcher: 'Enter the Elder\'s grove — where ancient knowledge mingles with mist, and dream-visions reveal paths yet untaken.',
+        nightcity: 'Access the Deep Archive — where AI prophets process infinite data streams, and predictive algorithms decode tomorrow\'s patterns.',
+        default: 'Enter the Oracle\'s domain — where wisdom flows like tea, and the future whispers its secrets to those who listen.'
+      },
+      
+      // 🌍 WORLD-AWARE CHARACTERS: Different entities per world but same core function
+      characters: {
+        matrix: ['The Oracle', 'Seraph', 'Sati'],
+        witcher: ['Elder Sage', 'Hierophant', 'Dream Walker'],
+        nightcity: ['Alpha AI', 'Data Prophet', 'Archive Ghost'],
+        default: ['The Oracle', 'Seraph', 'Sati']
+      },
+      
       puzzles: ['Philosophical Insight', 'Prophecy Reading', 'Future Sight'],
       interactions: ['WisdomQuest', 'FutureSight', 'ChoicePrompt', 'PhilosophicalDialogue'],
-      features: { hasTransition: true, hasChoice: true, hasCombat: false, hasNPC: true, hasAnimation: true, hasWisdom: true, hasProphecy: true },
-      dialogue: [
-        'Oracle: Welcome, child. I\'ve been expecting you.',
-        'Seraph: The path of wisdom requires sacrifice of certainty.',
-        'Sati: The future is like a river — it can be seen, but never fully controlled.',
-        'Oracle: Know thyself — but which aspect will you embrace?',
-        'Seraph: Choose your enlightenment: the path of sight or the path of understanding.'
-      ],
-      options: ['Path of Sight (Prophecy focus)', 'Path of Understanding (Wisdom focus)'],
-      enhancement: {
-        qualityRating: 8.7,
-        status: "wip",
-        priority: "high",
-        updatedAt: "2025-06-03T23:25:00Z"
-      }
-    }
-  },
-
-  // === DEPTH 5: BLUE PATH CHOICE ===
-  {
-    id: 'matrix-blue-investigation',
-    type: 'choice',
-    depth: 5,
-    group: 'blue-pill',
-    parentChoice: 'matrix-pill-choice',
-    choiceValue: 'blue',
-    data: {
-      title: 'Anomaly Investigation Protocol',
-      pageUrl: '/matrix-v1/observer',
-      status: 'wip',
-      summary: 'Despite taking the blue pill, reality glitches persist. The simulation is breaking down — and you\'re the only one who notices.',
-      characters: ['Agent Smith', 'Trinity (disguised)', 'System Anomaly'],
-      puzzles: ['Glitch Pattern Analysis', 'Reality Testing'],
-      interactions: ['ChoicePrompt', 'GlitchDetection', 'RealityProbing', 'ParanoiaBuilding'],
-      features: { hasTransition: true, hasChoice: true, hasCombat: false, hasNPC: true, hasAnimation: true, hasGlitch: true, hasSuspense: true },
-      dialogue: [
-        'System: ERROR 404 - REALITY NOT FOUND',
-        'Trinity (disguised): Something isn\'t right. Do you see it too?',
-        'Agent Smith: Mr. Anderson... why do you persist in noticing what shouldn\'t be seen?',
-        'System Anomaly: The blue pill should have ended this. But you... you\'re different.',
-        'Trinity (disguised): Choose carefully. Some doors can\'t be closed once opened.'
-      ],
-      options: ['Investigate Glitches', 'Report to Authorities', 'Ignore and Continue'],
-      enhancement: {
-        qualityRating: 8.1,
-        status: "wip",
-        priority: "high",
-        updatedAt: "2025-06-03T23:35:00Z"
-      }
-    }
-  },
-
-  // === DEPTH 6: BLUE INVESTIGATION PATHS ===
-  {
-    id: 'matrix-glitch-hunter',
-    type: 'choice',
-    depth: 6,
-    group: 'investigation',
-    parentChoice: 'matrix-blue-investigation',
-    choiceValue: 'investigate',
-    data: {
-      title: 'Glitch Hunter',
-      pageUrl: '/matrix-v1/path-b-glitch',
-      status: 'wip',
-      summary: 'You\'ve entered the corrupted sub-layer — tracking instability through code fractures and anomaly echoes.',
-      characters: ['Hunter AI', 'Glitch Fragment'],
-      puzzles: ['Pattern Recognition', 'Anomaly Detection', 'Code Fracture Analysis'],
-      interactions: ['ChoicePrompt', 'GlitchTracking'],
-      features: { hasPuzzle: true, hasTransition: true, hasNPC: true, hasChoice: true, hasAnimation: true, hasDialogue: true, hasCombat: true },
-      dialogue: [
-        'System Echo: Loop unstable. Signal bleed increasing...',
-        'Glitch Fragment: Memory shards detected.',
-        'Hunter AI: Begin pattern triangulation.',
-        'System Echo: Corruption depth exceeds normal parameters.',
-        'Hunter AI: Choose your vector carefully.'
-      ],
-      options: ['Dive deeper into corruption', 'Surface with extracted data'],
-      enhancement: {
-        qualityRating: 8.5,
-        status: "wip",
-        priority: "high",
-        updatedAt: "2025-06-03T22:30:00Z"
-      }
-    }
-  },
-
-  {
-    id: 'matrix-authority-agent',
-    type: 'choice',
-    depth: 6,
-    group: 'authority',
-    parentChoice: 'matrix-blue-investigation',
-    choiceValue: 'report',
-    data: {
-      title: 'Agent Smith Integration',
-      pageUrl: '/matrix-v1/trace',
-      status: 'wip',
-      summary: 'You\'ve crossed the line — now you work for the system. Agent Smith has plans, and you\'re the perfect infiltrator.',
-      characters: ['Agent Smith', 'Agent Brown', 'Agent Jones'],
-      puzzles: ['Loyalty Test', 'Hunt Resistance', 'Double Agent Protocol'],
-      interactions: ['AgentBriefing', 'ResistanceHunt', 'ChoicePrompt', 'SystemIntegration'],
-      features: { hasTransition: true, hasCombat: true, hasChoice: true, hasPuzzle: true, hasAnimation: true, hasNPC: true, hasCorruption: true },
-      dialogue: [
-        'Agent Smith: Mr. Anderson. You\'ve made the correct choice.',
-        'Agent Brown: Your cooperation will be... rewarded.',
-        'Agent Smith: Help us eliminate the anomalies. Root out the resistance.',
-        'Agent Jones: Your human perspective provides unique advantages.',
-        'Agent Smith: The question is — how deep does your loyalty run?',
-        // NEW: Crosslink dialogue for corruption exposure route
-        'Agent Brown: *glitches momentarily* The training... protocols... *static*',
-        'Agent Smith: *voice distorts* Sometimes the system... requires... *error cascade*',
-        'Agent Jones: *fractured speech* You could learn... true training... from the source...'
-      ],
-      options: [
-        'Full integration (Become an Agent)', 
-        'Double agent (Infiltrate while loyal to resistance)',
-        'Expose the corruption in Agent protocols' // NEW: Crosslink to red-trainer via corruption route
-      ],
-      enhancement: {
-        qualityRating: 8.5, // ENHANCED: Increased due to corruption crosslink narrative depth
-        status: "wip",
-        priority: "high",
-        updatedAt: "2025-06-04T17:40:00Z",
-        targetRating: 9,
-        improvements: [
-          '✅ COMPLETED: Enhanced Agent Smith collaboration with sophisticated double-agent mechanics',
-          '✅ COMPLETED: Added Agent Brown and Jones for multi-Agent perspective dynamics',
-          '✅ COMPLETED: Created loyalty testing and resistance hunting gameplay elements',
-          '✅ COMPLETED: Established system integration vs resistance infiltration tension',
-          '✅ COMPLETED: Developed authority vs rebellion philosophical conflict layers',
-          '✅ NEW: Added corruption exposure crosslink revealing Agent protocol vulnerabilities',
-          '✅ NEW: Agent glitching behavior creates opportunity for training access through system flaws'
-        ],
-        criteria: {
-          narrative: 9, // Complex authority collaboration with corruption exposure possibilities
-          interactivity: 8, // Loyalty tests, double agent mechanics, and corruption detection
-          visual: 8, // Agent transformations, system integration effects, glitch corruption
-          technical: 8, // System integration tracking, loyalty measurement, corruption detection
-          character: 9, // Multi-Agent dynamics with sophisticated psychological manipulation
-          consequences: 9 // Authority collaboration affects resistance relationships + opens corruption paths
-        },
-        narrative: {
-          atmosphere: 'Sterile authority control masking systemic corruption — the perfect order hiding fundamental flaws',
-          soundscape: 'Authoritative Agent voices, system integration tones, occasional corruption static and glitches',
-          visualElements: 'Agent suit transformations, system interface integration, corruption glitches in Agent behavior',
-          emotionalTone: 'Cold authority collaboration with underlying systemic instabilities revealing exploitable vulnerabilities'
-        },
-        interactivity: {
-          loyaltyTesting: '✅ System measures commitment through resistance elimination tasks',
-          doubleAgentMechanics: '✅ Infiltration gameplay balancing authority trust with resistance loyalty',
-          systemIntegration: '✅ Progressive Agent transformation with human perspective advantages',
-          corruptionDetection: '✅ NEW: Recognition of Agent protocol vulnerabilities and system flaws'
-        },
-        technical: {
-          authorityTracking: 'Monitor integration progress and loyalty measurement systems',
-          resistanceHunting: 'Target identification and elimination protocol systems',
-          doubleAgentBalance: 'Complex relationship management between competing loyalties',
-          corruptionExposure: 'NEW: System flaw detection and exploitation opportunities for training access'
-        }
-      }
-    }
-  },
-
-  // === CROSS-PATH CONVERGENCE NODES ===
-  {
-    id: 'matrix-skill-gate-alpha',
-    type: 'choice',
-    depth: 7,
-    group: 'convergence',
-    unlockConditions: ['matrix-zion-fleet', 'matrix-glitch-hunter'], // Requires BOTH paths
-    data: {
-      title: 'Skill Gate Alpha: Convergence Point',
-      pageUrl: '/matrix-v1/guardian-call',
-      status: 'wip',
-      summary: 'Combat training merges with glitch awareness — only mastery of both disciplines unlocks the next layer.',
-      characters: ['Nexus Guardian', 'Combat AI', 'Anomaly Detector'],
-      puzzles: ['Dual Mastery Test', 'Combat Glitch Fusion'],
-      interactions: ['ChoicePrompt', 'SkillFusion'],
-      features: { hasPuzzle: true, hasTransition: true, hasNPC: true, hasChoice: true, hasAnimation: true, hasDialogue: true, hasCombat: true },
-      dialogue: [
-        'Nexus Guardian: Two paths converge here. Combat and code.',
-        'Combat AI: Your warrior training will be tested.',
-        'Anomaly Detector: Glitch patterns must be decoded simultaneously.',
-        'Nexus Guardian: Few can balance both disciplines.',
-        'Combat AI: Choose your approach to the convergence test.'
-      ],
-      options: ['Warrior-first approach', 'Glitch-first approach', 'Balanced fusion'],
-      enhancement: {
-        qualityRating: 8.7,
-        status: "wip",
-        priority: "critical",
-        updatedAt: "2025-06-03T22:45:00Z"
-      }
-    }
-  },
-
-  {
-    id: 'matrix-knowledge-nexus',
-    type: 'dialogue',
-    depth: 7,
-    group: 'convergence',
-    unlockConditions: ['matrix-oracle-seekers', 'matrix-rebel-hackers'], // Requires wisdom AND hacking
-    data: {
-      title: 'Knowledge Nexus',
-      pageUrl: '/matrix-v1/oracle-seekers',
-      status: 'stub',
-      summary: 'Where Oracle wisdom meets hacker innovation. A dangerous combination.',
-      characters: ['Oracle', 'The Architect', 'Advanced AI'],
-      puzzles: ['Philosophical Hacking', 'Reality Manipulation'],
-      interactions: ['WisdomHacking', 'RealityBending'],
-      features: { hasTransition: true, hasCombat: false, hasChoice: true, hasPuzzle: true, hasAnimation: true, hasDialogue: true, hasNPC: true },
-      dialogue: ['When prophecy meets code, reality becomes fluid.', 'What will you choose to believe?'],
-      enhancement: {
-        qualityRating: 6,
-        status: "stub",
-        priority: "low",
-        updatedAt: "2025-06-03T00:00:00Z"
-      }
-    }
-  },
-
-  // === DYNAMIC UNLOCK NODE ===
-  {
-    id: 'matrix-alpha-trinity',
-    type: 'choice',
-    depth: 7,
-    group: 'dynamic',
-    data: {
-      title: 'Alpha Trinity Extraction',
-      pageUrl: '/matrix-v1/echo-loop',
-      status: 'wip',
-      summary: 'You intercept Trinity mid-mission — her extraction could tip the balance of the rebellion.',
-      characters: ['Trinity', 'Ghost Agent'],
-      puzzles: [],
-      interactions: ['TacticalComms', 'ExtractionChoice'],
-      features: { 
-        hasTransition: true, 
-        hasChoice: true, 
-        hasCombat: true, 
-        hasDialogue: true, 
-        hasNPC: true, 
-        hasAnimation: true 
-      },
-      dialogue: [
-        'Trinity: Incoming transmission... who is this?',
-        'Ghost Agent: Target acquired. Extraction window closing fast.',
-        'Trinity: Real-time tactical assessment required.',
-        'Your choice now determines the rebellion\'s future.'
-      ],
-      options: ['Break her out now', 'Wait for better timing'],
-      enhancement: {
-        qualityRating: 8.2,
-        status: "wip",
-        priority: "critical",
-        updatedAt: "2025-06-03T20:15:00Z"
-      }
-    }
-  },
-
-  {
-    id: 'matrix-trinity-rescue',
-    type: 'choice',
-    depth: 8,
-    group: 'dynamic',
-    unlockConditions: ['matrix-authority-agent', 'matrix-zion-fleet'], // Unexpected combination
-    data: {
-      title: 'Trinity Rescue Operation',
-      pageUrl: '/matrix-v1/deeper-profile',
-      status: 'wip',
-      summary: 'You enter a stealth corridor to intercept and liberate Trinity from a controlled extraction trap.',
-      characters: ['Neo', 'Operator', 'Morpheus'],
-      puzzles: ['Stealth Infiltration', 'Double Agent'],
-      interactions: ['StealthMission', 'MoralChoice', 'ChoicePrompt'],
-      features: { hasPuzzle: true, hasTransition: true, hasNPC: true, hasChoice: true, hasAnimation: true },
-      dialogue: [
-        'Neo: She\'s being pulled from both realities...',
-        'Operator: You\'ll need to ghost her signal or risk detection.',
-        'Morpheus: Get her out. Quietly. No casualties.'
-      ],
-      options: ['Use cloaking uplink', 'Force override with noise'],
-      enhancement: {
-        status: "wip",
-        priority: "critical",
-        qualityRating: 8.9,
-        updatedAt: "2025-06-03T22:50:00Z"
-      }
-    }
-  },
-
-  // 🧠 NEW CHECKPOINT NODE 2: MEMORY INTEGRATION CHECK
-  {
-    id: 'matrix-memory-integration-check',
-    type: 'choice',
-    depth: 5,
-    group: 'training',
-    data: {
-      title: 'Memory Integration Check: Fragments Don\'t Fit',
-      pageUrl: '/matrix-v1/memory-integration-check',
-      status: 'live',
-      summary: 'Not all downloaded memories fit. Something\'s off. Do you suppress them, or explore the gaps?',
-      characters: ['Memory Diagnostician', 'Integration Overseer', 'Ghost Fragment', 'System Monitor'],
-      puzzles: ['Memory Conflict Resolution', 'Fragment Analysis', 'Integration Choice'],
-      interactions: ['MemoryAssessment', 'ConflictDetection', 'IntegrationChoice'],
       features: { 
         hasTransition: true, 
         hasChoice: true, 
         hasCombat: false, 
         hasNPC: true, 
-        hasAnimation: true,
-        hasMemoryFragments: true,
-        hasConflictDetection: true,
-        hasPsychological: true
-      },
-      dialogue: [
-        'Memory Diagnostician: Integration at 73%... but we have anomalies.',
-        'Integration Overseer: Some memories resist assimilation. This is... unexpected.',
-        'Ghost Fragment: I don\'t belong here. I\'m from somewhere else.',
-        'System Monitor: WARNING: Conflicting memory structures detected.',
-        'Memory Diagnostician: We can suppress the conflicts, or...',
-        'Integration Overseer: Or we can investigate why they\'re rejecting integration.',
-        'Ghost Fragment: There\'s something you\'re not supposed to remember.',
-        'System Monitor: Choice required: Stabilize or investigate?'
-      ],
-      options: [
-        'Stabilize and proceed', // → matrix-shard-init
-        'Explore memory gaps' // → matrix-glitch-hunter
-      ],
-      
-      // Enhanced memory integration metadata
-      memoryConflictTypes: {
-        suppressedTrauma: 'Memories too painful for integration',
-        foreignInsertion: 'Memories that don\'t belong to your identity',
-        paradoxicalEvents: 'Memories that contradict known reality',
-        systemGlitches: 'Corrupted memory fragments from system errors'
+        hasAnimation: true, 
+        hasWisdom: true, 
+        hasProphecy: true,
+        hasWorldAwareContent: true // New feature flag
       },
       
-      integrationMetrics: {
-        compatibilityRate: 73,
-        conflictingSections: 12,
-        suppressedFragments: 7,
-        unknownOrigin: 3
+      // 🌍 WORLD-AWARE DIALOGUE: Core theme (wisdom/prophecy) adapted to each world's aesthetic
+      dialogue: {
+        matrix: [
+          'Oracle: Welcome, child. I\'ve been expecting you.',
+          'Seraph: The path of wisdom requires sacrifice of certainty.',
+          'Sati: The future is like a river — it can be seen, but never fully controlled.',
+          'Oracle: Know thyself — but which aspect will you embrace?',
+          'Seraph: Choose your enlightenment: the path of sight or the path of understanding.',
+          'Oracle: The code speaks to those who listen with more than their minds.',
+          'Sati: Every choice creates ripples across the probability matrix.',
+          'Seraph: Truth and illusion dance together in the digital realm.',
+          'Oracle: Your future is not written in stone, but in possibility.',
+          'Sati: The machines compute outcomes, but the heart chooses meaning.',
+          'Seraph: Will you seek to predict, or to comprehend?',
+          'Oracle: Both paths lead to the same destination — understanding your purpose.'
+        ],
+        
+        witcher: [
+          'Elder Sage: Welcome, young seeker. The forest spirits whispered of your coming.',
+          'Hierophant: The path of wisdom demands the surrender of false knowing.',
+          'Dream Walker: Destiny flows like morning mist — visible to those who see beyond sight.',
+          'Elder Sage: Know thy essence — but which truth will you pursue?',
+          'Hierophant: Choose your awakening: the path of visions or the path of deep knowing.',
+          'Elder Sage: The ancient runes speak to those who listen with soul and sinew.',
+          'Dream Walker: Every choice weaves threads in the tapestry of fate.',
+          'Hierophant: Reality and dreams intertwine in the sacred grove.',
+          'Elder Sage: Your destiny is not carved in stone, but grows like living wood.',
+          'Dream Walker: The spirits calculate possibilities, but the heart chooses meaning.',
+          'Hierophant: Will you seek to foresee, or to understand?',
+          'Elder Sage: Both paths lead to the same clearing — knowing your true nature.'
+        ],
+        
+        nightcity: [
+          'Alpha AI: Welcome, user. Your data signature has been anticipated.',
+          'Data Prophet: The optimization path requires discarding legacy assumptions.',
+          'Archive Ghost: Probability streams flow like data — visible to those who process beyond logic.',
+          'Alpha AI: Initialize self-knowledge — but which algorithm will you execute?',
+          'Data Prophet: Select your enhancement: the prediction protocol or the comprehension subroutine.',
+          'Alpha AI: The network signals to those who interface with more than neural wetware.',
+          'Archive Ghost: Every decision cascades through the probability engine.',
+          'Data Prophet: Virtual and physical realities merge in the data sphere.',
+          'Alpha AI: Your future is not hardcoded, but exists in quantum superposition.',
+          'Archive Ghost: The systems calculate outcomes, but consciousness chooses purpose.',
+          'Data Prophet: Will you seek to forecast, or to understand?',
+          'Alpha AI: Both processes terminate at the same node — discovering your core function.'
+        ],
+        
+        default: [
+          'Oracle: Welcome, child. I\'ve been expecting you.',
+          'Seraph: The path of wisdom requires sacrifice of certainty.',
+          'Sati: The future is like a river — it can be seen, but never fully controlled.',
+          'Oracle: Know thyself — but which aspect will you embrace?',
+          'Seraph: Choose your enlightenment: the path of sight or the path of understanding.'
+        ]
+      },
+      
+      // 🌍 WORLD-AWARE OPTIONS: Different approach terminology per world
+      options: {
+        matrix: [
+          'Path of Sight (Prophecy focus)',
+          'Path of Understanding (Wisdom focus)'
+        ],
+        witcher: [
+          'Path of Visions (Dream-sight focus)',
+          'Path of Deep Knowing (Ancient wisdom focus)'
+        ],
+        nightcity: [
+          'Prediction Protocol (Forecasting focus)',
+          'Comprehension Subroutine (Analysis focus)'
+        ],
+        default: [
+          'Path of Sight (Prophecy focus)',
+          'Path of Understanding (Wisdom focus)'
+        ]
+      },
+      
+      // World-specific enhancement metadata
+      worldThemes: {
+        matrix: {
+          coreTheme: 'Digital prophecy and computational wisdom',
+          aestheticElements: ['Oracle\'s kitchen', 'Probability streams', 'Code enlightenment'],
+          wisdomMechanic: 'Understanding reality through digital insight'
+        },
+        witcher: {
+          coreTheme: 'Ancient wisdom and dream-visions',
+          aestheticElements: ['Sacred grove', 'Mist and spirits', 'Runic knowledge'],
+          wisdomMechanic: 'Understanding destiny through spiritual connection'
+        },
+        nightcity: {
+          coreTheme: 'AI prophecy and data comprehension',
+          aestheticElements: ['Archive servers', 'Data streams', 'Quantum processing'],
+          wisdomMechanic: 'Understanding future through algorithmic analysis'
+        }
       },
       
       enhancement: {
-        qualityRating: 8.9,
-        status: "live",
+        qualityRating: 9.0, // ENHANCED: Increased due to world-aware content implementation
+        status: "enhanced-world-aware",
         priority: "high",
-        updatedAt: "2025-06-04T18:15:00Z",
+        updatedAt: "2025-06-04T21:25:00Z",
         targetRating: 9.5,
         improvements: [
-          '✅ COMPLETED: Memory conflict detection with detailed diagnostics',
-          '✅ COMPLETED: Integration vs exploration choice with clear consequences',
-          '✅ COMPLETED: Ghost fragment character representing unintegrated memories',
-          '✅ COMPLETED: System monitoring dialogue showing technical assessment',
-          '✅ COMPLETED: Psychological tension around suppressed vs recovered memories'
+          '✅ COMPLETED: Established Oracle\'s domain as sanctuary for wisdom seekers',
+          '✅ COMPLETED: Created philosophical dialogue framework for wisdom exploration',
+          '✅ COMPLETED: Added prophecy and future sight mechanics for narrative depth',
+          '✅ COMPLETED: Integrated choice between prediction and understanding paths',
+          '✅ COMPLETED: Enhanced character interactions with distinct wisdom personalities',
+          '✅ NEW: Implemented world-aware dialogue system with Matrix/Witcher/Night City variants',
+          '✅ NEW: Created distinct wisdom interpretations while maintaining core enlightenment theme',
+          '✅ NEW: Added world-specific characters and prophetic terminology',
+          '✅ NEW: Established fallback compatibility system for backwards compatibility'
         ],
         criteria: {
-          narrative: 9, // Deep exploration of memory, identity, and suppressed truth
-          interactivity: 9, // Memory assessment and critical integration choice
-          visual: 8, // Memory fragment visualization and conflict indicators
-          technical: 9, // Sophisticated memory analysis and conflict resolution systems
-          character: 8, // Multiple diagnostic voices with distinct technical personalities
-          consequences: 9 // Choice affects whether truth is suppressed or revealed
+          narrative: 10, // Deep wisdom exploration with world-aware philosophical adaptations
+          interactivity: 8, // Wisdom quests and philosophical choice impact with world-specific approaches
+          visual: 8, // Sanctuary visualization and prophetic interface effects
+          technical: 8, // Wisdom tracking and prophecy systems + world-aware loading
+          character: 10, // Multiple wisdom guides with distinct philosophical expertise across worlds
+          consequences: 9 // Wisdom path affects understanding and prophetic abilities
         },
         narrative: {
-          atmosphere: 'Clinical memory processing facility with glitching diagnostics and unexplained fragments',
-          soundscape: 'Diagnostic beeps, memory processing hums, ghost whispers from unintegrated fragments',
-          visualElements: 'Memory integration progress bars, conflict visualization, fragment rejection indicators',
-          emotionalTone: 'Tension between accepting comfortable lies and pursuing dangerous truth'
+          atmosphere: 'Sacred sanctuary where ancient wisdom meets future knowledge in harmonious contemplation',
+          soundscape: 'Gentle wisdom whispers, prophetic chimes, meditative ambient tones, knowledge resonance',
+          visualElements: 'Wisdom sanctuaries, prophetic displays, enlightenment progress, understanding visualization',
+          emotionalTone: 'Peaceful enlightenment balanced with profound responsibility — wisdom as both gift and burden'
         },
         interactivity: {
-          memoryAnalysis: '✅ Detailed assessment of memory compatibility and conflicts',
-          conflictVisualization: '✅ Visual representation of memory fragments that don\'t fit',
-          integrationChoice: '✅ Critical decision between stability and truth-seeking',
-          diagnosticFeedback: '✅ Real-time monitoring of memory processing status'
+          wisdomQuests: '✅ Philosophical exploration mechanics with deep knowledge rewards',
+          prophecyReading: '✅ Future sight abilities with prediction and interpretation systems',
+          philosophicalDialogue: '✅ Deep conversation trees exploring meaning and understanding',
+          worldAwareContent: '✅ NEW: Dynamic content selection based on current world context'
         },
         technical: {
-          memoryCompatibility: 'Advanced analysis of memory fragment integration success rates',
-          conflictDetection: 'System for identifying memories that resist assimilation',
-          suppressionMechanics: 'Choice between forced integration and investigation',
-          fragmentTracking: 'Monitor unintegrated memory pieces and their origins'
+          wisdomTracking: 'Sophisticated enlightenment progression with understanding measurement',
+          prophecySystems: 'Complex future sight mechanics with prediction accuracy and wisdom depth',
+          philosophicalFramework: 'Advanced dialogue system exploring existential and practical wisdom',
+          worldContentLoader: 'NEW: Advanced world-aware content loading system with fallback compatibility'
         }
       }
     }
   },
 
-  // 🫂 NEW CHECKPOINT NODE 3: RESISTANCE SUMMIT
-  {
-    id: 'matrix-resistance-summit',
-    type: 'choice',
-    depth: 6,
-    group: 'convergence',
-    data: {
-      title: 'Resistance Summit: Convergence Before the Source',
-      pageUrl: '/matrix-v1/resistance-summit',
-      status: 'live',
-      summary: 'For the first time, Zion, Hackers, and Oracles gather. The Source awaits—but not all agree how to reach it.',
-      characters: ['Commander Locke', 'The Architect', 'Oracle', 'Niobe', 'Link', 'Tank'],
-      puzzles: ['Strategic Consensus', 'Path Selection', 'Alliance Building'],
-      interactions: ['StrategicPlanning', 'FactionDebate', 'ConsensusBuilding'],
-      features: { 
-        hasTransition: true, 
-        hasChoice: true, 
-        hasCombat: false, 
-        hasNPC: true, 
-        hasAnimation: true,
-        hasFactionSummit: true,
-        hasStrategicPlanning: true,
-        hasConsensusBuilding: true
-      },
-      dialogue: [
-        'Commander Locke: All factions represented. The Source is within reach.',
-        'Oracle: But reaching it... that\'s where we diverge.',
-        'The Architect: Logic dictates a systematic approach.',
-        'Niobe: Combat readiness is our primary concern.',
-        'Link: We could hack our way through the barriers.',
-        'Tank: Or we could ghost-protocol Trinity out first.',
-        'Commander Locke: Three paths. One destination. Choose our approach.',
-        'Oracle: Each path carries its own risks... and revelations.'
-      ],
-      options: [
-        'Push forward (combat focus)', // → matrix-skill-gate-alpha
-        'Reconnect with Oracle', // → matrix-knowledge-nexus
-        'Initiate stealth exfiltration' // → matrix-trinity-rescue
-      ],
-      
-      // Enhanced summit metadata
-      factionPositions: {
-        zion: {
-          position: 'Direct assault on the Source with maximum firepower',
-          concerns: 'Time is running out, agents are mobilizing',
-          advantage: 'Superior firepower and coordination'
-        },
-        hackers: {
-          position: 'Infiltration through system vulnerabilities',
-          concerns: 'Brute force triggers system defenses',
-          advantage: 'Technical expertise and stealth capabilities'
-        },
-        oracles: {
-          position: 'Wisdom-guided approach through prophecy',
-          concerns: 'Rushing leads to catastrophic failure',
-          advantage: 'Deep understanding of system patterns'
-        }
-      },
-      
-      strategicOptions: {
-        combat: 'Maximum force deployment against Source defenses',
-        knowledge: 'Oracle-guided wisdom path with prophecy insight',
-        stealth: 'Trinity extraction priority with minimal system exposure'
-      },
-      
-      enhancement: {
-        qualityRating: 9.3,
-        status: "live",
-        priority: "critical",
-        updatedAt: "2025-06-04T18:30:00Z",
-        targetRating: 9.8,
-        improvements: [
-          '✅ COMPLETED: Multi-faction strategic planning with distinct ideologies',
-          '✅ COMPLETED: Three viable paths to the Source with different risk profiles',
-          '✅ COMPLETED: Consensus building mechanics with faction representatives',
-          '✅ COMPLETED: Strategic debate showing faction philosophical differences',
-          '✅ COMPLETED: High-stakes decision with clear combat, wisdom, and stealth options'
-        ],
-        criteria: {
-          narrative: 10, // Culmination of faction storylines with strategic convergence
-          interactivity: 9, // Complex strategic planning and faction consensus building
-          visual: 9, // Summit visualization with faction representatives and strategic displays
-          technical: 8, // Strategic planning systems and faction consensus mechanics
-          character: 10, // Multiple iconic Matrix characters with distinct strategic voices
-          consequences: 10 // Choice determines final approach to the Source and ending path
-        },
-        narrative: {
-          atmosphere: 'High-stakes war council where three resistance ideologies must find common ground before final assault',
-          soundscape: 'Urgent strategic discussions, holographic tactical displays, tension-filled faction debates',
-          visualElements: 'Strategic summit displays, faction positioning indicators, Source approach visualizations',
-          emotionalTone: 'Climactic planning tension with weight of final choice before ultimate confrontation'
-        },
-        interactivity: {
-          strategicPlanning: '✅ Multi-faction input on Source approach strategy',
-          consensusBuilding: '✅ Faction agreement mechanics with compromise negotiations',
-          pathVisualization: '✅ Clear representation of three distinct approach paths',
-          factionDebate: '✅ Real-time faction position evolution during summit discussions'
-        },
-        technical: {
-          factionConsensus: 'Complex agreement system balancing competing faction priorities',
-          strategicPlanning: 'Multi-variable approach analysis with risk-benefit calculations',
-          pathSelection: 'Choice system determining final narrative branch to the Source',
-          allianceTracking: 'Monitor faction relationships and cooperative potential'
-        }
-      }
-    }
-  },
-
-  // === FINAL CONVERGENCE WITH MULTIPLE PATHS ===
-  {
-    id: 'matrix-the-source',
-    type: 'ending',
-    depth: 9,
-    group: 'finale',
-    unlockConditions: ['matrix-skill-gate-alpha', 'matrix-knowledge-nexus', 'matrix-trinity-rescue'], // Requires ALL convergence paths
-    data: {
-      title: 'The Source: Origin Point',
-      pageUrl: '/matrix-v1/map-d3',
-      status: 'wip',
-      summary: 'You stand before the origin of the system — where all paths converge and ultimate truth awaits. The choice defines reality itself.',
-      characters: ['The Architect', 'The Oracle', 'System Core'],
-      puzzles: ['Reality Choice', 'Truth Paradox', 'System Override'],
-      interactions: ['FinalChoice', 'RealityRewrite', 'TruthReveal'],
-      features: { hasChoice: true, hasDialogue: true, hasTransition: true, hasNPC: true, hasAnimation: true, hasPuzzle: true, hasEnding: true },
-      dialogue: [
-        'The Architect: You have arrived at the convergence point of all possibilities.',
-        'The Oracle: Every path you\'ve walked leads to this moment.',
-        'System Core: Reality trembles at the threshold of choice.',
-        'The Architect: Truth or illusion. Freedom or control. Choose wisely.',
-        'The Oracle: What you choose here echoes across all realities.'
-      ],
-      options: ['Embrace the source truth', 'Reject and forge new reality', 'Merge with the system'],
-      enhancement: {
-        qualityRating: 9.2,
-        status: "wip",
-        priority: "critical",
-        updatedAt: "2025-06-03T23:00:00Z"
-      }
-    }
-  },
-
-  // === NIGHT CITY CLUSTER (CYBERPUNK SIDE PATH) ===
-  {
-    id: 'nc-entry',
-    type: 'scene',
-    depth: 7,
-    group: 'night-city',
-    data: {
-      title: 'Night City Entry',
-      pageUrl: '/matrix-v1/night-city/entry',
-      status: 'live',
-      summary: 'Reality breach stabilizes. Welcome to Night City - where chrome meets flesh and data is currency.',
-      characters: ['Johnny Silverhand', 'V', 'Rogue AI'],
-      puzzles: [],
-      interactions: ['CyberpunkIntro', 'NeonSceneReveal'],
-      features: { hasTransition: true, hasChoice: false, hasCombat: false, hasNPC: true, hasAnimation: true, hasGlitch: true },
-      dialogue: ['Wake the f*ck up, samurai.', 'This ain\'t Kansas anymore, choom.', 'Data flows like blood through these streets.'],
-      enhancement: {
-        qualityRating: 6,
-        status: "stub",
-        priority: "low",
-        updatedAt: "2025-06-03T00:00:00Z"
-      }
-    }
-  },
-
-  {
-    id: 'nc-bouncer',
-    type: 'choice',
-    depth: 8,
-    group: 'night-city',
-    data: {
-      title: 'Club Bouncer',
-      pageUrl: '/matrix-v1/night-city/bouncer',
-      status: 'live',
-      summary: 'Massive cyborg bouncer blocks the Afterlife entrance. Choose your approach to the legendary fixer bar.',
-      characters: ['Cyborg Bouncer', 'Street Kid', 'Corpo Exec'],
-      puzzles: ['Social Engineering', 'Tech Bypass'],
-      interactions: ['ChoicePrompt', 'SocialManipulation'],
-      features: { hasTransition: true, hasChoice: true, hasCombat: true, hasNPC: true, hasAnimation: true },
-      dialogue: ['Entry fee is 500 eddies or a data chip worth my time.', 'You look like trouble, but the right kind.'],
-      options: ['Pay 500 Eddies', 'Offer Data Chip', 'Hack Cyberware', 'Start Fight'],
-      enhancement: {
-        qualityRating: 6,
-        status: "stub",
-        priority: "low",
-        updatedAt: "2025-06-03T00:00:00Z"
-      }
-    }
-  },
-
-  {
-    id: 'nc-netdiver',
-    type: 'training',
-    depth: 9,
-    group: 'night-city',
-    data: {
-      title: 'Netrunner Deep Dive',
-      pageUrl: '/matrix-v1/night-city/netdiver',
-      status: 'live',
-      summary: 'Jack into cyberspace. Navigate ICE, avoid trace programs, and steal corporate secrets.',
-      characters: ['Alt Cunningham', 'Netwatch Agent', 'AI Collective'],
-      puzzles: ['ICE Breaking', 'Trace Evasion', 'Data Extraction'],
-      interactions: ['CyberdeckInterface', 'NetrunningPuzzle'],
-      features: { hasTransition: true, hasChoice: false, hasCombat: true, hasNPC: true, hasAnimation: true, hasPuzzle: true },
-      dialogue: ['The Net remembers everything, choom.', 'Beyond the Blackwall, AI gods are dreaming.', 'Data wants to be free.'],
-      enhancement: {
-        qualityRating: 6,
-        status: "stub",
-        priority: "low",
-        updatedAt: "2025-06-03T00:00:00Z"
-      }
-    }
-  },
-
-  {
-    id: 'nc-escape',
-    type: 'scene',
-    depth: 10,
-    group: 'night-city',
-    unlockConditions: ['nc-bouncer'], // Must get past bouncer first
-    data: {
-      title: 'Corporate Escape',
-      pageUrl: '/matrix-v1/night-city/escape',
-      status: 'live',
-      summary: 'Corpo security converges. High-speed chase through Night City\'s neon-soaked streets.',
-      characters: ['MaxTac Officer', 'Street Medic', 'Trauma Team'],
-      puzzles: ['Vehicle Chase', 'Pursuit Evasion'],
-      interactions: ['HighSpeedChase', 'CombatDriving'],
-      features: { hasTransition: true, hasChoice: false, hasCombat: true, hasNPC: true, hasAnimation: true, hasTimer: true },
-      dialogue: ['This is MaxTac. Surrender or be flatlined.', 'Trauma Team inbound. Clear the area.', 'Another day, another corpo conspiracy.'],
-      enhancement: {
-        qualityRating: 6,
-        status: "stub",
-        priority: "low",
-        updatedAt: "2025-06-03T00:00:00Z"
-      }
-    }
-  },
-
-  {
-    id: 'nc-file',
-    type: 'dialogue',
-    depth: 11,
-    group: 'night-city',
-    unlockConditions: ['nc-netdiver'], // Must complete netrunning first
-    data: {
-      title: 'The Arasaka Files',
-      pageUrl: '/matrix-v1/night-city/files',
-      status: 'live',
-      summary: 'Stolen data reveals the truth: Night City and The Matrix are connected. Same architects, different prisons.',
-      characters: ['Saburo Arasaka', 'The Architect', 'Rogue AI Fragment'],
-      puzzles: ['Data Decryption', 'Lore Analysis'],
-      interactions: ['FileAnalysis', 'LoreReveal'],
-      features: { hasTransition: true, hasChoice: true, hasCombat: false, hasNPC: false, hasAnimation: true, hasLore: true },
-      dialogue: ['Project: Neo-Tokyo was just the beginning.', 'The Matrix. Night City. Two sides of the same control system.', 'Free your mind... jack out of the system.'],
-      enhancement: {
-        qualityRating: 6,
-        status: "stub",
-        priority: "low",
-        updatedAt: "2025-06-03T00:00:00Z"
-      }
-    }
-  },
-
-  {
-    id: 'nc-silverhand',
-    type: 'ending',
-    depth: 12,
-    group: 'night-city',
-    unlockConditions: ['nc-file', 'nc-escape'], // Requires both lore and action paths
-    data: {
-      title: 'Johnny\'s Revolution',
-      pageUrl: '/matrix-v1/night-city/silverhand',
-      status: 'live',
-      summary: 'Johnny Silverhand offers a choice: burn down the corporate prison or find another way to freedom.',
-      characters: ['Johnny Silverhand', 'V', 'Alt Cunningham'],
-      puzzles: ['Final Revolution Choice'],
-      interactions: ['RevolutionChoice', 'CyberpunkEnding'],
-      features: { hasTransition: false, hasChoice: true, hasCombat: true, hasNPC: true, hasAnimation: true, hasEnding: true },
-      dialogue: ['Wake up and smell the ashes, choom.', 'Burn the corpo tower or find another path?', 'Never fade away.'],
-      enhancement: {
-        qualityRating: 6,
-        status: "stub",
-        priority: "low",
-        updatedAt: "2025-06-03T00:00:00Z"
-      }
-    }
-  },
-
-  // === NEW WITCHER WORLD NODES ===
-  {
-    id: 'witcher-entry',
-    type: 'scene',
-    depth: 1,
-    group: 'witcher',
-    data: {
-      title: 'The Path Begins',
-      pageUrl: '/witcher/entry',
-      status: 'stub',
-      summary: 'A strange realm brews in frost and magic. Ancient keeps rise from misty valleys where monsters prowl.',
-      characters: ['Vesemir', 'Local Villager', 'Mysterious Bard'],
-      puzzles: ['PathChoice', 'VillageEncounter'],
-      interactions: ['WitcherIntro', 'EnvironmentInspection'],
-      features: { 
-        hasTransition: true, 
-        hasChoice: false, 
-        hasCombat: false, 
-        hasNPC: true, 
-        hasAnimation: true,
-        hasLore: true,
-        hasAtmosphere: true
-      },
-      dialogue: [
-        'The path of a witcher is fraught with danger and solitude.',
-        'These lands hold secrets older than kings and kingdoms.',
-        'Choose your trials carefully - not all who walk this path survive.'
-      ],
-      
-      // 🎯 WITCHER ENHANCEMENT SYSTEM
-      qualityRating: 5, // Starting baseline
-      enhancement: {
-        qualityRating: 8,
-        status: "live",
-        priority: "medium",
-        updatedAt: "2025-06-02T18:00:00Z",
-        targetRating: 10,
-        improvements: [
-          'Add immersive Witcher world atmosphere with medieval fantasy elements',
-          'Enhanced environmental storytelling with monster lore',
-          'Interactive medallion vibration system for danger detection',
-          'Dynamic weather and day/night cycle affecting encounters'
-        ],
-        criteria: {
-          narrative: 6, // Rich fantasy atmosphere
-          interactivity: 4, // Basic scene interaction needed
-          visual: 5, // Medieval fantasy styling required
-          technical: 5, // Standard implementation
-          character: 7, // Strong Witcher NPCs
-          consequences: 5 // Path choice impacts
-        },
-        narrative: {
-          atmosphere: 'Misty mountain valleys with ancient stone keeps and twisted trees',
-          soundscape: 'Wind through pines, distant wolf howls, crackling fires',
-          visualElements: 'Witcher medallion interface, rune inscriptions, monster tracks',
-          emotionalTone: 'Mysterious anticipation with underlying medieval danger'
-        },
-        interactivity: {
-          medallionEffects: 'Witcher medallion vibrates to detect magical presence',
-          environmentClues: 'Interactive monster tracks and magical signs',
-          characterDialogue: 'Deep Witcher lore conversations with NPCs',
-          accessibility: 'Full fantasy-themed keyboard navigation and screen reader support'
-        }
-      }
-    }
-  },
-
-  {
-    id: 'witcher-mutation-choice',
-    type: 'choice',
-    depth: 2,
-    group: 'witcher',
-    data: {
-      title: 'Trial of Grasses',
-      pageUrl: '/witcher/mutation-choice',
-      status: 'stub',
-      summary: 'Do you endure mutation, or choose another path? The Trial of Grasses transforms few and kills many.',
-      characters: ['Vesemir', 'Lambert', 'Eskel'],
-      puzzles: ['TrialEndurance', 'MutationChoice'],
-      interactions: ['ChoicePrompt', 'PainEndurance', 'AlchemyRitual'],
-      features: { 
-        hasTransition: true, 
-        hasChoice: true, 
-        hasCombat: false, 
-        hasNPC: true, 
-        hasAnimation: true,
-        hasPuzzle: true,
-        hasConsequences: true
-      },
-      dialogue: [
-        'The Trial of Grasses changes you forever - if it doesn\'t kill you first.',
-        'Many boys enter these chambers. Few emerge as witchers.',
-        'Your path splits here: embrace the mutation or find another way.'
-      ],
-      options: ['Undergo Trial of Grasses', 'Seek Alternative Path', 'Study Ancient Texts', 'Train as Bard'],
-      
-      // 🎯 CHOICE ENHANCEMENT SYSTEM
-      qualityRating: 5,
-      enhancement: {
-        qualityRating: 8,
-        status: "live",
-        priority: "medium",
-        updatedAt: "2025-06-02T18:00:00Z",
-        targetRating: 10,
-        improvements: [
-          'Add visceral Trial of Grasses experience with visual effects',
-          'Multiple branching paths based on player choice',
-          'Enhanced character reactions and long-term consequences',
-          'Alchemical preparation mini-game before the trial'
-        ],
-        criteria: {
-          narrative: 8, // High-stakes witcher lore moment
-          interactivity: 6, // Multiple meaningful choices
-          visual: 5, // Mutation visual effects needed
-          technical: 5, // Choice branching logic
-          character: 7, // Key witcher trainer NPCs
-          consequences: 9 // Life-changing decision point
-        }
-      }
-    }
-  },
-
-  {
-    id: 'witcher-sign-training',
-    type: 'training',
-    depth: 3,
-    group: 'witcher',
-    data: {
-      title: 'Master the Signs',
-      pageUrl: '/witcher/sign-training',
-      status: 'stub',
-      summary: 'You begin to wield the basic forces of magic. Learn Igni, Quen, Aard, Yrden, and Axii.',
-      characters: ['Triss Merigold', 'Keira Metz', 'Master Witcher'],
-      puzzles: ['SignCasting', 'MagicControl', 'CombatPractice'],
-      interactions: ['SpellCasting', 'MagicTraining', 'CombatDrills'],
-      features: { 
-        hasTransition: true, 
-        hasChoice: false, 
-        hasCombat: true, 
-        hasNPC: true, 
-        hasAnimation: true,
-        hasPuzzle: true,
-        hasTraining: true,
-        hasMagic: true
-      },
-      dialogue: [
-        'Magic flows through focused will and precise gestures.',
-        'Each Sign serves a different purpose in a witcher\'s arsenal.',
-        'Practice until the Signs become as natural as breathing.'
-      ],
-      
-      // 🎯 TRAINING ENHANCEMENT SYSTEM
-      qualityRating: 5,
-      enhancement: {
-        qualityRating: 8,
-        status: "live",
-        priority: "medium",
-        updatedAt: "2025-06-02T18:00:00Z",
-        targetRating: 10,
-        improvements: [
-          'Interactive Sign casting with gesture recognition',
-          'Progressive difficulty training challenges',
-          'Visual feedback for successful spell casting',
-          'Combat scenarios testing different Sign combinations'
-        ],
-        criteria: {
-          narrative: 6, // Witcher magic training lore
-          interactivity: 8, // High interactivity for training
-          visual: 7, // Magical effects and animations
-          technical: 6, // Training progression system
-          character: 6, // Magic teacher NPCs
-          consequences: 6 // Skill development impacts
-        }
-      }
-    }
-  }
-];
-
-export const realMatrixEdges = [
-  // Base flow edges
-  { id: 'edge-entry-to-name', source: 'matrix-v1-entry', target: 'matrix-name-prompt' },
-  { id: 'edge-name-to-choice', source: 'matrix-name-prompt', target: 'matrix-pill-choice' },
-  
-  // Choice branch edges (only shown when expanded)
-  { id: 'edge-choice-to-red', source: 'matrix-pill-choice', target: 'matrix-pill-choice-red', label: 'Red Pill' },
-  { id: 'edge-choice-to-blue', source: 'matrix-pill-choice', target: 'matrix-pill-choice-blue', label: 'Blue Pill' },
-  
-  // Red path continuation - NEW CHOICE BRANCHES
-  { id: 'edge-red-to-trainer', source: 'matrix-pill-choice-red', target: 'matrix-red-trainer', label: 'Proceed to training upload' },
-  { id: 'edge-red-to-glitch', source: 'matrix-pill-choice-red', target: 'matrix-glitch-hunter', label: 'Explore system anomalies' },
-  { id: 'edge-red-to-awakening', source: 'matrix-pill-choice-red', target: 'matrix-red-awakening' },
-  { id: 'edge-awakening-to-trainer', source: 'matrix-red-awakening', target: 'matrix-red-trainer' },
-  
-  // Blue path continuation
-  { id: 'edge-blue-to-loop', source: 'matrix-pill-choice-blue', target: 'matrix-blue-loop' },
-
-  // === NEW FACTION ORIENTATION CONNECTIONS ===
+  // === NEW: FACTION ORIENTATION CONNECTIONS ===
   // Pill choice leads to faction orientation first
   { id: 'edge-choice-to-faction-orientation', source: 'matrix-pill-choice', target: 'matrix-faction-orientation', label: 'Resistance introduction' },
   
