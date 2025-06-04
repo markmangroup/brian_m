@@ -1206,6 +1206,392 @@ export const realMatrixNodes = [
         }
       }
     }
+  },
+
+  // === NIGHT CITY WORLD NODES ===
+  
+  // NIGHT CITY ENTRY - Portal entry to Night City
+  {
+    id: 'nc-entry',
+    type: 'dialogue',
+    depth: 1,
+    group: 'nightcity',
+    data: {
+      title: 'Night City Entry',
+      pageUrl: '/matrix-v1/night-city/entry',
+      status: 'live',
+      summary: 'Reality shifts as you breach into Night City 2077. Neon lights, chrome bodies, and data streams converge in a cyberpunk dystopia.',
+      
+      characters: ['Unknown Source', 'City Interface', 'Data Stream'],
+      puzzles: ['Reality Stabilization'],
+      interactions: ['DimensionalShift', 'TechInterface', 'ChoicePrompt'],
+      features: { 
+        hasTransition: true, 
+        hasChoice: true, 
+        hasCombat: false, 
+        hasDialogue: true, 
+        hasNPC: true, 
+        hasAnimation: true,
+        hasWorldAwareContent: true
+      },
+      
+      dialogue: [
+        'Unknown Source: Wake the f*ck up, samurai.',
+        'City Interface: Welcome to Night City. Data flows like blood through these streets.',
+        'Data Stream: This ain\'t Kansas anymore, choom.',
+        'Unknown Source: You want answers? Find me at the Afterlife.',
+        'City Interface: Choose your approach — credits, connections, or chaos.'
+      ],
+      
+      options: [
+        'Head to the Afterlife (main path)',
+        'Explore the data streams', 
+        'Return to reality breach'
+      ],
+      
+      enhancement: {
+        qualityRating: 8.0,
+        status: "live",
+        priority: "medium",
+        updatedAt: "2025-01-15T00:00:00Z"
+      }
+    }
+  },
+
+  // NIGHT CITY BOUNCER - Afterlife club entrance
+  {
+    id: 'nc-bouncer',
+    type: 'choice',
+    depth: 2,
+    group: 'nightcity',
+    data: {
+      title: 'The Afterlife Bouncer',
+      pageUrl: '/matrix-v1/night-city/bouncer',
+      status: 'live',
+      summary: 'A massive cyborg bouncer blocks the entrance to Night City\'s most legendary bar. Credits, connections, or chrome — choose your entry method.',
+      
+      characters: ['Cyborg Bouncer', 'Club Patron', 'Security AI'],
+      puzzles: ['Entry Challenge', 'Social Engineering', 'Technical Bypass'],
+      interactions: ['Negotiation', 'Combat', 'Hacking', 'ChoicePrompt'],
+      features: { 
+        hasTransition: true, 
+        hasChoice: true, 
+        hasCombat: true, 
+        hasDialogue: true, 
+        hasNPC: true, 
+        hasAnimation: true,
+        hasWorldAwareContent: true
+      },
+      
+      dialogue: [
+        'Cyborg Bouncer: Hold up there, choom.',
+        'Cyborg Bouncer: Entry fee is 500 eddies or a data chip worth my time.',
+        'Security AI: Scanning... threat level assessment in progress.',
+        'Club Patron: This place ain\'t for street rats without chrome.',
+        'Cyborg Bouncer: You look like trouble... but the right kind.'
+      ],
+      
+      options: [
+        'Pay the entry fee (500 eddies)',
+        'Offer data chip trade',
+        'Attempt to hack cyberware',
+        'Start a fight'
+      ],
+      
+      enhancement: {
+        qualityRating: 8.2,
+        status: "live",
+        priority: "medium",
+        updatedAt: "2025-01-15T00:00:00Z"
+      }
+    }
+  },
+
+  // NIGHT CITY NETDIVER - Inside the Afterlife
+  {
+    id: 'nc-netdiver',
+    type: 'choice',
+    depth: 3,
+    group: 'nightcity',
+    data: {
+      title: 'Afterlife Netdiver',
+      pageUrl: '/matrix-v1/night-city/netdiver',
+      status: 'wip',
+      summary: 'Inside the legendary bar, a skilled netdiver offers access to corporate databases in exchange for a dangerous favor.',
+      
+      characters: ['Elite Netdiver', 'Rogue Bartender', 'Corporate Spy', 'Data Broker'],
+      puzzles: ['Data Extraction', 'Ice Breaking', 'Corporate Infiltration'],
+      interactions: ['NetRunning', 'DataTrading', 'ChoicePrompt', 'CyberCombat'],
+      features: { 
+        hasTransition: true, 
+        hasChoice: true, 
+        hasCombat: false, 
+        hasDialogue: true, 
+        hasNPC: true, 
+        hasAnimation: true,
+        hasPuzzle: true,
+        hasWorldAwareContent: true
+      },
+      
+      dialogue: [
+        'Elite Netdiver: You want corporate data? I\'ve got the keys to every database in Night City.',
+        'Rogue Bartender: This one\'s trouble. Be careful what you trade for.',
+        'Data Broker: Information is the only currency that matters here.',
+        'Corporate Spy: Some secrets are worth more than your life.',
+        'Elite Netdiver: Let\'s jack in and see what we can steal.'
+      ],
+      
+      options: [
+        'Accept netrunning job',
+        'Negotiate better terms',
+        'Decline and leave',
+        'Attempt to steal their data'
+      ],
+      
+      enhancement: {
+        qualityRating: 7.8,
+        status: "wip",
+        priority: "medium",
+        updatedAt: "2025-01-15T00:00:00Z"
+      }
+    }
+  },
+
+  // NEW: NIGHT CITY ARCHIVE DIVE - Mid-Climax Lore Node as requested
+  {
+    id: 'nc-archive-dive',
+    type: 'choice',
+    depth: 5,
+    group: 'nightcity',
+    data: {
+      title: 'Archive Dive',
+      pageUrl: '/matrix-v1/night-city/archive-dive',
+      status: 'wip',
+      summary: 'A hidden subroutine in the megacorp archive reveals fragments of unauthorized data — glimpses of other realities, encrypted confessions, and buried black-ops logs.',
+      
+      characters: ['Data Whisperer', 'Corrupted Analyst'],
+      puzzles: ['Data Decryption', 'Reality Fragment Analysis', 'Archive Navigation'],
+      interactions: ['DataMining', 'LoreDiscovery', 'ChoicePrompt', 'RealityGlitch'],
+      features: { 
+        hasLore: true,
+        hasChoice: true, 
+        hasDialogue: true, 
+        hasAnimation: true,
+        hasWorldAwareContent: true,
+        hasTransition: true,
+        hasCombat: false,
+        hasNPC: true,
+        hasPuzzle: true
+      },
+      
+      dialogue: [
+        'Data Whisperer: Every shadow the corp casts creates a mirror somewhere.',
+        'Corrupted Analyst: Reality has forks. We chose one. But the others... still echo.',
+        'Data Whisperer: These fragments aren\'t from our timeline.',
+        'Corrupted Analyst: The archive remembers what was deleted from consensus reality.',
+        'Data Whisperer: Deep enough in the data, you find the truth they buried.',
+        'Corrupted Analyst: Every corporate decision creates ripples across dimensions.',
+        'Data Whisperer: This isn\'t just data mining. This is archaeological excavation of reality itself.',
+        'Corrupted Analyst: The black-ops logs reference projects that never existed... in this reality.'
+      ],
+      
+      // Archive fragments discovered
+      loreFragments: [
+        'Project MIRROR: Cross-dimensional data synchronization protocols',
+        'Operation GHOST: Memory implantation across parallel timelines',
+        'Arasaka File 2074-X: "Subject exhibits knowledge of events from alternate reality branches"',
+        'Militech Confession: "We\'ve been monitoring bleed-through from adjacent dimensions"'
+      ],
+      
+      options: [
+        'Dive deeper (route to nc-silverhand)',
+        'Extract fragment (cross-world link to matrix-glitch-portal)',
+        'Wipe evidence (return to nc-netdiver)'
+      ],
+      
+      enhancement: {
+        qualityRating: 9.1,
+        status: "wip",
+        priority: "high",
+        updatedAt: "2025-01-15T00:00:00Z",
+        targetRating: 9.5,
+        improvements: [
+          'Rich lore discovery mechanics with reality fragments',
+          'Cross-dimensional conspiracy narrative elements',
+          'Deep corporate archive exploration gameplay',
+          'Atmospheric cyberpunk data archaeology experience',
+          'Cross-world narrative connections and implications'
+        ],
+        criteria: {
+          narrative: 10, // Deep lore exploration with multiverse conspiracy elements
+          interactivity: 8, // Data mining and archive navigation mechanics
+          visual: 9, // Corporate archive interfaces and data visualization
+          technical: 8, // Lore discovery and cross-world linking systems
+          character: 9, // Mysterious data entities with cryptic knowledge
+          consequences: 9 // Multiple paths affecting reality understanding
+        }
+      }
+    }
+  },
+
+  // NIGHT CITY ESCAPE - Combat/Chase sequence
+  {
+    id: 'nc-escape',
+    type: 'choice',
+    depth: 3,
+    group: 'nightcity',
+    data: {
+      title: 'Night City Escape',
+      pageUrl: '/matrix-v1/night-city/escape',
+      status: 'wip',
+      summary: 'Security alarms blare as MaxTac units converge on your location. Time to run, fight, or hack your way out of this corporate nightmare.',
+      
+      characters: ['MaxTac Operative', 'Street Contact', 'Escape Route AI', 'Corporate Hunter'],
+      puzzles: ['Escape Route', 'Security Bypass', 'Combat Survival'],
+      interactions: ['ChaseSequence', 'CombatChoice', 'StealthPath', 'ChoicePrompt'],
+      features: { 
+        hasTransition: true, 
+        hasChoice: true, 
+        hasCombat: true, 
+        hasDialogue: true, 
+        hasNPC: true, 
+        hasAnimation: true,
+        hasWorldAwareContent: true
+      },
+      
+      dialogue: [
+        'MaxTac Operative: Target acquired. Lethal force authorized.',
+        'Street Contact: This way! I know the underground routes.',
+        'Escape Route AI: Multiple exit vectors detected. Choose quickly.',
+        'Corporate Hunter: You can run, but Night City never forgets.',
+        'Street Contact: Welcome to the shadows, choom. This is where legends are born.'
+      ],
+      
+      options: [
+        'Fight your way out',
+        'Use stealth and shadows',
+        'Hack the security systems',
+        'Follow the street contact'
+      ],
+      
+      enhancement: {
+        qualityRating: 7.5,
+        status: "wip",
+        priority: "medium",
+        updatedAt: "2025-01-15T00:00:00Z"
+      }
+    }
+  },
+
+  // NIGHT CITY FILE - Data discovery
+  {
+    id: 'nc-file',
+    type: 'choice',
+    depth: 4,
+    group: 'nightcity',
+    data: {
+      title: 'Corporate Data File',
+      pageUrl: '/matrix-v1/night-city/file',
+      status: 'wip',
+      summary: 'The stolen corporate file contains more than expected — classified information about cross-dimensional experiments and reality manipulation protocols.',
+      
+      characters: ['File Guardian AI', 'Data Fragment', 'Security Trace', 'Anonymous Insider'],
+      puzzles: ['Data Analysis', 'Encryption Breaking', 'Trace Evasion'],
+      interactions: ['DataAnalysis', 'InformationSynthesis', 'ChoicePrompt', 'SecurityEvasion'],
+      features: { 
+        hasTransition: true, 
+        hasChoice: true, 
+        hasCombat: false, 
+        hasDialogue: true, 
+        hasNPC: true, 
+        hasAnimation: true,
+        hasLore: true,
+        hasWorldAwareContent: true
+      },
+      
+      dialogue: [
+        'File Guardian AI: Access level insufficient. Initiating countermeasures.',
+        'Data Fragment: The truth is buried in layers of corporate obfuscation.',
+        'Anonymous Insider: They\'ve been experimenting with reality itself.',
+        'Security Trace: Target data package compromised. Recommend immediate extraction.',
+        'Data Fragment: This goes deeper than corporate espionage. This is about the nature of reality.'
+      ],
+      
+      options: [
+        'Analyze the reality manipulation data',
+        'Focus on the corporate conspiracy',
+        'Trace the source of the leak',
+        'Destroy the evidence'
+      ],
+      
+      enhancement: {
+        qualityRating: 8.3,
+        status: "wip",
+        priority: "medium",
+        updatedAt: "2025-01-15T00:00:00Z"
+      }
+    }
+  },
+
+  // NIGHT CITY SILVERHAND - Johnny Silverhand encounter
+  {
+    id: 'nc-silverhand',
+    type: 'dialogue',
+    depth: 5,
+    group: 'nightcity',
+    data: {
+      title: 'Johnny Silverhand',
+      pageUrl: '/matrix-v1/night-city/silverhand',
+      status: 'wip',
+      summary: 'The legendary rockerboy\'s digital ghost appears, carrying memories of revolution and the truth about corporate control over reality itself.',
+      
+      characters: ['Johnny Silverhand', 'Samurai Echo', 'Revolutionary Spirit', 'Digital Ghost'],
+      puzzles: ['Memory Sync', 'Revolutionary Choice', 'Reality Acceptance'],
+      interactions: ['GhostDialogue', 'MemoryShare', 'ChoicePrompt', 'PhilosophicalDebate'],
+      features: { 
+        hasTransition: true, 
+        hasChoice: true, 
+        hasCombat: false, 
+        hasDialogue: true, 
+        hasNPC: true, 
+        hasAnimation: true,
+        hasLore: true,
+        hasWorldAwareContent: true
+      },
+      
+      dialogue: [
+        'Johnny Silverhand: Wake the f*ck up, samurai. We got a reality to burn.',
+        'Samurai Echo: The corps don\'t just control data — they control what\'s real.',
+        'Revolutionary Spirit: Every system can be hacked. Every reality can be rewritten.',
+        'Digital Ghost: I died fighting the machine. But death ain\'t the end of the fight.',
+        'Johnny Silverhand: The truth isn\'t in their archives. It\'s in the spaces between realities.',
+        'Samurai Echo: You\'ve seen the glitches. The cracks where other worlds bleed through.',
+        'Revolutionary Spirit: The Matrix, Night City, the Witcher\'s realm — all part of the same lie.',
+        'Johnny Silverhand: Time to choose, samurai. Revolution or submission?'
+      ],
+      
+      options: [
+        'Join the revolution (cross-reality resistance)',
+        'Seek the truth behind the realities',
+        'Reject the choice and forge your own path',
+        'Return to the corporate system'
+      ],
+      
+      enhancement: {
+        qualityRating: 9.0,
+        status: "wip",
+        priority: "high",
+        updatedAt: "2025-01-15T00:00:00Z",
+        targetRating: 9.5,
+        improvements: [
+          'Iconic character encounter with deep lore implications',
+          'Revolutionary themes connecting across realities',
+          'Philosophical choice with massive consequences',
+          'Cross-world narrative convergence point',
+          'Reality-questioning dialogue and themes'
+        ]
+      }
+    }
   }
 ];
 
@@ -1411,5 +1797,15 @@ export const realMatrixEdges = [
   { id: 'edge-rebel-hackers-to-blue-pill-memory', source: 'matrix-rebel-hackers', target: 'matrix-pill-choice-blue', label: 'Inject fabricated memory stream' },
   
   // Crosslink 3: matrix-glitch-hunter → matrix-compliance-path (Submit anomaly report)
-  { id: 'edge-glitch-hunter-to-compliance-report', source: 'matrix-glitch-hunter', target: 'matrix-compliance-path', label: 'Submit anomaly report' }
+  { id: 'edge-glitch-hunter-to-compliance-report', source: 'matrix-glitch-hunter', target: 'matrix-compliance-path', label: 'Submit anomaly report' },
+
+  // === NEW: ARCHIVE DIVE CONNECTIONS ===
+  // Archive Dive accessible from netdiver and file nodes
+  { id: 'edge-nc-netdiver-to-archive', source: 'nc-netdiver', target: 'nc-archive-dive', label: 'Deep data mining' },
+  { id: 'edge-nc-file-to-archive', source: 'nc-file', target: 'nc-archive-dive', label: 'Follow data trail' },
+  
+  // Archive Dive choice branches
+  { id: 'edge-archive-to-silverhand', source: 'nc-archive-dive', target: 'nc-silverhand', label: 'Dive deeper' },
+  { id: 'edge-archive-to-glitch', source: 'nc-archive-dive', target: 'matrix-glitch-portal', label: 'Extract fragment' },
+  { id: 'edge-archive-to-netdiver', source: 'nc-archive-dive', target: 'nc-netdiver', label: 'Wipe evidence' }
 ];
