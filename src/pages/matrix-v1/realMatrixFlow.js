@@ -5,6 +5,7 @@ export const realMatrixNodes = [
     type: 'scene',
     depth: 0,
     group: 'intro',
+    world: 'matrix', // Explicit world assignment
     data: {
       title: 'Matrix Entry',
       pageUrl: '/matrix-v1',
@@ -48,6 +49,7 @@ export const realMatrixNodes = [
     type: 'dialogue',
     depth: 1,
     group: 'intro',
+    world: 'matrix', // Explicit world assignment
     data: {
       title: 'Identity Verification',
       pageUrl: '/matrix-v1/name-prompt',
@@ -125,6 +127,7 @@ export const realMatrixNodes = [
     type: 'choice',
     depth: 2,
     group: 'intro',
+    world: 'matrix', // Explicit world assignment
     data: {
       title: 'The Choice',
       pageUrl: '/matrix-v1',
@@ -169,6 +172,7 @@ export const realMatrixNodes = [
     type: 'choice',
     depth: 3,
     group: 'red-pill',
+    world: 'matrix', // Explicit world assignment
     parentChoice: 'matrix-pill-choice',
     choiceValue: 'red',
     data: {
@@ -201,6 +205,7 @@ export const realMatrixNodes = [
     type: 'choice', // CHANGED: From scene to choice to support crosslinks
     depth: 3,
     group: 'blue-pill',
+    world: 'matrix', // Explicit world assignment
     parentChoice: 'matrix-pill-choice',
     choiceValue: 'blue',
     data: {
@@ -311,6 +316,7 @@ export const realMatrixNodes = [
     type: 'choice',
     depth: 4,
     group: 'factions',
+    world: 'matrix', // Explicit world assignment
     data: {
       title: 'Faction Orientation: Three Paths Diverge',
       pageUrl: '/matrix-v1/faction-orientation',
@@ -415,6 +421,7 @@ export const realMatrixNodes = [
     type: 'choice',
     depth: 4,
     group: 'red-pill',
+    world: 'matrix', // Explicit world assignment
     parentChoice: 'matrix-pill-choice',
     choiceValue: 'red',
     data: {
@@ -449,6 +456,7 @@ export const realMatrixNodes = [
     type: 'scene',
     depth: 4,
     group: 'blue-pill',
+    world: 'matrix', // Explicit world assignment
     parentChoice: 'matrix-pill-choice',
     choiceValue: 'blue',
     data: {
@@ -476,6 +484,7 @@ export const realMatrixNodes = [
     type: 'choice',
     depth: 5,
     group: 'red-pill',
+    world: 'matrix', // Explicit world assignment
     parentChoice: 'matrix-pill-choice',
     choiceValue: 'red',
     data: {
@@ -510,6 +519,7 @@ export const realMatrixNodes = [
     type: 'choice', // CHANGED: From scene to choice to support crosslinks
     depth: 6,
     group: 'ghost-layer',
+    world: 'matrix', // Explicit world assignment
     data: {
       title: 'Shard Initialization: Memory Archaeology',
       pageUrl: '/matrix-v1/shard-init',
@@ -972,6 +982,7 @@ export const realMatrixNodes = [
     type: 'dialogue',
     depth: 1,
     group: 'witcher',
+    world: 'witcher', // Explicit world assignment
     data: {
       title: 'Witcher Realm Entry',
       pageUrl: '/witcher/entry',
@@ -1026,6 +1037,7 @@ export const realMatrixNodes = [
     type: 'choice',
     depth: 2,
     group: 'witcher',
+    world: 'witcher', // Explicit world assignment
     data: {
       title: 'Trial of Grasses',
       pageUrl: '/witcher/mutation',
@@ -1081,6 +1093,7 @@ export const realMatrixNodes = [
     type: 'dialogue',
     depth: 3,
     group: 'witcher',
+    world: 'witcher', // Explicit world assignment
     data: {
       title: 'Signs Training',
       pageUrl: '/witcher/signs',
@@ -1137,6 +1150,7 @@ export const realMatrixNodes = [
     type: 'choice',
     depth: 4,
     group: 'witcher',
+    world: 'witcher', // Explicit world assignment
     data: {
       title: 'Trial of Reflection',
       pageUrl: '/witcher/trial-reflection',
@@ -1216,6 +1230,7 @@ export const realMatrixNodes = [
     type: 'dialogue',
     depth: 1,
     group: 'nightcity',
+    world: 'nightcity', // Explicit world assignment
     data: {
       title: 'Night City Entry',
       pageUrl: '/matrix-v1/night-city/entry',
@@ -1264,6 +1279,7 @@ export const realMatrixNodes = [
     type: 'choice',
     depth: 2,
     group: 'nightcity',
+    world: 'nightcity', // Explicit world assignment
     data: {
       title: 'The Afterlife Bouncer',
       pageUrl: '/matrix-v1/night-city/bouncer',
@@ -1313,6 +1329,7 @@ export const realMatrixNodes = [
     type: 'choice',
     depth: 3,
     group: 'nightcity',
+    world: 'nightcity', // Explicit world assignment
     data: {
       title: 'Afterlife Netdiver',
       pageUrl: '/matrix-v1/night-city/netdiver',
@@ -1363,6 +1380,7 @@ export const realMatrixNodes = [
     type: 'choice',
     depth: 5,
     group: 'nightcity',
+    world: 'nightcity', // Explicit world assignment
     data: {
       title: 'Archive Dive',
       pageUrl: '/matrix-v1/night-city/archive-dive',
@@ -1440,6 +1458,7 @@ export const realMatrixNodes = [
     type: 'choice',
     depth: 3,
     group: 'nightcity',
+    world: 'nightcity', // Explicit world assignment
     data: {
       title: 'Night City Escape',
       pageUrl: '/matrix-v1/night-city/escape',
@@ -1489,6 +1508,7 @@ export const realMatrixNodes = [
     type: 'choice',
     depth: 4,
     group: 'nightcity',
+    world: 'nightcity', // Explicit world assignment
     data: {
       title: 'Corporate Data File',
       pageUrl: '/matrix-v1/night-city/file',
@@ -1539,6 +1559,7 @@ export const realMatrixNodes = [
     type: 'dialogue',
     depth: 5,
     group: 'nightcity',
+    world: 'nightcity', // Explicit world assignment
     data: {
       title: 'Johnny Silverhand',
       pageUrl: '/matrix-v1/night-city/silverhand',
