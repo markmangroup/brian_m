@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import 'reactflow/dist/base.css';
 import { nodes } from './nodes';
@@ -24,9 +24,36 @@ const NARRATIVE_TIER_OPTIONS = [
   { value: 'finale', label: 'Finale', icon: '🏆' }
 ];
 
+// Simulated story paths for demonstration
+const STORY_PATHS = {
+  'night-city': [
+    { id: 'nc-entry', label: 'Night City Entry', status: 'completed' },
+    { id: 'nc-bouncer', label: 'Afterlife Bouncer', status: 'completed' },
+    { id: 'nc-netdiver', label: 'Netrunner Dive', status: 'current' },
+    { id: 'nc-file', label: 'Data Theft', status: 'upcoming' },
+    { id: 'nc-final-protocol', label: 'Final Protocol', status: 'upcoming' }
+  ],
+  'matrix-main': [
+    { id: 'scene-1', label: 'The Matrix', status: 'completed' },
+    { id: 'dialogue-1', label: 'Morpheus Introduction', status: 'completed' },
+    { id: 'choice-1', label: 'Red/Blue Pill Choice', status: 'current' },
+    { id: 'training-hub', label: 'Training Entry', status: 'upcoming' },
+    { id: 'ending-1', label: 'The One', status: 'upcoming' }
+  ],
+  'training': [
+    { id: 'training-hub', label: 'Training Entry', status: 'completed' },
+    { id: 'guardian-call', label: 'AWAKEN Challenge', status: 'completed' },
+    { id: 'data-filter', label: 'Signal Filtering', status: 'current' },
+    { id: 'code-match', label: 'Memory Puzzle', status: 'upcoming' }
+  ]
+};
+
 export default function MapPage() {
   const [devView, setDevView] = useState(false);
   const [selectedTier, setSelectedTier] = useState('all');
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [selectedPath, setSelectedPath] = useState('night-city');
+  const mapCanvasRef = useRef(null);
 
   console.log('Rendering nodes:', nodes);
 
@@ -38,8 +65,52 @@ export default function MapPage() {
     return nodes.filter(node => node.narrativeTier === selectedTier);
   }, [selectedTier]);
 
+  const currentStoryPath = STORY_PATHS[selectedPath] || [];
+
   const handleTierChange = (event) => {
     setSelectedTier(event.target.value);
+  };
+
+  const handlePathChange = (event) => {
+    setSelectedPath(event.target.value);
+  };
+
+  const handleNodeClick = (nodeId) => {
+    // Find the node and center it in the map
+    const targetNode = nodes.find(node => node.id === nodeId);
+    if (targetNode && mapCanvasRef.current) {
+      mapCanvasRef.current.centerNode(nodeId);
+    }
+  };
+
+  const getNodeIcon = (nodeType, status) => {
+    const icons = {
+      'scene': '🎬',
+      'dialogue': '💬', 
+      'choice': '🤔',
+      'ending': '🏁',
+      'npc': '👤',
+      'faction': '⚔️',
+      'training': '🧪',
+      'end': '🛑'
+    };
+    
+    const statusIcons = {
+      'completed': '✅',
+      'current': '👁️',
+      'upcoming': '⏳'
+    };
+    
+    return `${statusIcons[status] || '📍'} ${icons[nodeType] || '📄'}`;
+  };
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'completed': return 'text-green-400 border-green-400/60 bg-green-900/20';
+      case 'current': return 'text-cyan-400 border-cyan-400/60 bg-cyan-900/30 shadow-[0_0_4px_cyan]';
+      case 'upcoming': return 'text-gray-400 border-gray-600/60 bg-gray-900/20';
+      default: return 'text-purple-400 border-purple-400/60 bg-purple-900/20';
+    }
   };
 
   return (
@@ -74,6 +145,129 @@ export default function MapPage() {
         </div>
       </div>
 
+      {/* Scene Path View Drawer */}
+      <div className={`fixed top-0 right-0 h-full z-40 transition-transform duration-300 ease-in-out ${
+        drawerOpen ? 'translate-x-0' : 'translate-x-full'
+      }`}>
+        {/* Drawer Toggle Button */}
+        <button
+          onClick={() => setDrawerOpen(!drawerOpen)}
+          className={`absolute left-0 top-1/2 -translate-y-1/2 -translate-x-full 
+                     bg-[#111] border border-orange-400/60 text-orange-400 px-3 py-4 
+                     font-mono text-sm font-semibold shadow-[0_0_8px_orange] 
+                     hover:bg-[#222] hover:shadow-[0_0_12px_orange] transition-all
+                     ${drawerOpen ? 'rounded-l-lg' : 'rounded-l-lg'}`}
+        >
+          <div className="flex flex-col items-center gap-1">
+            <span className="text-lg">🗺️</span>
+            <span className="text-xs writing-mode-vertical transform -rotate-90">
+              {drawerOpen ? 'Close' : 'Path'}
+            </span>
+          </div>
+        </button>
+
+        {/* Drawer Content */}
+        <div className="w-80 h-full bg-[#111] border-l border-orange-400/60 shadow-[-8px_0_16px_rgba(255,165,0,0.2)] backdrop-blur-sm">
+          <div className="p-4 border-b border-orange-400/30">
+            <h2 className="text-orange-400 font-mono font-bold text-lg mb-2 flex items-center gap-2">
+              🗺️ Scene Path View
+            </h2>
+            <p className="text-orange-300/80 font-mono text-xs mb-4">
+              Live tracking of story progression
+            </p>
+            
+            {/* Path Selector */}
+            <div className="mb-4">
+              <label htmlFor="path-selector" className="block text-orange-400 font-mono text-sm font-semibold mb-2">
+                Current Story Path:
+              </label>
+              <select
+                id="path-selector"
+                value={selectedPath}
+                onChange={handlePathChange}
+                className="w-full bg-[#1a1a1a] text-white border border-orange-400/60 rounded px-3 py-2 font-mono text-sm
+                         focus:outline-none focus:border-orange-400 focus:shadow-[0_0_4px_orange] 
+                         hover:border-orange-400/80 transition-all cursor-pointer"
+              >
+                <option value="night-city">🌆 Night City Arc</option>
+                <option value="matrix-main">🔴 Matrix Main Path</option>
+                <option value="training">🧪 Training Sequence</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Path Timeline */}
+          <div className="flex-1 overflow-y-auto p-4">
+            <div className="space-y-3">
+              {currentStoryPath.map((pathNode, index) => {
+                const nodeData = nodes.find(n => n.id === pathNode.id);
+                const nodeType = nodeData?.type || 'scene';
+                
+                return (
+                  <div key={pathNode.id} className="relative">
+                    {/* Connection Line */}
+                    {index < currentStoryPath.length - 1 && (
+                      <div className="absolute left-6 top-12 w-0.5 h-6 bg-orange-400/30"></div>
+                    )}
+                    
+                    {/* Node Item */}
+                    <button
+                      onClick={() => handleNodeClick(pathNode.id)}
+                      className={`w-full text-left p-3 rounded-lg border font-mono text-sm transition-all
+                                 hover:scale-105 hover:shadow-lg group ${getStatusColor(pathNode.status)}`}
+                    >
+                      <div className="flex items-start gap-3">
+                        <span className="text-lg flex-shrink-0 mt-0.5">
+                          {getNodeIcon(nodeType, pathNode.status)}
+                        </span>
+                        <div className="flex-1 min-w-0">
+                          <div className="font-semibold text-sm mb-1 truncate">
+                            {pathNode.label}
+                          </div>
+                          <div className="text-xs opacity-60 mb-1">
+                            ID: {pathNode.id}
+                          </div>
+                          <div className="text-xs opacity-80 capitalize">
+                            {pathNode.status} • {nodeType}
+                          </div>
+                        </div>
+                        <div className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <span className="text-xs">🎯</span>
+                        </div>
+                      </div>
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Path Stats */}
+            <div className="mt-6 pt-4 border-t border-orange-400/30">
+              <div className="grid grid-cols-3 gap-2 text-center font-mono text-xs">
+                <div className="bg-green-900/30 border border-green-400/30 rounded p-2">
+                  <div className="text-green-400 font-semibold">
+                    {currentStoryPath.filter(n => n.status === 'completed').length}
+                  </div>
+                  <div className="text-green-300/80">Done</div>
+                </div>
+                <div className="bg-cyan-900/30 border border-cyan-400/30 rounded p-2">
+                  <div className="text-cyan-400 font-semibold">
+                    {currentStoryPath.filter(n => n.status === 'current').length}
+                  </div>
+                  <div className="text-cyan-300/80">Active</div>
+                </div>
+                <div className="bg-gray-900/30 border border-gray-400/30 rounded p-2">
+                  <div className="text-gray-400 font-semibold">
+                    {currentStoryPath.filter(n => n.status === 'upcoming').length}
+                  </div>
+                  <div className="text-gray-300/80">Next</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div style={{ position: 'fixed', bottom: 20, left: 20, zIndex: 50 }}>
         <div className="flex gap-2">
           <Link
@@ -104,6 +298,7 @@ export default function MapPage() {
         Build: {commit || 'dev'}
       </div>
       <MapCanvas
+        ref={mapCanvasRef}
         nodes={filteredNodes}
         edges={edges}
         nodeTypes={nodeTypes}

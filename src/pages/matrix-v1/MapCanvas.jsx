@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import React, { useState, useMemo, useEffect, useCallback, forwardRef, useImperativeHandle } from 'react';
 import ReactFlow, { ReactFlowProvider, useReactFlow, MarkerType } from 'reactflow';
 import 'reactflow/dist/base.css';
 import ZoomHUD from './ZoomHUD';
@@ -170,7 +170,7 @@ function layoutNodesByDepth(nodes, useOverlayPositions = false) {
   });
 }
 
-function MapCanvasInner({ nodes }) {
+const MapCanvasInner = forwardRef(function MapCanvasInner({ nodes }, ref) {
   const [activeTypes, setActiveTypes] = useState(() => NODE_TYPE_FILTERS.map(f => f.key));
   const [showEdges, setShowEdges] = useState(true);
   const [hoveredNode, setHoveredNode] = useState(null);
@@ -180,6 +180,23 @@ function MapCanvasInner({ nodes }) {
   const [focusedOverlayNodeId, setFocusedOverlayNodeId] = useState(null);
   
   const reactFlowInstance = useReactFlow();
+
+  // Expose methods to parent component
+  useImperativeHandle(ref, () => ({
+    centerNode: (nodeId) => {
+      if (reactFlowInstance) {
+        const node = nodes.find(n => n.id === nodeId);
+        if (node) {
+          reactFlowInstance.setCenter(node.position.x, node.position.y, { zoom: 1.2, duration: 800 });
+        }
+      }
+    },
+    fitView: () => {
+      if (reactFlowInstance) {
+        reactFlowInstance.fitView({ padding: 0.8, duration: 800 });
+      }
+    }
+  }), [reactFlowInstance, nodes]);
 
   // Helper functions
   const getChoiceChildren = useCallback((choiceId) => {
@@ -515,12 +532,12 @@ function MapCanvasInner({ nodes }) {
       </div>
     </>
   );
-}
+});
 
-export default function MapCanvas(props) {
+export default forwardRef(function MapCanvas(props, ref) {
   return (
     <ReactFlowProvider>
-      <MapCanvasInner {...props} />
+      <MapCanvasInner {...props} ref={ref} />
     </ReactFlowProvider>
   );
-}
+});
