@@ -2,13 +2,16 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { ThemeProvider } from '../theme/ThemeContext';
+import { ColorModeProvider } from '../theme/ColorModeContext';
 import WorldLayout from '../components/WorldLayout';
 import { themes } from '../theme/themes';
 
 const Wrapper = ({ children }) => (
-  <ThemeProvider>
-    {children}
-  </ThemeProvider>
+  <ColorModeProvider>
+    <ThemeProvider>
+      {children}
+    </ThemeProvider>
+  </ColorModeProvider>
 );
 
 test('renders children with world background', () => {

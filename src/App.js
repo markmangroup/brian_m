@@ -154,13 +154,13 @@ function AppLayout() {
 export default function App() {
   return (
     <UserProvider>
-      <ThemeProvider>
-        <ColorModeProvider>
+      <ColorModeProvider>
+        <ThemeProvider>
           <Router>
             <AppLayout />
           </Router>
-        </ColorModeProvider>
-      </ThemeProvider>
+        </ThemeProvider>
+      </ColorModeProvider>
     </UserProvider>
   );
 }

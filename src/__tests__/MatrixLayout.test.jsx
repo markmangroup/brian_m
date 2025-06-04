@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { ThemeProvider } from '../theme/ThemeContext';
+import { ColorModeProvider } from '../theme/ColorModeContext';
 import MatrixLayout, { MatrixCard, MatrixButton, MatrixInput } from '../components/MatrixLayout';
 import { themes } from '../theme/themes';
 
@@ -13,9 +14,11 @@ jest.mock('../components/MatrixRain', () => {
 });
 
 const TestWrapper = ({ children }) => (
-  <ThemeProvider>
-    {children}
-  </ThemeProvider>
+  <ColorModeProvider>
+    <ThemeProvider>
+      {children}
+    </ThemeProvider>
+  </ColorModeProvider>
 );
 
 describe('MatrixLayout', () => {

@@ -2,12 +2,17 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import MapD3 from '../pages/matrix-v1/MapD3';
 import { ThemeProvider } from '../theme/ThemeContext';
+import { ColorModeProvider } from '../theme/ColorModeContext';
 
 jest.mock('../pages/matrix-v1/useTreeLayout', () => {
   return jest.fn(() => ({ drawTree: jest.fn(), rootPosRef: { current: { x: 0, y: 0 } } }));
 });
 
-const Wrapper = ({ children }) => <ThemeProvider>{children}</ThemeProvider>;
+const Wrapper = ({ children }) => (
+  <ColorModeProvider>
+    <ThemeProvider>{children}</ThemeProvider>
+  </ColorModeProvider>
+);
 
 test('toggle metrics overlay button works', () => {
   render(
