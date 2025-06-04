@@ -16,6 +16,7 @@ import { useTheme } from '../../theme/ThemeContext';
 import { useColorMode } from '../../theme/ColorModeContext';
 import DiagnosticOverlay from './DiagnosticOverlay';
 import { getWorldDialogue, getWorldSummary, getWorldCharacters } from '../../utils/worldContentLoader';
+import { getNodeSummary } from '../../utils/getNodeSummary';
 
 // Status icon mapping
 const STATUS_ICONS = {
@@ -328,7 +329,15 @@ const ExecutiveNodeCard = ({ node, onView, onEdit }) => {
             </h3>
           </div>
           <p className="text-xs text-theme-muted mb-2 leading-relaxed">
-            {node.data?.summary || 'No summary available'}
+            {(() => {
+              const summary = getNodeSummary(node.data, currentWorld, getWorldDialogue);
+              if (summary) return summary;
+              return (
+                <span title="This node lacks summary, description, and setting information">
+                  ⚠️ Missing summary.
+                </span>
+              );
+            })()}
           </p>
         </div>
       </div>
