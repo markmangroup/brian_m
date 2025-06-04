@@ -10,6 +10,8 @@ import SidebarFilters from './SidebarFilters';
 import DetailPanel from './DetailPanel';
 import ZoomControls from './ZoomControls';
 import DiagnosticOverlay from './DiagnosticOverlay';
+import MapOverlayControls from './MapOverlayControls';
+import { getVisited } from './MatrixRouteMemory';
 import { getWorldCharacters } from '../../utils/worldContentLoader';
 
 const realMatrixNodes = migrateLegacyNodes(rawMatrixNodes);
@@ -207,6 +209,10 @@ export default function MapD3() {
 
   // Metrics overlay toggle
   const [showMetrics, setShowMetrics] = useState(false);
+
+  // Overlay controls
+  const [hideEdges, setHideEdges] = useState(false);
+  const [showRealPath, setShowRealPath] = useState(true);
   
   // Search and UI states
   const [searchQuery, setSearchQuery] = useState('');
@@ -522,6 +528,7 @@ export default function MapD3() {
     selectedNode,
     handleNodeClick,
     showMetrics,
+    hideEdges,
   });
 
   const toggleStatusFilter = (status) => {
@@ -572,6 +579,29 @@ export default function MapD3() {
   useEffect(() => {
     drawTree();
   }, [drawTree]);
+
+  // Draw real user path overlay
+  useEffect(() => {
+    const svg = d3.select(svgRef.current);
+    svg.selectAll('.real-path-overlay').remove();
+    if (!showRealPath) return;
+    const visited = getVisited();
+    const points = visited
+      .map(id => nodePosRef.current[id])
+      .filter(Boolean)
+      .map(p => `${p.x},${p.y}`)
+      .join(' ');
+    if (points) {
+      svg
+        .append('polyline')
+        .attr('class', 'real-path-overlay')
+        .attr('points', points)
+        .style('fill', 'none')
+        .style('stroke', '#06b6d4')
+        .style('stroke-width', 2)
+        .style('pointer-events', 'none');
+    }
+  }, [showRealPath, drawTree]);
 
   useEffect(() => {
     if (!initialCentered && rootPosRef?.current && svgRef.current) {
@@ -928,9 +958,15 @@ export default function MapD3() {
           <svg
             ref={svgRef}
             className="w-full h-full bg-gradient-to-br from-gray-900 to-black border-l border-green-400/20"
-            style={{ minHeight: '600px' }}
+          style={{ minHeight: '600px' }}
           />
           <ZoomControls svgRef={svgRef} />
+          <MapOverlayControls
+            hideEdges={hideEdges}
+            setHideEdges={setHideEdges}
+            showRealPath={showRealPath}
+            setShowRealPath={setShowRealPath}
+          />
           
           {/* Help Text */}
           <div className="absolute top-[72px] left-4 bg-black/80 text-xs text-gray-400 p-3 rounded border border-gray-600 font-mono z-[110]">

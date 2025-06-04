@@ -37,6 +37,7 @@ export default function useTreeLayout(params) {
     selectedNode,
     handleNodeClick,
     showMetrics,
+    hideEdges,
   } = params;
 
   const rootPosRef = useRef({ x: 0, y: 0 });
@@ -171,27 +172,42 @@ export default function useTreeLayout(params) {
       nodePosRef.current[id] = { x: xPos, y: yPos };
     });
 
-    const linkGroups = g.selectAll('.link').data(links).enter().append('g').attr('class', 'link');
-    const linkPaths = linkGroups
-      .append('path')
-      .attr('d', (d) => {
-        if (layoutType === 'radial') {
-          const sx = d.source.x_cartesian + width / 2;
-          const sy = d.source.y_cartesian + height / 2;
-          const tx = d.target.x_cartesian + width / 2;
-          const ty = d.target.y_cartesian + height / 2;
-          return `M${sx},${sy}L${tx},${ty}`;
-        }
-        if (layoutType === 'tree') {
-          return `M${d.source.y},${d.source.x}C${(d.source.y + d.target.y) / 2},${d.source.x} ${(d.source.y + d.target.y) / 2},${d.target.x} ${d.target.y},${d.target.x}`;
-        }
-        return `M${d.source.x},${d.source.y}L${d.target.x},${d.target.y}`;
-      })
-      .style('fill', 'none')
-      .style('stroke', themeConfigs[currentTheme].linkColor)
-      .style('stroke-width', '2px')
-      .style('opacity', 0.6)
-      .style('stroke-dasharray', layoutType === 'network' ? '3,3' : 'none');
+    const edgesGroup = g.append('g').attr('class', 'edges');
+    if (hideEdges) {
+      edgesGroup.style('display', 'none');
+    } else {
+      edgesGroup.style('display', null);
+    }
+
+    let linkPaths = edgesGroup.selectAll('path');
+    if (!hideEdges) {
+      const linkGroups = edgesGroup
+        .selectAll('.link')
+        .data(links)
+        .enter()
+        .append('g')
+        .attr('class', 'link');
+      linkPaths = linkGroups
+        .append('path')
+        .attr('d', (d) => {
+          if (layoutType === 'radial') {
+            const sx = d.source.x_cartesian + width / 2;
+            const sy = d.source.y_cartesian + height / 2;
+            const tx = d.target.x_cartesian + width / 2;
+            const ty = d.target.y_cartesian + height / 2;
+            return `M${sx},${sy}L${tx},${ty}`;
+          }
+          if (layoutType === 'tree') {
+            return `M${d.source.y},${d.source.x}C${(d.source.y + d.target.y) / 2},${d.source.x} ${(d.source.y + d.target.y) / 2},${d.target.x} ${d.target.y},${d.target.x}`;
+          }
+          return `M${d.source.x},${d.source.y}L${d.target.x},${d.target.y}`;
+        })
+        .style('fill', 'none')
+        .style('stroke', themeConfigs[currentTheme].linkColor)
+        .style('stroke-width', '2px')
+        .style('opacity', 0.6)
+        .style('stroke-dasharray', layoutType === 'network' ? '3,3' : 'none');
+    }
 
     const nodeGroups = g
       .selectAll('.node')
@@ -363,7 +379,7 @@ export default function useTreeLayout(params) {
         nodeGroups.attr('transform', (d) => `translate(${d.x},${d.y})`);
       });
     }
-  }, [svgRef, filteredTree, layoutType, expandedNodes, nodeMatchesFilters, themeConfigs, currentTheme, forceStrength, linkDistance, centerStrength, collideRadius, selectedNode, handleNodeClick, showMetrics]);
+  }, [svgRef, filteredTree, layoutType, expandedNodes, nodeMatchesFilters, themeConfigs, currentTheme, forceStrength, linkDistance, centerStrength, collideRadius, selectedNode, handleNodeClick, showMetrics, hideEdges]);
 
   return { drawTree, rootPosRef, nodePosRef };
 }
