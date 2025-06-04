@@ -44,6 +44,32 @@ const WORLD_OPTIONS = [
     features: ['Corporate Intrigue', 'Netrunning', 'Street Credibility']
   },
   {
+    id: 'finance',
+    name: 'Finance',
+    description: 'Corporate Ops, Net Worth, and Data Uplinks',
+    route: '/matrix-v1/finance/fin-entry',
+    theme: 'matrix',
+    icon: '💰',
+    background: 'bg-gradient-to-br from-emerald-900/20 to-blue-900/20',
+    border: 'border-emerald-400/60',
+    glow: 'shadow-[0_0_20px_rgba(16,185,129,0.4)]',
+    hoverGlow: 'hover:shadow-[0_0_30px_rgba(16,185,129,0.6)]',
+    features: ['Corporate Ops', 'Net Worth Tracking', 'Data Uplinks']
+  },
+  {
+    id: 'fallout',
+    name: 'Fallout',
+    description: 'Vault 914, NYC fragments, wasteland missions',
+    route: '/matrix-v1/fallout/vault-entry',
+    theme: 'matrix',
+    icon: '☢️',
+    background: 'bg-gradient-to-br from-lime-900/20 to-gray-800/20',
+    border: 'border-lime-400/60',
+    glow: 'shadow-[0_0_20px_rgba(132,204,22,0.4)]',
+    hoverGlow: 'hover:shadow-[0_0_30px_rgba(132,204,22,0.6)]',
+    features: ['Vault 914', 'NYC Fragments', 'Wasteland Missions']
+  },
+  {
     id: 'progress',
     name: 'Progress Dashboard',
     description: 'Visualize cleansing momentum across worlds.',
