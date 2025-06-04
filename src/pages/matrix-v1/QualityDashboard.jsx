@@ -599,7 +599,7 @@ const WorldFilter = ({ selectedWorlds, onChange, onToggle, isCollapsed }) => {
 
 // Enhanced Metrics Widget Component
 const MetricsWidget = ({ colorMode, filteredNodes = null }) => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
   
   const systemMetrics = useMemo(() => {
     // Use filtered nodes if provided, otherwise get all nodes
