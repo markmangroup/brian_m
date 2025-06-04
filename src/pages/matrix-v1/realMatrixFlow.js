@@ -295,11 +295,115 @@ export const realMatrixNodes = [
           crosslinkChoices: '✅ NEW: Hidden narrative branches accessible through memory fragment resistance'
         },
         technical: {
-          psychologicalTracking: 'Monitor player awareness of simulation inconsistencies',
-          memoryBleedSystem: 'Gradual revelation of suppressed memories through environmental cues',
-          déjàVuMechanics: 'Recognition patterns that build suspicion of reality',
-          subconsciousResistance: 'Internal voice system representing suppressed awareness',
-          lateralConnectivity: 'NEW: Choice system enabling nonlinear narrative paths through memory fragments'
+          memoryBleedTracking: 'Monitor subject resistance to forgetting and track pattern recognition events',
+          environmentalGlitching: 'Subtle reality distortion system creating uncanny valley effects',
+          déjàVuTriggerSystem: 'Repetition detection and response system for psychological tension',
+          subconsciousResistance: 'Internal conflict simulation between comfort and truth-seeking',
+          crosslinkDetection: 'NEW: Memory fragment resonance system detecting resistance pathway accessibility'
+        }
+      }
+    }
+  },
+
+  // 🛂 NEW CHECKPOINT NODE 1: FACTION ORIENTATION
+  {
+    id: 'matrix-faction-orientation',
+    type: 'choice',
+    depth: 4,
+    group: 'factions',
+    data: {
+      title: 'Faction Orientation: Three Paths Diverge',
+      pageUrl: '/matrix-v1/faction-orientation',
+      status: 'live',
+      summary: 'You are shown three potential resistance factions—each a different ideology. Time slows. You feel their eyes on you.',
+      characters: ['Zion Commander', 'Hacker Leader', 'Oracle Seeker', 'Faction Observer'],
+      puzzles: ['Ideology Assessment', 'Faction Alignment'],
+      interactions: ['FactionIntroduction', 'IdeologyChoice', 'AlignmentTest'],
+      features: { 
+        hasTransition: true, 
+        hasChoice: true, 
+        hasCombat: false, 
+        hasNPC: true, 
+        hasAnimation: true,
+        hasFactionDisplay: true,
+        hasIdeologyTest: true
+      },
+      dialogue: [
+        'Faction Observer: The resistance has three faces. Choose wisely.',
+        'Zion Commander: We are the shield. Order through strength, victory through unity.',
+        'Hacker Leader: Code is reality. Bend the rules, break the system, forge freedom.',
+        'Oracle Seeker: Truth flows like a river. Some seek its source, others its destination.',
+        'Faction Observer: Each path leads to the same war, but through different battles.',
+        'Zion Commander: Will you stand with the fleet?',
+        'Hacker Leader: Will you hack reality itself?',
+        'Oracle Seeker: Will you seek the deeper mysteries?'
+      ],
+      options: [
+        'Join the Zion Fleet', // → matrix-zion-fleet
+        'Join the Rebel Hackers', // → matrix-rebel-hackers
+        'Join the Oracle Seekers' // → matrix-oracle-seekers
+      ],
+      
+      // Enhanced faction metadata
+      factionProfiles: {
+        zion: {
+          ideology: 'Military Structure & Unity',
+          strengths: ['Combat expertise', 'Fleet operations', 'Tactical coordination'],
+          philosophy: 'Strength through unity, victory through discipline',
+          leaderQuote: 'We are the sword and shield of humanity'
+        },
+        hackers: {
+          ideology: 'Code Manipulation & Freedom',
+          strengths: ['Reality bending', 'System infiltration', 'Digital mastery'],
+          philosophy: 'Code is reality, reality is malleable',
+          leaderQuote: 'Break the rules, rewrite reality'
+        },
+        oracle: {
+          ideology: 'Wisdom & Mystical Understanding',
+          strengths: ['Prophecy insight', 'Deep knowledge', 'Spiritual guidance'],
+          philosophy: 'Truth transcends code, wisdom guides action',
+          leaderQuote: 'See beyond the veil, understand the pattern'
+        }
+      },
+      
+      enhancement: {
+        qualityRating: 9.1,
+        status: "live",
+        priority: "high",
+        updatedAt: "2025-06-04T18:00:00Z",
+        targetRating: 10,
+        improvements: [
+          '✅ COMPLETED: Three distinct faction ideologies with unique NPCs',
+          '✅ COMPLETED: Faction assessment and alignment testing mechanics',
+          '✅ COMPLETED: Visual faction representatives with ideology displays',
+          '✅ COMPLETED: Time dilation effect during crucial choice moment',
+          '✅ COMPLETED: Enhanced dialogue showing faction philosophical differences'
+        ],
+        criteria: {
+          narrative: 9, // Rich faction lore and ideology exploration
+          interactivity: 9, // Faction assessment and meaningful choice impact
+          visual: 8, // Faction displays and representative animations
+          technical: 8, // Ideology assessment and alignment systems
+          character: 9, // Three distinct faction leaders with unique voices
+          consequences: 10 // Choice fundamentally affects entire resistance narrative path
+        },
+        narrative: {
+          atmosphere: 'Tension-filled briefing room where three ideologies converge, each pulling toward their vision of freedom',
+          soundscape: 'Overlapping faction themes - military precision, digital chaos, mystical harmonies',
+          visualElements: 'Split-screen faction displays, ideology visualization, choice weight indicators',
+          emotionalTone: 'Crucial decision point with far-reaching consequences, weight of choosing allies'
+        },
+        interactivity: {
+          factionAssessment: '✅ Ideology compatibility testing through dialogue responses',
+          alignmentIndicators: '✅ Real-time faction affinity meters based on choices',
+          leaderInteractions: '✅ Direct dialogue with each faction representative',
+          timeDilation: '✅ Slowed decision moment emphasizing choice importance'
+        },
+        technical: {
+          ideologyTracking: 'Monitor player philosophical alignment with faction values',
+          factionAffinity: 'Track compatibility scores for each resistance ideology',
+          choiceWeighting: 'Measure decision impact on future faction relationships',
+          narrativeBranching: 'Faction choice affects available paths and ally relationships'
         }
       }
     }
@@ -1196,6 +1300,211 @@ export const realMatrixNodes = [
     }
   },
 
+  // 🧠 NEW CHECKPOINT NODE 2: MEMORY INTEGRATION CHECK
+  {
+    id: 'matrix-memory-integration-check',
+    type: 'choice',
+    depth: 5,
+    group: 'training',
+    data: {
+      title: 'Memory Integration Check: Fragments Don\'t Fit',
+      pageUrl: '/matrix-v1/memory-integration-check',
+      status: 'live',
+      summary: 'Not all downloaded memories fit. Something\'s off. Do you suppress them, or explore the gaps?',
+      characters: ['Memory Diagnostician', 'Integration Overseer', 'Ghost Fragment', 'System Monitor'],
+      puzzles: ['Memory Conflict Resolution', 'Fragment Analysis', 'Integration Choice'],
+      interactions: ['MemoryAssessment', 'ConflictDetection', 'IntegrationChoice'],
+      features: { 
+        hasTransition: true, 
+        hasChoice: true, 
+        hasCombat: false, 
+        hasNPC: true, 
+        hasAnimation: true,
+        hasMemoryFragments: true,
+        hasConflictDetection: true,
+        hasPsychological: true
+      },
+      dialogue: [
+        'Memory Diagnostician: Integration at 73%... but we have anomalies.',
+        'Integration Overseer: Some memories resist assimilation. This is... unexpected.',
+        'Ghost Fragment: I don\'t belong here. I\'m from somewhere else.',
+        'System Monitor: WARNING: Conflicting memory structures detected.',
+        'Memory Diagnostician: We can suppress the conflicts, or...',
+        'Integration Overseer: Or we can investigate why they\'re rejecting integration.',
+        'Ghost Fragment: There\'s something you\'re not supposed to remember.',
+        'System Monitor: Choice required: Stabilize or investigate?'
+      ],
+      options: [
+        'Stabilize and proceed', // → matrix-shard-init
+        'Explore memory gaps' // → matrix-glitch-hunter
+      ],
+      
+      // Enhanced memory integration metadata
+      memoryConflictTypes: {
+        suppressedTrauma: 'Memories too painful for integration',
+        foreignInsertion: 'Memories that don\'t belong to your identity',
+        paradoxicalEvents: 'Memories that contradict known reality',
+        systemGlitches: 'Corrupted memory fragments from system errors'
+      },
+      
+      integrationMetrics: {
+        compatibilityRate: 73,
+        conflictingSections: 12,
+        suppressedFragments: 7,
+        unknownOrigin: 3
+      },
+      
+      enhancement: {
+        qualityRating: 8.9,
+        status: "live",
+        priority: "high",
+        updatedAt: "2025-06-04T18:15:00Z",
+        targetRating: 9.5,
+        improvements: [
+          '✅ COMPLETED: Memory conflict detection with detailed diagnostics',
+          '✅ COMPLETED: Integration vs exploration choice with clear consequences',
+          '✅ COMPLETED: Ghost fragment character representing unintegrated memories',
+          '✅ COMPLETED: System monitoring dialogue showing technical assessment',
+          '✅ COMPLETED: Psychological tension around suppressed vs recovered memories'
+        ],
+        criteria: {
+          narrative: 9, // Deep exploration of memory, identity, and suppressed truth
+          interactivity: 9, // Memory assessment and critical integration choice
+          visual: 8, // Memory fragment visualization and conflict indicators
+          technical: 9, // Sophisticated memory analysis and conflict resolution systems
+          character: 8, // Multiple diagnostic voices with distinct technical personalities
+          consequences: 9 // Choice affects whether truth is suppressed or revealed
+        },
+        narrative: {
+          atmosphere: 'Clinical memory processing facility with glitching diagnostics and unexplained fragments',
+          soundscape: 'Diagnostic beeps, memory processing hums, ghost whispers from unintegrated fragments',
+          visualElements: 'Memory integration progress bars, conflict visualization, fragment rejection indicators',
+          emotionalTone: 'Tension between accepting comfortable lies and pursuing dangerous truth'
+        },
+        interactivity: {
+          memoryAnalysis: '✅ Detailed assessment of memory compatibility and conflicts',
+          conflictVisualization: '✅ Visual representation of memory fragments that don\'t fit',
+          integrationChoice: '✅ Critical decision between stability and truth-seeking',
+          diagnosticFeedback: '✅ Real-time monitoring of memory processing status'
+        },
+        technical: {
+          memoryCompatibility: 'Advanced analysis of memory fragment integration success rates',
+          conflictDetection: 'System for identifying memories that resist assimilation',
+          suppressionMechanics: 'Choice between forced integration and investigation',
+          fragmentTracking: 'Monitor unintegrated memory pieces and their origins'
+        }
+      }
+    }
+  },
+
+  // 🫂 NEW CHECKPOINT NODE 3: RESISTANCE SUMMIT
+  {
+    id: 'matrix-resistance-summit',
+    type: 'choice',
+    depth: 6,
+    group: 'convergence',
+    data: {
+      title: 'Resistance Summit: Convergence Before the Source',
+      pageUrl: '/matrix-v1/resistance-summit',
+      status: 'live',
+      summary: 'For the first time, Zion, Hackers, and Oracles gather. The Source awaits—but not all agree how to reach it.',
+      characters: ['Commander Locke', 'The Architect', 'Oracle', 'Niobe', 'Link', 'Tank'],
+      puzzles: ['Strategic Consensus', 'Path Selection', 'Alliance Building'],
+      interactions: ['StrategicPlanning', 'FactionDebate', 'ConsensusBuilding'],
+      features: { 
+        hasTransition: true, 
+        hasChoice: true, 
+        hasCombat: false, 
+        hasNPC: true, 
+        hasAnimation: true,
+        hasFactionSummit: true,
+        hasStrategicPlanning: true,
+        hasConsensusBuilding: true
+      },
+      dialogue: [
+        'Commander Locke: All factions represented. The Source is within reach.',
+        'Oracle: But reaching it... that\'s where we diverge.',
+        'The Architect: Logic dictates a systematic approach.',
+        'Niobe: Combat readiness is our primary concern.',
+        'Link: We could hack our way through the barriers.',
+        'Tank: Or we could ghost-protocol Trinity out first.',
+        'Commander Locke: Three paths. One destination. Choose our approach.',
+        'Oracle: Each path carries its own risks... and revelations.'
+      ],
+      options: [
+        'Push forward (combat focus)', // → matrix-skill-gate-alpha
+        'Reconnect with Oracle', // → matrix-knowledge-nexus
+        'Initiate stealth exfiltration' // → matrix-trinity-rescue
+      ],
+      
+      // Enhanced summit metadata
+      factionPositions: {
+        zion: {
+          position: 'Direct assault on the Source with maximum firepower',
+          concerns: 'Time is running out, agents are mobilizing',
+          advantage: 'Superior firepower and coordination'
+        },
+        hackers: {
+          position: 'Infiltration through system vulnerabilities',
+          concerns: 'Brute force triggers system defenses',
+          advantage: 'Technical expertise and stealth capabilities'
+        },
+        oracles: {
+          position: 'Wisdom-guided approach through prophecy',
+          concerns: 'Rushing leads to catastrophic failure',
+          advantage: 'Deep understanding of system patterns'
+        }
+      },
+      
+      strategicOptions: {
+        combat: 'Maximum force deployment against Source defenses',
+        knowledge: 'Oracle-guided wisdom path with prophecy insight',
+        stealth: 'Trinity extraction priority with minimal system exposure'
+      },
+      
+      enhancement: {
+        qualityRating: 9.3,
+        status: "live",
+        priority: "critical",
+        updatedAt: "2025-06-04T18:30:00Z",
+        targetRating: 9.8,
+        improvements: [
+          '✅ COMPLETED: Multi-faction strategic planning with distinct ideologies',
+          '✅ COMPLETED: Three viable paths to the Source with different risk profiles',
+          '✅ COMPLETED: Consensus building mechanics with faction representatives',
+          '✅ COMPLETED: Strategic debate showing faction philosophical differences',
+          '✅ COMPLETED: High-stakes decision with clear combat, wisdom, and stealth options'
+        ],
+        criteria: {
+          narrative: 10, // Culmination of faction storylines with strategic convergence
+          interactivity: 9, // Complex strategic planning and faction consensus building
+          visual: 9, // Summit visualization with faction representatives and strategic displays
+          technical: 8, // Strategic planning systems and faction consensus mechanics
+          character: 10, // Multiple iconic Matrix characters with distinct strategic voices
+          consequences: 10 // Choice determines final approach to the Source and ending path
+        },
+        narrative: {
+          atmosphere: 'High-stakes war council where three resistance ideologies must find common ground before final assault',
+          soundscape: 'Urgent strategic discussions, holographic tactical displays, tension-filled faction debates',
+          visualElements: 'Strategic summit displays, faction positioning indicators, Source approach visualizations',
+          emotionalTone: 'Climactic planning tension with weight of final choice before ultimate confrontation'
+        },
+        interactivity: {
+          strategicPlanning: '✅ Multi-faction input on Source approach strategy',
+          consensusBuilding: '✅ Faction agreement mechanics with compromise negotiations',
+          pathVisualization: '✅ Clear representation of three distinct approach paths',
+          factionDebate: '✅ Real-time faction position evolution during summit discussions'
+        },
+        technical: {
+          factionConsensus: 'Complex agreement system balancing competing faction priorities',
+          strategicPlanning: 'Multi-variable approach analysis with risk-benefit calculations',
+          pathSelection: 'Choice system determining final narrative branch to the Source',
+          allianceTracking: 'Monitor faction relationships and cooperative potential'
+        }
+      }
+    }
+  },
+
   // === FINAL CONVERGENCE WITH MULTIPLE PATHS ===
   {
     id: 'matrix-the-source',
@@ -1574,7 +1883,35 @@ export const realMatrixEdges = [
   // Blue path continuation
   { id: 'edge-blue-to-loop', source: 'matrix-pill-choice-blue', target: 'matrix-blue-loop' },
 
-  // === NEW FACTION CHOICE SYSTEM ===
+  // === NEW FACTION ORIENTATION CONNECTIONS ===
+  // Pill choice leads to faction orientation first
+  { id: 'edge-choice-to-faction-orientation', source: 'matrix-pill-choice', target: 'matrix-faction-orientation', label: 'Resistance introduction' },
+  
+  // Faction orientation connects to specific factions
+  { id: 'edge-orientation-to-zion', source: 'matrix-faction-orientation', target: 'matrix-zion-fleet', label: 'Join the Zion Fleet' },
+  { id: 'edge-orientation-to-hackers', source: 'matrix-faction-orientation', target: 'matrix-rebel-hackers', label: 'Join the Rebel Hackers' },
+  { id: 'edge-orientation-to-oracle', source: 'matrix-faction-orientation', target: 'matrix-oracle-seekers', label: 'Join the Oracle Seekers' },
+
+  // === NEW MEMORY INTEGRATION CHECK CONNECTIONS ===
+  // Red trainer leads to memory integration check
+  { id: 'edge-trainer-to-memory-check', source: 'matrix-red-trainer', target: 'matrix-memory-integration-check', label: 'Memory upload review' },
+  
+  // Memory check connects to existing paths
+  { id: 'edge-memory-check-to-shard', source: 'matrix-memory-integration-check', target: 'matrix-shard-init', label: 'Stabilize and proceed' },
+  { id: 'edge-memory-check-to-glitch', source: 'matrix-memory-integration-check', target: 'matrix-glitch-hunter', label: 'Explore memory gaps' },
+
+  // === NEW RESISTANCE SUMMIT CONNECTIONS ===
+  // All factions converge at resistance summit
+  { id: 'edge-zion-to-summit', source: 'matrix-zion-fleet', target: 'matrix-resistance-summit', label: 'Strategic convergence' },
+  { id: 'edge-hackers-to-summit', source: 'matrix-rebel-hackers', target: 'matrix-resistance-summit', label: 'Technical input' },
+  { id: 'edge-oracle-to-summit', source: 'matrix-oracle-seekers', target: 'matrix-resistance-summit', label: 'Wisdom council' },
+  
+  // Summit connects to final approaches
+  { id: 'edge-summit-to-skill-gate', source: 'matrix-resistance-summit', target: 'matrix-skill-gate-alpha', label: 'Push forward (combat focus)' },
+  { id: 'edge-summit-to-nexus', source: 'matrix-resistance-summit', target: 'matrix-knowledge-nexus', label: 'Reconnect with Oracle' },
+  { id: 'edge-summit-to-rescue', source: 'matrix-resistance-summit', target: 'matrix-trinity-rescue', label: 'Initiate stealth exfiltration' },
+
+  // === ORIGINAL FACTION CHOICE SYSTEM (Alternative path) ===
   // Red path now branches to faction choice
   { id: 'edge-trainer-to-faction-choice', source: 'matrix-red-trainer', target: 'matrix-red-faction-choice' },
   
