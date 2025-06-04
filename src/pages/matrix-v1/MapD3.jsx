@@ -4,6 +4,7 @@ import { nodes as realMatrixNodes } from './nodes';
 import { edges as realMatrixEdges } from './edges';
 import { convertToTree, filterTreeByStatus, findPathToNode, validateTreeNoCycles, analyzeTree } from '../../utils/convertToTree';
 import { useTheme } from '../../theme/ThemeContext';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import useTreeLayout from './useTreeLayout';
 import SidebarFilters from './SidebarFilters';
 import DetailPanel from './DetailPanel';
@@ -170,6 +171,9 @@ export default function MapD3() {
   const svgRef = useRef();
   const searchInputRef = useRef();
   const { currentTheme, theme, getThemeD3, currentWorld } = useTheme();
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const focusNodeId = location.state?.focusNode || searchParams.get('node');
   
   const [layoutType, setLayoutType] = useState(LAYOUT_TYPES.tree);
   const [statusFilter, setStatusFilter] = useState(['live', 'wip', 'stub']);
@@ -488,7 +492,7 @@ export default function MapD3() {
     }
   }, [toggleNodeExpansion, originalTree]);
 
-  const { drawTree, rootPosRef } = useTreeLayout({
+  const { drawTree, rootPosRef, nodePosRef } = useTreeLayout({
     svgRef,
     filteredTree,
     layoutType,
@@ -556,7 +560,11 @@ export default function MapD3() {
 
   useEffect(() => {
     if (!initialCentered && rootPosRef?.current && svgRef.current) {
-      const { x, y } = rootPosRef.current;
+      const target = focusNodeId && nodePosRef.current[focusNodeId]
+        ? nodePosRef.current[focusNodeId]
+        : rootPosRef.current;
+      if (!target) return;
+      const { x, y } = target;
       const svgRect = svgRef.current.getBoundingClientRect();
       const centerX = svgRect.width / 2;
       const centerY = svgRect.height / 2;
@@ -568,7 +576,7 @@ export default function MapD3() {
         );
       setInitialCentered(true);
     }
-  }, [rootPosRef, initialCentered]);
+  }, [rootPosRef, nodePosRef, focusNodeId, initialCentered]);
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white flex">

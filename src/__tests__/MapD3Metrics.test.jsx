@@ -5,7 +5,11 @@ import { ThemeProvider } from '../theme/ThemeContext';
 import { ColorModeProvider } from '../theme/ColorModeContext';
 
 jest.mock('../pages/matrix-v1/useTreeLayout', () => {
-  return jest.fn(() => ({ drawTree: jest.fn(), rootPosRef: { current: { x: 0, y: 0 } } }));
+  return jest.fn(() => ({
+    drawTree: jest.fn(),
+    rootPosRef: { current: { x: 0, y: 0 } },
+    nodePosRef: { current: {} },
+  }));
 });
 
 const Wrapper = ({ children }) => (

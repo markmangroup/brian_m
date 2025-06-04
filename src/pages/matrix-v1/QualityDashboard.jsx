@@ -352,6 +352,13 @@ const ExecutiveNodeCard = ({ node, onView, onEdit }) => {
             })()}
           </p>
         </div>
+        <button
+          onClick={() => navigate(`/matrix-v1/map-d3?node=${node.id}`)}
+          className="text-lg hover:text-theme-accent"
+          title="View on map"
+        >
+          🗺️
+        </button>
       </div>
 
       {/* Quality & Score Section with enhanced contrast */}
