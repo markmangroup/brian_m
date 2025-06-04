@@ -17,6 +17,7 @@ import LittleAlchemy from './components/LittleAlchemy';
 import RCPlaneDesigner from './components/RCPlaneDesigner';
 import Updates from './components/Updates';
 import Home from './components/Home';
+import StartPage from './pages/StartPage';
 // Matrix V1 Pages
 import Entry from './pages/matrix-v1/Entry';
 import MatrixNamePrompt from './pages/matrix-v1/MatrixNamePrompt';
@@ -81,6 +82,7 @@ function AppLayout() {
       <Breadcrumbs />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/start" element={<StartPage />} />
         <Route path="/snack-trail" element={<SnackTrailPage />} />
         <Route path="/pixel-art" element={<PixelArtMaker />} />
         <Route path="/robot-lab" element={<RobotLab />} />
