@@ -772,6 +772,620 @@ export const realMatrixNodes = [
     }
   },
 
+  // === PLACEHOLDER NODES ===
+  {
+    id: 'matrix-alpha-trinity',
+    type: 'scene',
+    depth: 7,
+    group: 'placeholder',
+    world: 'matrix',
+    data: {
+      title: 'Alpha Trinity',
+      pageUrl: '/matrix-v1/alpha-trinity',
+      status: 'stub',
+      summary: 'Placeholder scene.',
+      characters: [],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
+  },
+  {
+    id: 'matrix-authority-agent',
+    type: 'scene',
+    depth: 7,
+    group: 'placeholder',
+    world: 'matrix',
+    data: {
+      title: 'Authority Agent',
+      pageUrl: '/matrix-v1/authority-agent',
+      status: 'stub',
+      summary: 'Placeholder scene.',
+      characters: [],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
+  },
+  {
+    id: 'matrix-blue-investigation',
+    type: 'scene',
+    depth: 7,
+    group: 'placeholder',
+    world: 'matrix',
+    data: {
+      title: 'Blue Investigation',
+      pageUrl: '/matrix-v1/blue-investigation',
+      status: 'stub',
+      summary: 'Placeholder scene.',
+      characters: [],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
+  },
+  {
+    id: 'matrix-compliance-path',
+    type: 'scene',
+    depth: 7,
+    group: 'placeholder',
+    world: 'matrix',
+    data: {
+      title: 'Compliance Path',
+      pageUrl: '/matrix-v1/compliance-path',
+      status: 'stub',
+      summary: 'Placeholder scene.',
+      characters: [],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
+  },
+  {
+    id: 'matrix-echo-verify',
+    type: 'scene',
+    depth: 7,
+    group: 'placeholder',
+    world: 'matrix',
+    data: {
+      title: 'Echo Verify',
+      pageUrl: '/matrix-v1/echo-verify',
+      status: 'stub',
+      summary: 'Placeholder scene.',
+      characters: [],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
+  },
+  {
+    id: 'matrix-ghost-layer-2',
+    type: 'scene',
+    depth: 7,
+    group: 'placeholder',
+    world: 'matrix',
+    data: {
+      title: 'Ghost Layer 2',
+      pageUrl: '/matrix-v1/ghost-layer-2',
+      status: 'stub',
+      summary: 'Placeholder scene.',
+      characters: [],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
+  },
+  {
+    id: 'matrix-glitch-hunter',
+    type: 'scene',
+    depth: 7,
+    group: 'placeholder',
+    world: 'matrix',
+    data: {
+      title: 'Glitch Hunter',
+      pageUrl: '/matrix-v1/glitch-hunter',
+      status: 'stub',
+      summary: 'Placeholder scene.',
+      characters: [],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
+  },
+  {
+    id: 'matrix-knowledge-nexus',
+    type: 'scene',
+    depth: 7,
+    group: 'placeholder',
+    world: 'matrix',
+    data: {
+      title: 'Knowledge Nexus',
+      pageUrl: '/matrix-v1/knowledge-nexus',
+      status: 'stub',
+      summary: 'Placeholder scene.',
+      characters: [],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
+  },
+  {
+    id: 'matrix-memory-integration-check',
+    type: 'scene',
+    depth: 7,
+    group: 'placeholder',
+    world: 'matrix',
+    data: {
+      title: 'Memory Integration Check',
+      pageUrl: '/matrix-v1/memory-integration-check',
+      status: 'stub',
+      summary: 'Placeholder scene.',
+      characters: [],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
+  },
+  {
+    id: 'matrix-resistance-summit',
+    type: 'scene',
+    depth: 7,
+    group: 'placeholder',
+    world: 'matrix',
+    data: {
+      title: 'Resistance Summit',
+      pageUrl: '/matrix-v1/resistance-summit',
+      status: 'stub',
+      summary: 'Placeholder scene.',
+      characters: [],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
+  },
+  {
+    id: 'matrix-shard-insert',
+    type: 'scene',
+    depth: 7,
+    group: 'placeholder',
+    world: 'matrix',
+    data: {
+      title: 'Shard Insert',
+      pageUrl: '/matrix-v1/shard-insert',
+      status: 'stub',
+      summary: 'Placeholder scene.',
+      characters: [],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
+  },
+  {
+    id: 'matrix-skill-gate-alpha',
+    type: 'scene',
+    depth: 7,
+    group: 'placeholder',
+    world: 'matrix',
+    data: {
+      title: 'Skill Gate Alpha',
+      pageUrl: '/matrix-v1/skill-gate-alpha',
+      status: 'stub',
+      summary: 'Placeholder scene.',
+      characters: [],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
+  },
+  {
+    id: 'matrix-the-source',
+    type: 'scene',
+    depth: 7,
+    group: 'placeholder',
+    world: 'matrix',
+    data: {
+      title: 'The Source',
+      pageUrl: '/matrix-v1/the-source',
+      status: 'stub',
+      summary: 'Placeholder scene.',
+      characters: [],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
+  },
+  {
+    id: 'matrix-trinity-rescue',
+    type: 'scene',
+    depth: 7,
+    group: 'placeholder',
+    world: 'matrix',
+    data: {
+      title: 'Trinity Rescue',
+      pageUrl: '/matrix-v1/trinity-rescue',
+      status: 'stub',
+      summary: 'Placeholder scene.',
+      characters: [],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
+  },
+  {
+    id: 'matrix-v1-anomaly-route',
+    type: 'scene',
+    depth: 7,
+    group: 'placeholder',
+    world: 'matrix',
+    data: {
+      title: 'Anomaly Route',
+      pageUrl: '/matrix-v1/anomaly-route',
+      status: 'stub',
+      summary: 'Placeholder scene.',
+      characters: [],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
+  },
+  {
+    id: 'matrix-v1-checkpoint',
+    type: 'scene',
+    depth: 7,
+    group: 'placeholder',
+    world: 'matrix',
+    data: {
+      title: 'Checkpoint',
+      pageUrl: '/matrix-v1/checkpoint',
+      status: 'stub',
+      summary: 'Placeholder scene.',
+      characters: [],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
+  },
+  {
+    id: 'matrix-v1-compliance-route',
+    type: 'scene',
+    depth: 7,
+    group: 'placeholder',
+    world: 'matrix',
+    data: {
+      title: 'Compliance Route',
+      pageUrl: '/matrix-v1/compliance-route',
+      status: 'stub',
+      summary: 'Placeholder scene.',
+      characters: [],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
+  },
+  {
+    id: 'matrix-v1-echo-loop',
+    type: 'scene',
+    depth: 7,
+    group: 'placeholder',
+    world: 'matrix',
+    data: {
+      title: 'Echo Loop',
+      pageUrl: '/matrix-v1/echo-loop',
+      status: 'stub',
+      summary: 'Placeholder scene.',
+      characters: [],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
+  },
+  {
+    id: 'matrix-v1-faction-choice',
+    type: 'scene',
+    depth: 7,
+    group: 'placeholder',
+    world: 'matrix',
+    data: {
+      title: 'Faction Choice',
+      pageUrl: '/matrix-v1/faction-choice',
+      status: 'stub',
+      summary: 'Placeholder scene.',
+      characters: [],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
+  },
+  {
+    id: 'matrix-v1-ghost-layer-2',
+    type: 'scene',
+    depth: 7,
+    group: 'placeholder',
+    world: 'matrix',
+    data: {
+      title: 'Ghost Layer 2',
+      pageUrl: '/matrix-v1/ghost-layer-2',
+      status: 'stub',
+      summary: 'Placeholder scene.',
+      characters: [],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
+  },
+  {
+    id: 'matrix-v1-map-d3',
+    type: 'scene',
+    depth: 7,
+    group: 'placeholder',
+    world: 'matrix',
+    data: {
+      title: 'Map D3',
+      pageUrl: '/matrix-v1/map-d3',
+      status: 'stub',
+      summary: 'Placeholder scene.',
+      characters: [],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
+  },
+  {
+    id: 'matrix-v1-night-city-bouncer',
+    type: 'scene',
+    depth: 7,
+    group: 'placeholder',
+    world: 'matrix',
+    data: {
+      title: 'Night City Bouncer',
+      pageUrl: '/matrix-v1/night-city/bouncer',
+      status: 'stub',
+      summary: 'Placeholder scene.',
+      characters: [],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
+  },
+  {
+    id: 'matrix-v1-night-city-entry',
+    type: 'scene',
+    depth: 7,
+    group: 'placeholder',
+    world: 'matrix',
+    data: {
+      title: 'Night City Entry',
+      pageUrl: '/matrix-v1/night-city/entry',
+      status: 'stub',
+      summary: 'Placeholder scene.',
+      characters: [],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
+  },
+  {
+    id: 'matrix-v1-oracle-seekers',
+    type: 'scene',
+    depth: 7,
+    group: 'placeholder',
+    world: 'matrix',
+    data: {
+      title: 'Oracle Seekers',
+      pageUrl: '/matrix-v1/oracle-seekers',
+      status: 'stub',
+      summary: 'Placeholder scene.',
+      characters: [],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
+  },
+  {
+    id: 'matrix-v1-rebel-hackers',
+    type: 'scene',
+    depth: 7,
+    group: 'placeholder',
+    world: 'matrix',
+    data: {
+      title: 'Rebel Hackers',
+      pageUrl: '/matrix-v1/rebel-hackers',
+      status: 'stub',
+      summary: 'Placeholder scene.',
+      characters: [],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
+  },
+  {
+    id: 'matrix-v1-shard-insert',
+    type: 'scene',
+    depth: 7,
+    group: 'placeholder',
+    world: 'matrix',
+    data: {
+      title: 'Shard Insert',
+      pageUrl: '/matrix-v1/shard-insert',
+      status: 'stub',
+      summary: 'Placeholder scene.',
+      characters: [],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
+  },
+  {
+    id: 'matrix-v1-stage-1',
+    type: 'scene',
+    depth: 7,
+    group: 'placeholder',
+    world: 'matrix',
+    data: {
+      title: 'Stage 1',
+      pageUrl: '/matrix-v1/stage-1',
+      status: 'stub',
+      summary: 'Placeholder scene.',
+      characters: [],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
+  },
+  {
+    id: 'matrix-v1-stage-2',
+    type: 'scene',
+    depth: 7,
+    group: 'placeholder',
+    world: 'matrix',
+    data: {
+      title: 'Stage 2',
+      pageUrl: '/matrix-v1/stage-2',
+      status: 'stub',
+      summary: 'Placeholder scene.',
+      characters: [],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
+  },
+  {
+    id: 'matrix-v1-terminal',
+    type: 'scene',
+    depth: 7,
+    group: 'placeholder',
+    world: 'matrix',
+    data: {
+      title: 'Terminal',
+      pageUrl: '/matrix-v1/terminal',
+      status: 'stub',
+      summary: 'Placeholder scene.',
+      characters: [],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
+  },
+  {
+    id: 'matrix-v1-zion-fleet',
+    type: 'scene',
+    depth: 7,
+    group: 'placeholder',
+    world: 'matrix',
+    data: {
+      title: 'Zion Fleet',
+      pageUrl: '/matrix-v1/zion-fleet',
+      status: 'stub',
+      summary: 'Placeholder scene.',
+      characters: [],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
+  },
+  {
+    id: 'matrix-zion-fleet',
+    type: 'scene',
+    depth: 7,
+    group: 'placeholder',
+    world: 'matrix',
+    data: {
+      title: 'Zion Fleet',
+      pageUrl: '/matrix-v1/zion-fleet',
+      status: 'stub',
+      summary: 'Placeholder scene.',
+      characters: [],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
+  },
+  {
+    id: 'matrix-red-faction-choice',
+    type: 'scene',
+    depth: 7,
+    group: 'placeholder',
+    world: 'matrix',
+    data: {
+      title: 'Red Faction Choice',
+      pageUrl: '/matrix-v1/faction-choice',
+      status: 'stub',
+      summary: 'Placeholder scene.',
+      characters: [],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
+  },
+  {
+    id: 'matrix-rebel-hackers',
+    type: 'scene',
+    depth: 7,
+    group: 'placeholder',
+    world: 'matrix',
+    data: {
+      title: 'Rebel Hackers',
+      pageUrl: '/matrix-v1/rebel-hackers',
+      status: 'stub',
+      summary: 'Placeholder scene.',
+      characters: [],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
+  },
+  {
+    id: 'matrix-oracle-seekers',
+    type: 'scene',
+    depth: 7,
+    group: 'placeholder',
+    world: 'matrix',
+    data: {
+      title: 'Oracle Seekers',
+      pageUrl: '/matrix-v1/oracle-seekers',
+      status: 'stub',
+      summary: 'Placeholder scene.',
+      characters: [],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
+  },
+  {
+    id: 'matrix-glitch-portal',
+    type: 'scene',
+    depth: 7,
+    group: 'placeholder',
+    world: 'matrix',
+    data: {
+      title: 'Glitch Portal',
+      pageUrl: '/matrix-v1/glitch-portal',
+      status: 'stub',
+      summary: 'Placeholder scene.',
+      characters: [],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
+  },
+  {
+    id: 'matrix-echo-loop',
+    type: 'scene',
+    depth: 7,
+    group: 'placeholder',
+    world: 'matrix',
+    data: {
+      title: 'Echo Loop',
+      pageUrl: '/matrix-v1/echo-loop',
+      status: 'stub',
+      summary: 'Placeholder scene.',
+      characters: [],
+      puzzles: [],
+      interactions: [],
+      features: { hasTransition: true }
+    }
+  },
+
   // === NEW: FACTION ORIENTATION CONNECTIONS ===
   // Pill choice leads to faction orientation first
   { id: 'edge-choice-to-faction-orientation', source: 'matrix-pill-choice', target: 'matrix-faction-orientation', label: 'Resistance introduction' },
