@@ -357,7 +357,12 @@ export const nodes = [
       title: 'Night City Entry',
       description: 'The neon-soaked streets of Night City stretch before you.',
       setting: 'Watson District',
-      status: 'live'
+      status: 'live',
+      enhancement: {
+        qualityRating: 5,
+        status: 'live',
+        priority: 'medium'
+      }
     }
   },
   {
@@ -372,7 +377,12 @@ export const nodes = [
       description: 'A chrome-enhanced bouncer guards the entrance to the legendary bar.',
       character: 'Bouncer',
       setting: 'The Afterlife',
-      status: 'live'
+      status: 'live',
+      enhancement: {
+        qualityRating: 5,
+        status: 'live',
+        priority: 'medium'
+      }
     }
   },
   {
@@ -388,7 +398,12 @@ export const nodes = [
       prompt: 'How do you proceed with the hack?',
       options: ['Stealth approach', 'Brute force', 'Social engineering'],
       setting: 'Cyberspace',
-      status: 'live'
+      status: 'live',
+      enhancement: {
+        qualityRating: 5,
+        status: 'live',
+        priority: 'medium'
+      }
     }
   },
   {
@@ -402,7 +417,12 @@ export const nodes = [
       title: 'Data Theft',
       description: 'Corporate secrets flow through your neural interface.',
       setting: 'Data Vault',
-      status: 'live'
+      status: 'live',
+      enhancement: {
+        qualityRating: 5,
+        status: 'live',
+        priority: 'medium'
+      }
     }
   },
   {
@@ -418,7 +438,12 @@ export const nodes = [
       dialogue: 'Wake the fuck up, samurai. We have a city to burn.',
       emotion: 'rebellious',
       setting: 'Neural Interface',
-      status: 'live'
+      status: 'live',
+      enhancement: {
+        qualityRating: 5,
+        status: 'live',
+        priority: 'medium'
+      }
     }
   },
   {
@@ -434,7 +459,12 @@ export const nodes = [
       prompt: 'How do you escape?',
       options: ['Rooftop parkour', 'Underground tunnels', 'Hijack vehicle'],
       setting: 'Corporate Plaza',
-      status: 'live'
+      status: 'live',
+      enhancement: {
+        qualityRating: 5,
+        status: 'live',
+        priority: 'medium'
+      }
     }
   },
   {
@@ -448,7 +478,12 @@ export const nodes = [
       title: 'Archive Dive',
       description: 'Deep in the corporate data archives, truth awaits.',
       setting: 'Arasaka Data Center',
-      status: 'live'
+      status: 'live',
+      enhancement: {
+        qualityRating: 5,
+        status: 'live',
+        priority: 'medium'
+      }
     }
   },
   {
@@ -468,7 +503,12 @@ export const nodes = [
         'Rewrite protocol for control'
       ],
       setting: 'Quantum Vault',
-      status: 'wip'
+      status: 'wip',
+      enhancement: {
+        qualityRating: 5,
+        status: 'wip',
+        priority: 'medium'
+      }
     }
   },
   {
@@ -483,7 +523,12 @@ export const nodes = [
       outcome: 'Freedom',
       description: 'You walk away from it all, memories intact but changed.',
       setting: 'Night City Streets',
-      status: 'stub'
+      status: 'stub',
+      enhancement: {
+        qualityRating: 5,
+        status: 'stub',
+        priority: 'medium'
+      }
     }
   },
   {
@@ -498,7 +543,12 @@ export const nodes = [
       outcome: 'Power',
       description: 'You seize control of the corporate machinery.',
       setting: 'Arasaka Tower',
-      status: 'stub'
+      status: 'stub',
+      enhancement: {
+        qualityRating: 5,
+        status: 'stub',
+        priority: 'medium'
+      }
     }
   }
 ]; 
