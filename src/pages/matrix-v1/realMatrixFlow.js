@@ -1906,5 +1906,11 @@ export const realMatrixNodes = [
 
 // Export the edges as a separate array
 export const realMatrixEdges = [
-  // ... (existing edges)
+  // Introductory flow
+  { id: 'edge-entry-to-name', source: 'matrix-v1-entry', target: 'matrix-name-prompt' },
+  { id: 'edge-name-to-choice', source: 'matrix-name-prompt', target: 'matrix-pill-choice' },
+  { id: 'edge-pill-red', source: 'matrix-pill-choice', target: 'matrix-pill-choice-red', label: 'Red Pill' },
+  { id: 'edge-pill-blue', source: 'matrix-pill-choice', target: 'matrix-pill-choice-blue', label: 'Blue Pill' },
+  { id: 'edge-red-to-terminal', source: 'matrix-pill-choice-red', target: 'matrix-v1-terminal' },
+  { id: 'edge-terminal-to-orientation', source: 'matrix-v1-terminal', target: 'matrix-faction-orientation' }
 ];
