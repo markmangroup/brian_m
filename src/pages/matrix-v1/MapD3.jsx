@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import * as d3 from 'd3';
-import { realMatrixNodes, realMatrixEdges } from './realMatrixFlow';
+import { nodes as realMatrixNodes } from './nodes';
+import { edges as realMatrixEdges } from './edges';
 import { convertToTree, filterTreeByStatus, findPathToNode, validateTreeNoCycles, analyzeTree } from '../../utils/convertToTree';
 import { useTheme } from '../../theme/ThemeContext';
 import useTreeLayout from './useTreeLayout';
