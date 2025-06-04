@@ -1614,7 +1614,7 @@ const rawMatrixNodes = [
   // Archive Dive choice branches
   { id: 'edge-archive-to-silverhand', source: 'nc-archive-dive', target: 'nc-silverhand', label: 'Dive deeper' },
   { id: 'edge-archive-to-glitch', source: 'nc-archive-dive', target: 'matrix-glitch-portal', label: 'Extract fragment' },
-  { id: 'edge-archive-to-netdiver', source: 'nc-archive-dive', target: 'nc-netdiver', label: 'Wipe evidence' },
+  { id: 'edge-archive-to-netdiver', source: 'nc-archive-dive', target: 'nc-netdiver', label: 'Wipe evidence', requiresKey: 'dataShard' },
 
   // === WITCHER PLACEHOLDER NODES ===
   {
@@ -2056,7 +2056,7 @@ const rawMatrixNodes = [
   {
     id: 'nc-neutral-ending',
     displayName: 'Nc Neutral Ending',
-    type: 'scene',
+    type: 'ending',
     world: 'night-city',
     narrativeTier: 'mid',
     status: 'stub',
@@ -2065,7 +2065,7 @@ const rawMatrixNodes = [
   {
     id: 'nc-control-ending',
     displayName: 'Nc Control Ending',
-    type: 'scene',
+    type: 'ending',
     world: 'night-city',
     narrativeTier: 'mid',
     status: 'stub',
