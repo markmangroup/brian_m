@@ -203,6 +203,12 @@ export const ThemeProvider = ({ children }) => {
       return colors[colorKey] || '#ffffff';
     },
     getThemeFont: (fontKey) => theme?.fonts?.[fontKey] || 'inherit',
+    getThemeD3: (d3Key) => {
+      const varName = `--d3-${d3Key.replace(/([A-Z])/g, '-$1').toLowerCase()}`;
+      const value = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+      const num = parseFloat(value);
+      return isNaN(num) ? value : num;
+    },
     getCurrentColors,
     
     // CSS variable helpers
