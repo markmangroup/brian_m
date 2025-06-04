@@ -88,6 +88,13 @@ import NcArchiveDive from './pages/matrix-v1/night-city/NcArchiveDive';
 import NcNeutralEnding from './pages/matrix-v1/night-city/NcNeutralEnding';
 import NcControlEnding from './pages/matrix-v1/night-city/NcControlEnding';
 
+// Fallout routes
+import FoVaultEntry from './pages/matrix-v1/fallout/FoVaultEntry';
+import FoFactionChoice from './pages/matrix-v1/fallout/FoFactionChoice';
+import FoWastelandScout from './pages/matrix-v1/fallout/FoWastelandScout';
+import FoDataTerminal from './pages/matrix-v1/fallout/FoDataTerminal';
+import FoMainQuest from './pages/matrix-v1/fallout/FoMainQuest';
+
 // Witcher routes
 import WitcherEntry from './pages/witcher/WitcherEntry';
 import MutationChoice from './pages/witcher/MutationChoice';
@@ -184,6 +191,13 @@ function AppLayout() {
         <Route path="/matrix-v1/finance/fin-cleansing-node" element={<FinCleansingNode />} />
         <Route path="/matrix-v1/finance/fin-ops-dashboard" element={<FinOpsDashboard />} />
         <Route path="/matrix-v1/finance/fin-credits-hub" element={<FinCreditsHub />} />
+
+        {/* Fallout routes */}
+        <Route path="/matrix-v1/fallout/vault-entry" element={<FoVaultEntry />} />
+        <Route path="/matrix-v1/fallout/faction-choice" element={<FoFactionChoice />} />
+        <Route path="/matrix-v1/fallout/wasteland-scout" element={<FoWastelandScout />} />
+        <Route path="/matrix-v1/fallout/data-terminal" element={<FoDataTerminal />} />
+        <Route path="/matrix-v1/fallout/main-quest" element={<FoMainQuest />} />
 
         {/* Witcher routes */}
         <Route path="/witcher/entry" element={<WitcherEntry />} />

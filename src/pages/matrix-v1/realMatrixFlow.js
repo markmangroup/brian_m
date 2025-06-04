@@ -2112,10 +2112,51 @@ const rawMatrixNodes = [
     status: 'stub',
     enhancement: { reviewNeeded: true }
   },
+  // === FALLOUT WORLD STUB NODES ===
+  {
+    id: 'fo-vault-entry',
+    type: 'scene',
+    world: 'fallout',
+    narrativeTier: 'intro',
+    status: 'stub',
+    enhancement: { reviewNeeded: true }
+  },
+  {
+    id: 'fo-faction-choice',
+    type: 'scene',
+    world: 'fallout',
+    narrativeTier: 'mid',
+    status: 'stub',
+    enhancement: { reviewNeeded: true }
+  },
+  {
+    id: 'fo-wasteland-scout',
+    type: 'scene',
+    world: 'fallout',
+    narrativeTier: 'mid',
+    status: 'stub',
+    enhancement: { reviewNeeded: true }
+  },
+  {
+    id: 'fo-data-terminal',
+    type: 'scene',
+    world: 'fallout',
+    narrativeTier: 'mid',
+    status: 'stub',
+    enhancement: { reviewNeeded: true }
+  },
+  {
+    id: 'fo-main-quest',
+    type: 'scene',
+    world: 'fallout',
+    narrativeTier: 'climax',
+    status: 'stub',
+    enhancement: { reviewNeeded: true }
+  },
 ];
 
 // Provide simple default positions so new nodes render even without layout
-const worldIndex = { matrix: 0, witcher: 1, nightcity: 2, finance: 3 };
+const worldIndex = { matrix: 0, witcher: 1, nightcity: 2, finance: 3, fallout: 4 };
 export const realMatrixNodes = rawMatrixNodes.map((n) => ({
   ...n,
   position: n.position || {
