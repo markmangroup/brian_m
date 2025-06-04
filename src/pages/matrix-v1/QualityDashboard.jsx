@@ -783,9 +783,10 @@ export default function QualityDashboard() {
       const nodeStatus = node.data?.enhancement?.status || node.data?.status || 'stub';
       if (!selectedStatuses.includes(nodeStatus)) return false;
 
-      // Priority filtering
+      // Priority filtering - treat missing priority as LOW by default
       const quality = calculateNodeQuality(node);
-      if (!selectedPriorities.includes(quality.priority)) return false;
+      const priority = quality.priority || 'LOW';
+      if (!selectedPriorities.includes(priority)) return false;
 
       return true;
     });
@@ -803,7 +804,7 @@ export default function QualityDashboard() {
     const avgQuality = qualities.length > 0 ? qualities.reduce((sum, q) => sum + q, 0) / qualities.length : 0;
 
     const priorityCounts = filteredNodes.reduce((acc, node) => {
-      const priority = calculateNodeQuality(node).priority;
+      const priority = calculateNodeQuality(node).priority || 'LOW';
       acc[priority] = (acc[priority] || 0) + 1;
       return acc;
     }, { CRITICAL: 0, HIGH: 0, MEDIUM: 0, LOW: 0 });
