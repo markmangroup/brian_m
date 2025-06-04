@@ -1,31 +1,29 @@
 import React, { useEffect, useState } from 'react';
+import { realMatrixNodes } from '../../pages/matrix-v1/realMatrixFlow';
 
-const rows = 8;
 const cols = 16;
-
-function randomState() {
-  const states = ['dirty', 'processing', 'clean'];
-  return states[Math.floor(Math.random() * states.length)];
-}
+const statuses = realMatrixNodes.map((n) => n.data?.status || 'stub');
+const rows = Math.ceil(statuses.length / cols);
 
 export default function TilesVisualizer() {
-  const [cells, setCells] = useState(() => Array(rows * cols).fill('dirty'));
+  const [cells, setCells] = useState(statuses);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCells((c) =>
         c.map((state) => {
-          if (state === 'dirty' && Math.random() < 0.2) return 'processing';
-          if (state === 'processing' && Math.random() < 0.3) return 'clean';
+          if (state === 'stub' && Math.random() < 0.05) return 'wip';
+          if (state === 'wip' && Math.random() < 0.1) return 'live';
           return state;
         })
       );
-    }, 500);
+    }, 800);
     return () => clearInterval(interval);
   }, []);
 
   const getColor = (state) => {
-    if (state === 'clean') return 'bg-green-500 scale-105';
-    if (state === 'processing') return 'bg-yellow-400 animate-pulse';
+    if (state === 'live') return 'bg-green-500';
+    if (state === 'wip') return 'bg-yellow-400 animate-pulse';
     return 'bg-red-500';
   };
 

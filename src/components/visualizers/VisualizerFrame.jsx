@@ -5,7 +5,7 @@ const NodesVisualizer = React.lazy(() => import('./NodesVisualizer'));
 
 export default function VisualizerFrame({ mode }) {
   return (
-    <div className="rounded-2xl bg-white/90 shadow-lg backdrop-blur p-4 h-64 flex items-center justify-center">
+    <div className="rounded-2xl bg-theme-overlay shadow-lg backdrop-blur p-4 h-64 flex items-center justify-center">
       {mode === 'tiles' && <TilesVisualizer />}
       {mode === 'bars' && <BarsVisualizer />}
       {mode === 'nodes' && (

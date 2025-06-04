@@ -11,7 +11,7 @@ export default function AnimationPicker({ mode, onChange }) {
       {options.map((opt) => (
         <button
           key={opt.id}
-          className={`px-3 py-1 rounded-full text-sm transition-colors ${mode === opt.id ? 'bg-green-600 text-white' : 'bg-gray-700 text-gray-300'}`}
+          className={`px-3 py-1 rounded-full text-sm transition-colors ${mode === opt.id ? 'bg-theme-accent text-theme-inverse' : 'bg-theme-secondary text-theme-muted'}`}
           onClick={() => onChange(opt.id)}
         >
           {opt.label}
