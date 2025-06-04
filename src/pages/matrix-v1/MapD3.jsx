@@ -8,6 +8,7 @@ import SidebarFilters from './SidebarFilters';
 import DetailPanel from './DetailPanel';
 import ZoomControls from './ZoomControls';
 import DiagnosticOverlay from './DiagnosticOverlay';
+import { getWorldCharacters } from '../../utils/worldContentLoader';
 
 const LAYOUT_TYPES = {
   tree: 'tree',
@@ -308,17 +309,19 @@ export default function MapD3() {
     );
   };
   
-  // Extract unique values from all nodes dynamically with counts
+  // Calculate filter options from nodes data
   const filterOptions = useMemo(() => {
+    const { currentWorld } = useTheme();
     const characterCounts = new Map();
     const puzzleCounts = new Map();
     const interactionCounts = new Map();
     const featureCounts = new Map();
     
     realMatrixNodes.forEach(node => {
-      // Characters
+      // Characters - handle world-aware content
       if (node.data?.characters) {
-        node.data.characters.forEach(char => {
+        const characters = getWorldCharacters(node.data.characters, currentWorld);
+        characters.forEach(char => {
           characterCounts.set(char, (characterCounts.get(char) || 0) + 1);
         });
       }
@@ -391,6 +394,8 @@ export default function MapD3() {
 
   // Check if a node matches active filters
   const nodeMatchesFilters = useCallback((node) => {
+    const { currentWorld } = useTheme();
+    
     // If no filters are active, show all nodes
     if (activeCharacterFilters.length === 0 && 
         activePuzzleFilters.length === 0 && 
@@ -401,10 +406,11 @@ export default function MapD3() {
     
     let matches = true;
     
-    // Check character filters (AND logic)
+    // Check character filters (AND logic) - handle world-aware content
     if (activeCharacterFilters.length > 0) {
+      const nodeCharacters = getWorldCharacters(node.data?.characters, currentWorld);
       matches = matches && activeCharacterFilters.some(char => 
-        node.data?.characters?.includes(char)
+        nodeCharacters.includes(char)
       );
     }
     
