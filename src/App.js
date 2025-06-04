@@ -65,6 +65,9 @@ import OracleSeekers from './pages/matrix-v1/OracleSeekers';
 // Night City routes
 import NightCityEntry from './pages/matrix-v1/NightCityEntry';
 import NightCityBouncer from './pages/matrix-v1/NightCityBouncer';
+import NightCityNetdiver from './pages/matrix-v1/NightCityNetdiver';
+import NightCityFile from './pages/matrix-v1/NightCityFile';
+import NightCityAccessConfirmed from './pages/matrix-v1/NightCityAccessConfirmed';
 
 // Witcher routes
 import WitcherEntry from './pages/witcher/WitcherEntry';
@@ -139,6 +142,9 @@ function AppLayout() {
         {/* Night City routes */}
         <Route path="/matrix-v1/night-city/entry" element={<NightCityEntry />} />
         <Route path="/matrix-v1/night-city/bouncer" element={<NightCityBouncer />} />
+        <Route path="/matrix-v1/night-city/netdiver" element={<NightCityNetdiver />} />
+        <Route path="/matrix-v1/night-city/file" element={<NightCityFile />} />
+        <Route path="/matrix-v1/night-city/access-confirmed" element={<NightCityAccessConfirmed />} />
 
         {/* Witcher routes */}
         <Route path="/witcher/entry" element={<WitcherEntry />} />
