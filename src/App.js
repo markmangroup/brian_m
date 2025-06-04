@@ -43,6 +43,7 @@ import Factions from './pages/matrix-v1/Factions';
 import Align from './pages/matrix-v1/Align';
 import Stabilize from './pages/matrix-v1/Stabilize';
 import GuardianCall from './pages/matrix-v1/GuardianCall';
+import ProgressDashboard from './pages/matrix-v1/ProgressDashboard';
 
 // Faction Choice Components
 import FactionChoice from './pages/matrix-v1/FactionChoice';
@@ -112,6 +113,7 @@ function AppLayout() {
         <Route path="/matrix-v1/map" element={<Map />} />
         <Route path="/matrix-v1/map-d3" element={<MapD3 />} />
         <Route path="/matrix-v1/quality-dashboard" element={<QualityDashboard />} />
+        <Route path="/matrix-v1/progress" element={<ProgressDashboard />} />
         <Route path="/matrix-v1/node-editor" element={<NodeEditor />} />
         <Route path="/matrix-v1/deeper-profile" element={<DeeperProfile />} />
         <Route path="/matrix-v1/interference" element={<Interference />} />

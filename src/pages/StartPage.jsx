@@ -15,7 +15,7 @@ const WORLD_OPTIONS = [
     border: 'border-green-400/60',
     glow: 'shadow-[0_0_20px_rgba(34,197,94,0.4)]',
     hoverGlow: 'hover:shadow-[0_0_30px_rgba(34,197,94,0.6)]',
-    features: ['Digital Awakening', 'Choice & Consequence', 'Reality Hacking']
+    features: ['Digital Awakening', 'Choice & Consequence', 'Reality Hacking', 'Progress Dashboard']
   },
   {
     id: 'witcher',
@@ -42,6 +42,19 @@ const WORLD_OPTIONS = [
     glow: 'shadow-[0_0_20px_rgba(147,51,234,0.4)]',
     hoverGlow: 'hover:shadow-[0_0_30px_rgba(147,51,234,0.6)]',
     features: ['Corporate Intrigue', 'Netrunning', 'Street Credibility']
+  },
+  {
+    id: 'progress',
+    name: 'Progress Dashboard',
+    description: 'Visualize cleansing momentum across worlds.',
+    route: '/matrix-v1/progress',
+    theme: 'matrix',
+    icon: '📈',
+    background: 'bg-gradient-to-br from-gray-700/20 to-green-700/20',
+    border: 'border-green-400/60',
+    glow: 'shadow-[0_0_20px_rgba(34,197,94,0.4)]',
+    hoverGlow: 'hover:shadow-[0_0_30px_rgba(34,197,94,0.6)]',
+    features: ['Metrics', 'Animations', 'Data Upgrades']
   }
 ];
 
