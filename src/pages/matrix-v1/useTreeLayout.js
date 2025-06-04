@@ -40,6 +40,7 @@ export default function useTreeLayout(params) {
   } = params;
 
   const rootPosRef = useRef({ x: 0, y: 0 });
+  const nodePosRef = useRef({});
 
   const getNodeColor = (node) => {
     const status = node.data?.status || 'unknown';
@@ -153,6 +154,23 @@ export default function useTreeLayout(params) {
         return;
     }
 
+    nodePosRef.current = {};
+    nodes.forEach((d) => {
+      let xPos, yPos;
+      if (layoutType === 'radial') {
+        xPos = d.x_cartesian + width / 2 + margin.left;
+        yPos = d.y_cartesian + height / 2 + margin.top;
+      } else if (layoutType === 'tree' || layoutType === 'cluster') {
+        xPos = (layoutType === 'tree' ? d.y : d.x) + margin.left;
+        yPos = (layoutType === 'tree' ? d.x : d.y) + margin.top;
+      } else {
+        xPos = (d.x || 0) + margin.left;
+        yPos = (d.y || 0) + margin.top;
+      }
+      const id = d.data ? d.data.id : d.id;
+      nodePosRef.current[id] = { x: xPos, y: yPos };
+    });
+
     const linkGroups = g.selectAll('.link').data(links).enter().append('g').attr('class', 'link');
     const linkPaths = linkGroups
       .append('path')
@@ -181,6 +199,7 @@ export default function useTreeLayout(params) {
       .enter()
       .append('g')
       .attr('class', 'node')
+      .attr('data-id', (d) => (d.data ? d.data.id : d.id))
       .attr('transform', (d) => {
         if (layoutType === 'radial') return `translate(${d.x_cartesian + width / 2},${d.y_cartesian + height / 2})`;
         return `translate(${layoutType === 'tree' ? d.y : d.x},${layoutType === 'tree' ? d.x : d.y})`;
@@ -345,6 +364,6 @@ export default function useTreeLayout(params) {
     }
   }, [svgRef, filteredTree, layoutType, expandedNodes, nodeMatchesFilters, themeConfigs, currentTheme, forceStrength, linkDistance, centerStrength, collideRadius, selectedNode, handleNodeClick, showMetrics]);
 
-  return { drawTree, rootPosRef };
+  return { drawTree, rootPosRef, nodePosRef };
 }
 
