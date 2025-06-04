@@ -19,8 +19,7 @@ const realMatrixNodes = migrateLegacyNodes(rawMatrixNodes);
 const LAYOUT_TYPES = {
   tree: 'tree',
   cluster: 'cluster',
-  radial: 'radial',
-  network: 'network'
+  radial: 'radial'
 };
 
 const STATUS_FILTERS = [
@@ -189,12 +188,6 @@ export default function MapD3() {
   // TODO: Revert to: useState(getInitialExpandedNodes(realMatrixNodes, realMatrixEdges))
   const [expandedNodes, setExpandedNodes] = useState(new Set(realMatrixNodes.map(n => n.id)));
   
-  // Force layout controls
-  const [showForceControls, setShowForceControls] = useState(false);
-  const [forceStrength, setForceStrength] = useState(-300);
-  const [linkDistance, setLinkDistance] = useState(80);
-  const [centerStrength, setCenterStrength] = useState(0.3);
-  const [collideRadius, setCollideRadius] = useState(30);
   
   // Visual group states
   const [visibleGroups, setVisibleGroups] = useState(Object.keys(VISUAL_GROUPS));
@@ -521,10 +514,6 @@ export default function MapD3() {
     nodeMatchesFilters,
     themeConfigs,
     currentTheme,
-    forceStrength,
-    linkDistance,
-    centerStrength,
-    collideRadius,
     selectedNode,
     handleNodeClick,
     showMetrics,
@@ -710,19 +699,6 @@ export default function MapD3() {
                 </button>
               ))}
               
-              {/* Force Controls Toggle (only for network layout) */}
-              {layoutType === LAYOUT_TYPES.network && (
-                <button
-                  onClick={() => setShowForceControls(!showForceControls)}
-                  className={`ml-2 px-3 py-1 rounded text-xs font-mono border transition-colors ${
-                    showForceControls
-                      ? 'bg-orange-900 text-orange-300 border-orange-400'
-                      : 'bg-gray-900 text-gray-400 border-gray-600 hover:border-orange-400'
-                  }`}
-                >
-                  ⚙️ Force Controls
-                </button>
-              )}
 
               {/* Metrics Overlay Toggle */}
               <button
@@ -777,181 +753,7 @@ export default function MapD3() {
           )}
         </div>
 
-        {/* Force Controls Panel (only for network layout) */}
-        {layoutType === LAYOUT_TYPES.network && showForceControls && (
-          <div className="bg-orange-900/20 border-b border-orange-400/30 p-4">
-            <div className="max-w-4xl mx-auto">
-              <h3 className="text-orange-400 font-mono font-bold mb-4">⚙️ Force Simulation Controls</h3>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {/* Force Strength */}
-                <div className="space-y-2">
-                  <label className="text-orange-300 text-sm font-mono">
-                    Charge Force: {forceStrength}
-                  </label>
-                  <input
-                    type="range"
-                    min="-1000"
-                    max="0"
-                    step="10"
-                    value={forceStrength}
-                    onChange={(e) => {
-                      const newValue = parseInt(e.target.value);
-                      setForceStrength(newValue);
-                      // Update simulation if it exists
-                      const svg = d3.select(svgRef.current);
-                      const g = svg.select('.main-group');
-                      if (g.node() && g.node().simulation) {
-                        g.node().simulation.force('charge').strength(newValue);
-                        g.node().simulation.alpha(0.3).restart();
-                      }
-                    }}
-                    className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-orange"
-                  />
-                  <div className="text-xs text-gray-400">Node repulsion strength</div>
-                </div>
 
-                {/* Link Distance */}
-                <div className="space-y-2">
-                  <label className="text-orange-300 text-sm font-mono">
-                    Link Distance: {linkDistance}
-                  </label>
-                  <input
-                    type="range"
-                    min="20"
-                    max="200"
-                    step="5"
-                    value={linkDistance}
-                    onChange={(e) => {
-                      const newValue = parseInt(e.target.value);
-                      setLinkDistance(newValue);
-                      const svg = d3.select(svgRef.current);
-                      const g = svg.select('.main-group');
-                      if (g.node() && g.node().simulation) {
-                        g.node().simulation.force('link').distance(newValue);
-                        g.node().simulation.alpha(0.3).restart();
-                      }
-                    }}
-                    className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-orange"
-                  />
-                  <div className="text-xs text-gray-400">Preferred link length</div>
-                </div>
-
-                {/* Center Strength */}
-                <div className="space-y-2">
-                  <label className="text-orange-300 text-sm font-mono">
-                    Center Force: {centerStrength.toFixed(1)}
-                  </label>
-                  <input
-                    type="range"
-                    min="0"
-                    max="1"
-                    step="0.1"
-                    value={centerStrength}
-                    onChange={(e) => {
-                      const newValue = parseFloat(e.target.value);
-                      setCenterStrength(newValue);
-                      const svg = d3.select(svgRef.current);
-                      const g = svg.select('.main-group');
-                      if (g.node() && g.node().simulation) {
-                        g.node().simulation.force('center').strength(newValue);
-                        g.node().simulation.alpha(0.3).restart();
-                      }
-                    }}
-                    className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-orange"
-                  />
-                  <div className="text-xs text-gray-400">Pull toward center</div>
-                </div>
-
-                {/* Collision Radius */}
-                <div className="space-y-2">
-                  <label className="text-orange-300 text-sm font-mono">
-                    Collision: {collideRadius}
-                  </label>
-                  <input
-                    type="range"
-                    min="10"
-                    max="80"
-                    step="2"
-                    value={collideRadius}
-                    onChange={(e) => {
-                      const newValue = parseInt(e.target.value);
-                      setCollideRadius(newValue);
-                      const svg = d3.select(svgRef.current);
-                      const g = svg.select('.main-group');
-                      if (g.node() && g.node().simulation) {
-                        g.node().simulation.force('collide').radius(newValue);
-                        g.node().simulation.alpha(0.3).restart();
-                      }
-                    }}
-                    className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-orange"
-                  />
-                  <div className="text-xs text-gray-400">Node collision radius</div>
-                </div>
-              </div>
-
-              {/* Control Buttons */}
-              <div className="flex gap-4 mt-4">
-                <button
-                  onClick={() => {
-                    const svg = d3.select(svgRef.current);
-                    const g = svg.select('.main-group');
-                    if (g.node() && g.node().simulation) {
-                      g.node().simulation.alpha(1).restart();
-                    }
-                  }}
-                  className="px-3 py-1 bg-green-900 text-green-300 rounded text-sm font-mono border border-green-400 hover:bg-green-800 transition-colors"
-                >
-                  🔄 Restart Simulation
-                </button>
-                
-                <button
-                  onClick={() => {
-                    const svg = d3.select(svgRef.current);
-                    const g = svg.select('.main-group');
-                    if (g.node() && g.node().simulation) {
-                      g.node().simulation.stop();
-                    }
-                  }}
-                  className="px-3 py-1 bg-red-900 text-red-300 rounded text-sm font-mono border border-red-400 hover:bg-red-800 transition-colors"
-                >
-                  ⏹️ Stop Simulation
-                </button>
-
-                <button
-                  onClick={() => {
-                    // Reset to defaults
-                    setForceStrength(-300);
-                    setLinkDistance(80);
-                    setCenterStrength(0.3);
-                    setCollideRadius(30);
-                    
-                    const svg = d3.select(svgRef.current);
-                    const g = svg.select('.main-group');
-                    if (g.node() && g.node().simulation) {
-                      g.node().simulation
-                        .force('charge').strength(-300)
-                        .force('link').distance(80)
-                        .force('center').strength(0.3)
-                        .force('collide').radius(30);
-                      g.node().simulation.alpha(0.3).restart();
-                    }
-                  }}
-                  className="px-3 py-1 bg-blue-900 text-blue-300 rounded text-sm font-mono border border-blue-400 hover:bg-blue-800 transition-colors"
-                >
-                  🔧 Reset Defaults
-                </button>
-              </div>
-
-              {/* Network Layout Instructions */}
-              <div className="mt-4 p-3 bg-orange-900/10 border border-orange-400/20 rounded text-xs text-orange-200">
-                <strong>Network Layout Controls:</strong> Drag nodes to reposition • Double-click to pin/unpin • 
-                Adjust forces for different network behaviors • Higher charge = more repulsion • 
-                Lower link distance = tighter connections
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* Main SVG Canvas */}
         <div className="flex-1 relative">
@@ -976,15 +778,6 @@ export default function MapD3() {
             <div>🎛️ Use sidebar filters to highlight</div>
             <div>⚡ Toggle layouts & status</div>
             <div>⌨️ Press <kbd className="bg-gray-700 px-1 rounded">/</kbd> to search</div>
-            {layoutType === LAYOUT_TYPES.network && (
-              <>
-                <div className="border-t border-gray-600 my-2"></div>
-                <div className="text-orange-300">Network Layout:</div>
-                <div>🫱 Drag nodes to reposition</div>
-                <div>🖱️ Double-click to pin/unpin</div>
-                <div>⚙️ Use force controls to adjust</div>
-              </>
-            )}
           </div>
 
           {/* Active Filters Mini-Display */}
