@@ -2071,10 +2071,51 @@ const rawMatrixNodes = [
     status: 'stub',
     enhancement: { reviewNeeded: true }
   },
+  // === FINANCE WORLD STUB NODES ===
+  {
+    id: 'fin-entry',
+    type: 'scene',
+    world: 'finance',
+    narrativeTier: 'intro',
+    status: 'stub',
+    enhancement: { reviewNeeded: true }
+  },
+  {
+    id: 'fin-upload-terminal',
+    type: 'scene',
+    world: 'finance',
+    narrativeTier: 'mid',
+    status: 'stub',
+    enhancement: { reviewNeeded: true }
+  },
+  {
+    id: 'fin-cleansing-node',
+    type: 'scene',
+    world: 'finance',
+    narrativeTier: 'mid',
+    status: 'stub',
+    enhancement: { reviewNeeded: true }
+  },
+  {
+    id: 'fin-ops-dashboard',
+    type: 'scene',
+    world: 'finance',
+    narrativeTier: 'climax',
+    status: 'stub',
+    enhancement: { reviewNeeded: true }
+  },
+  {
+    id: 'fin-credits-hub',
+    type: 'scene',
+    world: 'finance',
+    narrativeTier: 'climax',
+    status: 'stub',
+    enhancement: { reviewNeeded: true }
+  },
 ];
 
 // Provide simple default positions so new nodes render even without layout
-const worldIndex = { matrix: 0, witcher: 1, nightcity: 2 };
+const worldIndex = { matrix: 0, witcher: 1, nightcity: 2, finance: 3 };
 export const realMatrixNodes = rawMatrixNodes.map((n) => ({
   ...n,
   position: n.position || {

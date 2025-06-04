@@ -63,6 +63,13 @@ import FactionPortal from './pages/matrix-v1/FactionPortal';
 import GlitchPortal from './pages/matrix-v1/GlitchPortal';
 import OracleSeekers from './pages/matrix-v1/OracleSeekers';
 
+// Finance world routes
+import FinEntry from './pages/matrix-v1/finance/FinEntry';
+import FinUploadTerminal from './pages/matrix-v1/finance/FinUploadTerminal';
+import FinCleansingNode from './pages/matrix-v1/finance/FinCleansingNode';
+import FinOpsDashboard from './pages/matrix-v1/finance/FinOpsDashboard';
+import FinCreditsHub from './pages/matrix-v1/finance/FinCreditsHub';
+
 // Night City routes
 import NightCityEntry from './pages/matrix-v1/NightCityEntry';
 import NightCityBouncer from './pages/matrix-v1/NightCityBouncer';
@@ -170,6 +177,13 @@ function AppLayout() {
         <Route path="/matrix-v1/night-city/nc-archive-dive" element={<NcArchiveDive />} />
         <Route path="/matrix-v1/night-city/nc-neutral-ending" element={<NcNeutralEnding />} />
         <Route path="/matrix-v1/night-city/nc-control-ending" element={<NcControlEnding />} />
+
+        {/* Finance routes */}
+        <Route path="/matrix-v1/finance/fin-entry" element={<FinEntry />} />
+        <Route path="/matrix-v1/finance/fin-upload-terminal" element={<FinUploadTerminal />} />
+        <Route path="/matrix-v1/finance/fin-cleansing-node" element={<FinCleansingNode />} />
+        <Route path="/matrix-v1/finance/fin-ops-dashboard" element={<FinOpsDashboard />} />
+        <Route path="/matrix-v1/finance/fin-credits-hub" element={<FinCreditsHub />} />
 
         {/* Witcher routes */}
         <Route path="/witcher/entry" element={<WitcherEntry />} />
