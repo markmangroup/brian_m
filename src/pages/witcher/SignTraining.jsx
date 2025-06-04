@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../theme/ThemeContext';
+import ProgressBar from '../../components/ProgressBar';
 
 export default function SignTraining() {
   const navigate = useNavigate();
@@ -183,12 +184,11 @@ export default function SignTraining() {
             <span className="text-blue-300 text-sm font-semibold">Magic Energy</span>
             <span className="text-blue-400 text-sm">{magicEnergy}/100</span>
           </div>
-          <div className="w-full bg-gray-700 rounded-full h-3 overflow-hidden">
-            <div 
-              className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-1000"
-              style={{ width: `${magicEnergy}%` }}
-            />
-          </div>
+          <ProgressBar
+            value={magicEnergy}
+            max={100}
+            color="bg-gradient-to-r from-blue-500 to-purple-500"
+          />
         </div>
 
         {/* Instructor Dialogue */}
@@ -269,12 +269,12 @@ export default function SignTraining() {
                     <span className={sign.color}>{signProgress[sign.id]}%</span>
                   </div>
                   
-                  <div className="w-full bg-gray-700 rounded-full h-2 overflow-hidden">
-                    <div 
-                      className={`h-full transition-all duration-500 ${sign.color.replace('text-', 'bg-')}`}
-                      style={{ width: `${signProgress[sign.id]}%` }}
-                    />
-                  </div>
+                  <ProgressBar
+                    value={signProgress[sign.id]}
+                    max={100}
+                    color={`${sign.color.replace('text-', 'bg-')}`}
+                    style={{ height: '0.5rem' }}
+                  />
                   
                   <p className="text-xs text-gray-400 italic">
                     Effect: {sign.effect}
