@@ -184,12 +184,20 @@ const MapCanvasInner = forwardRef(function MapCanvasInner({ nodes }, ref) {
   // Expose methods to parent component
   useImperativeHandle(ref, () => ({
     centerNode: (nodeId) => {
-      if (reactFlowInstance) {
-        const node = nodes.find(n => n.id === nodeId);
-        if (node) {
-          reactFlowInstance.setCenter(node.position.x, node.position.y, { zoom: 1.2, duration: 800 });
-        }
+      if (!reactFlowInstance) return;
+      const n = reactFlowInstance.getNode(nodeId);
+      if (!n) {
+        requestAnimationFrame(() => {
+          const retry = reactFlowInstance.getNode(nodeId);
+          if (retry) {
+            reactFlowInstance.fitView({ nodes: [retry], maxZoom: 1.5 });
+          } else {
+            console.error('Node not found on this map');
+          }
+        });
+        return;
       }
+      reactFlowInstance.fitView({ nodes: [n], maxZoom: 1.5 });
     },
     fitView: () => {
       if (reactFlowInstance) {
