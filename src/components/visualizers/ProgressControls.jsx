@@ -1,21 +1,30 @@
 import React from 'react';
-import { FaPlay, FaPause, FaStop } from 'react-icons/fa';
+import { Play, Pause, Square } from 'lucide-react';
 
-export default function ProgressControls({ playing, onPlay, onPause, onReset, speed, onSpeed }) {
+export default function ProgressControls({
+  playing,
+  onPlay,
+  onPause,
+  onReset,
+  speed,
+  onSpeed,
+}) {
   return (
     <div className="flex items-center space-x-3">
       {playing ? (
         <button onClick={onPause} aria-label="pause">
-          <FaPause className="w-5 h-5" />
+          <Pause className="w-5 h-5" />
         </button>
       ) : (
         <button onClick={onPlay} aria-label="play">
-          <FaPlay className="w-5 h-5" />
+          <Play className="w-5 h-5" />
         </button>
       )}
+
       <button onClick={onReset} aria-label="reset">
-        <FaStop className="w-5 h-5" />
+        <Square className="w-5 h-5" />
       </button>
+
       <input
         type="range"
         min="0.5"
@@ -23,6 +32,8 @@ export default function ProgressControls({ playing, onPlay, onPause, onReset, sp
         step="0.1"
         value={speed}
         onChange={(e) => onSpeed(parseFloat(e.target.value))}
+        aria-label="animation speed"
+        className="w-24"
       />
     </div>
   );
