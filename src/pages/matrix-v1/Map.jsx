@@ -118,7 +118,7 @@ export default function MapPage() {
       <h1 className="sr-only">Matrix Story Map</h1>
       
       {/* Narrative Tier Filter */}
-      <div className="fixed top-6 left-6 z-50">
+      <div className="fixed top-[72px] left-6 z-[110]">
         <div className="bg-[#111] border border-purple-400/60 rounded-lg p-4 shadow-[0_0_8px_purple] backdrop-blur-sm">
           <label htmlFor="tier-filter" className="block text-purple-400 font-mono text-sm font-semibold mb-2">
             📖 Narrative Tier Filter
@@ -146,7 +146,7 @@ export default function MapPage() {
       </div>
 
       {/* Scene Path View Drawer */}
-      <div className={`fixed top-0 right-0 h-full z-40 transition-transform duration-300 ease-in-out ${
+      <div className={`fixed top-0 right-0 h-full z-[110] transition-transform duration-300 ease-in-out ${
         drawerOpen ? 'translate-x-0' : 'translate-x-full'
       }`}>
         {/* Drawer Toggle Button */}

@@ -66,7 +66,7 @@ export default function Entry() {
       <div className="w-full max-w-md space-y-8 text-center relative">
         {/* Active world badge */}
         <div
-          className="absolute top-0 right-0 mt-2 mr-2 px-2 py-1 text-xs rounded border border-theme-accent text-theme-accent bg-theme-glass animate-fade-in"
+          className="absolute top-[64px] right-0 mr-2 px-2 py-1 text-xs rounded border border-theme-accent text-theme-accent bg-theme-glass animate-fade-in"
         >
           {currentWorld.toUpperCase()}
         </div>

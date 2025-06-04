@@ -514,7 +514,7 @@ export default function MatrixNamePrompt() {
   return (
     <MatrixLayout>
       {/* View Toggle */}
-      <div className="absolute top-4 right-4 z-10">
+      <div className="absolute top-4 right-4 z-[110]">
         <div className="flex items-center gap-2 bg-theme-secondary border border-theme-accent rounded-lg p-2">
           <span className={`text-xs font-mono ${viewMode === 'enhanced' ? 'text-theme-bright' : 'text-theme-muted'}`}>
             UI
