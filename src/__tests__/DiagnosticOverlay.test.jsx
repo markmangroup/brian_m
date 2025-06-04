@@ -2,9 +2,14 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import DiagnosticOverlay from '../pages/matrix-v1/DiagnosticOverlay';
 import { ThemeProvider } from '../theme/ThemeContext';
+import { ColorModeProvider } from '../theme/ColorModeContext';
 import { realMatrixNodes } from '../pages/matrix-v1/realMatrixFlow';
 
-const Wrapper = ({ children }) => <ThemeProvider>{children}</ThemeProvider>;
+const Wrapper = ({ children }) => (
+  <ColorModeProvider>
+    <ThemeProvider>{children}</ThemeProvider>
+  </ColorModeProvider>
+);
 
 test('opens and closes diagnostic overlay', () => {
   render(
