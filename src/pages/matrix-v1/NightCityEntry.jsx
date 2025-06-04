@@ -48,7 +48,7 @@ export default function NightCityEntry() {
       )}
       
       {/* Neon lights effects */}
-      <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-500 animate-pulse"></div>
+      <div className="absolute top-[72px] left-0 w-full h-2 bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-500 animate-pulse"></div>
       <div className="absolute bottom-0 left-0 w-full h-2 bg-gradient-to-r from-cyan-500 via-pink-500 to-purple-500 animate-pulse"></div>
       
       <div className="relative z-10 max-w-4xl mx-auto">

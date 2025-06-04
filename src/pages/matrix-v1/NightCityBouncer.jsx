@@ -67,7 +67,7 @@ export default function NightCityBouncer() {
     <div className="min-h-screen bg-gradient-to-br from-purple-950 via-black to-pink-950 text-white p-6 font-mono relative overflow-hidden">
       {/* Neon ambiance */}
       <div className="absolute inset-0 bg-grid-cyberpunk opacity-20"></div>
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-pink-500 animate-pulse"></div>
+      <div className="absolute top-[72px] left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-pink-500 animate-pulse"></div>
       
       <div className="relative z-10 max-w-4xl mx-auto">
         {/* Phase 0: Arriving at the club */}

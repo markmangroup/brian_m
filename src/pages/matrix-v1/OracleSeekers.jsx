@@ -265,7 +265,7 @@ export default function OracleSeekers() {
         )}
 
         {/* Wisdom Quotes Sidebar */}
-        <div className="fixed top-4 right-4 bg-blue-900/50 border border-blue-400/30 rounded-lg p-4 w-64 backdrop-blur-sm">
+        <div className="fixed top-4 right-4 z-[110] bg-blue-900/50 border border-blue-400/30 rounded-lg p-4 w-64 backdrop-blur-sm">
           <h4 className="text-blue-400 font-bold mb-2">💫 Wisdom of the Oracle</h4>
           <div className="text-xs text-gray-300 space-y-2">
             {wisdomQuotes.slice(0, Math.min(wisdom, wisdomQuotes.length)).map((quote, index) => (

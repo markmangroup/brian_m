@@ -893,7 +893,7 @@ export default function MapD3() {
           <ZoomControls svgRef={svgRef} />
           
           {/* Help Text */}
-          <div className="absolute top-4 left-4 bg-black/80 text-xs text-gray-400 p-3 rounded border border-gray-600 font-mono">
+          <div className="absolute top-[72px] left-4 bg-black/80 text-xs text-gray-400 p-3 rounded border border-gray-600 font-mono z-[110]">
             <div>🖱️ Click nodes to explore</div>
             <div>🔍 Scroll to zoom</div>
             <div>✋ Drag to pan</div>
