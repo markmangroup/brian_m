@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ProgressBar from '../../components/ProgressBar';
 
 export default function GhostLayer2() {
   const navigate = useNavigate();
@@ -271,26 +272,19 @@ export default function GhostLayer2() {
             <div className="grid grid-cols-3 gap-4">
               <div className="bg-gray-900/50 border border-green-400/30 rounded p-3">
                 <div className="text-xs text-gray-400 mb-1">SYSTEM HEALTH</div>
-                <div className="w-full bg-gray-800 rounded-full h-3">
-                  <div 
-                    className={`h-3 rounded-full transition-all duration-300 ${
-                      systemHealth > 60 ? 'bg-green-400' : 
-                      systemHealth > 30 ? 'bg-yellow-400' : 'bg-red-400'
-                    }`}
-                    style={{ width: `${systemHealth}%` }}
-                  ></div>
-                </div>
+                <ProgressBar
+                  value={systemHealth}
+                  max={100}
+                  color={
+                    systemHealth > 60 ? 'bg-green-400' : systemHealth > 30 ? 'bg-yellow-400' : 'bg-red-400'
+                  }
+                />
                 <div className="text-lg font-bold text-white mt-1">{Math.round(systemHealth)}%</div>
               </div>
 
               <div className="bg-gray-900/50 border border-blue-400/30 rounded p-3">
                 <div className="text-xs text-gray-400 mb-1">BREACH PROGRESS</div>
-                <div className="w-full bg-gray-800 rounded-full h-3">
-                  <div 
-                    className="bg-blue-400 h-3 rounded-full transition-all duration-300"
-                    style={{ width: `${breachProgress}%` }}
-                  ></div>
-                </div>
+                <ProgressBar value={breachProgress} max={100} color="bg-blue-400" />
                 <div className="text-lg font-bold text-white mt-1">{Math.round(breachProgress)}%</div>
               </div>
 

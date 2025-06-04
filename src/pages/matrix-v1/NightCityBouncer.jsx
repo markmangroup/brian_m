@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ResourcePanel from '../../components/ResourcePanel';
 
 export default function NightCityBouncer() {
   const navigate = useNavigate();
@@ -119,14 +120,11 @@ export default function NightCityBouncer() {
 
             {/* Player Status */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-              <div className="bg-green-900/20 border border-green-400/30 rounded-lg p-4">
-                <h3 className="text-green-400 font-bold mb-2">💰 Your Resources</h3>
-                <div className="text-gray-300 text-sm">
-                  <p>Eddies: {playerEddies}</p>
-                  <p>Data Chips: {hasDataChip ? '1 (Basic Intel)' : 'None'}</p>
-                  <p>Cyberware: Basic Neural Interface</p>
-                </div>
-              </div>
+              <ResourcePanel title="💰 Your Resources">
+                <p>Eddies: {playerEddies}</p>
+                <p>Data Chips: {hasDataChip ? '1 (Basic Intel)' : 'None'}</p>
+                <p>Cyberware: Basic Neural Interface</p>
+              </ResourcePanel>
               
               <div className="bg-red-900/20 border border-red-400/30 rounded-lg p-4">
                 <h3 className="text-red-400 font-bold mb-2">⚠️ Threat Assessment</h3>

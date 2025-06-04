@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CharacterDialogue } from '../../components/CharacterSystem';
 import { useTheme } from '../../theme/ThemeContext';
+import ProgressBar from '../../components/ProgressBar';
 
 export default function NightCityEntry() {
   const navigate = useNavigate();
@@ -88,9 +89,12 @@ export default function NightCityEntry() {
             <div className="bg-purple-900/30 border border-pink-400/30 rounded-xl p-8 mb-8 backdrop-blur-sm">
               <div className="text-center mb-6">
                 <div className="text-2xl text-pink-400 mb-4">Reality Stabilizing...</div>
-                <div className="w-full bg-gray-800 rounded-full h-4 overflow-hidden mb-4">
-                  <div className="h-4 bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-500 rounded-full animate-pulse w-full"></div>
-                </div>
+                <ProgressBar
+                  value={100}
+                  max={100}
+                  color="bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-500 animate-pulse"
+                  style={{ height: '1rem' }}
+                />
               </div>
               
               <div className="text-gray-300 text-center space-y-4">

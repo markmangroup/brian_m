@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useTypewriterEffect from '../../components/useTypewriterEffect';
 import MatrixLayout, { MatrixButton } from '../../components/MatrixLayout';
+import ProgressBar from '../../components/ProgressBar';
 
 export default function Checkpoint() {
   const navigate = useNavigate();
@@ -31,10 +32,12 @@ export default function Checkpoint() {
         </div>
         
         <div className="space-y-4">
-          <div className="w-full bg-gray-800 rounded-full h-3 overflow-hidden">
-            <div className="h-full bg-theme-primary rounded-full animate-pulse transition-all duration-1000" 
-                 style={{ width: '100%', animationDuration: '2s' }} />
-          </div>
+          <ProgressBar
+            value={100}
+            max={100}
+            color="bg-theme-primary animate-pulse"
+            style={{ animationDuration: '2s' }}
+          />
           <div className="text-theme-secondary text-sm">
             Consciousness transfer stabilizing...
           </div>

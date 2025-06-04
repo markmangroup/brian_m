@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MatrixLayout, { MatrixInput, MatrixButton } from '../../components/MatrixLayout';
+import ProgressBar from '../../components/ProgressBar';
 import useTypewriterEffect from '../../components/useTypewriterEffect';
 import { useStoryProgress } from '../../hooks/useStoryProgress';
 import { useUserActions } from '../../store/useAppStore';
@@ -396,9 +397,11 @@ export default function MatrixNamePrompt() {
               <p className="text-2xl text-theme-bright font-bold">Identity Confirmed</p>
               <p className="text-theme-secondary">Welcome to the Matrix, {name}</p>
             </div>
-            <div className="w-full bg-theme-overlay rounded-full h-3 overflow-hidden">
-              <div className="h-full bg-gradient-to-r from-theme-primary to-theme-accent animate-progress-bar" />
-            </div>
+            <ProgressBar
+              value={100}
+              max={100}
+              color="bg-gradient-to-r from-theme-primary to-theme-accent animate-progress-bar"
+            />
           </div>
         )}
       </div>

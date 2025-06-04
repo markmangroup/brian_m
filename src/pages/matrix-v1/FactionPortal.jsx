@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CharacterAvatar } from '../../components/CharacterSystem';
+import ProgressBar from '../../components/ProgressBar';
 
 export default function FactionPortal() {
   const navigate = useNavigate();
@@ -142,18 +143,18 @@ export default function FactionPortal() {
                     <span>Training Progress</span>
                     <span>{factionProgress.completed}/{factionProgress.total}</span>
                   </div>
-                  <div className="w-full bg-gray-800 rounded-full h-3 overflow-hidden">
-                    <div 
-                      className={`h-3 rounded-full transition-all duration-700 ${
-                        faction.color === 'red' ? 'bg-red-500' :
-                        faction.color === 'green' ? 'bg-green-500' : 'bg-blue-500'
-                      }`}
-                      style={{ width: `${factionProgress.percentage}%` }}
-                    ></div>
-                  </div>
-                  <div className="text-center text-xs text-gray-500 mt-1">
-                    {factionProgress.percentage}% Complete
-                  </div>
+                  <ProgressBar
+                    value={factionProgress.completed}
+                    max={factionProgress.total}
+                    color={
+                      faction.color === 'red'
+                        ? 'bg-red-500'
+                        : faction.color === 'green'
+                        ? 'bg-green-500'
+                        : 'bg-blue-500'
+                    }
+                    label={`${factionProgress.percentage}% Complete`}
+                  />
                 </div>
 
                 {/* Module Breakdown */}
