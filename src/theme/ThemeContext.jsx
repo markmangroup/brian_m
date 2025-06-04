@@ -10,6 +10,7 @@ const WORLD_THEME_MAP = {
   'witcher': 'witcher',
   'nightcity': 'nightcity',
   'cyberpunk': 'nightcity', // Legacy support
+  'fallout': 'matrix',
   'all': 'matrix'
 };
 

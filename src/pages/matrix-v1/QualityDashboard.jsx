@@ -68,6 +68,13 @@ const WORLD_GROUPS = {
     groups: ['night-city', 'nightcity', 'corpo', 'street', 'nomad']
   }
   ,
+  'fallout': {
+    name: 'Fallout',
+    icon: '☢️',
+    color: 'text-theme-primary',
+    borderColor: 'border-theme-primary',
+    groups: ['fallout']
+  },
   'finance': {
     name: 'Finance',
     icon: '💰',
@@ -784,7 +791,7 @@ export default function QualityDashboard() {
   const { colorMode } = useColorMode();
   
   // State management
-  const [selectedWorlds, setSelectedWorlds] = useState(['matrix', 'witcher', 'nightcity', 'finance']);
+  const [selectedWorlds, setSelectedWorlds] = useState(['matrix', 'witcher', 'nightcity', 'fallout', 'finance']);
   const [selectedStatuses, setSelectedStatuses] = useState(['live', 'wip', 'stub']);
   const [selectedPriorities, setSelectedPriorities] = useState(['CRITICAL', 'HIGH', 'MEDIUM', 'LOW']);
   const [showMissingSummaries, setShowMissingSummaries] = useState(false);

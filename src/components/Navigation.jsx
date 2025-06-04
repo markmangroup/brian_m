@@ -37,7 +37,8 @@ export default function Navigation() {
     'matrix': { icon: '💊', label: 'MATRIX', color: 'text-green-400 border-green-400' },
     'witcher': { icon: '⚔️', label: 'WITCHER', color: 'text-amber-400 border-amber-400' },
     'nightcity': { icon: '🌆', label: 'NIGHT_CITY', color: 'text-purple-400 border-purple-400' },
-    'cyberpunk': { icon: '🌆', label: 'NIGHT_CITY', color: 'text-purple-400 border-purple-400' } // Legacy support
+    'cyberpunk': { icon: '🌆', label: 'NIGHT_CITY', color: 'text-purple-400 border-purple-400' }, // Legacy support
+    'fallout': { icon: '☢️', label: 'FALLOUT', color: 'text-lime-400 border-lime-400' }
   };
 
   const worldDisplay = worldDisplays[currentWorld] || worldDisplays.matrix;

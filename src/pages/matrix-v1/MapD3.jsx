@@ -250,6 +250,14 @@ export default function MapD3() {
       nodeColor: getThemeD3('nodeColor') || '#a855f7',
       linkColor: getThemeD3('linkColor') || '#c084fc',
       gridOpacity: getThemeD3('gridOpacity') || 0.4
+    },
+    fallout: {
+      bgColor: 'bg-neutral-900',
+      primaryColor: 'text-lime-400',
+      accentColor: 'text-yellow-400',
+      nodeColor: getThemeD3('nodeColor') || '#84cc16',
+      linkColor: getThemeD3('linkColor') || '#a3e635',
+      gridOpacity: getThemeD3('gridOpacity') || 0.3
     }
   }), [getThemeD3]);
 
