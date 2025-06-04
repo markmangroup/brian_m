@@ -4,6 +4,7 @@ export const nodes = [
     type: 'scene',
     position: { x: 50, y: 50 },
     narrativeTier: 'intro',
+    world: 'matrix',
     data: {
       title: 'Visible Test',
       description: 'This should always be on screen.',
@@ -16,6 +17,7 @@ export const nodes = [
     type: 'scene',
     position: { x: 0, y: 0 },
     narrativeTier: 'intro',
+    world: 'matrix',
     data: {
       title: 'The Matrix',
       description: 'A dark room filled with monitors. The air hums with digital energy.',
@@ -27,6 +29,7 @@ export const nodes = [
     type: 'scene',
     position: { x: 200, y: 0 },
     narrativeTier: 'mid',
+    world: 'matrix',
     data: {
       title: 'The Construct',
       description: 'An endless white space where anything is possible.',
@@ -40,6 +43,7 @@ export const nodes = [
     type: 'dialogue',
     position: { x: 0, y: 200 },
     narrativeTier: 'intro',
+    world: 'matrix',
     data: {
       character: 'Morpheus',
       dialogue: 'I\'m going to show you how deep the rabbit hole goes.',
@@ -51,6 +55,7 @@ export const nodes = [
     type: 'dialogue',
     position: { x: 200, y: 200 },
     narrativeTier: 'mid',
+    world: 'matrix',
     data: {
       character: 'Neo',
       dialogue: 'I know kung fu.',
@@ -64,6 +69,7 @@ export const nodes = [
     type: 'choice',
     position: { x: 0, y: 400 },
     narrativeTier: 'climax',
+    world: 'matrix',
     data: {
       prompt: 'Choose your path',
       options: [
@@ -77,6 +83,7 @@ export const nodes = [
     type: 'choice',
     position: { x: 200, y: 400 },
     narrativeTier: 'climax',
+    world: 'matrix',
     data: {
       prompt: 'How do you proceed?',
       options: [
@@ -93,6 +100,7 @@ export const nodes = [
     type: 'ending',
     position: { x: 0, y: 600 },
     narrativeTier: 'finale',
+    world: 'matrix',
     data: {
       title: 'The One',
       outcome: 'Victory',
@@ -104,6 +112,7 @@ export const nodes = [
     type: 'ending',
     position: { x: 200, y: 600 },
     narrativeTier: 'finale',
+    world: 'matrix',
     data: {
       title: 'System Failure',
       outcome: 'Defeat',
@@ -118,6 +127,7 @@ export const nodes = [
     depth: 0,
     group: 'training',
     narrativeTier: 'intro',
+    world: 'matrix',
     data: {
       label: 'Training Entry',
       tooltip: 'Begin your training',
@@ -132,6 +142,7 @@ export const nodes = [
     depth: 1,
     group: 'training',
     narrativeTier: 'mid',
+    world: 'matrix',
     data: {
       label: 'AWAKEN Challenge',
       tooltip: 'Face the guardian',
@@ -146,6 +157,7 @@ export const nodes = [
     depth: 2,
     group: 'training',
     narrativeTier: 'mid',
+    world: 'matrix',
     data: {
       label: 'Find the Real Signal',
       tooltip: 'Discern truth from noise',
@@ -160,6 +172,7 @@ export const nodes = [
     depth: 3,
     group: 'training',
     narrativeTier: 'climax',
+    world: 'matrix',
     data: {
       label: 'Memory Puzzle',
       tooltip: 'Test your recall',
@@ -176,6 +189,7 @@ export const nodes = [
     depth: 0,
     group: 'main',
     narrativeTier: 'intro',
+    world: 'matrix',
     data: {
       label: 'Agent Echo',
       tooltip: 'System Guardian: Echo',
@@ -190,6 +204,7 @@ export const nodes = [
     depth: 1,
     group: 'main',
     narrativeTier: 'mid',
+    world: 'matrix',
     data: {
       label: 'Archivist (Simulated Recovery)',
       tooltip: 'Archivist: Simulated Recovery',
@@ -204,6 +219,7 @@ export const nodes = [
     depth: 1,
     group: 'main',
     narrativeTier: 'mid',
+    world: 'matrix',
     data: {
       label: 'Agent Shadow (Signal Distorted)',
       tooltip: 'System anomaly containment unit',
@@ -218,6 +234,7 @@ export const nodes = [
     depth: 2,
     group: 'main',
     narrativeTier: 'finale',
+    world: 'matrix',
     data: {
       label: 'Safe Mode (Fabricated Timeline)',
       tooltip: 'End: Fabricated Timeline',
@@ -232,6 +249,7 @@ export const nodes = [
     depth: 2,
     group: 'main',
     narrativeTier: 'finale',
+    world: 'matrix',
     data: {
       label: 'Reset / Entry',
       tooltip: 'Restart the journey',
@@ -246,6 +264,7 @@ export const nodes = [
     depth: 2,
     group: 'main',
     narrativeTier: 'climax',
+    world: 'matrix',
     data: {
       label: 'Stabilize (Puzzle)',
       tooltip: 'Puzzle node (under construction)',
@@ -261,6 +280,7 @@ export const nodes = [
     depth: 2,
     group: 'main',
     narrativeTier: 'finale',
+    world: 'matrix',
     data: {
       label: 'Error Loop (Recursive)',
       tooltip: 'Unstable recursive logic state',
@@ -277,6 +297,7 @@ export const nodes = [
     depth: 0,
     group: 'factions',
     narrativeTier: 'intro',
+    world: 'matrix',
     data: {
       label: 'Deeper Profile',
       tooltip: 'Profile analysis',
@@ -291,6 +312,7 @@ export const nodes = [
     depth: 1,
     group: 'factions',
     narrativeTier: 'mid',
+    world: 'matrix',
     data: {
       label: "Choose who's watching you",
       tooltip: 'Faction selection',
@@ -305,6 +327,7 @@ export const nodes = [
     depth: 2,
     group: 'factions',
     narrativeTier: 'climax',
+    world: 'matrix',
     data: {
       label: 'Aligned: Signal Brokers',
       tooltip: 'Signal Brokers (teal)',
@@ -320,6 +343,7 @@ export const nodes = [
     depth: 2,
     group: 'factions',
     narrativeTier: 'climax',
+    world: 'matrix',
     data: {
       label: 'Aligned: Oblivion Hand',
       tooltip: 'Oblivion Hand (gray)',
@@ -335,6 +359,7 @@ export const nodes = [
     depth: 2,
     group: 'factions',
     narrativeTier: 'climax',
+    world: 'matrix',
     data: {
       label: 'Aligned: Architects of Silence',
       tooltip: 'Architects of Silence (gold)',
@@ -353,6 +378,7 @@ export const nodes = [
     depth: 0,
     group: 'night-city',
     narrativeTier: 'intro',
+    world: 'nightcity',
     data: {
       title: 'Night City Entry',
       description: 'The neon-soaked streets of Night City stretch before you.',
@@ -372,6 +398,7 @@ export const nodes = [
     depth: 1,
     group: 'night-city',
     narrativeTier: 'intro',
+    world: 'nightcity',
     data: {
       title: 'Afterlife Bouncer',
       description: 'A chrome-enhanced bouncer guards the entrance to the legendary bar.',
@@ -392,6 +419,7 @@ export const nodes = [
     depth: 2,
     group: 'night-city',
     narrativeTier: 'mid',
+    world: 'nightcity',
     data: {
       title: 'Netrunner Dive',
       description: 'Jack into the Net and dive deep into the data stream.',
@@ -413,6 +441,7 @@ export const nodes = [
     depth: 3,
     group: 'night-city',
     narrativeTier: 'mid',
+    world: 'nightcity',
     data: {
       title: 'Data Theft',
       description: 'Corporate secrets flow through your neural interface.',
@@ -432,6 +461,7 @@ export const nodes = [
     depth: 4,
     group: 'night-city',
     narrativeTier: 'climax',
+    world: 'nightcity',
     data: {
       title: 'Ghost of Johnny',
       character: 'Johnny Silverhand',
@@ -453,6 +483,7 @@ export const nodes = [
     depth: 2,
     group: 'night-city',
     narrativeTier: 'mid',
+    world: 'nightcity',
     data: {
       title: 'Corporate Escape',
       description: 'Security forces are closing in. Time to run.',
@@ -474,6 +505,7 @@ export const nodes = [
     depth: 3,
     group: 'night-city',
     narrativeTier: 'climax',
+    world: 'nightcity',
     data: {
       title: 'Archive Dive',
       description: 'Deep in the corporate data archives, truth awaits.',
@@ -493,6 +525,7 @@ export const nodes = [
     depth: 5,
     group: 'night-city',
     narrativeTier: 'finale',
+    world: 'nightcity',
     data: {
       title: 'Final Protocol',
       description: 'The ultimate choice: upload, erase, or rewrite reality.',
@@ -518,6 +551,7 @@ export const nodes = [
     depth: 6,
     group: 'night-city',
     narrativeTier: 'finale',
+    world: 'nightcity',
     data: {
       title: 'Neutral Ending',
       outcome: 'Freedom',
@@ -538,6 +572,7 @@ export const nodes = [
     depth: 6,
     group: 'night-city',
     narrativeTier: 'finale',
+    world: 'nightcity',
     data: {
       title: 'Control Ending',
       outcome: 'Power',
