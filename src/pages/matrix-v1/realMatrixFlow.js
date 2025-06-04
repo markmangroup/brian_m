@@ -1982,5 +1982,12 @@ export const realMatrixEdges = [
   { id: 'edge-pill-red', source: 'matrix-pill-choice', target: 'matrix-pill-choice-red', label: 'Red Pill' },
   { id: 'edge-pill-blue', source: 'matrix-pill-choice', target: 'matrix-pill-choice-blue', label: 'Blue Pill' },
   { id: 'edge-red-to-terminal', source: 'matrix-pill-choice-red', target: 'matrix-v1-terminal' },
-  { id: 'edge-terminal-to-orientation', source: 'matrix-v1-terminal', target: 'matrix-faction-orientation' }
+  { id: 'edge-terminal-to-orientation', source: 'matrix-v1-terminal', target: 'matrix-faction-orientation' },
+
+  // Witcher world flow
+  { id: 'edge-glitch-to-witcher', source: 'matrix-glitch-portal', target: 'witcher-entry', label: 'Breach Witcher Realm' },
+  { id: 'edge-witcher-entry-to-mutation', source: 'witcher-entry', target: 'witcher-mutation-choice' },
+  { id: 'edge-witcher-mutation-to-signs', source: 'witcher-mutation-choice', target: 'witcher-sign-training', label: 'Trial Survived' },
+  { id: 'edge-witcher-signs-to-final-ritual', source: 'witcher-sign-training', target: 'witcher-final-ritual', label: 'Final Trial Beckons' },
+  { id: 'edge-witcher-trial-to-final-ritual', source: 'witcher-trial-of-reflection', target: 'witcher-final-ritual', label: 'Elder Circle Calls' }
 ];

@@ -15,6 +15,7 @@ import {
 import { useTheme } from '../../theme/ThemeContext';
 import { useColorMode } from '../../theme/ColorModeContext';
 import DiagnosticOverlay from './DiagnosticOverlay';
+import { ChevronDown } from 'lucide-react';
 import { getWorldDialogue, getWorldSummary, getWorldCharacters } from '../../utils/worldContentLoader';
 import { getNodeSummary } from '../../utils/getNodeSummary';
 
@@ -321,9 +322,8 @@ const ExecutiveNodeCard = ({ node, onView, onEdit }) => {
 
   return (
     <div className={`
-      relative rounded-xl p-3 hover:border-theme-primary transition-all duration-300 group 
-      shadow hover:shadow-xl hover:-translate-y-0.5 transform-gpu
-      bg-theme-secondary border-2 border-theme-accent text-theme-bright
+      transition-all duration-200 transform hover:scale-[1.02] hover:-translate-y-1 hover:shadow-xl
+      bg-theme-secondary border border-theme-accent rounded-lg p-2 relative text-theme-bright
       ${getPriorityClasses(nodePriority, colorMode)}
     `}>
       {/* Enhanced Priority Indicator */}
@@ -332,7 +332,7 @@ const ExecutiveNodeCard = ({ node, onView, onEdit }) => {
       </div>
 
       {/* Top Section with enhanced readability */}
-      <div className="flex items-start justify-between mb-3">
+      <div className="flex items-start justify-between mb-2">
         <div className="flex-1 pr-2">
           <div className="flex items-center gap-2 mb-1">
             <span className="text-lg">{getWorldIcon(node.group)}</span>
@@ -362,7 +362,7 @@ const ExecutiveNodeCard = ({ node, onView, onEdit }) => {
       </div>
 
       {/* Quality & Score Section with enhanced contrast */}
-      <div className="space-y-2 mb-3">
+      <div className="space-y-2 mb-2">
         <div className="flex items-center justify-between">
           <span className="text-xs text-theme-secondary font-medium">Quality</span>
           <QualityBadge score={quality.overall} />
@@ -377,7 +377,7 @@ const ExecutiveNodeCard = ({ node, onView, onEdit }) => {
       </div>
 
       {/* Enhanced Metadata with better contrast */}
-      <div className="grid grid-cols-2 gap-2 text-xs mb-3">
+      <div className="grid grid-cols-2 gap-2 text-xs mb-2">
         <div>
           <span className="text-theme-muted font-medium">Type:</span>
           <span className="ml-1 text-theme-bright">{node.type}</span>
@@ -397,13 +397,13 @@ const ExecutiveNodeCard = ({ node, onView, onEdit }) => {
       </div>
 
       {/* Updated Date with better visibility */}
-      <div className="text-xs text-theme-muted mb-3 font-medium">
+      <div className="text-xs text-theme-muted mb-2 font-medium">
         <span>Updated: <span className="text-theme-secondary">{formatDate(lastUpdated)}</span></span>
       </div>
 
       {/* Next Improvements with enhanced readability */}
       {improvements.length > 0 && (
-        <div className="mb-3">
+        <div className="mb-2">
           <div className="text-xs text-theme-secondary mb-1 font-medium">Next Improvements:</div>
           <ul className="text-xs text-theme-muted space-y-1">
             {improvements.slice(0, 2).map((improvement, idx) => (
@@ -555,44 +555,30 @@ const EditNodeModal = ({ node, onSave, onClose }) => {
 };
 
 // Enhanced World Filter Component
-const WorldFilter = ({ selectedWorlds, onChange, onToggle, isCollapsed }) => {
+const WorldFilter = ({ selectedWorlds, onChange }) => {
   const { colorMode } = useColorMode();
-  
+
   return (
-    <div className="bg-theme-secondary border-2 border-theme-accent rounded-lg p-3 md:sticky top-2">
-      <div className="flex items-center justify-between">
-        <div className="text-theme-bright font-medium">🌍 Worlds</div>
-        <button
-          onClick={onToggle}
-          className="text-theme-muted hover:text-theme-secondary transition-colors md:hidden focus-theme"
-        >
-          {isCollapsed ? '▼' : '▲'}
-        </button>
-      </div>
-      
-      {!isCollapsed && (
-        <div className="mt-3 space-y-2">
-          {Object.entries(WORLD_GROUPS).map(([worldKey, world]) => (
-            <label key={worldKey} className="flex items-center gap-2 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={selectedWorlds.includes(worldKey)}
-                onChange={(e) => {
-                  if (e.target.checked) {
-                    onChange([...selectedWorlds, worldKey]);
-                  } else {
-                    onChange(selectedWorlds.filter(w => w !== worldKey));
-                  }
-                }}
-                className="w-4 h-4 text-theme-primary focus:ring-theme-primary focus:ring-2 rounded border-theme-accent"
-              />
-              <span className="text-sm text-theme-bright">
-                {world.icon} {world.name}
-              </span>
-            </label>
-          ))}
-        </div>
-      )}
+    <div className="flex flex-wrap gap-2">
+      {Object.entries(WORLD_GROUPS).map(([worldKey, world]) => (
+        <label key={worldKey} className="flex items-center gap-1 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={selectedWorlds.includes(worldKey)}
+            onChange={(e) => {
+              if (e.target.checked) {
+                onChange([...selectedWorlds, worldKey]);
+              } else {
+                onChange(selectedWorlds.filter(w => w !== worldKey));
+              }
+            }}
+            className="w-4 h-4 text-theme-primary focus:ring-theme-primary focus:ring-2 rounded border-theme-accent"
+          />
+          <span className="text-xs text-theme-bright">
+            {world.icon} {world.name}
+          </span>
+        </label>
+      ))}
     </div>
   );
 };
@@ -675,7 +661,7 @@ const MetricsWidget = ({ colorMode, filteredNodes = null }) => {
   };
 
   return (
-    <div className="mb-8">
+    <div>
       {/* Collapsible Header */}
       <div 
         className={`${colorMode === 'light' ? 'bg-blue-50 border-blue-200' : 'bg-theme-accent/20 border-theme-primary'} border-2 rounded-lg p-4 cursor-pointer transition-colors duration-300`}
@@ -704,7 +690,7 @@ const MetricsWidget = ({ colorMode, filteredNodes = null }) => {
         <div className={`${colorMode === 'light' ? 'bg-gray-50 border-gray-200' : 'bg-theme-secondary/50 border-theme-accent'} border-2 border-t-0 rounded-b-lg p-6 transition-all duration-300`}>
           
           {/* Key Metrics Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             
             {/* Total Nodes */}
             <div className={getMetricCardStyles(colorMode)}>
@@ -794,7 +780,7 @@ export default function QualityDashboard() {
   const [selectedStatuses, setSelectedStatuses] = useState(['live', 'wip', 'stub']);
   const [selectedPriorities, setSelectedPriorities] = useState(['CRITICAL', 'HIGH', 'MEDIUM', 'LOW']);
   const [showMissingSummaries, setShowMissingSummaries] = useState(false);
-  const [worldFilterCollapsed, setWorldFilterCollapsed] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
   const [showMore, setShowMore] = useState(false);
   const [sortConfig, setSortConfig] = useState([{ key: 'updatedAt', direction: 'desc' }]);
   const [editingNode, setEditingNode] = useState(null);
@@ -983,11 +969,11 @@ export default function QualityDashboard() {
   };
 
   return (
-    <div className="min-h-screen p-4 md:p-6 transition-colors duration-300 bg-theme-primary text-theme-bright" 
+    <div className="min-h-screen p-4 md:p-6 transition-colors duration-300 bg-theme-primary text-theme-bright"
          style={{ background: 'var(--world-background)' }}>
       {/* Enhanced Header */}
-      <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
+      <div className="w-full px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between mb-4">
           <div>
             <h1 className="heading-theme text-4xl mb-2">
               Executive Quality Dashboard
@@ -1005,7 +991,8 @@ export default function QualityDashboard() {
         <MetricsWidget colorMode={colorMode} filteredNodes={filteredNodes} />
 
         {/* Enhanced Top-Level KPIs with better contrast */}
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4 mb-8">
+        <div className="sticky top-0 z-40 bg-theme-primary/95 backdrop-blur-sm border-b border-theme-accent py-3 mb-4">
+          <div className="grid grid-cols-4 sm:grid-cols-8 gap-2 lg:gap-3">
           <div className={getKpiCardStyles('total', colorMode)}>
             <div className={getKpiValueStyles('total', colorMode)}>{kpis.total}</div>
             <div className="text-xs text-theme-muted font-medium">Total Nodes</div>
@@ -1045,6 +1032,7 @@ export default function QualityDashboard() {
             <div className={getKpiValueStyles('upgraded', colorMode)}>{kpis.percentUpgraded.toFixed(1)}%</div>
             <div className="text-xs text-theme-muted font-medium">Upgraded</div>
           </div>
+          </div>
         </div>
 
         {/* Enhanced Sort Controls */}
@@ -1064,78 +1052,71 @@ export default function QualityDashboard() {
         </div>
 
         {/* Enhanced Filters */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-8">
-          <WorldFilter
-            selectedWorlds={selectedWorlds}
-            onChange={setSelectedWorlds}
-            onToggle={() => setWorldFilterCollapsed(!worldFilterCollapsed)}
-            isCollapsed={worldFilterCollapsed}
-          />
-          
-          {/* Enhanced Status Filter */}
-          <div className="bg-theme-secondary border-2 border-theme-accent rounded-lg p-3 md:sticky top-2">
-            <div className="text-theme-bright font-medium mb-3">📊 Status</div>
-            <div className="flex gap-2">
-              {['live', 'wip', 'stub'].map(status => (
-                <label key={status} className="flex items-center gap-1 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={selectedStatuses.includes(status)}
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        setSelectedStatuses([...selectedStatuses, status]);
-                      } else {
-                        setSelectedStatuses(selectedStatuses.filter(s => s !== status));
-                      }
-                    }}
-                    className="w-4 h-4 text-theme-primary focus:ring-theme-primary focus:ring-2 rounded border-theme-accent"
-                  />
-                  <span className="text-sm text-theme-bright">{STATUS_ICONS[status]} {STATUS_LABELS[status]}</span>
-                </label>
-              ))}
+        <div className="sticky top-16 z-30 bg-theme-secondary/95 backdrop-blur-sm border border-theme-accent rounded-lg p-3 mb-4">
+          <button
+            className="lg:hidden w-full flex justify-between"
+            onClick={() => setShowFilters(!showFilters)}
+          >
+            <span>Filters</span>
+            <ChevronDown className={`w-4 h-4 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
+          </button>
+          <div className={`transition-all duration-300 overflow-hidden ${showFilters ? 'max-h-[240px]' : 'max-h-0 lg:max-h-none'}`}>
+            <div className="flex flex-wrap items-center gap-3 lg:gap-4">
+              <WorldFilter selectedWorlds={selectedWorlds} onChange={setSelectedWorlds} />
+              <div className="flex gap-2">
+                {['live', 'wip', 'stub'].map(status => (
+                  <label key={status} className="flex items-center gap-1 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={selectedStatuses.includes(status)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setSelectedStatuses([...selectedStatuses, status]);
+                        } else {
+                          setSelectedStatuses(selectedStatuses.filter(s => s !== status));
+                        }
+                      }}
+                      className="w-4 h-4 text-theme-primary focus:ring-theme-primary focus:ring-2 rounded border-theme-accent"
+                    />
+                    <span className="text-sm text-theme-bright">{STATUS_ICONS[status]} {STATUS_LABELS[status]}</span>
+                  </label>
+                ))}
+              </div>
+              <div className="flex gap-2">
+                {['CRITICAL', 'HIGH', 'MEDIUM', 'LOW'].map(priority => (
+                  <label key={priority} className="flex items-center gap-1 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={selectedPriorities.includes(priority)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setSelectedPriorities([...selectedPriorities, priority]);
+                        } else {
+                          setSelectedPriorities(selectedPriorities.filter(p => p !== priority));
+                        }
+                      }}
+                      className="w-4 h-4 text-theme-primary focus:ring-theme-primary focus:ring-2 rounded border-theme-accent"
+                    />
+                    <span className="text-xs text-theme-bright">{priority}</span>
+                  </label>
+                ))}
+              </div>
+              <label className="flex items-center gap-1 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={showMissingSummaries}
+                  onChange={(e) => setShowMissingSummaries(e.target.checked)}
+                  className="w-4 h-4 text-theme-primary focus:ring-theme-primary focus:ring-2 rounded border-theme-accent"
+                />
+                <span className="text-sm text-theme-bright">Show nodes missing summaries</span>
+              </label>
+              <button className="ml-auto text-sm text-theme-muted hover:text-theme-bright">Advanced ⚙️</button>
             </div>
-          </div>
-
-          {/* Enhanced Priority Filter */}
-          <div className="bg-theme-secondary border-2 border-theme-accent rounded-lg p-3 md:sticky top-2">
-            <div className="text-theme-bright font-medium mb-3">⚡ Priority</div>
-          <div className="grid grid-cols-2 gap-2">
-            {['CRITICAL', 'HIGH', 'MEDIUM', 'LOW'].map(priority => (
-              <label key={priority} className="flex items-center gap-1 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={selectedPriorities.includes(priority)}
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        setSelectedPriorities([...selectedPriorities, priority]);
-                      } else {
-                        setSelectedPriorities(selectedPriorities.filter(p => p !== priority));
-                      }
-                    }}
-                    className="w-4 h-4 text-theme-primary focus:ring-theme-primary focus:ring-2 rounded border-theme-accent"
-                  />
-                  <span className="text-xs text-theme-bright">{priority}</span>
-                </label>
-              ))}
-            </div>
-          </div>
-
-          {/* Filter for nodes missing summaries */}
-          <div className="bg-theme-secondary border-2 border-theme-accent rounded-lg p-3 md:sticky top-2 flex items-center">
-            <label className="flex items-center gap-1 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={showMissingSummaries}
-                onChange={(e) => setShowMissingSummaries(e.target.checked)}
-                className="w-4 h-4 text-theme-primary focus:ring-theme-primary focus:ring-2 rounded border-theme-accent"
-              />
-              <span className="text-sm text-theme-bright">Show nodes missing summaries</span>
-            </label>
           </div>
         </div>
 
         {/* Enhanced Node Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-6 gap-2 lg:gap-3 mb-8">
           {displayNodes.map(node => (
             <ExecutiveNodeCard
               key={node.id}
